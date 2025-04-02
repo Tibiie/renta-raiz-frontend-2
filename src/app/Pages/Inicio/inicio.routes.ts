@@ -1,14 +1,15 @@
 import { RouterModule, Routes } from '@angular/router';
 import { VistaInicialComponent } from './Components/vista-inicial/vista-inicial.component';
+import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
 
-  { path: '', redirectTo: 'vista-inicial', pathMatch: 'full' },
+  { path: '', redirectTo: 'venta', pathMatch: 'full' },
 
-    {
-        path: 'vista-inicial',
-        component: VistaInicialComponent
-    }
+  {
+    path: 'venta',
+    component: VistaInicialComponent
+  }
 
 ];
 
