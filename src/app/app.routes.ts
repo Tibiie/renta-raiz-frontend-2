@@ -3,11 +3,7 @@ import { VistaInicialComponent } from './Pages/Inicio/Components/vista-inicial/v
 
 export const routes: Routes = [
 
-    {
-        path: '',
-        redirectTo: 'vista-inicial',
-        pathMatch: 'full'
-    },
+    { path: '', redirectTo: 'vista-inicial', pathMatch: 'full' },
 
     {
         path: 'vista-inicial',
