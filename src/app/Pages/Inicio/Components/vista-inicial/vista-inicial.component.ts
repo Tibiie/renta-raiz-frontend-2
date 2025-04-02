@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import { FormsModule, NgModel } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-vista-inicial',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, FormsModule, CommonModule],
   templateUrl: './vista-inicial.component.html',
   styleUrl: './vista-inicial.component.scss'
 })
