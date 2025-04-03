@@ -48,58 +48,69 @@
                     </div>
                 </div>
 
-                <div class="relative w-full md:w-1/3">
-                    <button (click)="toggleDropdown()"
+                    <!-- Tipo de Propiedad (Mismo que antes) -->
+                    <div class="relative w-full md:w-1/3">
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de propiedad</label>
+                      <button (click)="toggleDropdown('property')"
                         class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
-                        <span>{{ selectedOption }}</span>
+                        <span>
+                          <i [class]="getIcon('property', selectedProperty)" class="mr-2"></i>
+                          {{ selectedProperty }}
+                        </span>
                         <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                            </path>
+                          viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
-                    </button>
-
-                    <!-- Menú desplegable -->
-                    <div *ngIf="isDropdownOpen"
+                      </button>
+                    
+                      <!-- Menú desplegable -->
+                      <div *ngIf="isPropertyDropdownOpen"
                         class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200">
                         <div class="p-4">
-                            <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button (click)="selectOption('Compra nuevo')"
-                                    class="flex items-center px-3 py-2 text-sm rounded-md bg-blue-100 text-blue-700">
-                                    <i class="bx bx-dollar-circle mr-2"></i>
-                                    Compra nuevo
-                                </button>
-                                <button (click)="selectOption('Compra usado')"
-                                    class="flex items-center px-3 py-2 text-sm rounded-md bg-blue-700 text-white">
-                                    <i class="bx bx-home mr-2"></i>
-                                    Compra usado
-                                </button>
-                                <button (click)="selectOption('Arriendo')"
-                                    class="flex items-center px-3 py-2 text-sm rounded-md bg-blue-100 text-blue-700">
-                                    <i class="bx bx-buildings mr-2"></i>
-                                    Arriendo
-                                </button>
-                                <button (click)="selectOption('Remates')"
-                                    class="flex items-center px-3 py-2 text-sm rounded-md bg-blue-100 text-blue-700">
-                                    <i class="bx bx-gavel mr-2"></i>
-                                    Remates
-                                </button>
-                            </div>
+                          <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
+                          <div class="grid grid-cols-2 gap-2">
+                            <button *ngFor="let option of propertyOptions" 
+                              (click)="selectOption('property', option)"
+                              [class]="getButtonClass(selectedProperty === option)">
+                              <i [class]="getIcon('property', option)" class="mr-2"></i>
+                              {{ option }}
+                            </button>
+                          </div>
                         </div>
+                      </div>
                     </div>
-                </div>
-
-                <div class="w-full md:w-1/3">
-                    <label for="precio" class="block text-sm font-medium text-gray-700 mb-1">Inmueble</label>
-                    <select id="precio"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#CDAD60] focus:border-[#CDAD60]">
-                        <option value="">Todos</option>
-                        <option value="100-200">$100k - $200k</option>
-                        <option value="200-500">$200k - $500k</option>
-                        <option value="500+">$500k+</option>
-                    </select>
-                </div>
+                  
+                    <!-- Inmueble (Nuevo dropdown con mismo estilo) -->
+                    <div class="relative w-full md:w-1/3">
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Inmueble</label>
+                      <button (click)="toggleDropdown('estate')"
+                        class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                        <span>
+                          <i [class]="getIcon('estate', selectedEstate)" class="mr-2"></i>
+                          {{ selectedEstate }}
+                        </span>
+                        <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+                          viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                      </button>
+                    
+                      <!-- Menú desplegable -->
+                      <div *ngIf="isEstateDropdownOpen"
+                        class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200">
+                        <div class="p-4">
+                          <p class="text-gray-500 text-sm font-medium mb-2">Tipo de inmueble</p>
+                          <div class="grid grid-cols-2 gap-2">
+                            <button *ngFor="let option of estateOptions" 
+                              (click)="selectOption('estate', option)"
+                              [class]="getButtonClass(selectedEstate === option)">
+                              <i [class]="getIcon('estate', option)" class="mr-2"></i>
+                              {{ option }}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
                 <!-- Botón Buscar redondo con icono -->
                 <button type="button"
