@@ -1,24 +1,49 @@
 <nav [ngClass]="{'bg-[#060F29] shadow-md': isScrolled, 'bg-transparent': !isScrolled}"
     class="border-none fixed w-full top-0 left-0 z-50 transition-all duration-300">
     <div [ngClass]="{'py-2': isScrolled, 'py-4': !isScrolled}"
-        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto transition-all duration-300">
-        <a href="#" class="flex items-center space-x-10">
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4 transition-all duration-300">
+
+        <!-- Logo -->
+        <a href="#" class="flex items-center">
             <img src="assets/images/LogoBlancoyDorado.png" [ngClass]="{'h-12': isScrolled, 'h-16': !isScrolled}"
                 class="transition-all duration-300" alt="Logo" />
         </a>
+
+        <!-- Botón menú móvil -->
+        <button (click)="toggleMobileMenu()" class="md:hidden text-white focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path *ngIf="!isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"></path>
+                <path *ngIf="isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        <!-- Menú desktop (oculto en móvil) -->
         <div class="hidden md:block">
             <ul class="flex flex-col md:flex-row md:space-x-8 font-medium text-white">
-                <li><a href="#" class="hover:text-gray-300">Venta</a></li>
-                <li><a href="#" class="hover:text-gray-300">Arriendo</a></li>
-                <li><a href="#" class="hover:text-gray-300">Destacadas</a></li>
-                <li><a href="#" class="hover:text-gray-300">Nosotros</a></li>
-                <li><a href="#" class="hover:text-gray-300">Clientes</a></li>
-                <li><a href="#" class="hover:text-gray-300">Contactanos</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Venta</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Arriendo</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Destacadas</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Nosotros</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Clientes</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Contactanos</a></li>
+            </ul>
+        </div>
+
+        <!-- Menú móvil (solo visible en móvil) -->
+        <div *ngIf="isMobileMenuOpen" class="md:hidden w-full bg-[#060F29] mt-4 rounded-lg shadow-lg">
+            <ul class="flex flex-col space-y-2 p-4 font-medium text-white">
+                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Venta</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Arriendo</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Destacadas</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Nosotros</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Clientes</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Contactanos</a></li>
             </ul>
         </div>
     </div>
 </nav>
-
 
 
 <!-- <li>

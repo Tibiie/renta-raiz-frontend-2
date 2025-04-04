@@ -10,9 +10,14 @@ import { Component, HostListener } from '@angular/core';
 })
 export class NavbarComponent {
   isScrolled = false;
+  isMobileMenuOpen: boolean = false;
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.isScrolled = window.scrollY > 50;
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 }
