@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
+import { get } from 'http';
+import { HttpClientModule } from '@angular/common/http';
 
 type PropertyOption = 'Todas' | 'Ventas' | 'Airbnb' | 'Arriendos';
 type EstateOption = 'Todas' | 'Amoblados' | 'Apartaestudios' | 'Apartamentos' | 'Casas';
@@ -13,32 +16,55 @@ type EstateOption = 'Todas' | 'Amoblados' | 'Apartaestudios' | 'Apartamentos' | 
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss']
 })
-export class VistaInicialComponent {
-  // Para Tipo de Propiedad
-  isPropertyDropdownOpen = false;
-  selectedProperty: PropertyOption = 'Todas';
-  propertyOptions: PropertyOption[] = ['Todas', 'Ventas', 'Airbnb', 'Arriendos'];
+export class VistaInicialComponent implements OnInit {
 
-  // Para Inmueble
-  isEstateDropdownOpen = false;
-  selectedEstate: EstateOption = 'Todas';
-  estateOptions: EstateOption[] = ['Todas', 'Amoblados', 'Apartaestudios', 'Apartamentos', 'Casas'];
+  inmueblesDestacadosArray: any[] = [];
 
-  private readonly icons = {
-    property: {
-      'Todas': 'fas fa-list-ul',
-      'Ventas': 'fas fa-dollar-sign',
-      'Airbnb': 'fas fa-home',
-      'Arriendos': 'fas fa-building'
-    } as Record<PropertyOption, string>,
-    estate: {
-      'Todas': 'fas fa-list-ul',
-      'Amoblados': 'fas fa-couch',
-      'Apartaestudios': 'fas fa-home-user',
-      'Apartamentos': 'fas fa-building',
-      'Casas': 'fas fa-house'
-    } as Record<EstateOption, string>
-  };
+   // Para Tipo de Propiedad
+   isPropertyDropdownOpen = false;
+   selectedProperty: PropertyOption = 'Todas';
+   propertyOptions: PropertyOption[] = ['Todas', 'Ventas', 'Airbnb', 'Arriendos'];
+ 
+   // Para Inmueble
+   isEstateDropdownOpen = false;
+   selectedEstate: EstateOption = 'Todas';
+   estateOptions: EstateOption[] = ['Todas', 'Amoblados', 'Apartaestudios', 'Apartamentos', 'Casas'];
+ 
+   private readonly icons = {
+     property: {
+       'Todas': 'fas fa-list-ul',
+       'Ventas': 'fas fa-dollar-sign',
+       'Airbnb': 'fas fa-home',
+       'Arriendos': 'fas fa-building'
+     } as Record<PropertyOption, string>,
+     estate: {
+       'Todas': 'fas fa-list-ul',
+       'Amoblados': 'fas fa-couch',
+       'Apartaestudios': 'fas fa-home-user',
+       'Apartamentos': 'fas fa-building',
+       'Casas': 'fas fa-house'
+     } as Record<EstateOption, string>
+   }; 
+
+  constructor(
+    private inmueblesService: InmueblesService,
+  ) { }
+
+  ngOnInit(): void {
+    this.getInmueblesDestacados();
+  }
+
+  getInmueblesDestacados() {
+    this.inmueblesService.getInmueblesDestacados().subscribe(
+      (data: any) => {
+        this.inmueblesDestacadosArray = data;
+        console.log(data);
+      },
+      (error: any) => {
+        console.error('Error al obtener los inmuebles:', error);
+      }
+    );
+  }
 
   getIcon(type: 'property' | 'estate', option: PropertyOption | EstateOption): string {
     const icon = this.icons[type][option as keyof typeof this.icons[typeof type]];
