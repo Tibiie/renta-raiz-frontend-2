@@ -531,43 +531,48 @@
   </div>
 </section>
 
-<footer class="bg-[#060F29] text-white min-h-[350px]">
-  <div
-    class="max-w-screen-xl mx-auto py-16 flex flex-col justify-between h-full"
-  >
-    <div class="md:flex md:items-start md:justify-evenly">
+<footer class="relative w-full overflow-hidden min-h-[380px]">
+  <!-- Fondo con diagonal muy pronunciada -->
+  <div class="absolute top-0 left-0 w-full h-full bg-[#060F29] z-0" 
+       style="clip-path: polygon(0 20%, 100% 0%, 100% 100%, 0% 100%)"></div>
+  
+  <!-- Contenido del footer -->
+  <div class="relative z-10 max-w-screen-xl mx-auto pb-24 px-4 pt-[400px]">
+    <div class="flex flex-col md:flex-row justify-between items-start">
       <!-- Logo -->
-      <div class="mb-6 md:mb-0 md:w-1/3">
+      <div class="mb-12 md:mb-0 md:w-1/4">
         <a href="#" class="flex items-center">
           <img
             src="assets/images/LogoBlancoyDorado.png"
-            class="h-24"
+            class="h-28"
             alt="Logo"
           />
         </a>
       </div>
 
-      <!-- Secciones de texto -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 md:w-2/3">
-        <div>
-          <h2 class="mb-4 text-sm font-semibold">Contáctenos</h2>
-          <p class="text-gray-400 font-medium mb-10">
+      <!-- Secciones de contacto -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 md:w-3/4">
+        <!-- Contacto -->
+        <div class="text-white">
+          <h2 class="mb-5 text-xl font-semibold">Contáctenos</h2>
+          <p class="text-gray-300 text-lg mb-8">
             Envíanos tus inquietudes, sugerencias o comentarios
           </p>
           <button
-            class="px-4 py-2 bg-[#CDAD60] text-white hover:bg-[#CDAD60]/90 font-semibold rounded-lg transition text-center"
+            class="px-8 py-4 bg-[#CDAD60] hover:bg-[#CDAD60]/90 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-lg"
           >
             Contáctenos
           </button>
         </div>
 
-        <div>
-          <h2 class="mb-4 text-sm font-semibold">Consigna Tu Inmueble</h2>
-          <p class="text-gray-400 font-medium mb-10">
+        <!-- Consignar inmueble -->
+        <div class="text-white">
+          <h2 class="mb-5 text-xl font-semibold">Consigna Tu Inmueble</h2>
+          <p class="text-gray-300 text-lg mb-8">
             Vende o arrienda tu inmueble con nosotros.
           </p>
           <button
-            class="px-4 py-2 bg-[#CDAD60] text-white hover:bg-[#CDAD60]/90 font-semibold rounded-lg transition text-center"
+            class="px-8 py-4 bg-[#CDAD60] hover:bg-[#CDAD60]/90 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-lg"
           >
             Consignar Inmueble
           </button>
@@ -575,44 +580,25 @@
       </div>
     </div>
 
-    <hr class="my-8 border-gray-700" />
+    <!-- Separador -->
+    <hr class="my-16 border-gray-600" />
 
-    <!-- Pie final con redes -->
-    <div class="flex flex-col sm:flex-row justify-between items-center">
-      <span class="text-sm text-gray-400 text-center sm:text-left mb-4 sm:mb-0">
+    <!-- Pie final -->
+    <div class="flex flex-col sm:flex-row justify-between items-center text-white">
+      <span class="text-base text-gray-300 text-center sm:text-left mb-2 sm:mb-0">
         © 2025 Renta Raiz S.A.S. Todos los derechos reservados.
       </span>
-      <div class="flex space-x-5">
-        <!-- Redes sociales -->
-        <a
-          href="#"
-          class="text-gray-400 hover:text-white"
-          aria-label="WhatsApp"
-        >
-          <!-- WhatsApp -->
-          <i class="fa-brands fa-whatsapp fa-xl"></i>
+      
+      <!-- Redes sociales -->
+      <div class="flex space-x-8">
+        <a href="#" class="text-gray-300 hover:text-[#CDAD60] transition-colors text-2xl" aria-label="WhatsApp">
+          <i class="fa-brands fa-whatsapp"></i>
         </a>
-
-        <a
-          href="#"
-          class="text-gray-400 hover:text-white"
-          aria-label="Instagram"
-        >
-          <!-- Instagram -->
-          <i class="fa-brands fa-instagram fa-xl"></i>
+        <a href="#" class="text-gray-300 hover:text-[#CDAD60] transition-colors text-2xl" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
         </a>
-
-        <a
-          href="#"
-          class="text-gray-400 hover:text-white"
-          aria-label="LinkedIn"
-        >
-          <!-- LinkedIn -->
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path
-              d="M21.6 0H2.4C1.08 0 0 1.08 0 2.4v19.2C0 22.92 1.08 24 2.4 24h19.2c1.32 0 2.4-1.08 2.4-2.4V2.4C24 1.08 22.92 0 21.6 0zM7.2 20.4H3.6V9.6h3.6v10.8zm-1.8-12.3a2.1 2.1 0 110-4.2 2.1 2.1 0 010 4.2zm15 12.3h-3.6v-5.4c0-1.29-.03-2.94-1.8-2.94-1.8 0-2.1 1.41-2.1 2.85v5.49H9.6V9.6h3.45v1.47h.05a3.78 3.78 0 013.4-1.86c3.63 0 4.29 2.4 4.29 5.49v5.7z"
-            />
-          </svg>
+        <a href="#" class="text-gray-300 hover:text-[#CDAD60] transition-colors text-2xl" aria-label="LinkedIn">
+          <i class="fa-brands fa-linkedin"></i>
         </a>
       </div>
     </div>
