@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -8,13 +8,22 @@ import { Component, HostListener } from '@angular/core';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
+  @Input() alwaysScrolled = false;
   isScrolled = false;
   isMobileMenuOpen: boolean = false;
 
+  ngOnInit(): void {
+    if (this.alwaysScrolled) {
+      this.isScrolled = true;
+    }
+  }
+
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isScrolled = window.scrollY > 50;
+    if (!this.alwaysScrolled) {
+      this.isScrolled = window.scrollY > 50;
+    }
   }
 
   toggleMobileMenu(): void {

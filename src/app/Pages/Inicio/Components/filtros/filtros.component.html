@@ -1,1 +1,100 @@
-<app-navbar></app-navbar>
+<app-navbar [alwaysScrolled]="true"></app-navbar>
+
+<!-- Botón para mostrar el drawer -->
+<!-- Font Awesome CDN -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<div class="text-center pt-32">
+    <button type="button"
+        class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-[#CDAD60] dark:text-[#CDAD60] dark:hover:text-white dark:hover:bg-[#CDAD60] shadow-lg transition duration-300"
+        data-drawer-target="modern-drawer" data-drawer-show="modern-drawer" data-drawer-backdrop="false"
+        aria-controls="modern-drawer">
+        <i class="fas fa-filter mr-2"></i> Filtros
+    </button>
+</div>
+
+<div id="modern-drawer"
+    class="fixed top-50 left-0 z-60 h-[calc(150vh-5rem)] p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-96 text-black shadow-xl"
+    style="border: 1px solid #CDAD60;" tabindex="-1" aria-labelledby="modern-drawer-label">
+
+    <!-- Contenedor azul claro con botón de cierre -->
+    <div class="bg-blue-100/50 rounded-t-lg p-1 flex justify-between items-center mb-1">
+        <h3 class="text-lg font-semibold text-gray-800"></h3>
+        <button type="button" data-drawer-hide="modern-drawer" aria-controls="modern-drawer"
+            class="text-gray-600 hover:text-black transition-colors duration-200 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:shadow-md">
+            <span class="text-xl leading-none">×</span>
+        </button>
+    </div>
+
+    <ul class="space-y-3 font-medium">
+        <li>
+            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-money-bill-wave text-xl text-[#CDAD60] mr-3"></i>
+                <span>Rango de precios</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-tags text-xl text-[#CDAD60] mr-3"></i>
+                <span class="font-semibold">Categoría</span>
+            </a>
+
+            <div class="mt-2">
+                <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
+
+                <div class="flex flex-wrap gap-2">
+                    <button *ngFor="let option of propertyOptions" (click)="selectOption('property', option)"
+                        [ngClass]="getButtonClass(selectedProperty === option)">
+                        <i [class]="getIcon('property', option)" class="mr-2"></i>
+                        {{ option }}
+                        <span *ngIf="selectedProperty === option" class="ml-1">✔</span>
+                    </button>
+                </div>
+            </div>
+        </li>
+
+
+        <li>
+            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-home text-xl text-[#CDAD60] mr-3"></i>
+                <span class="font-semibold">Tipo de inmueble</span>
+            </a>
+
+            <div class="mt-2">
+                <p class="text-gray-500 text-sm font-medium mb-2">Tipo de inmueble</p>
+
+                <div class="flex flex-wrap gap-2">
+                    <button *ngFor="let option of estateOptions" (click)="selectOption('estate', option)"
+                        [ngClass]="getButtonClass(selectedEstate === option)">
+                        <i [class]="getIcon('estate', option)" class="mr-2"></i>
+                        {{ option }}
+                        <span *ngIf="selectedEstate === option" class="ml-1">✔</span>
+                    </button>
+                </div>
+            </div>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-building text-xl text-[#CDAD60] mr-3"></i>
+                <span>Tipo de proyecto</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-ruler-combined text-xl text-[#CDAD60] mr-3"></i>
+                <span>Área</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-clipboard-list text-xl text-[#CDAD60] mr-3"></i>
+                <span>Detalles del proyecto</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-star text-xl text-[#CDAD60] mr-3"></i>
+                <span>Otras características</span>
+            </a>
+        </li>
+    </ul>

@@ -7,6 +7,7 @@ import { get } from 'http';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+
 type PropertyOption = 'Todas' | 'Ventas' | 'Airbnb' | 'Arriendos';
 type EstateOption =
   | 'Todas'
@@ -14,7 +15,6 @@ type EstateOption =
   | 'Apartaestudios'
   | 'Apartamentos'
   | 'Casas';
-
 @Component({
   selector: 'app-vista-inicial',
   standalone: true,
@@ -74,7 +74,7 @@ export class VistaInicialComponent implements OnInit {
     'assets/images/experian.png',
     'assets/images/fianzacredito.png',
   ];
-  
+
 
   constructor(
     private inmueblesService: InmueblesService,
