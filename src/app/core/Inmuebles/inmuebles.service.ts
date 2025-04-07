@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -7,9 +7,9 @@ import { environment } from '../../../environments/environment';
 })
 export class InmueblesService {
 
-  // constructor(private http: HttpClient) { }
+  http = inject(HttpClient);
 
-  // getInmueblesDestacados(): any {
-  //   return this.http.get(`${environment.baseUrl}/properties`);
-  // }
+  getInmueblesDestacados(): any {
+    return this.http.get(`${environment.baseUrl}/properties/destacados`);
+  }
 }

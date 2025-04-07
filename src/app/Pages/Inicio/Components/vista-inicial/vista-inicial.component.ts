@@ -84,20 +84,22 @@ export class VistaInicialComponent implements OnInit {
   ngOnInit(): void {
     // this.startAutoSlide();
 
-    // this.getInmueblesDestacados();
+    this.getInmueblesDestacados();
   }
 
-  // getInmueblesDestacados() {
-  //   this.inmueblesService.getInmueblesDestacados().subscribe(
-  //     (data: any) => {
-  //       this.inmueblesDestacadosArray = data;
-  //       console.log(data);
-  //     },
-  //     (error: any) => {
-  //       console.error('Error al obtener los inmuebles:', error);
-  //     }
-  //   );
-  // }
+  getInmueblesDestacados() {
+    this.inmueblesService.getInmueblesDestacados().subscribe(
+      (data: any) => {
+        this.inmueblesDestacadosArray = data;
+        console.log(data);
+      },
+      (error: any) => {
+        console.log(error);
+        
+        console.error('Error al obtener los inmuebles:', error);
+      }
+    );
+  }
 
   // ngOnDestroy(): void {
   //   clearInterval(this.intervalId);
