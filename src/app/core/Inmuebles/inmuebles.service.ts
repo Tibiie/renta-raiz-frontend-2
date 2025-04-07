@@ -7,9 +7,9 @@ import { environment } from '../../../environments/environment';
 })
 export class InmueblesService {
 
-  constructor(private http: HttpClient) { }
+  // constructor(private http: HttpClient) { }
 
-  getInmueblesDestacados(): any {
-    return this.http.get(`${environment.baseUrl}/properties`);
-  }
+  // getInmueblesDestacados(): any {
+  //   return this.http.get(`${environment.baseUrl}/properties`);
+  // }
 }

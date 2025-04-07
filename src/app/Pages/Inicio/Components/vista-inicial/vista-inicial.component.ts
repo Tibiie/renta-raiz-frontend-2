@@ -19,6 +19,8 @@ type EstateOption = 'Todas' | 'Amoblados' | 'Apartaestudios' | 'Apartamentos' | 
 export class VistaInicialComponent implements OnInit {
 
   inmueblesDestacadosArray: any[] = [];
+  currentSlide = 0;
+  intervalId: any;
 
    // Para Tipo de Propiedad
    isPropertyDropdownOpen = false;
@@ -46,26 +48,63 @@ export class VistaInicialComponent implements OnInit {
      } as Record<EstateOption, string>
    }; 
 
+   aliados: string[] = [
+    'assets/images/sura.png',
+    'assets/images/experian.png',
+    'assets/images/fianzacredito.png',
+    'assets/images/libertador.png',
+    'assets/images/lonja.png',
+    'assets/images/sura.png',
+    'assets/images/experian.png',
+    'assets/images/fianzacredito.png',
+  ];
+  
+
   constructor(
     private inmueblesService: InmueblesService,
   ) { }
 
   ngOnInit(): void {
-    this.getInmueblesDestacados();
+    this.startAutoSlide();
+
+    // this.getInmueblesDestacados();
   }
 
-  getInmueblesDestacados() {
-    this.inmueblesService.getInmueblesDestacados().subscribe(
-      (data: any) => {
-        this.inmueblesDestacadosArray = data;
-        console.log(data);
-      },
-      (error: any) => {
-        console.error('Error al obtener los inmuebles:', error);
-      }
-    );
+  // getInmueblesDestacados() {
+  //   this.inmueblesService.getInmueblesDestacados().subscribe(
+  //     (data: any) => {
+  //       this.inmueblesDestacadosArray = data;
+  //       console.log(data);
+  //     },
+  //     (error: any) => {
+  //       console.error('Error al obtener los inmuebles:', error);
+  //     }
+  //   );
+  // }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalId);
   }
 
+  getAliadosPorGrupo(): string[][] {
+    const grupos: string[][] = [];
+    for (let i = 0; i < this.aliados.length; i += 4) {
+      grupos.push(this.aliados.slice(i, i + 4));
+    }
+    return grupos;
+  }
+
+  startAutoSlide() {
+    this.intervalId = setInterval(() => {
+      const totalSlides = this.getAliadosPorGrupo().length;
+      this.currentSlide = (this.currentSlide + 1) % totalSlides;
+    }, 3000); // cambia cada 3 segundos
+  }
+
+  goToSlide(index: number) {
+    this.currentSlide = index;
+  }
+  
   getIcon(type: 'property' | 'estate', option: PropertyOption | EstateOption): string {
     const icon = this.icons[type][option as keyof typeof this.icons[typeof type]];
     return icon || 'fas fa-question-circle';
