@@ -5,6 +5,7 @@ import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { get } from 'http';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 type PropertyOption = 'Todas' | 'Ventas' | 'Airbnb' | 'Arriendos';
 type EstateOption = 'Todas' | 'Amoblados' | 'Apartaestudios' | 'Apartamentos' | 'Casas';
@@ -62,10 +63,11 @@ export class VistaInicialComponent implements OnInit {
 
   constructor(
     private inmueblesService: InmueblesService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.startAutoSlide();
+    // this.startAutoSlide();
 
     // this.getInmueblesDestacados();
   }
@@ -136,5 +138,9 @@ export class VistaInicialComponent implements OnInit {
     return selected 
       ? `${base} bg-[#080E36] text-white` 
       : `${base} bg-blue-100 text-blue-700`;
+  }
+
+  redirigirFiltros() {
+    this.router.navigate(['/filtros']);
   }
 }

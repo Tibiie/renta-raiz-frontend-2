@@ -1,6 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { VistaInicialComponent } from './Components/vista-inicial/vista-inicial.component';
 import { NgModule } from '@angular/core';
+import { FiltrosComponent } from './Components/filtros/filtros.component';
 
 export const routes: Routes = [
 
@@ -9,6 +10,11 @@ export const routes: Routes = [
   {
     path: 'venta',
     component: VistaInicialComponent
+  },
+
+  {
+    path: 'filtros',
+    component: FiltrosComponent
   }
 
 ];
