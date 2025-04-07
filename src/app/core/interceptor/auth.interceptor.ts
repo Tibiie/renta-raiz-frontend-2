@@ -18,12 +18,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   req = req.clone({
     setHeaders: {
-       Authorization: `Bearer ${encryptedToken}`
+      Authorization: `Bearer ${encryptedToken}`
     }
   });
 
   console.log(req);
-  
+
   return next(req);
 };
 
