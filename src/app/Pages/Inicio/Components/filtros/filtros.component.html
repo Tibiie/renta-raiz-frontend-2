@@ -1,8 +1,5 @@
 <app-navbar [alwaysScrolled]="true"></app-navbar>
 
-<!-- Botón para mostrar el drawer -->
-<!-- Font Awesome CDN -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <div class="text-center pt-32">
     <button type="button"
@@ -14,7 +11,7 @@
 </div>
 
 <div id="modern-drawer"
-    class="fixed top-50 left-0 z-60 h-[calc(150vh-5rem)] p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-96 text-black shadow-xl"
+    class="fixed top-48 left-0 z-60 max-h-[calc(100vh-6rem)] p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-[28rem] text-black shadow-xl"
     style="border: 1px solid #CDAD60;" tabindex="-1" aria-labelledby="modern-drawer-label">
 
     <!-- Contenedor azul claro con botón de cierre -->
@@ -27,21 +24,44 @@
     </div>
 
     <ul class="space-y-3 font-medium">
-        <li>
-            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
-                <i class="fas fa-money-bill-wave text-xl text-[#CDAD60] mr-3"></i>
-                <span>Rango de precios</span>
+        <li class="border-b border-[#d1d5db] pb-4 mb-4">
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-money-bill-wave text-xl text-[#CDAD60] mr-3"></i>
+              <span class="font-semibold">Rango de precios</span>
             </a>
-        </li>
-        <li>
-            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+          
+            <!-- Inputs de rango -->
+            <div class="mt-2 px-3">
+              <div class="flex gap-4">
+                <div class="flex flex-col w-44">
+                  <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
+                  <input
+                    id="min-price"
+                    type="number"
+                    placeholder="Desde $"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                  />
+                </div>
+                <div class="flex flex-col w-44">
+                  <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
+                  <input
+                    id="max-price"
+                    type="number"
+                    placeholder="Hasta $"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                  />
+                </div>
+              </div>
+            </div>
+        </li>  
+
+        <li class="border-b border-[#d1d5db] pb-4 mb-4">
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-tags text-xl text-[#CDAD60] mr-3"></i>
                 <span class="font-semibold">Categoría</span>
             </a>
 
             <div class="mt-2">
-                <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
-
                 <div class="flex flex-wrap gap-2">
                     <button *ngFor="let option of propertyOptions" (click)="selectOption('property', option)"
                         [ngClass]="getButtonClass(selectedProperty === option)">
@@ -53,15 +73,14 @@
             </div>
         </li>
 
-
-        <li>
-            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+        <li class="border-b border-[#d1d5db] pb-4 mb-4">
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-home text-xl text-[#CDAD60] mr-3"></i>
                 <span class="font-semibold">Tipo de inmueble</span>
             </a>
 
             <div class="mt-2">
-                <p class="text-gray-500 text-sm font-medium mb-2">Tipo de inmueble</p>
+                <p class="text-gray-500 text-sm font-medium mb-2">Puedes seleccionar más de uno</p>
 
                 <div class="flex flex-wrap gap-2">
                     <button *ngFor="let option of estateOptions" (click)="selectOption('estate', option)"
@@ -73,28 +92,145 @@
                 </div>
             </div>
         </li>
-        <li>
-            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+
+        <li class="border-b border-[#d1d5db] pb-4 mb-4">
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-building text-xl text-[#CDAD60] mr-3"></i>
                 <span>Tipo de proyecto</span>
             </a>
+
+            <div class="mt-2">
+                <div class="flex flex-wrap gap-2">
+                    <button *ngFor="let option of projectOptions" (click)="selectOption('project', option)"
+                        [ngClass]="getButtonClass(selectedProject === option)">
+                        <i [class]="getIcon('project', option)" class="mr-2"></i>
+                        {{ option }}
+                        <span *ngIf="selectedProject === option" class="ml-1">✔</span>
+                    </button>
+                </div>
+            </div>
         </li>
-        <li>
-            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+
+        <li class="border-b border-[#d1d5db] pb-4 mb-4">
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-ruler-combined text-xl text-[#CDAD60] mr-3"></i>
                 <span>Área</span>
             </a>
+
+            <div class="mt-2 px-3">
+                <div class="flex gap-4">
+                  <div class="flex flex-col w-44">
+                    <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Mínima</label>
+                    <input
+                      id="min-price"
+                      type="number"
+                      placeholder="Ej. 60 m2"
+                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                    />
+                  </div>
+                  <div class="flex flex-col w-44">
+                    <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Máxima</label>
+                    <input
+                      id="max-price"
+                      type="number"
+                      placeholder="Ej. 120 m2"
+                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                    />
+                  </div>
+                </div>
+              </div>
         </li>
-        <li>
-            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+
+        <li class="border-b border-[#d1d5db] pb-4 mb-4">
+            <div class="p-3">
+              <div class="flex items-center mb-4">
                 <i class="fas fa-clipboard-list text-xl text-[#CDAD60] mr-3"></i>
-                <span>Detalles del proyecto</span>
-            </a>
+                <span class="font-semibold text-lg">Detalles del proyecto</span>
+              </div>
+          
+              <!-- Sección dinámica -->
+              <div class="space-y-4">
+                <!-- Habitaciones -->
+                <div>
+                  <p class="text-gray-700 font-medium mb-2">Habitaciones</p>
+                  <div class="flex gap-2 flex-wrap">
+                    <button
+                      *ngFor="let hab of habitaciones"
+                      (click)="seleccionar('habitaciones', hab)"
+                      [ngClass]="{
+                        'bg-gray-700 text-white font-semibold': seleccion.habitaciones === hab,
+                        'bg-blue-100 text-blue-700': seleccion.habitaciones !== hab
+                      }"
+                      class="w-8 h-8 rounded-md"
+                    >
+                      {{ hab }}
+                    </button>
+                  </div>
+                </div>
+          
+                <!-- Baños -->
+                <div>
+                  <p class="text-gray-700 font-medium mb-2">Baños</p>
+                  <div class="flex gap-2 flex-wrap">
+                    <button
+                      *ngFor="let bano of banos"
+                      (click)="seleccionar('banos', bano)"
+                      [ngClass]="{
+                        'bg-gray-700 text-white font-semibold': seleccion.banos === bano,
+                        'bg-blue-100 text-blue-700': seleccion.banos !== bano
+                      }"
+                      class="w-8 h-8 rounded-md"
+                    >
+                      {{ bano }}
+                    </button>
+                  </div>
+                </div>
+          
+                <!-- Parqueadero -->
+                <div>
+                  <p class="text-gray-700 font-medium mb-2">Parqueadero</p>
+                  <div class="flex gap-2 flex-wrap">
+                    <button
+                      *ngFor="let p of parqueadero"
+                      (click)="seleccionar('parqueadero', p)"
+                      [ngClass]="{
+                        'bg-gray-700 text-white font-semibold': seleccion.parqueadero === p,
+                        'bg-blue-100 text-blue-700': seleccion.parqueadero !== p
+                      }"
+                      class="w-8 h-8 rounded-md"
+                    >
+                      {{ p }}
+                    </button>
+                  </div>
+                </div>
+          
+                <!-- Estrato -->
+                <div>
+                  <p class="text-gray-700 font-medium mb-2">Estrato</p>
+                  <div class="flex gap-2 flex-wrap">
+                    <button
+                      *ngFor="let e of estrato"
+                      (click)="seleccionar('estrato', e)"
+                      [ngClass]="{
+                        'bg-gray-700 text-white font-semibold': seleccion.estrato === e,
+                        'bg-blue-100 text-blue-700': seleccion.estrato !== e
+                      }"
+                      class="w-8 h-8 rounded-md"
+                    >
+                      {{ e }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
         </li>
-        <li>
-            <a href="#" class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+          
+          
+        <li class="border-b border-[#d1d5db] pb-4 mb-4">
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-star text-xl text-[#CDAD60] mr-3"></i>
                 <span>Otras características</span>
             </a>
         </li>
     </ul>
+</div>
