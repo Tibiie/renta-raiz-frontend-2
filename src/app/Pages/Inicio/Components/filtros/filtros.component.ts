@@ -32,7 +32,6 @@ export class FiltrosComponent implements OnInit {
   categoriasInmuebles: any[] = [];
   resultados: any[] = [];
 
-
   // Para Tipo de Propiedad
   isPropertyDropdownOpen = false;
   selectedProperty: { code: string, name: string, displayName?: string } | null = null;
