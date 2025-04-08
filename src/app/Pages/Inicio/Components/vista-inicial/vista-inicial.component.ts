@@ -83,7 +83,6 @@ export class VistaInicialComponent implements OnInit {
 
   ngOnInit(): void {
     // this.startAutoSlide();
-
     this.getInmueblesDestacados();
   }
 

@@ -10,6 +10,7 @@ type EstateOption =
   | 'Apartaestudios'
   | 'Apartamentos'
   | 'Casas';
+type TipoProyecto = 'En construcción' | 'Sobre planos' | 'No VIS' | 'VIS';
 @Component({
   selector: 'app-filtros',
   standalone: true,
@@ -18,6 +19,19 @@ type EstateOption =
   styleUrl: './filtros.component.scss'
 })
 export class FiltrosComponent implements OnInit {
+
+  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  estrato: number[] = [1, 2, 3, 4, 5, 6];
+
+  // Para seleccionar
+  seleccion = {
+    habitaciones: null as number | string | null,
+    banos: null as number | string | null,
+    parqueadero: null as number | string | null,
+    estrato: null as number | null,
+  };
 
   // Para Tipo de Propiedad
   isPropertyDropdownOpen = false;
@@ -40,6 +54,16 @@ export class FiltrosComponent implements OnInit {
     'Casas',
   ];
 
+  // Para Tipo de Proyecto
+  isProjectDropdownOpen = false;
+  selectedProject: TipoProyecto = 'En construcción';
+  projectOptions: TipoProyecto[] = [
+    'En construcción',
+    'Sobre planos',
+    'No VIS',
+    'VIS',
+  ];
+
   private readonly icons = {
     property: {
       Todas: 'fas fa-list-ul',
@@ -54,6 +78,12 @@ export class FiltrosComponent implements OnInit {
       Apartamentos: 'fas fa-building',
       Casas: 'fas fa-house',
     } as Record<EstateOption, string>,
+    project: {
+      EnConstrucción: 'fas fa-building',
+      SobrePlanos: 'fas fa-ruler-combined',
+      NoVIS: 'fas fa-clipboard-list',
+      VIS: 'fas fa-star',
+    }
   };
 
   constructor() { }
@@ -61,35 +91,57 @@ export class FiltrosComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
+    // Para estrato, solo permitir números
+    if (categoria === 'estrato') {
+      if (typeof valor !== 'number') return;
+  
+      this.seleccion[categoria] =
+        this.seleccion[categoria] === valor ? null : valor;
+    } else {
+      this.seleccion[categoria] =
+        this.seleccion[categoria] === valor ? null : valor;
+    }
+  
+    console.log('Selección actual:', this.seleccion);
+  }
+  
+
   getIcon(
-    type: 'property' | 'estate',
-    option: PropertyOption | EstateOption
+    type: 'property' | 'estate' | 'project',
+    option: PropertyOption | EstateOption | TipoProyecto
   ): string {
     const icon =
       this.icons[type][option as keyof (typeof this.icons)[typeof type]];
     return icon || 'fas fa-question-circle';
   }
 
-  toggleDropdown(type: 'property' | 'estate'): void {
+  toggleDropdown(type: 'property' | 'estate' | 'project'): void {
     if (type === 'property') {
       this.isPropertyDropdownOpen = !this.isPropertyDropdownOpen;
       this.isEstateDropdownOpen = false;
-    } else {
+    }if (type === 'estate') {
       this.isEstateDropdownOpen = !this.isEstateDropdownOpen;
+      this.isPropertyDropdownOpen = false;
+    }else if (type === 'project') {
+      this.isProjectDropdownOpen = !this.isProjectDropdownOpen;
       this.isPropertyDropdownOpen = false;
     }
   }
 
   selectOption(
-    type: 'property' | 'estate',
-    option: PropertyOption | EstateOption
+    type: 'property' | 'estate' | 'project',
+    option: PropertyOption | EstateOption | TipoProyecto
   ): void {
     if (type === 'property') {
       this.selectedProperty = option as PropertyOption;
       this.isPropertyDropdownOpen = false;
-    } else {
+    }if (type === 'estate') {
       this.selectedEstate = option as EstateOption;
       this.isEstateDropdownOpen = false;
+    }else if (type === 'project') {
+      this.selectedProject = option as TipoProyecto;
+      this.isProjectDropdownOpen = false;
     }
   }
 
@@ -99,5 +151,4 @@ export class FiltrosComponent implements OnInit {
       ? `${base} bg-[#080E36] text-white`
       : `${base} bg-blue-100 text-blue-700`;
   }
-
 }
