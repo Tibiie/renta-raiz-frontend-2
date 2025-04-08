@@ -24,4 +24,8 @@ export class InmueblesService {
   getFiltros() {
     return this.http.get(`${environment.baseUrl}/properties/filtros`);
   }
+
+  getFiltrosEnviar(filtros: any, elementsPerPage: number) {
+    return this.http.get(`${environment.baseUrl}/properties/?elementsPerPage=${elementsPerPage}`, { params: filtros });
+  }
 }

@@ -8,13 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 
-type PropertyOption = 'Todas' | 'Ventas' | 'Airbnb' | 'Arriendos';
-type EstateOption =
-  | 'Todas'
-  | 'Amoblados'
-  | 'Apartaestudios'
-  | 'Apartamentos'
-  | 'Casas';
 @Component({
   selector: 'app-vista-inicial',
   standalone: true,
@@ -26,46 +19,46 @@ export class VistaInicialComponent implements OnInit {
 
   intervalId: any;
   currentSlide = 0;
+  ubicacion: string = '';
+  filtrosSeleccionados: Map<string, any> = new Map();
 
-  tipoPropiedad: any[] = [];
+  elementsPerPage = 10;
+  filtros: any = {};
   categoriasInmuebles: any[] = [];
-  inmueblesDestacadosArray: any[] = [];
+  inmueblesDestacadosArray: any = {};
 
-  // Para Tipo de Propiedad
+  // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
-  selectedProperty: PropertyOption = 'Todas';
-  propertyOptions: PropertyOption[] = [
-    'Todas',
-    'Ventas',
-    'Airbnb',
-    'Arriendos',
-  ];
+  selectedProperty: { code: string, name: string, displayName?: string } | null = null;
+  propertyOptions: { code: string, name: string, displayName?: string }[] = [];
 
-  // Para Inmueble
+  // Para tipos de propiedades
   isEstateDropdownOpen = false;
-  selectedEstate: EstateOption = 'Todas';
-  estateOptions: EstateOption[] = [
-    'Todas',
-    'Amoblados',
-    'Apartaestudios',
-    'Apartamentos',
-    'Casas',
-  ];
+  selectedEstate: { code: string, name: string } | null = null;
+  estateOptions: { code: string, name: string }[] = [];
 
   private readonly icons = {
     property: {
-      Todas: 'fas fa-list-ul',
-      Ventas: 'fas fa-dollar-sign',
-      Airbnb: 'fas fa-home',
-      Arriendos: 'fas fa-building',
-    } as Record<PropertyOption, string>,
+      '': 'fas fa-list-ul',
+      '1': 'fas fa-building',
+      '2': 'fas fa-dollar-sign',
+      '3': 'fas fa-home',
+    } as Record<string, string>,
     estate: {
-      Todas: 'fas fa-list-ul',
-      Amoblados: 'fas fa-couch',
-      Apartaestudios: 'fas fa-home-user',
-      Apartamentos: 'fas fa-building',
-      Casas: 'fas fa-house',
-    } as Record<EstateOption, string>,
+      '1': 'fas fa-building',
+      '2': 'fas fa-home',
+      '3': 'fas fa-home-user',
+      '4': 'fas fa-store',
+      '5': 'fas fa-warehouse',
+      '6': 'fas fa-briefcase',
+      '7': 'fas fa-map-marked-alt',
+      '8': 'fas fa-tractor',
+      '10': 'fas fa-home',
+      '11': 'fas fa-car',
+      '12': 'fas fa-umbrella-beach',
+      '13': 'fas fa-store',
+      '14': 'fas fa-home'
+    } as Record<string, string>
   };
 
   aliados: string[] = [
@@ -79,37 +72,114 @@ export class VistaInicialComponent implements OnInit {
     'assets/images/fianzacredito.png',
   ];
 
-
   constructor(
     private inmueblesService: InmueblesService,
-    private router: Router,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.getDatos()
+  }
+
+  getDatos() {
+    this.getFiltros();
     this.getTipoPropiedad();
     this.getInmueblesDestacados();
     this.getCategoriasInmuebles();
   }
 
-  getInmueblesDestacados() {
-    this.inmueblesService.getInmueblesDestacados().subscribe(
-      (data: any) => {
-        this.inmueblesDestacadosArray = data;
-        console.log(data);
+  prepararFiltros() {
+    this.filtrosSeleccionados.clear();
+
+    if (this.ubicacion) {
+      this.filtrosSeleccionados.set('neighborhood', this.ubicacion);
+    }
+
+    if (this.selectedProperty) {
+      this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
+    }
+
+    if (this.selectedEstate) {
+      this.filtrosSeleccionados.set('type', this.selectedEstate.code);
+    }
+  }
+
+  getCategoriasInmuebles() {
+    this.inmueblesService.getCategoriasInmuebles().subscribe(
+      (response: any) => {
+        this.categoriasInmuebles = response.data;
+        console.log("categorias", response.data);
+
+        this.propertyOptions = response.data.map((cat: any) => {
+          if (cat.code === '3') {
+            return { ...cat, displayName: 'Todas' };
+          }
+          return cat;
+        });
+
+        const defaultOption = this.propertyOptions.find(cat => cat.code === '3') || this.propertyOptions[0];
+        this.selectedProperty = defaultOption;
       },
       (error: any) => {
-        console.log(error);
-
-        console.error('Error al obtener los inmuebles:', error);
+        console.error('Error al obtener las categorias:', error);
       }
     );
   }
 
   getTipoPropiedad() {
     this.inmueblesService.getTipoPropiedad().subscribe(
+      (response: any) => {
+        this.estateOptions = response.data;
+        console.log("tipoPropiedad", response.data);
+
+        // Establece la primera opción como selección por defecto
+        this.selectedEstate = this.estateOptions[0] || null;
+      },
+      (error: any) => {
+        console.error('Error al obtener los tipos de propiedad:', error);
+      }
+    );
+  }
+
+  getFiltros() {
+    this.inmueblesService.getFiltros().subscribe(
       (data: any) => {
-        this.tipoPropiedad = data;
-        console.log(data);
+        this.filtros = data;
+        console.log("filtros", data);
+      },
+      (error: any) => {
+        console.log(error);
+
+        console.error('Error al obtener los filtros:', error);
+      }
+    );
+  }
+
+  getEnviarFiltros() {
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      pages: 1,
+    }
+    console.log('Objeto a enviar:', obj);
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log("filtros", response.data);
+        this.router.navigate(['/filtros'], {
+          state: { resultados: response.data }
+        });
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
+  getInmueblesDestacados() {
+    this.inmueblesService.getInmueblesDestacados().subscribe(
+      (data: any) => {
+        this.inmueblesDestacadosArray = data;
+        console.log("inmuebles destacados", data);
       },
       (error: any) => {
         console.log(error);
@@ -119,27 +189,29 @@ export class VistaInicialComponent implements OnInit {
     );
   }
 
-  getCategoriasInmuebles() {
-    this.inmueblesService.getCategoriasInmuebles().subscribe(
-      (data: any) => {
-        this.categoriasInmuebles = data;
-        console.log(data);
-      },
-      (error: any) => {
-        console.log(error);
 
-        console.error('Error al obtener las categorias:', error);
-      }
-    );
+  getIcon(type: 'property' | 'estate', option: any): string {
+    if (type === 'property') {
+      if (!option) return 'fas fa-list-ul';
+      const code = typeof option === 'object' ? option.code : '';
+      return this.icons.property[code] || 'fas fa-home';
+    } else {
+      const code = typeof option === 'object' ? option.code : '';
+      return this.icons.estate[code] || 'fas fa-question-circle';
+    }
   }
 
-  getIcon(
+  selectOption(
     type: 'property' | 'estate',
-    option: PropertyOption | EstateOption
-  ): string {
-    const icon =
-      this.icons[type][option as keyof (typeof this.icons)[typeof type]];
-    return icon || 'fas fa-question-circle';
+    option: any
+  ): void {
+    if (type === 'property') {
+      this.selectedProperty = option;
+      this.isPropertyDropdownOpen = false;
+    } else {
+      this.selectedEstate = option;
+      this.isEstateDropdownOpen = false;
+    }
   }
 
   toggleDropdown(type: 'property' | 'estate'): void {
@@ -152,19 +224,6 @@ export class VistaInicialComponent implements OnInit {
     }
   }
 
-  selectOption(
-    type: 'property' | 'estate',
-    option: PropertyOption | EstateOption
-  ): void {
-    if (type === 'property') {
-      this.selectedProperty = option as PropertyOption;
-      this.isPropertyDropdownOpen = false;
-    } else {
-      this.selectedEstate = option as EstateOption;
-      this.isEstateDropdownOpen = false;
-    }
-  }
-
   getButtonClass(selected: boolean): string {
     const base = 'flex items-center px-3 py-2 text-sm rounded-md';
     return selected
@@ -173,7 +232,8 @@ export class VistaInicialComponent implements OnInit {
   }
 
   redirigirFiltros() {
-    this.router.navigate(['/filtros']);
+    this.prepararFiltros();
+    this.getEnviarFiltros();
   }
 
   getAliadosPorGrupo(): string[][] {
