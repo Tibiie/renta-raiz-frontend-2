@@ -23,9 +23,13 @@ type EstateOption =
   styleUrls: ['./vista-inicial.component.scss'],
 })
 export class VistaInicialComponent implements OnInit {
-  inmueblesDestacadosArray: any[] = [];
-  currentSlide = 0;
+
   intervalId: any;
+  currentSlide = 0;
+
+  tipoPropiedad: any[] = [];
+  categoriasInmuebles: any[] = [];
+  inmueblesDestacadosArray: any[] = [];
 
   // Para Tipo de Propiedad
   isPropertyDropdownOpen = false;
@@ -82,9 +86,9 @@ export class VistaInicialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.startAutoSlide();
-
+    this.getTipoPropiedad();
     this.getInmueblesDestacados();
+    this.getCategoriasInmuebles();
   }
 
   getInmueblesDestacados() {
@@ -95,33 +99,38 @@ export class VistaInicialComponent implements OnInit {
       },
       (error: any) => {
         console.log(error);
-        
+
         console.error('Error al obtener los inmuebles:', error);
       }
     );
   }
 
-  // ngOnDestroy(): void {
-  //   clearInterval(this.intervalId);
-  // }
+  getTipoPropiedad() {
+    this.inmueblesService.getTipoPropiedad().subscribe(
+      (data: any) => {
+        this.tipoPropiedad = data;
+        console.log(data);
+      },
+      (error: any) => {
+        console.log(error);
 
-  getAliadosPorGrupo(): string[][] {
-    const grupos: string[][] = [];
-    for (let i = 0; i < this.aliados.length; i += 4) {
-      grupos.push(this.aliados.slice(i, i + 4));
-    }
-    return grupos;
+        console.error('Error al obtener los inmuebles:', error);
+      }
+    );
   }
 
-  startAutoSlide() {
-    this.intervalId = setInterval(() => {
-      const totalSlides = this.getAliadosPorGrupo().length;
-      this.currentSlide = (this.currentSlide + 1) % totalSlides;
-    }, 3000); // cambia cada 3 segundos
-  }
+  getCategoriasInmuebles() {
+    this.inmueblesService.getCategoriasInmuebles().subscribe(
+      (data: any) => {
+        this.categoriasInmuebles = data;
+        console.log(data);
+      },
+      (error: any) => {
+        console.log(error);
 
-  goToSlide(index: number) {
-    this.currentSlide = index;
+        console.error('Error al obtener las categorias:', error);
+      }
+    );
   }
 
   getIcon(
@@ -165,5 +174,24 @@ export class VistaInicialComponent implements OnInit {
 
   redirigirFiltros() {
     this.router.navigate(['/filtros']);
+  }
+
+  getAliadosPorGrupo(): string[][] {
+    const grupos: string[][] = [];
+    for (let i = 0; i < this.aliados.length; i += 4) {
+      grupos.push(this.aliados.slice(i, i + 4));
+    }
+    return grupos;
+  }
+
+  startAutoSlide() {
+    this.intervalId = setInterval(() => {
+      const totalSlides = this.getAliadosPorGrupo().length;
+      this.currentSlide = (this.currentSlide + 1) % totalSlides;
+    }, 3000); // cambia cada 3 segundos
+  }
+
+  goToSlide(index: number) {
+    this.currentSlide = index;
   }
 }

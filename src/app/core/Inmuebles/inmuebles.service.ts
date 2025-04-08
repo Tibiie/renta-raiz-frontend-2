@@ -9,7 +9,19 @@ export class InmueblesService {
 
   http = inject(HttpClient);
 
-  getInmueblesDestacados(): any {
+  getInmueblesDestacados() {
     return this.http.get(`${environment.baseUrl}/properties/destacados`);
+  }
+
+  getTipoPropiedad() {
+    return this.http.get(`${environment.baseUrl}/properties/tipoPropiedad`);
+  }
+
+  getCategoriasInmuebles() {
+    return this.http.get(`${environment.baseUrl}/properties/categoriasInmueble`);
+  }
+
+  getFiltros() {
+    return this.http.get(`${environment.baseUrl}/properties/filtros`);
   }
 }
