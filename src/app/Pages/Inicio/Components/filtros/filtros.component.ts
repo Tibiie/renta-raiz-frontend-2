@@ -15,20 +15,23 @@ import { Location } from '@angular/common';
 })
 export class FiltrosComponent implements OnInit {
 
+  elementsPerPage = 10;
+  AreaMinima = '';
+  AreaMaxima = '';
   filtrosSeleccionados: Map<string, any> = new Map();
   habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
   banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
   parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
-  estrato: number[] = [1, 2, 3, 4, 5, 6];
+  estrato: number[] = [1, 2, 3, 4];
 
   // Para seleccionar
   seleccion = {
-    habitaciones: null as number | string | null,
-    banos: null as number | string | null,
-    parqueadero: null as number | string | null,
-    estrato: null as number | null,
+    habitaciones: [] as (number | string)[],
+    banos: [] as (number | string)[],
+    parqueadero: [] as (number | string)[],
+    estrato: [] as number[],
   };
-
+  
   categoriasInmuebles: any[] = [];
   resultados: any[] = [];
 
@@ -39,7 +42,7 @@ export class FiltrosComponent implements OnInit {
 
   // Para Inmueble
   isEstateDropdownOpen = false;
-  selectedEstate: { code: string, name: string } | null = null;
+  selectedEstates: { code: string, name: string }[] = [];
   estateOptions: { code: string, name: string }[] = [];
 
   private readonly icons = {
@@ -91,35 +94,97 @@ export class FiltrosComponent implements OnInit {
     this.getTipoPropiedad();
   }
 
+  enviarFiltros() {
+    this.prepararFiltros();
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      pages: 1,
+    }
+    console.log('Objeto a enviar:', obj);
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log("filtros", response.data);
+        this.resultados = response.data;
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
   prepararFiltros() {
     this.filtrosSeleccionados.clear();
 
     if (this.selectedProperty) {
-      this.filtrosSeleccionados.set('neighborhood', this.selectedProperty.code);
+      this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
     }
 
-    if (this.selectedEstate) {
-      this.filtrosSeleccionados.set('type', this.selectedEstate.code);
+    if (this.selectedEstates.length > 0) {
+      const estateCodes = this.selectedEstates.map(e => e.code).join(',');
+      this.filtrosSeleccionados.set('type', estateCodes);
+    }
+    
+    if (this.seleccion.habitaciones.length > 0) {
+      // Si deseas enviar todos los valores seleccionados en un arreglo
+      this.filtrosSeleccionados.set('bedrooms', this.seleccion.habitaciones.join(','));
+    }
+    
+    if (this.seleccion.banos.length > 0) {
+      this.filtrosSeleccionados.set('bathrooms', this.seleccion.banos.join(','));
+    }
+    
+    if (this.seleccion.parqueadero.length > 0) {
+      const values = this.seleccion.parqueadero;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('"maxparking"', 100);
+        this.filtrosSeleccionados.set('"minparking"', 6);
+      } else {
+        // Por ejemplo, enviar una cadena con los valores seleccionados
+        this.filtrosSeleccionados.set('"maxparking"', values.join(','));
+        this.filtrosSeleccionados.set('"minparking"', values.join(','));
+      }
+    }
+    
+    if (this.seleccion.estrato.length > 0) {
+      this.filtrosSeleccionados.set('stratum', this.seleccion.estrato.join(','));
+    }
+    
+
+    if (this.AreaMinima) {
+      this.filtrosSeleccionados.set('"minarea"', this.AreaMinima);
     }
 
-    if (this.seleccion.habitaciones) {
-      this.filtrosSeleccionados.set('bedrooms', this.seleccion.habitaciones);
-    }
-
-    if (this.seleccion.banos) {
-      this.filtrosSeleccionados.set('bathrooms', this.seleccion.banos);
-    }
-
-    if (this.seleccion.parqueadero) {
-      this.filtrosSeleccionados.set('parqueadero', this.seleccion.parqueadero);
-    }
-
-    if (this.seleccion.estrato) {
-      this.filtrosSeleccionados.set('stratum', this.seleccion.estrato);
+    if (this.AreaMaxima) {
+      this.filtrosSeleccionados.set('"maxarea"', this.AreaMaxima);
     }
   }
 
-
+  seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
+    if (categoria === 'estrato') {
+      let arr = this.seleccion.estrato as number[];
+      const index = arr.indexOf(valor as number);
+      if (index > -1) {
+        arr.splice(index, 1);
+      } else {
+        arr.push(valor as number);
+      }
+      this.seleccion.estrato = arr;
+    } else {
+      let arr = this.seleccion[categoria] as (number | string)[];
+      const index = arr.indexOf(valor);
+      if (index > -1) {
+        arr.splice(index, 1);
+      } else {
+        arr.push(valor);
+      }
+      this.seleccion[categoria] = arr;
+    }
+  
+    console.log('Selección actual:', this.seleccion);
+  }
+  
+  
   getCategoriasInmuebles() {
     this.inmueblesService.getCategoriasInmuebles().subscribe(
       (response: any) => {
@@ -142,34 +207,24 @@ export class FiltrosComponent implements OnInit {
     );
   }
 
+  isEstateSelected(option: any): boolean {
+    return this.selectedEstates.some(o => o.code === option.code);
+  }
+  
+
   getTipoPropiedad() {
     this.inmueblesService.getTipoPropiedad().subscribe(
       (response: any) => {
         this.estateOptions = response.data;
         console.log("tipoPropiedad", response.data);
 
-        this.selectedEstate = this.estateOptions[0] || null;
+        this.selectedEstates = this.estateOptions.length ? [this.estateOptions[0]] : [];
       },
       (error: any) => {
         console.error('Error al obtener los tipos de propiedad:', error);
       }
     );
   }
-
-  seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
-    if (categoria === 'estrato') {
-      if (typeof valor !== 'number') return;
-
-      this.seleccion[categoria] =
-        this.seleccion[categoria] === valor ? null : valor;
-    } else {
-      this.seleccion[categoria] =
-        this.seleccion[categoria] === valor ? null : valor;
-    }
-
-    console.log('Selección actual:', this.seleccion);
-  }
-
 
   getIcon(type: 'property' | 'estate', option: any): string {
     if (type === 'property') {
@@ -198,11 +253,19 @@ export class FiltrosComponent implements OnInit {
     option: any
   ): void {
     if (type === 'property') {
-      this.selectedProperty = option;
+      this.selectedProperty = this.selectedProperty?.code === option.code ? null : option;
       this.isPropertyDropdownOpen = false;
-    } if (type === 'estate') {
-      this.selectedEstate = option;
-      this.isEstateDropdownOpen = false;
+    }
+  
+    if (type === 'estate') {
+      const index = this.selectedEstates.findIndex(o => o.code === option.code);
+      if (index > -1) {
+        // Ya está seleccionado → lo quitamos
+        this.selectedEstates.splice(index, 1);
+      } else {
+        // No está seleccionado → lo agregamos
+        this.selectedEstates.push(option);
+      }
     }
   }
 

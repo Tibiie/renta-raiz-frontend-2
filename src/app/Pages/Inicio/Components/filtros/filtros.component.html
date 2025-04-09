@@ -89,20 +89,20 @@
             <div class="mt-2">
               <div class="flex flex-wrap gap-2">
                 <button
-                  *ngFor="let option of propertyOptions"
-                  (click)="selectOption('property', option)"
-                  [class]="
-                    getButtonClass(selectedProperty?.code === option.code)
-                  "
+                *ngFor="let option of propertyOptions"
+                (click)="selectOption('property', option)"
+                [class]="getButtonClass(selectedProperty?.code === option.code)"
+              >
+                <i [class]="getIcon('property', option)" class="mr-2"></i>
+                {{ option.displayName || option.name | titlecase }}
+                <span
+                  *ngIf="selectedProperty?.code === option.code"
+                  class="ml-1"
+                  >✔</span
                 >
-                  <i [class]="getIcon('property', option)" class="mr-2"></i>
-                  {{ option.displayName || option.name | titlecase }}
-                  <span
-                    *ngIf="selectedProperty?.code === option.code"
-                    class="ml-1"
-                    >✔</span
-                  >
-                </button>
+              </button>
+              
+              
               </div>
             </div>
           </li>
@@ -124,13 +124,13 @@
                 <button
                   *ngFor="let option of estateOptions"
                   (click)="selectOption('estate', option)"
-                  [class]="getButtonClass(selectedEstate?.code === option.code)"
-                >
+                  [class]="getButtonClass(isEstateSelected(option))"
+                  >
                   <i [class]="getIcon('estate', option)" class="mr-2"></i>
                   {{ option.name || option.name | titlecase }}
                   <span
-                    *ngIf="selectedEstate?.code === option.code"
-                    class="ml-1"
+                  *ngIf="isEstateSelected(option)"
+                  class="ml-1"
                     >✔</span
                   >
                 </button>
@@ -158,7 +158,8 @@
                     id="min-price"
                     type="number"
                     placeholder="Ej. 60 m2"
-                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" 
+                    id="AreaMinima" [(ngModel)]="AreaMinima"
                   />
                 </div>
                 <div class="flex flex-col w-44">
@@ -172,6 +173,7 @@
                     type="number"
                     placeholder="Ej. 120 m2"
                     class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                    id="AreaMaxima" [(ngModel)]="AreaMaxima"
                   />
                 </div>
               </div>
@@ -192,18 +194,17 @@
                   <p class="text-gray-700 font-medium mb-2">Habitaciones</p>
                   <div class="flex gap-2 flex-wrap">
                     <button
-                      *ngFor="let hab of habitaciones"
-                      (click)="seleccionar('habitaciones', hab)"
-                      [ngClass]="{
-                        'bg-gray-700 text-white font-semibold':
-                          seleccion.habitaciones === hab,
-                        'bg-blue-100 text-blue-700':
-                          seleccion.habitaciones !== hab
-                      }"
-                      class="w-8 h-8 rounded-md"
-                    >
-                      {{ hab }}
-                    </button>
+                    *ngFor="let hab of habitaciones"
+                    (click)="seleccionar('habitaciones', hab)"
+                    [ngClass]="{
+                      'bg-gray-700 text-white font-semibold': seleccion.habitaciones.includes(hab),
+                      'bg-blue-100 text-blue-700': !seleccion.habitaciones.includes(hab)
+                    }"
+                    class="w-8 h-8 rounded-md"
+                  >
+                    {{ hab }}
+                  </button>
+                  
                   </div>
                 </div>
 
@@ -212,17 +213,17 @@
                   <p class="text-gray-700 font-medium mb-2">Baños</p>
                   <div class="flex gap-2 flex-wrap">
                     <button
-                      *ngFor="let bano of banos"
-                      (click)="seleccionar('banos', bano)"
-                      [ngClass]="{
-                        'bg-gray-700 text-white font-semibold':
-                          seleccion.banos === bano,
-                        'bg-blue-100 text-blue-700': seleccion.banos !== bano
-                      }"
-                      class="w-8 h-8 rounded-md"
-                    >
-                      {{ bano }}
-                    </button>
+                    *ngFor="let bano of banos"
+                    (click)="seleccionar('banos', bano)"
+                    [ngClass]="{
+                      'bg-gray-700 text-white font-semibold': seleccion.banos.includes(bano),
+                      'bg-blue-100 text-blue-700': !seleccion.banos.includes(bano)
+                    }"
+                    class="w-8 h-8 rounded-md"
+                  >
+                    {{ bano }}
+                  </button>
+                  
                   </div>
                 </div>
 
@@ -235,8 +236,8 @@
                       (click)="seleccionar('parqueadero', p)"
                       [ngClass]="{
                         'bg-gray-700 text-white font-semibold':
-                          seleccion.parqueadero === p,
-                        'bg-blue-100 text-blue-700': seleccion.parqueadero !== p
+                          seleccion.parqueadero.includes(p),
+                        'bg-blue-100 text-blue-700': !seleccion.parqueadero.includes(p)
                       }"
                       class="w-8 h-8 rounded-md"
                     >
@@ -254,8 +255,8 @@
                       (click)="seleccionar('estrato', e)"
                       [ngClass]="{
                         'bg-gray-700 text-white font-semibold':
-                          seleccion.estrato === e,
-                        'bg-blue-100 text-blue-700': seleccion.estrato !== e
+                          seleccion.estrato.includes(e),
+                        'bg-blue-100 text-blue-700': !seleccion.estrato.includes(e)
                       }"
                       class="w-8 h-8 rounded-md"
                     >
@@ -280,6 +281,7 @@
           </button>
           <button
             class="flex-1 bg-[#CDAD60] hover:bg-[#b59a50] text-white font-semibold py-2 px-4 rounded-xl transition duration-200"
+            (click)="enviarFiltros()"
           >
             Aplicar filtros
           </button>
@@ -292,8 +294,8 @@
   <div class="w-full md:w-4/6 mt-44 mb-10">
     <div
       *ngIf="resultados.length > 0"
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-10"
-    >
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
       <div
         *ngFor="let inmueble of resultados"
         class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6"
@@ -318,13 +320,6 @@
             >
               Ver propiedad
             </a>
-          </div>
-
-          <!-- Destacado -->
-          <div
-            class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]"
-          >
-            Destacado
           </div>
 
           <!-- Tipo de inmueble y favorito -->
@@ -353,7 +348,7 @@
               {{ inmueble.neighborhood || "Sin barrio especificado" }}
             </h5>
             <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
-              {{ inmueble.description }}
+              {{ inmueble.address }}
             </p>
           </a>
 
@@ -387,20 +382,20 @@
             </div>
           </div>
 
-          <!-- Precio -->
           <div
-            class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold"
-          >
-            <span>Precio:</span>
-            <span class="text-[#000000]">
-              {{
-                inmueble.price_format ||
-                  (inmueble.price
-                    | currency : "COP" : "symbol-narrow" : "1.0-0") ||
-                  "Consultar"
-              }}
-            </span>
-          </div>
+          class="flex flex-col mt-4 text-[#080E36] text-lg font-semibold"
+        >
+          <span>Precio:</span>
+          <span class="text-[#000000] mt-1">
+            {{
+              inmueble.price_format ||
+                (inmueble.price
+                  | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                "Consultar"
+            }}
+          </span>
+        </div>
+        
         </div>
       </div>
     </div>
