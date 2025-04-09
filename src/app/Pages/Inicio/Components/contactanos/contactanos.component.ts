@@ -55,7 +55,6 @@ export class ContactanosComponent {
     );
   }
 
-
   vaciarFormulario() {
     this.formContacto.reset();
   }
