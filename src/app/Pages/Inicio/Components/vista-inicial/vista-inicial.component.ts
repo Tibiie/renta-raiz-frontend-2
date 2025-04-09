@@ -22,7 +22,7 @@ export class VistaInicialComponent implements OnInit {
   ubicacion: string = '';
   filtrosSeleccionados: Map<string, any> = new Map();
 
-  elementsPerPage = 10;
+  elementsPerPage = 12;
   filtros: any = {};
   categoriasInmuebles: any[] = [];
   inmueblesDestacadosArray: any = {};
@@ -88,22 +88,6 @@ export class VistaInicialComponent implements OnInit {
     this.getCategoriasInmuebles();
   }
 
-  prepararFiltros() {
-    this.filtrosSeleccionados.clear();
-
-    if (this.ubicacion) {
-      this.filtrosSeleccionados.set('neighborhood', this.ubicacion);
-    }
-
-    if (this.selectedProperty) {
-      this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
-    }
-
-    if (this.selectedEstate) {
-      this.filtrosSeleccionados.set('type', this.selectedEstate.code);
-    }
-  }
-
   getCategoriasInmuebles() {
     this.inmueblesService.getCategoriasInmuebles().subscribe(
       (response: any) => {
@@ -132,7 +116,6 @@ export class VistaInicialComponent implements OnInit {
         this.estateOptions = response.data;
         console.log("tipoPropiedad", response.data);
 
-        // Establece la primera opción como selección por defecto
         this.selectedEstate = this.estateOptions[0] || null;
       },
       (error: any) => {
@@ -155,18 +138,34 @@ export class VistaInicialComponent implements OnInit {
     );
   }
 
+  prepararFiltros() {
+    this.filtrosSeleccionados.clear();
+
+    if (this.ubicacion) {
+      this.filtrosSeleccionados.set('neighborhood', this.ubicacion);
+    }
+
+    if (this.selectedProperty) {
+      this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
+    }
+
+    if (this.selectedEstate) {
+      this.filtrosSeleccionados.set('type', this.selectedEstate.code);
+    }
+  }
+
   getEnviarFiltros() {
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = {
       ...filtrosObj,
-      pages: 1,
+      page: 1,
     }
     console.log('Objeto a enviar:', obj);
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
         this.router.navigate(['/filtros'], {
-          state: { resultados: response.data }
+          state: { resultados: response.data, paginacion: response, filtros: obj }
         });
       },
       (error: any) => {
@@ -189,17 +188,22 @@ export class VistaInicialComponent implements OnInit {
     );
   }
 
-
   getIcon(type: 'property' | 'estate', option: any): string {
-    if (type === 'property') {
-      if (!option) return 'fas fa-list-ul';
-      const code = typeof option === 'object' ? option.code : '';
-      return this.icons.property[code] || 'fas fa-home';
-    } else {
-      const code = typeof option === 'object' ? option.code : '';
-      return this.icons.estate[code] || 'fas fa-question-circle';
+    const defaultIcons = {
+      property: 'fas fa-home',
+      estate: 'fas fa-question-circle'
+    };
+
+    if (!option && type === 'property') {
+      return 'fas fa-list-ul';
     }
+
+    const code = typeof option === 'object' ? option.code : '';
+    const iconMap = this.icons[type];
+
+    return iconMap?.[code] || defaultIcons[type];
   }
+
 
   selectOption(
     type: 'property' | 'estate',
@@ -257,5 +261,12 @@ export class VistaInicialComponent implements OnInit {
 
   abrirPestana(url: string) {
     window.open(url, '_blank');
+  }
+
+  verPropiedad(codPro: number) {
+    console.log("codPro", codPro);
+    this.router.navigate(['/ver-propiedad'], {
+      state: { codPro: codPro }
+    });
   }
 }

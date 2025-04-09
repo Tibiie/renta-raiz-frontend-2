@@ -22,9 +22,9 @@
         <!-- Menú desktop (oculto en móvil) -->
         <div class="hidden md:block">
             <ul class="flex flex-col md:flex-row md:space-x-8 font-medium text-white">
-                <!-- <li><a href="#" class="hover:text-gray-300 block py-2">Venta</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Venta</a></li>
                 <li><a href="#" class="hover:text-gray-300 block py-2">Arriendo</a></li>
-                <li><a href="#" class="hover:text-gray-300 block py-2">Destacadas</a></li> -->
+                <li><a href="#" class="hover:text-gray-300 block py-2">Destacadas</a></li>
                 <li class="relative">
                     <a href="#" class="hover:text-gray-300 block py-2"
                         (click)="toggleNosotrosDropdown($event)">Nosotros</a>
@@ -53,6 +53,9 @@
         <div *ngIf="isMobileMenuOpen" class="md:hidden w-full bg-[#060F29] mt-4 rounded-lg shadow-lg">
             <ul class="flex flex-col space-y-2 p-4 font-medium text-white">
 
+                <li><a href="#" class="hover:text-gray-300 block py-2">Venta</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Arriendo</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2">Destacadas</a></li>
                 <!-- Nosotros con submenú -->
                 <li>
                     <div class="flex items-center justify-between py-2 cursor-pointer hover:text-gray-300"

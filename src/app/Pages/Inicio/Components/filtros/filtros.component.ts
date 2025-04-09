@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-filtros',
@@ -15,16 +16,21 @@ import { Location } from '@angular/common';
 })
 export class FiltrosComponent implements OnInit {
 
-  elementsPerPage = 10;
   AreaMinima = '';
   AreaMaxima = '';
+  precioVenta = '';
+  precioMinimo = '';
+  precioMaximo = '';
+  paginaActual = 1;
+  totalPaginas = 0;
+  elementsPerPage = 12;
+  paginas: number[] = [];
   filtrosSeleccionados: Map<string, any> = new Map();
-  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  estrato: number[] = [1, 2, 3, 4];
   banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
   parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
-  estrato: number[] = [1, 2, 3, 4];
+  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
 
-  // Para seleccionar
   seleccion = {
     habitaciones: [] as (number | string)[],
     banos: [] as (number | string)[],
@@ -32,18 +38,22 @@ export class FiltrosComponent implements OnInit {
     estrato: [] as number[],
   };
 
-  categoriasInmuebles: any[] = [];
+  paginacion: any = {};
   resultados: any[] = [];
+  isDrawerOpen: boolean = true;
+  filtrosVistaInicial: any = {};
+  categoriasInmuebles: any[] = [];
+
 
   // Para Tipo de Propiedad
   isPropertyDropdownOpen = false;
-  selectedProperty: { code: string, name: string, displayName?: string } | null = null;
   propertyOptions: { code: string, name: string, displayName?: string }[] = [];
+  selectedProperty: { code: string, name: string, displayName?: string } | null = null;
 
   // Para Inmueble
   isEstateDropdownOpen = false;
-  selectedEstates: { code: string, name: string }[] = [];
   estateOptions: { code: string, name: string }[] = [];
+  selectedEstates: { code: string, name: string }[] = [];
 
   private readonly icons = {
     property: {
@@ -70,47 +80,156 @@ export class FiltrosComponent implements OnInit {
   };
 
   constructor(
-    private inmueblesService: InmueblesService,
     private router: Router,
-    private location: Location,
+    private cdRef: ChangeDetectorRef,
+    private inmueblesService: InmueblesService,
   ) { }
 
-  ngOnInit(): void {
-    this.getDatos();
-
+  async ngOnInit(): Promise<void> {
+    console.log('Iniciando componente Filtros');
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras?.state || history.state;
 
     if (state?.resultados) {
-      console.log('Resultados recibidos:', state.resultados);
+      console.log('Estado recibido:', state);
       this.resultados = state.resultados;
-    } else {
-      console.log('No se recibieron resultados.');
+      this.filtrosVistaInicial = state.filtros;
+      this.paginacion = state.paginacion;
+
+      this.totalPaginas = this.paginacion.totalPages || 1;
+      this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+      this.paginaActual = this.filtrosVistaInicial.page || 1;
+
+      console.log('Paginacion:', this.paginacion);
+      console.log('Filtros:', this.filtrosVistaInicial);
+      console.log('Resultados:', this.resultados);
+    }
+
+    await this.getDatos();
+
+    console.log('Opciones cargadas:', {
+      propertyOptions: this.propertyOptions,
+      estateOptions: this.estateOptions
+    });
+
+    if (this.filtrosVistaInicial) {
+      console.log('Inicializando filtros con:', this.filtrosVistaInicial);
+      this.inicializarFiltrosDesdeVistaInicial();
+      console.log('Filtros inicializados:', {
+        selectedProperty: this.selectedProperty,
+        selectedEstates: this.selectedEstates,
+        seleccion: this.seleccion
+      });
+    }
+
+    this.cdRef.detectChanges();
+  }
+
+  async getDatos(): Promise<void> {
+    try {
+      const [categoriasResponse, tipoPropiedadResponse] = await firstValueFrom(
+        forkJoin([
+          this.inmueblesService.getCategoriasInmuebles(),
+          this.inmueblesService.getTipoPropiedad()
+        ])
+      ) as [any, any];
+
+      this.categoriasInmuebles = categoriasResponse.data;
+      this.propertyOptions = this.categoriasInmuebles.map((cat: any) => {
+        if (cat.code === '3') {
+          return { ...cat, displayName: 'Todas' };
+        }
+        return cat;
+      });
+      this.selectedProperty = this.propertyOptions.find(cat => cat.code === '3') || this.propertyOptions[0];
+
+      this.estateOptions = tipoPropiedadResponse.data;
+      this.selectedEstates = this.estateOptions.length ? [this.estateOptions[0]] : [];
+    } catch (error) {
+      console.error('Error al obtener datos:', error);
     }
   }
 
-  getDatos() {
-    this.getCategoriasInmuebles();
-    this.getTipoPropiedad();
+  toggleDrawer() {
+    this.isDrawerOpen = !this.isDrawerOpen;
+    console.log("isDrawerOpen", this.isDrawerOpen);
+
   }
 
-  enviarFiltros() {
+  enviarFiltros(pagina: number = 1) {
+    this.paginaActual = pagina;
     this.prepararFiltros();
+
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = {
       ...filtrosObj,
-      pages: 1,
-    }
+      page: pagina,
+    };
+
     console.log('Objeto a enviar:', obj);
+
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
         this.resultados = response.data;
+
+        this.paginacion = response;
+        this.totalPaginas = response.totalPages || 1;
+        this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+
+        console.log("Paginas", this.paginas);
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
       }
     );
+  }
+
+  cambiarPagina(pagina: number) {
+    if (pagina !== this.paginaActual) {
+      this.enviarFiltros(pagina);
+    }
+  }
+
+  paginaAnterior() {
+    if (this.paginaActual > 1) {
+      this.enviarFiltros(this.paginaActual - 1);
+    }
+  }
+
+  paginaSiguiente() {
+    if (this.paginaActual < this.totalPaginas) {
+      this.enviarFiltros(this.paginaActual + 1);
+    }
+  }
+
+  inicializarFiltrosDesdeVistaInicial() {
+    const f = this.filtrosVistaInicial;
+
+    this.selectedProperty = this.propertyOptions.find(opt => opt.code === f?.biz) || this.selectedProperty;
+
+    if (f?.type) {
+      const estateCodes = f.type.split(',');
+      this.selectedEstates = this.estateOptions.filter(opt => estateCodes.includes(opt.code));
+    }
+
+    this.seleccion.habitaciones = this.inicializarRango(f, 'bedroom');
+    this.seleccion.banos = this.inicializarRango(f, 'bathroom');
+    this.seleccion.parqueadero = this.inicializarParqueadero(f?.minparking);
+    this.seleccion.estrato = f?.stratum?.split(',').map(Number) || [];
+
+    this.AreaMinima = f?.minarea || '';
+    this.AreaMaxima = f?.maxarea || '';
+
+    this.cdRef.detectChanges();
+  }
+
+  private inicializarRango(f: any, campo: string): (number | string)[] {
+    return f?.[`${campo}s`]?.split(',') || (f?.[`min${campo}`] ? ['+6'] : []);
+  }
+
+  private inicializarParqueadero(min: string): (number | string)[] {
+    return min === '6' ? ['+6'] : min ? [min] : [];
   }
 
   prepararFiltros() {
@@ -167,30 +286,76 @@ export class FiltrosComponent implements OnInit {
     if (this.AreaMaxima) {
       this.filtrosSeleccionados.set('"maxarea"', this.AreaMaxima);
     }
+
+    if (this.precioMinimo) {
+      this.filtrosSeleccionados.set('""pcmin""', this.precioMinimo);
+    }
+
+    if (this.precioMaximo) {
+      this.filtrosSeleccionados.set('""pcmax""', this.precioMaximo);
+    }
+
+    if (this.precioVenta) {
+      this.filtrosSeleccionados.set('""saleprice""', this.precioVenta);
+    }
   }
 
   seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
-    if (categoria === 'estrato') {
-      let arr = this.seleccion.estrato as number[];
-      const index = arr.indexOf(valor as number);
-      if (index > -1) {
-        arr.splice(index, 1);
-      } else {
-        arr.push(valor as number);
-      }
-      this.seleccion.estrato = arr;
-    } else {
-      let arr = this.seleccion[categoria] as (number | string)[];
-      const index = arr.indexOf(valor);
-      if (index > -1) {
-        arr.splice(index, 1);
-      } else {
-        arr.push(valor);
-      }
-      this.seleccion[categoria] = arr;
+    const arr = this.seleccion[categoria] as (number | string)[];
+    const index = arr.indexOf(valor);
+    index > -1 ? arr.splice(index, 1) : arr.push(valor);
+  }
+
+  isEstateSelected(option: any): boolean {
+    return this.selectedEstates.some(o => o.code === option.code);
+  }
+
+  selectOption(
+    type: 'property' | 'estate',
+    option: any
+  ): void {
+    if (type === 'property') {
+      this.selectedProperty = this.selectedProperty?.code === option.code ? null : option;
+      this.isPropertyDropdownOpen = false;
     }
 
-    console.log('Selección actual:', this.seleccion);
+    if (type === 'estate') {
+      const index = this.selectedEstates.findIndex(o => o.code === option.code);
+      if (index > -1) {
+        this.selectedEstates.splice(index, 1);
+      } else {
+        this.selectedEstates.push(option);
+      }
+    }
+  }
+
+  toggleDropdown(type: 'property' | 'estate'): void {
+    if (type === 'property') {
+      this.isPropertyDropdownOpen = !this.isPropertyDropdownOpen;
+      this.isEstateDropdownOpen = false;
+    } if (type === 'estate') {
+      this.isEstateDropdownOpen = !this.isEstateDropdownOpen;
+      this.isPropertyDropdownOpen = false;
+    }
+  }
+
+  getButtonClass(condition: boolean): string {
+    const base = 'flex items-center px-3 py-2 text-sm rounded-md';
+    return condition
+      ? `${base} bg-[#080E36] text-white`
+      : `${base} bg-blue-100 text-blue-700`;
+  }
+
+  getIcon(type: 'property' | 'estate', option: any): string {
+    if (type === 'property') {
+      if (!option) return 'fas fa-list-ul';
+      const code = typeof option === 'object' ? option.code : '';
+      return this.icons.property[code] || 'fas fa-home';
+    }
+    else {
+      const code = typeof option === 'object' ? option.code : '';
+      return this.icons.estate[code] || 'fas fa-question-circle';
+    }
   }
 
   getCategoriasInmuebles() {
@@ -215,10 +380,6 @@ export class FiltrosComponent implements OnInit {
     );
   }
 
-  isEstateSelected(option: any): boolean {
-    return this.selectedEstates.some(o => o.code === option.code);
-  }
-
   getTipoPropiedad() {
     this.inmueblesService.getTipoPropiedad().subscribe(
       (response: any) => {
@@ -231,55 +392,5 @@ export class FiltrosComponent implements OnInit {
         console.error('Error al obtener los tipos de propiedad:', error);
       }
     );
-  }
-
-  getIcon(type: 'property' | 'estate', option: any): string {
-    if (type === 'property') {
-      if (!option) return 'fas fa-list-ul';
-      const code = typeof option === 'object' ? option.code : '';
-      return this.icons.property[code] || 'fas fa-home';
-    }
-    else {
-      const code = typeof option === 'object' ? option.code : '';
-      return this.icons.estate[code] || 'fas fa-question-circle';
-    }
-  }
-
-  toggleDropdown(type: 'property' | 'estate'): void {
-    if (type === 'property') {
-      this.isPropertyDropdownOpen = !this.isPropertyDropdownOpen;
-      this.isEstateDropdownOpen = false;
-    } if (type === 'estate') {
-      this.isEstateDropdownOpen = !this.isEstateDropdownOpen;
-      this.isPropertyDropdownOpen = false;
-    }
-  }
-
-  selectOption(
-    type: 'property' | 'estate' | 'project',
-    option: any
-  ): void {
-    if (type === 'property') {
-      this.selectedProperty = this.selectedProperty?.code === option.code ? null : option;
-      this.isPropertyDropdownOpen = false;
-    }
-
-    if (type === 'estate') {
-      const index = this.selectedEstates.findIndex(o => o.code === option.code);
-      if (index > -1) {
-        // Ya está seleccionado → lo quitamos
-        this.selectedEstates.splice(index, 1);
-      } else {
-        // No está seleccionado → lo agregamos
-        this.selectedEstates.push(option);
-      }
-    }
-  }
-
-  getButtonClass(selected: boolean): string {
-    const base = 'flex items-center px-3 py-2 text-sm rounded-md';
-    return selected
-      ? `${base} bg-[#080E36] text-white`
-      : `${base} bg-blue-100 text-blue-700`;
   }
 }

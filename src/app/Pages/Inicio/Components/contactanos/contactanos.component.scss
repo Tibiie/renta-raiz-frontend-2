@@ -1,48 +1,21 @@
 .banner-contacto {
-    background-image: url('../../../../../assets/images/SliderCONTACTO.jpg');
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    height: 60vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-    .overlay {
-      background-color: rgba(0, 0, 0, 0);
-      color: white;
-      text-align: center;
-      padding: 2rem;
-      animation: fadeInRight 1.5s ease-out;
-    }
-  
-    .titulo-animado {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-  
-    .subtitulo {
-      font-size: 1.1rem;
-      letter-spacing: 2px;
-      margin-bottom: 1rem;
-    }
-  
-    .btn-contactar {
-      background-color: #f5d47a;
-      border: none;
-      padding: 0.7rem 2rem;
-      font-weight: bold;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-  
-      &:hover {
-        background-color: #e4c56c;
-      }
-    }
+  background-image: url('../../../../../assets/images/SliderCONTACTO.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 78vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .overlay {
+    background-color: rgba(0, 0, 0, 0);
+    text-align: center;
+    padding: 2rem;
+    animation: fadeInRight 1.5s ease-out;
   }
-  
+}
+
   @keyframes fadeInRight {
     from {
       opacity: 0;
@@ -111,10 +84,6 @@
   @media (max-width: 768px) {
     .contacto-formulario .formulario-container {
       flex-direction: column;
-    }
-  
-    .banner-contacto .titulo-animado {
-      font-size: 1.8rem;
     }
   }
   

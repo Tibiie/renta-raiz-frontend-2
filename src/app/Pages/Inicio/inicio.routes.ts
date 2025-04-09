@@ -3,6 +3,7 @@ import { VistaInicialComponent } from './Components/vista-inicial/vista-inicial.
 import { NgModule } from '@angular/core';
 import { FiltrosComponent } from './Components/filtros/filtros.component';
 import { ContactanosComponent } from './Components/contactanos/contactanos.component';
+import { VerPropiedadComponent } from './Components/ver-propiedad/ver-propiedad.component';
 
 export const routes: Routes = [
 
@@ -20,6 +21,10 @@ export const routes: Routes = [
   {
     path: 'contacto',
     component: ContactanosComponent
+  },
+  {
+    path: 'ver-propiedad',
+    component: VerPropiedadComponent
   }
 
 ];

@@ -3,45 +3,30 @@
 <div class="flex flex-col md:flex-row">
   <div class="flex-1">
     <div class="text-center pt-32 fixed left-36">
-      <button
-        type="button"
+      <button type="button" (click)="toggleDrawer()"
         class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-[#CDAD60] dark:text-[#CDAD60] dark:hover:text-white dark:hover:bg-[#CDAD60] shadow-lg transition duration-300"
-        data-drawer-target="modern-drawer"
-        data-drawer-show="modern-drawer"
-        data-drawer-backdrop="false"
-        aria-controls="modern-drawer"
-      >
+        data-drawer-target="modern-drawer" data-drawer-show="modern-drawer" data-drawer-backdrop="false"
+        aria-controls="modern-drawer">
         <i class="fas fa-filter mr-2"></i> Filtros
       </button>
     </div>
 
-    <div
-      id="modern-drawer"
+    <div id="modern-drawer"
       class="fixed top-48 left-0 z-60 max-h-[calc(100vh-6rem)] w-[28rem] bg-white text-black shadow-xl flex flex-col"
-      style="border: 1px solid #cdad60"
-      tabindex="-1"
-      aria-labelledby="modern-drawer-label"
-    >
-      <div
-        class="bg-blue-100/50 rounded-t-lg p-1 flex justify-between items-center mb-1 sticky top-0 z-10"
-      >
+      style="border: 1px solid #cdad60" tabindex="-1" aria-labelledby="modern-drawer-label">
+      <div class="bg-blue-100/50 rounded-t-lg p-1 flex justify-between items-center mb-1 sticky top-0 z-10">
         <h3 class="text-lg font-semibold text-gray-800"></h3>
-        <button
-          type="button"
-          data-drawer-hide="modern-drawer"
-          aria-controls="modern-drawer"
-          class="text-gray-600 hover:text-black transition-colors duration-200 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:shadow-md"
-        >
+        <button type="button" (click)="toggleDrawer()" data-drawer-hide="modern-drawer" aria-controls="modern-drawer"
+          class="text-gray-600 hover:text-black transition-colors duration-200 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:shadow-md">
           <span class="text-xl leading-none">×</span>
         </button>
       </div>
 
       <div class="flex-1 overflow-y-auto max-h-[calc(100vh-20rem)]">
         <ul class="space-y-3 font-medium">
-          <li class="border-b border-[#d1d5db] pb-4 mb-4">
-            <a
-              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-            >
+          <li class="border-b border-[#d1d5db] pb-4 mb-4"
+            *ngIf="selectedProperty?.code === '3' || selectedProperty?.code === '1'">
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-money-bill-wave text-xl text-[#000000] mr-3"></i>
               <span class="font-semibold">Rango de precios</span>
             </a>
@@ -49,68 +34,59 @@
             <div class="mt-2 px-3">
               <div class="flex gap-4">
                 <div class="flex flex-col w-44">
-                  <label
-                    for="min-price"
-                    class="text-sm font-medium text-gray-700 mb-1"
-                    >Precio mínimo</label
-                  >
-                  <input
-                    id="min-price"
-                    type="number"
-                    placeholder="Desde $"
-                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                  />
+                  <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
+                  <input id="min-price" [(ngModel)]="precioMinimo" type="number" placeholder="Desde $"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                 </div>
                 <div class="flex flex-col w-44">
-                  <label
-                    for="max-price"
-                    class="text-sm font-medium text-gray-700 mb-1"
-                    >Precio máximo</label
-                  >
-                  <input
-                    id="max-price"
-                    type="number"
-                    placeholder="Hasta $"
-                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                  />
+                  <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
+                  <input id="max-price" [(ngModel)]="precioMaximo" type="number" placeholder="Hasta $"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="border-b border-[#d1d5db] pb-4 mb-4"
+            *ngIf="selectedProperty?.code === '3' || selectedProperty?.code === '2'">
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-money-bill-wave text-xl text-[#000000] mr-3"></i>
+              <span class="font-semibold">Precio de venta</span>
+            </a>
+
+            <div class="mt-2 px-3">
+              <div class="flex gap-4">
+                <div class="flex flex-col w-full max-w-[400px]">
+                  <label for="saleprice" class="text-sm font-medium text-gray-700 mb-1">Precio de venta</label>
+                  <input id="saleprice" [(ngModel)]="precioVenta" type="number" placeholder="Precio de venta"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60] w-full" />
                 </div>
               </div>
             </div>
           </li>
 
           <li class="border-b border-[#d1d5db] pb-4 mb-4">
-            <a
-              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-            >
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-tags text-xl text-[#000000] mr-3"></i>
               <span class="font-semibold">Categoría</span>
             </a>
 
             <div class="mt-2">
               <div class="flex flex-wrap gap-2">
-                <button
-                *ngFor="let option of propertyOptions"
-                (click)="selectOption('property', option)"
-                [class]="getButtonClass(selectedProperty?.code === option.code)"
-              >
-                <i [class]="getIcon('property', option)" class="mr-2"></i>
-                {{ option.displayName || option.name | titlecase }}
-                <span
-                  *ngIf="selectedProperty?.code === option.code"
-                  class="ml-1"
-                  >✔</span
-                >
-              </button>
-              
-              
+                <button *ngFor="let option of propertyOptions" (click)="selectOption('property', option)"
+                  [class]="getButtonClass(selectedProperty?.code === option.code)">
+                  <i [class]="getIcon('property', option)" class="mr-2"></i>
+                  {{ option.displayName || option.name | titlecase }}
+                  <span *ngIf="selectedProperty?.code === option.code" class="ml-1">✔</span>
+                </button>
+
+
               </div>
             </div>
           </li>
 
           <li class="border-b border-[#d1d5db] pb-4 mb-4">
-            <a
-              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-            >
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-home text-xl text-[#000000] mr-3"></i>
               <span class="font-semibold">Tipo de inmueble</span>
             </a>
@@ -121,27 +97,18 @@
               </p>
 
               <div class="flex flex-wrap gap-2">
-                <button
-                  *ngFor="let option of estateOptions"
-                  (click)="selectOption('estate', option)"
-                  [class]="getButtonClass(isEstateSelected(option))"
-                  >
+                <button *ngFor="let option of estateOptions" (click)="selectOption('estate', option)"
+                  [class]="getButtonClass(isEstateSelected(option))">
                   <i [class]="getIcon('estate', option)" class="mr-2"></i>
                   {{ option.name || option.name | titlecase }}
-                  <span
-                  *ngIf="isEstateSelected(option)"
-                  class="ml-1"
-                    >✔</span
-                  >
+                  <span *ngIf="isEstateSelected(option)" class="ml-1">✔</span>
                 </button>
               </div>
             </div>
           </li>
 
           <li class="border-b border-[#d1d5db] pb-4 mb-4">
-            <a
-              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-            >
+            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-ruler-combined text-xl text-[#000000] mr-3"></i>
               <span>Área</span>
             </a>
@@ -149,32 +116,16 @@
             <div class="mt-2 px-3">
               <div class="flex gap-4">
                 <div class="flex flex-col w-44">
-                  <label
-                    for="min-price"
-                    class="text-sm font-medium text-gray-700 mb-1"
-                    >Mínima</label
-                  >
-                  <input
-                    id="min-price"
-                    type="number"
-                    placeholder="Ej. 60 m2"
-                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" 
-                    id="AreaMinima" [(ngModel)]="AreaMinima"
-                  />
+                  <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Mínima</label>
+                  <input id="min-price" type="number" placeholder="Ej. 60 m2"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                    id="AreaMinima" [(ngModel)]="AreaMinima" />
                 </div>
                 <div class="flex flex-col w-44">
-                  <label
-                    for="max-price"
-                    class="text-sm font-medium text-gray-700 mb-1"
-                    >Máxima</label
-                  >
-                  <input
-                    id="max-price"
-                    type="number"
-                    placeholder="Ej. 120 m2"
+                  <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Máxima</label>
+                  <input id="max-price" type="number" placeholder="Ej. 120 m2"
                     class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                    id="AreaMaxima" [(ngModel)]="AreaMaxima"
-                  />
+                    id="AreaMaxima" [(ngModel)]="AreaMaxima" />
                 </div>
               </div>
             </div>
@@ -183,9 +134,7 @@
           <li class="border-b border-[#d1d5db] pb-4 mb-4">
             <div class="p-3">
               <div class="flex items-center mb-4">
-                <i
-                  class="fas fa-clipboard-list text-xl text-[#000000] mr-3"
-                ></i>
+                <i class="fas fa-clipboard-list text-xl text-[#000000] mr-3"></i>
                 <span class="font-semibold text-lg">Detalles del proyecto</span>
               </div>
 
@@ -193,18 +142,13 @@
                 <div>
                   <p class="text-gray-700 font-medium mb-2">Habitaciones</p>
                   <div class="flex gap-2 flex-wrap">
-                    <button
-                    *ngFor="let hab of habitaciones"
-                    (click)="seleccionar('habitaciones', hab)"
-                    [ngClass]="{
+                    <button *ngFor="let hab of habitaciones" (click)="seleccionar('habitaciones', hab)" [ngClass]="{
                       'bg-gray-700 text-white font-semibold': seleccion.habitaciones.includes(hab),
                       'bg-blue-100 text-blue-700': !seleccion.habitaciones.includes(hab)
-                    }"
-                    class="w-8 h-8 rounded-md"
-                  >
-                    {{ hab }}
-                  </button>
-                  
+                    }" class="w-8 h-8 rounded-md">
+                      {{ hab }}
+                    </button>
+
                   </div>
                 </div>
 
@@ -212,18 +156,13 @@
                 <div>
                   <p class="text-gray-700 font-medium mb-2">Baños</p>
                   <div class="flex gap-2 flex-wrap">
-                    <button
-                    *ngFor="let bano of banos"
-                    (click)="seleccionar('banos', bano)"
-                    [ngClass]="{
+                    <button *ngFor="let bano of banos" (click)="seleccionar('banos', bano)" [ngClass]="{
                       'bg-gray-700 text-white font-semibold': seleccion.banos.includes(bano),
                       'bg-blue-100 text-blue-700': !seleccion.banos.includes(bano)
-                    }"
-                    class="w-8 h-8 rounded-md"
-                  >
-                    {{ bano }}
-                  </button>
-                  
+                    }" class="w-8 h-8 rounded-md">
+                      {{ bano }}
+                    </button>
+
                   </div>
                 </div>
 
@@ -231,16 +170,11 @@
                 <div>
                   <p class="text-gray-700 font-medium mb-2">Parqueadero</p>
                   <div class="flex gap-2 flex-wrap">
-                    <button
-                      *ngFor="let p of parqueadero"
-                      (click)="seleccionar('parqueadero', p)"
-                      [ngClass]="{
+                    <button *ngFor="let p of parqueadero" (click)="seleccionar('parqueadero', p)" [ngClass]="{
                         'bg-gray-700 text-white font-semibold':
                           seleccion.parqueadero.includes(p),
                         'bg-blue-100 text-blue-700': !seleccion.parqueadero.includes(p)
-                      }"
-                      class="w-8 h-8 rounded-md"
-                    >
+                      }" class="w-8 h-8 rounded-md">
                       {{ p }}
                     </button>
                   </div>
@@ -250,16 +184,11 @@
                 <div>
                   <p class="text-gray-700 font-medium mb-2">Estrato</p>
                   <div class="flex gap-2 flex-wrap">
-                    <button
-                      *ngFor="let e of estrato"
-                      (click)="seleccionar('estrato', e)"
-                      [ngClass]="{
+                    <button *ngFor="let e of estrato" (click)="seleccionar('estrato', e)" [ngClass]="{
                         'bg-gray-700 text-white font-semibold':
                           seleccion.estrato.includes(e),
                         'bg-blue-100 text-blue-700': !seleccion.estrato.includes(e)
-                      }"
-                      class="w-8 h-8 rounded-md"
-                    >
+                      }" class="w-8 h-8 rounded-md">
                       {{ e }}
                     </button>
                   </div>
@@ -270,19 +199,15 @@
         </ul>
       </div>
 
-      <div
-        class="sticky bottom-0 bg-white pt-2 pb-4 mt-4 z-10 border-t border-gray-200"
-      >
+      <div class="sticky bottom-0 bg-white pt-2 pb-4 mt-4 z-10 border-t border-gray-200">
         <div class="flex justify-between gap-4 px-4">
           <button
-            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200"
-          >
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200">
             Borrar filtros
           </button>
           <button
             class="flex-1 bg-[#CDAD60] hover:bg-[#b59a50] text-white font-semibold py-2 px-4 rounded-xl transition duration-200"
-            (click)="enviarFiltros()"
-          >
+            (click)="enviarFiltros()">
             Aplicar filtros
           </button>
         </div>
@@ -291,120 +216,119 @@
   </div>
 
   <!-- Cards de resultados filtrados -->
-  <div class="w-full md:w-4/6 mt-44 mb-10">
-    <div
-      *ngIf="resultados.length > 0"
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-      >
-      <div
-        *ngFor="let inmueble of resultados"
-        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6"
-      >
-        <!-- Imagen -->
+  <div class="w-full mt-60 mb-6 px-2 transition-all duration-300 ease-in-out"
+    [ngClass]="{'md:ml-[28rem]': isDrawerOpen, 'md:ml-0': !isDrawerOpen}">
+    <div *ngIf="resultados.length > 0" class="grid gap-1" [ngClass]="{'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4': !isDrawerOpen, 
+                    'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3': isDrawerOpen}">
+      <div *ngFor="let inmueble of resultados"
+        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-4 text-sm max-w-[280px] mx-auto">
+
         <div class="relative group">
           <a href="#">
-            <img
-              class="rounded-t-lg w-full h-70 object-cover"
-              [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-              [alt]="inmueble.address"
-            />
+            <img class="rounded-t-lg w-full h-44 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+              [alt]="inmueble.address" />
           </a>
 
-          <!-- Hover efecto -->
           <div
-            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10"
-          >
-            <a
-              href="#"
-              class="bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
-            >
+            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+            <a href="#"
+              class="bg-white text-[#080E36] px-4 py-1 font-medium rounded shadow hover:bg-[#CDAD60] hover:text-white text-xs">
               Ver propiedad
             </a>
           </div>
 
-          <!-- Tipo de inmueble y favorito -->
-          <div
-            class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20"
-          >
-            <span
-              class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow"
-            >
+          <div class="absolute bottom-1 left-1 right-1 flex justify-between items-center px-2 z-20">
+            <span class="bg-[#CDAD60] text-white text-xs font-medium px-2 py-0.5 rounded shadow">
               {{ inmueble.type | titlecase }}
             </span>
-            <button
-              class="text-white text-lg hover:text-[#ea6666] transition-colors"
-            >
-              <i class="fas fa-heart text-2xl"></i>
+            <button class="text-white text-base hover:text-[#ea6666] transition-colors">
+              <i class="fas fa-heart text-xl"></i>
             </button>
           </div>
         </div>
 
-        <!-- Info -->
-        <div class="p-5">
+        <div class="p-3">
           <a href="#">
-            <h5
-              class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]"
-            >
+            <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug">
               {{ inmueble.neighborhood || "Sin barrio especificado" }}
             </h5>
-            <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
-              {{ inmueble.address }}
+            <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
+              {{ inmueble.description }}
             </p>
           </a>
 
-          <!-- Detalles -->
-          <div class="flex justify-between text-[#080E36] mt-5">
+          <div class="flex justify-between text-[#080E36] mt-2">
             <div class="flex flex-col items-center">
-              <span class="text-sm font-semibold">Habitaciones</span>
-              <div class="flex items-center">
-                <i class="fas fa-bed text-lg"></i>
-                <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+              <span class="text-xs font-medium">Habit</span>
+              <div class="flex items-center text-xs">
+                <i class="fas fa-bed text-sm"></i>
+                <span class="ml-1">{{ inmueble.bedrooms || "N/A" }}</span>
               </div>
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm font-semibold">Baños</span>
-              <div class="flex items-center">
-                <i class="fas fa-bath text-lg"></i>
-                <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+              <span class="text-xs font-medium">Baños</span>
+              <div class="flex items-center text-xs">
+                <i class="fas fa-bath text-sm"></i>
+                <span class="ml-1">{{ inmueble.bathrooms || "N/A" }}</span>
               </div>
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm font-semibold">Área</span>
-              <div class="flex items-center">
-                <i class="fas fa-ruler-combined text-lg"></i>
-                <span class="ml-2"
-                  >{{
-                    inmueble.area_cons || inmueble.area_lot || "N/A"
-                  }}
-                  m²</span
-                >
+              <span class="text-xs font-medium">Área</span>
+              <div class="flex items-center text-xs">
+                <i class="fas fa-ruler-combined text-sm"></i>
+                <span class="ml-1">
+                  {{ inmueble.area_cons || inmueble.area_lot || "N/A" }} m²
+                </span>
               </div>
             </div>
           </div>
 
-          <div
-          class="flex flex-col mt-4 text-[#080E36] text-lg font-semibold"
-        >
-          <span>Precio:</span>
-          <span class="text-[#000000] mt-1">
-            {{
+          <div class="flex flex-col mt-3 text-[#080E36] text-sm font-medium">
+            <span>Precio:</span>
+            <span class="text-[#000000] mt-1 text-base font-semibold">
+              {{
               inmueble.price_format ||
-                (inmueble.price
-                  | currency : "COP" : "symbol-narrow" : "1.0-0") ||
-                "Consultar"
-            }}
-          </span>
-        </div>
-        
+              (inmueble.price
+              | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+              "Consultar"
+              }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
 
-    <div
-      *ngIf="resultados.length === 0"
-      class="text-center py-10 text-gray-500"
-    >
+    <div *ngIf="resultados.length === 0" class="text-center py-10 text-gray-500">
       No se encontraron inmuebles con los filtros seleccionados.
+    </div>
+
+    <!-- Paginado -->
+    <div class="flex justify-center mt-6">
+      <nav aria-label="Page navigation">
+        <ul class="inline-flex items-center -space-x-px text-sm">
+          <li>
+            <button (click)="paginaAnterior()" [disabled]="paginaActual === 1"
+              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+              Anterior
+            </button>
+          </li>
+
+          <li *ngFor="let pagina of paginas" class="mx-0.5">
+            <button (click)="cambiarPagina(pagina)"
+              [ngClass]="pagina === paginaActual ? 'text-white bg-[#CDAD60]' : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'"
+              class="px-3 py-2 leading-tight border border-gray-300 rounded">
+              {{ pagina }}
+            </button>
+          </li>
+
+          <li>
+            <button (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+              Siguiente
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>
