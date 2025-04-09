@@ -26,24 +26,24 @@
                 <li><a href="#" class="hover:text-gray-300 block py-2">Arriendo</a></li>
                 <li><a href="#" class="hover:text-gray-300 block py-2">Destacadas</a></li> -->
                 <li class="relative">
-                    <a href="#" class="hover:text-gray-300 block py-2" (click)="toggleNosotrosDropdown($event)">Nosotros</a>
-                  
+                    <a href="#" class="hover:text-gray-300 block py-2"
+                        (click)="toggleNosotrosDropdown($event)">Nosotros</a>
+
                     <!-- Submenú -->
-                    <ul
-                      *ngIf="showNosotrosDropdown"
-                      class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48"
-                    >
-                      <li>
-                        <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('quienes-somos')">Quiénes Somos</a>
-                      </li>
-                      <li>
-                        <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('equipo')">Equipo</a>
-                      </li>
-                      <li>
-                        <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('historia')">Historia</a>
-                      </li>
+                    <ul *ngIf="showNosotrosDropdown"
+                        class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48">
+                        <li>
+                            <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('quienes-somos')">Quiénes
+                                Somos</a>
+                        </li>
+                        <li>
+                            <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('equipo')">Equipo</a>
+                        </li>
+                        <li>
+                            <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('historia')">Historia</a>
+                        </li>
                     </ul>
-                  </li>
+                </li>
                 <li><a href="#" class="hover:text-gray-300 block py-2">Clientes</a></li>
                 <li><a class="hover:text-gray-300 block py-2" (click)="redirectTo('contacto')">Contactanos</a></li>
             </ul>
@@ -52,12 +52,33 @@
         <!-- Menú móvil (solo visible en móvil) -->
         <div *ngIf="isMobileMenuOpen" class="md:hidden w-full bg-[#060F29] mt-4 rounded-lg shadow-lg">
             <ul class="flex flex-col space-y-2 p-4 font-medium text-white">
-                <!-- <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Venta</a></li>
-                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Arriendo</a></li>
-                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Destacadas</a></li> -->
-                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Nosotros</a></li>
+
+                <!-- Nosotros con submenú -->
+                <li>
+                    <div class="flex items-center justify-between py-2 cursor-pointer hover:text-gray-300"
+                        (click)="toggleNosotrosDropdown($event)">
+                        <span>Nosotros</span>
+                        <svg class="w-4 h-4 transition-transform duration-300"
+                            [ngClass]="{ 'rotate-180': showNosotrosDropdown }" fill="none" stroke="currentColor"
+                            stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+
+                    <!-- Submenú desplegable -->
+                    <ul *ngIf="showNosotrosDropdown" class="pl-4 mt-2 space-y-1 text-sm">
+                        <li><a href="/quienes-somos" class="block py-1 hover:text-gray-300"
+                                (click)="toggleMobileMenu()">Quiénes Somos</a></li>
+                        <li><a href="/equipo" class="block py-1 hover:text-gray-300"
+                                (click)="toggleMobileMenu()">Equipo</a></li>
+                        <li><a href="/historia" class="block py-1 hover:text-gray-300"
+                                (click)="toggleMobileMenu()">Historia</a></li>
+                    </ul>
+                </li>
+
+                <!-- Otras opciones -->
                 <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Clientes</a></li>
-                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Contactanos</a></li>
+                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Contáctanos</a></li>
             </ul>
         </div>
     </div>
