@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -19,6 +20,8 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  constructor(private _router: Router) { }
+
   @HostListener('window:scroll', [])
   onWindowScroll() {
     if (!this.alwaysScrolled) {
@@ -28,5 +31,25 @@ export class NavbarComponent implements OnInit {
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  redirectTo(url: string): void {
+    this._router.navigate([url]);
+  }
+
+  showNosotrosDropdown = false;
+
+  toggleNosotrosDropdown(event: MouseEvent) {
+    event.preventDefault();
+    this.showNosotrosDropdown = !this.showNosotrosDropdown;
+  }
+
+  closeDropdown() {
+    this.showNosotrosDropdown = false;
+  }
+
+  navigateTo(route: string) {
+    this._router.navigate([route]);
+    this.closeDropdown();
   }
 }

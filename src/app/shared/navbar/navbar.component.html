@@ -25,9 +25,27 @@
                 <!-- <li><a href="#" class="hover:text-gray-300 block py-2">Venta</a></li>
                 <li><a href="#" class="hover:text-gray-300 block py-2">Arriendo</a></li>
                 <li><a href="#" class="hover:text-gray-300 block py-2">Destacadas</a></li> -->
-                <li><a href="#" class="hover:text-gray-300 block py-2">Nosotros</a></li>
+                <li class="relative">
+                    <a href="#" class="hover:text-gray-300 block py-2" (click)="toggleNosotrosDropdown($event)">Nosotros</a>
+                  
+                    <!-- Submenú -->
+                    <ul
+                      *ngIf="showNosotrosDropdown"
+                      class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48"
+                    >
+                      <li>
+                        <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('quienes-somos')">Quiénes Somos</a>
+                      </li>
+                      <li>
+                        <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('equipo')">Equipo</a>
+                      </li>
+                      <li>
+                        <a class="block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('historia')">Historia</a>
+                      </li>
+                    </ul>
+                  </li>
                 <li><a href="#" class="hover:text-gray-300 block py-2">Clientes</a></li>
-                <li><a href="#" class="hover:text-gray-300 block py-2">Contactanos</a></li>
+                <li><a class="hover:text-gray-300 block py-2" (click)="redirectTo('contacto')">Contactanos</a></li>
             </ul>
         </div>
 
