@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.12",
-    "@angular/cli": "^17.3.12",
+    "@angular/cli": "^17.3.15",
     "@angular/compiler-cli": "^17.3.0",
     "@types/crypto-js": "^4.2.2",
     "@types/express": "^4.17.17",
