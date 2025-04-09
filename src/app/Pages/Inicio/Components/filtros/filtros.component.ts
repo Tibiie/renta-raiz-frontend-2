@@ -31,7 +31,7 @@ export class FiltrosComponent implements OnInit {
     parqueadero: [] as (number | string)[],
     estrato: [] as number[],
   };
-  
+
   categoriasInmuebles: any[] = [];
   resultados: any[] = [];
 
@@ -124,32 +124,41 @@ export class FiltrosComponent implements OnInit {
       const estateCodes = this.selectedEstates.map(e => e.code).join(',');
       this.filtrosSeleccionados.set('type', estateCodes);
     }
-    
+
     if (this.seleccion.habitaciones.length > 0) {
-      // Si deseas enviar todos los valores seleccionados en un arreglo
-      this.filtrosSeleccionados.set('bedrooms', this.seleccion.habitaciones.join(','));
+      const values = this.seleccion.habitaciones;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('"maxbedroom"', 100);
+        this.filtrosSeleccionados.set('"minbedroom"', 6);
+      } else {
+        this.filtrosSeleccionados.set('"bedrooms"', values.join(','));
+      }
     }
-    
+
     if (this.seleccion.banos.length > 0) {
-      this.filtrosSeleccionados.set('bathrooms', this.seleccion.banos.join(','));
+      const values = this.seleccion.banos;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('"maxbathroom"', 100);
+        this.filtrosSeleccionados.set('"minbathroom"', 6);
+      } else {
+        this.filtrosSeleccionados.set('"bathroom"', values.join(','));
+      }
     }
-    
+
     if (this.seleccion.parqueadero.length > 0) {
       const values = this.seleccion.parqueadero;
       if (values.includes('+6')) {
         this.filtrosSeleccionados.set('"maxparking"', 100);
         this.filtrosSeleccionados.set('"minparking"', 6);
       } else {
-        // Por ejemplo, enviar una cadena con los valores seleccionados
         this.filtrosSeleccionados.set('"maxparking"', values.join(','));
         this.filtrosSeleccionados.set('"minparking"', values.join(','));
       }
     }
-    
+
     if (this.seleccion.estrato.length > 0) {
       this.filtrosSeleccionados.set('stratum', this.seleccion.estrato.join(','));
     }
-    
 
     if (this.AreaMinima) {
       this.filtrosSeleccionados.set('"minarea"', this.AreaMinima);
@@ -180,11 +189,10 @@ export class FiltrosComponent implements OnInit {
       }
       this.seleccion[categoria] = arr;
     }
-  
+
     console.log('Selección actual:', this.seleccion);
   }
-  
-  
+
   getCategoriasInmuebles() {
     this.inmueblesService.getCategoriasInmuebles().subscribe(
       (response: any) => {
@@ -210,7 +218,6 @@ export class FiltrosComponent implements OnInit {
   isEstateSelected(option: any): boolean {
     return this.selectedEstates.some(o => o.code === option.code);
   }
-  
 
   getTipoPropiedad() {
     this.inmueblesService.getTipoPropiedad().subscribe(
@@ -256,7 +263,7 @@ export class FiltrosComponent implements OnInit {
       this.selectedProperty = this.selectedProperty?.code === option.code ? null : option;
       this.isPropertyDropdownOpen = false;
     }
-  
+
     if (type === 'estate') {
       const index = this.selectedEstates.findIndex(o => o.code === option.code);
       if (index > -1) {
