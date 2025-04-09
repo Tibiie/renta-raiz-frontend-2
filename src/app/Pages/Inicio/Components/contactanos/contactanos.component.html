@@ -1,0 +1,40 @@
+<app-navbar [alwaysScrolled]="true"></app-navbar>
+
+<div class="flex flex-col">
+
+    <!-- Banner superior con animación -->
+    <section class="banner-contacto">
+        <div class="overlay">
+            <h1 class="titulo-animado">UBICACIONES EXCEPCIONALES,<br>ESTILOS DE VIDA INCOMPARABLES.</h1>
+            <p class="subtitulo">TRABAJA CON LOS QUE SABEN</p>
+            <button class="btn-contactar">CONTÁCTANOS</button>
+        </div>
+    </section>
+
+    <!-- Formulario y mapa -->
+    <section class="contacto-formulario">
+        <div class="mapa-info">
+            <iframe  class="w-full h-72 rounded-md"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.527264572011!2d-75.57878828820685!3d6.19394229376781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e46825af2bfffff%3A0xe438ca98577bfa7f!2sRenta%20Raiz!5e0!3m2!1ses-419!2sco!4v1744174393181!5m2!1ses-419!2sco"
+                 style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <div class="formulario-container">
+            <form>
+                <input type="text" placeholder="Nombre" />
+                <input type="email" placeholder="Correo electrónico" />
+                <input type="tel" placeholder="Tu teléfono" />
+                <textarea placeholder="Mensaje"></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+
+            <div class="info-contacto">
+                <p><strong>Teléfono:</strong> 604 322-7088</p>
+                <p><strong>Móvil:</strong> +57 304-541-1001</p>
+                <p><strong>Correo electrónico:</strong> {{email}}</p>
+                <p><strong>Dirección:</strong> Carrera 43 #9 Sur – 234 SQUARE TRADE AND HOME P.H – MEDELLÍN</p>
+            </div>
+        </div>
+    </section>
+</div>

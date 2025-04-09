@@ -254,4 +254,8 @@ export class VistaInicialComponent implements OnInit {
   goToSlide(index: number) {
     this.currentSlide = index;
   }
+
+  abrirPestana(url: string) {
+    window.open(url, '_blank');
+  }
 }
