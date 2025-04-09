@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FiltrosComponent } from './Components/filtros/filtros.component';
 import { ContactanosComponent } from './Components/contactanos/contactanos.component';
 import { VerPropiedadComponent } from './Components/ver-propiedad/ver-propiedad.component';
+import { NuestroEquipoComponent } from './Components/nuestro-equipo/nuestro-equipo.component';
 
 export const routes: Routes = [
 
@@ -25,7 +26,13 @@ export const routes: Routes = [
   {
     path: 'ver-propiedad',
     component: VerPropiedadComponent
+  },
+  {
+    path: 'nuestro-equipo',
+    component: NuestroEquipoComponent
   }
+
+
 
 ];
 
