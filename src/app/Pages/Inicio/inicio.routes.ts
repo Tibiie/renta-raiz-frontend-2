@@ -31,7 +31,12 @@ export const routes: Routes = [
   {
     path: 'nuestro-equipo',
     component: NuestroEquipoComponent
+  },
+  {
+    path: 'quienes-somos',
+    component: QuienesSomosComponent
   }
+  
 
 
 

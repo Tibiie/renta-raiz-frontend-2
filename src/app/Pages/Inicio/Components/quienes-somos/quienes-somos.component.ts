@@ -10,4 +10,8 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 })
 export class QuienesSomosComponent {
 
+  abrirPestana(url: string) {
+    window.open(url, '_blank');
+  }
+
 }
