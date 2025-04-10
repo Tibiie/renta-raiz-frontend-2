@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
@@ -9,12 +9,11 @@ import { firstValueFrom, forkJoin } from 'rxjs';
 @Component({
   selector: 'app-filtros',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule ],
+  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './filtros.component.html',
-  styleUrl: './filtros.component.scss'
+  styleUrl: './filtros.component.scss',
 })
 export class FiltrosComponent implements OnInit {
-
   AreaMinima = '';
   AreaMaxima = '';
   precioVenta = '';
@@ -43,16 +42,19 @@ export class FiltrosComponent implements OnInit {
   filtrosVistaInicial: any = {};
   categoriasInmuebles: any[] = [];
 
-
   // Para Tipo de Propiedad
   isPropertyDropdownOpen = false;
-  propertyOptions: { code: string, name: string, displayName?: string }[] = [];
-  selectedProperty: { code: string, name: string, displayName?: string } | null = null;
+  propertyOptions: { code: string; name: string; displayName?: string }[] = [];
+  selectedProperty: {
+    code: string;
+    name: string;
+    displayName?: string;
+  } | null = null;
 
   // Para Inmueble
   isEstateDropdownOpen = false;
-  estateOptions: { code: string, name: string }[] = [];
-  selectedEstates: { code: string, name: string }[] = [];
+  estateOptions: { code: string; name: string }[] = [];
+  selectedEstates: { code: string; name: string }[] = [];
 
   private readonly icons = {
     property: {
@@ -74,15 +76,15 @@ export class FiltrosComponent implements OnInit {
       '11': 'fas fa-car',
       '12': 'fas fa-umbrella-beach',
       '13': 'fas fa-store',
-      '14': 'fas fa-home'
-    } as Record<string, string>
+      '14': 'fas fa-home',
+    } as Record<string, string>,
   };
 
   constructor(
     private router: Router,
     private cdRef: ChangeDetectorRef,
-    private inmueblesService: InmueblesService,
-  ) { }
+    private inmueblesService: InmueblesService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     console.log(this.isDrawerOpen);
@@ -108,7 +110,7 @@ export class FiltrosComponent implements OnInit {
 
     console.log('Opciones cargadas:', {
       propertyOptions: this.propertyOptions,
-      estateOptions: this.estateOptions
+      estateOptions: this.estateOptions,
     });
 
     if (this.filtrosVistaInicial) {
@@ -117,7 +119,7 @@ export class FiltrosComponent implements OnInit {
       console.log('Filtros inicializados:', {
         selectedProperty: this.selectedProperty,
         selectedEstates: this.selectedEstates,
-        seleccion: this.seleccion
+        seleccion: this.seleccion,
       });
     }
 
@@ -126,12 +128,12 @@ export class FiltrosComponent implements OnInit {
 
   async getDatos(): Promise<void> {
     try {
-      const [categoriasResponse, tipoPropiedadResponse] = await firstValueFrom(
+      const [categoriasResponse, tipoPropiedadResponse] = (await firstValueFrom(
         forkJoin([
           this.inmueblesService.getCategoriasInmuebles(),
-          this.inmueblesService.getTipoPropiedad()
+          this.inmueblesService.getTipoPropiedad(),
         ])
-      ) as [any, any];
+      )) as [any, any];
 
       this.categoriasInmuebles = categoriasResponse.data;
       this.propertyOptions = this.categoriasInmuebles.map((cat: any) => {
@@ -140,10 +142,14 @@ export class FiltrosComponent implements OnInit {
         }
         return cat;
       });
-      this.selectedProperty = this.propertyOptions.find(cat => cat.code === '3') || this.propertyOptions[0];
+      this.selectedProperty =
+        this.propertyOptions.find((cat) => cat.code === '3') ||
+        this.propertyOptions[0];
 
       this.estateOptions = tipoPropiedadResponse.data;
-      this.selectedEstates = this.estateOptions.length ? [this.estateOptions[0]] : [];
+      this.selectedEstates = this.estateOptions.length
+        ? [this.estateOptions[0]]
+        : [];
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
@@ -151,8 +157,8 @@ export class FiltrosComponent implements OnInit {
 
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
+    console.log(this.isDrawerOpen);
   }
-  
 
   enviarFiltros(pagina: number = 1) {
     this.paginaActual = pagina;
@@ -168,14 +174,17 @@ export class FiltrosComponent implements OnInit {
 
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        console.log("filtros", response.data);
+        console.log('filtros', response.data);
         this.resultados = response.data;
 
         this.paginacion = response;
         this.totalPaginas = response.totalPages || 1;
-        this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+        this.paginas = Array.from(
+          { length: this.totalPaginas },
+          (_, i) => i + 1
+        );
 
-        console.log("Paginas", this.paginas);
+        console.log('Paginas', this.paginas);
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -204,11 +213,15 @@ export class FiltrosComponent implements OnInit {
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
 
-    this.selectedProperty = this.propertyOptions.find(opt => opt.code === f?.biz) || this.selectedProperty;
+    this.selectedProperty =
+      this.propertyOptions.find((opt) => opt.code === f?.biz) ||
+      this.selectedProperty;
 
     if (f?.type) {
       const estateCodes = f.type.split(',');
-      this.selectedEstates = this.estateOptions.filter(opt => estateCodes.includes(opt.code));
+      this.selectedEstates = this.estateOptions.filter((opt) =>
+        estateCodes.includes(opt.code)
+      );
     }
 
     this.seleccion.habitaciones = this.inicializarRango(f, 'bedroom');
@@ -238,7 +251,7 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (this.selectedEstates.length > 0) {
-      const estateCodes = this.selectedEstates.map(e => e.code).join(',');
+      const estateCodes = this.selectedEstates.map((e) => e.code).join(',');
       this.filtrosSeleccionados.set('type', estateCodes);
     }
 
@@ -274,7 +287,10 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (this.seleccion.estrato.length > 0) {
-      this.filtrosSeleccionados.set('stratum', this.seleccion.estrato.join(','));
+      this.filtrosSeleccionados.set(
+        'stratum',
+        this.seleccion.estrato.join(',')
+      );
     }
 
     if (this.AreaMinima) {
@@ -305,20 +321,20 @@ export class FiltrosComponent implements OnInit {
   }
 
   isEstateSelected(option: any): boolean {
-    return this.selectedEstates.some(o => o.code === option.code);
+    return this.selectedEstates.some((o) => o.code === option.code);
   }
 
-  selectOption(
-    type: 'property' | 'estate',
-    option: any
-  ): void {
+  selectOption(type: 'property' | 'estate', option: any): void {
     if (type === 'property') {
-      this.selectedProperty = this.selectedProperty?.code === option.code ? null : option;
+      this.selectedProperty =
+        this.selectedProperty?.code === option.code ? null : option;
       this.isPropertyDropdownOpen = false;
     }
 
     if (type === 'estate') {
-      const index = this.selectedEstates.findIndex(o => o.code === option.code);
+      const index = this.selectedEstates.findIndex(
+        (o) => o.code === option.code
+      );
       if (index > -1) {
         this.selectedEstates.splice(index, 1);
       } else {
@@ -331,7 +347,8 @@ export class FiltrosComponent implements OnInit {
     if (type === 'property') {
       this.isPropertyDropdownOpen = !this.isPropertyDropdownOpen;
       this.isEstateDropdownOpen = false;
-    } if (type === 'estate') {
+    }
+    if (type === 'estate') {
       this.isEstateDropdownOpen = !this.isEstateDropdownOpen;
       this.isPropertyDropdownOpen = false;
     }
@@ -349,8 +366,7 @@ export class FiltrosComponent implements OnInit {
       if (!option) return 'fas fa-list-ul';
       const code = typeof option === 'object' ? option.code : '';
       return this.icons.property[code] || 'fas fa-home';
-    }
-    else {
+    } else {
       const code = typeof option === 'object' ? option.code : '';
       return this.icons.estate[code] || 'fas fa-question-circle';
     }
@@ -360,7 +376,7 @@ export class FiltrosComponent implements OnInit {
     this.inmueblesService.getCategoriasInmuebles().subscribe(
       (response: any) => {
         this.categoriasInmuebles = response.data;
-        console.log("categorias", response.data);
+        console.log('categorias', response.data);
 
         this.propertyOptions = response.data.map((cat: any) => {
           if (cat.code === '3') {
@@ -369,7 +385,9 @@ export class FiltrosComponent implements OnInit {
           return cat;
         });
 
-        const defaultOption = this.propertyOptions.find(cat => cat.code === '3') || this.propertyOptions[0];
+        const defaultOption =
+          this.propertyOptions.find((cat) => cat.code === '3') ||
+          this.propertyOptions[0];
         this.selectedProperty = defaultOption;
       },
       (error: any) => {
@@ -382,9 +400,11 @@ export class FiltrosComponent implements OnInit {
     this.inmueblesService.getTipoPropiedad().subscribe(
       (response: any) => {
         this.estateOptions = response.data;
-        console.log("tipoPropiedad", response.data);
+        console.log('tipoPropiedad', response.data);
 
-        this.selectedEstates = this.estateOptions.length ? [this.estateOptions[0]] : [];
+        this.selectedEstates = this.estateOptions.length
+          ? [this.estateOptions[0]]
+          : [];
       },
       (error: any) => {
         console.error('Error al obtener los tipos de propiedad:', error);
