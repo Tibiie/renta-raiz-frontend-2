@@ -1,16 +1,15 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { firstValueFrom, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-filtros',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss'
 })
@@ -86,7 +85,7 @@ export class FiltrosComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    console.log('Iniciando componente Filtros');
+    console.log(this.isDrawerOpen);
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras?.state || history.state;
 
@@ -152,9 +151,8 @@ export class FiltrosComponent implements OnInit {
 
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
-    console.log("isDrawerOpen", this.isDrawerOpen);
-
   }
+  
 
   enviarFiltros(pagina: number = 1) {
     this.paginaActual = pagina;
