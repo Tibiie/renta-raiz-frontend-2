@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,22 +14,21 @@ import { CommonModule } from '@angular/common';
 })
 export class ContactanosComponent {
 
-  formContacto!: FormGroup;
   mostrarAlerta: boolean = false;
 
   email = "info@rentaraiz.com";
 
-  constructor(
-    private inmueblesService: InmueblesService,
-    private formBuilder: FormBuilder,
-  ) {
-    this.formContacto = this.formBuilder.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      telefono: ['', [Validators.required, Validators.minLength(10)]],
-      mensaje: ['', [Validators.required, Validators.minLength(10)]],
-    });
-  }
+  // Injeccciones
+  inmueblesService = inject(InmueblesService);
+  formBuilder = inject(FormBuilder);
+
+  // Formularios
+  formContacto = this.formBuilder.group({
+    nombre: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    telefono: ['', [Validators.required, Validators.minLength(10)]],
+    mensaje: ['', [Validators.required, Validators.minLength(10)]],
+  });
 
   createContacto() {
     const obj = {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, inject, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
@@ -80,11 +80,10 @@ export class FiltrosComponent implements OnInit {
     } as Record<string, string>,
   };
 
-  constructor(
-    private router: Router,
-    private cdRef: ChangeDetectorRef,
-    private inmueblesService: InmueblesService
-  ) {}
+  // Injectaciones
+  router = inject(Router);
+  cdRef = inject(ChangeDetectorRef);
+  inmueblesService = inject(InmueblesService);
 
   async ngOnInit(): Promise<void> {
     console.log(this.isDrawerOpen);
@@ -97,7 +96,7 @@ export class FiltrosComponent implements OnInit {
       this.filtrosVistaInicial = state.filtros;
       this.paginacion = state.paginacion;
 
-      this.totalPaginas = this.paginacion.totalPages || 1;
+      this.totalPaginas = this.paginacion.last_page || 1;
       this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
       this.paginaActual = this.filtrosVistaInicial.page || 1;
 
@@ -178,7 +177,7 @@ export class FiltrosComponent implements OnInit {
         this.resultados = response.data;
 
         this.paginacion = response;
-        this.totalPaginas = response.totalPages || 1;
+        this.totalPaginas = response.last_page || 1;
         this.paginas = Array.from(
           { length: this.totalPaginas },
           (_, i) => i + 1

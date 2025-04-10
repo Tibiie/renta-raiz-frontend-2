@@ -36,4 +36,8 @@ export class InmueblesService {
   getDatosPropiedad(codPro: number) {
     return this.http.get(`${environment.baseUrl}/properties/${codPro}`);
   }
+
+  getCiudades() {
+    return this.http.get(`${environment.baseUrl}/properties/ciudades`);
+  }
 }

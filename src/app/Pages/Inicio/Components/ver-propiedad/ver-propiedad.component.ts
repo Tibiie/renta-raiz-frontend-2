@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router, RouterModule } from '@angular/router';
@@ -16,13 +16,13 @@ export class VerPropiedadComponent implements OnInit {
 
   codPro?: number;
   propiedad: any = {};
+  selectedIndex: number = 0;
+  selectedImage: string = '';
 
-  constructor(
-    private router: Router,
-    private cdRef: ChangeDetectorRef,
-    private inmueblesService: InmueblesService,
-  ) {
-  }
+  // Injectaciones
+  router = inject(Router);
+  cdRef = inject(ChangeDetectorRef);
+  inmueblesService = inject(InmueblesService);
 
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
@@ -52,4 +52,26 @@ export class VerPropiedadComponent implements OnInit {
       }
     );
   }
+
+  selectImage(index: number) {
+    this.selectedIndex = index;
+  }
+
+  prevImage() {
+    if (this.selectedIndex === 0) {
+      this.selectedIndex = this.propiedad.images.length - 1;
+    } else {
+      this.selectedIndex--;
+    }
+  }
+
+  nextImage() {
+    if (this.selectedIndex === this.propiedad.images.length - 1) {
+      this.selectedIndex = 0;
+    } else {
+      this.selectedIndex++;
+    }
+  }
+
+
 }

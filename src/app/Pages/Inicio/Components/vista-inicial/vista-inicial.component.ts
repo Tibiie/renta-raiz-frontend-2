@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
@@ -19,11 +19,12 @@ export class VistaInicialComponent implements OnInit {
 
   intervalId: any;
   currentSlide = 0;
+  elementsPerPage = 12;
   ubicacion: string = '';
   filtrosSeleccionados: Map<string, any> = new Map();
 
-  elementsPerPage = 12;
   filtros: any = {};
+  ciudades: any[] = [];
   categoriasInmuebles: any[] = [];
   inmueblesDestacadosArray: any = {};
 
@@ -72,20 +73,32 @@ export class VistaInicialComponent implements OnInit {
     'assets/images/fianzacredito.png',
   ];
 
-  constructor(
-    private inmueblesService: InmueblesService,
-    private router: Router
-  ) { }
+  // Injectaciones
+  inmueblesService = inject(InmueblesService);
+  router = inject(Router);
 
   ngOnInit(): void {
     this.getDatos()
   }
 
   getDatos() {
-    this.getFiltros();
     this.getTipoPropiedad();
-    this.getInmueblesDestacados();
     this.getCategoriasInmuebles();
+    this.getCiudades();
+    this.getFiltros();
+    this.getInmueblesDestacados();
+  }
+
+  getCiudades() {
+    this.inmueblesService.getCiudades().subscribe(
+      (response: any) => {
+        this.ciudades = response.data;
+        console.log("ciudades", response.data);
+      },
+      (error: any) => {
+        console.error('Error al obtener las ciudades:', error);
+      }
+    );
   }
 
   getCategoriasInmuebles() {
@@ -141,8 +154,21 @@ export class VistaInicialComponent implements OnInit {
   prepararFiltros() {
     this.filtrosSeleccionados.clear();
 
+    const limpiarTexto = (texto: string) => {
+      return texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    };
+
+    const ciudad = this.ciudades.find(c =>
+      limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
+    );
+    var codigo = ciudad?.code;
+
     if (this.ubicacion) {
-      this.filtrosSeleccionados.set('neighborhood', this.ubicacion);
+      this.filtrosSeleccionados.set('city', codigo);
     }
 
     if (this.selectedProperty) {

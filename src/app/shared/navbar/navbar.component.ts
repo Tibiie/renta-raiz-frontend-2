@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, inject, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,17 +10,19 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
-  @Input() alwaysScrolled = false;
   isScrolled = false;
+  showNosotrosDropdown = false;
+  @Input() alwaysScrolled = false;
   isMobileMenuOpen: boolean = false;
+
+  // Injecciones
+  _router = inject(Router);
 
   ngOnInit(): void {
     if (this.alwaysScrolled) {
       this.isScrolled = true;
     }
   }
-
-  constructor(private _router: Router) { }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -36,8 +38,6 @@ export class NavbarComponent implements OnInit {
   redirectTo(url: string): void {
     this._router.navigate([url]);
   }
-
-  showNosotrosDropdown = false;
 
   toggleNosotrosDropdown(event: MouseEvent) {
     event.preventDefault();
