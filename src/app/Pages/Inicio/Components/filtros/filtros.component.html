@@ -5,7 +5,8 @@
     <div class="text-center pt-32 fixed left-36">
       <button type="button" (click)="toggleDrawer()"
         class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-[#CDAD60] dark:text-[#CDAD60] dark:hover:text-white dark:hover:bg-[#CDAD60] shadow-lg transition duration-300"
-        data-drawer-target="modern-drawer" data-drawer-show="modern-drawer" data-drawer-backdrop="false"
+        data-drawer-target="modern-drawer" data-drawer-toggle="modern-drawer"
+        data-drawer-backdrop="false"
         aria-controls="modern-drawer">
         <i class="fas fa-filter mr-2"></i> Filtros
       </button>
@@ -218,7 +219,7 @@
   <!-- Cards de resultados filtrados -->
   <div class="w-full mt-60 mb-6 px-2 transition-all duration-300 ease-in-out"
     [ngClass]="{'md:ml-[28rem]': isDrawerOpen, 'md:ml-0': !isDrawerOpen}">
-    <div *ngIf="resultados.length > 0" class="grid gap-1" [ngClass]="{'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4': !isDrawerOpen, 
+    <div *ngIf="resultados.length > 0" class="grid gap-3" [ngClass]="{'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4': !isDrawerOpen, 
                     'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3': isDrawerOpen}">
       <div *ngFor="let inmueble of resultados"
         class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-4 text-sm max-w-[280px] mx-auto">
