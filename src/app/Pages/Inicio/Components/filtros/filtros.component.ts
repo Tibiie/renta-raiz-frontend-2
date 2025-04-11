@@ -192,6 +192,9 @@ export class FiltrosComponent implements OnInit {
       (response: any) => {
         console.log('filtros', response);
         this.resultados = response.data;
+
+        this.inmueblesService.setPropiedades(response.data);
+
         this.totalDatos = response.total;
 
         this.paginacion = response;

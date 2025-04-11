@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/modal-crear-contacto.component';
+import { MapaComponent } from "../mapa/mapa.component";
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -15,8 +16,9 @@ import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/moda
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
-    ModalCrearContactoComponent
-  ],
+    ModalCrearContactoComponent,
+    MapaComponent
+],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
 })
@@ -31,7 +33,7 @@ export class VerPropiedadComponent implements OnInit {
   visibleThumbnailsStart = 0;
   selectedImage: string = '';
   tabActivo: string = 'fotos';
-
+  propiedades: any[] = [];
   // Injectaciones
   router = inject(Router);
   cdRef = inject(ChangeDetectorRef);
@@ -47,6 +49,7 @@ export class VerPropiedadComponent implements OnInit {
       console.log('CodPro:', this.codPro);
       this.getDatos();
     });
+    
   }
 
   getDatos() {
