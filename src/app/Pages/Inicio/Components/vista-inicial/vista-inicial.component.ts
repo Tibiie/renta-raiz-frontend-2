@@ -20,13 +20,18 @@ export class VistaInicialComponent implements OnInit {
   intervalId: any;
   currentSlide = 0;
   elementsPerPage = 12;
+  elementsPerPageInicial = 3;
   ubicacion: string = '';
   filtrosSeleccionados: Map<string, any> = new Map();
+  filtrosInmueblesVenta: Map<string, any> = new Map();
+  filtrosInmueblesArriendo: Map<string, any> = new Map();
 
   filtros: any = {};
   ciudades: any[] = [];
   categoriasInmuebles: any[] = [];
+  inmueblesVentasArray: any[] = [];
   inmueblesDestacadosArray: any = {};
+  inmueblesArriendosArray: any[] = [];
 
   // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
@@ -82,10 +87,12 @@ export class VistaInicialComponent implements OnInit {
   }
 
   getDatos() {
-    this.getTipoPropiedad();
+    this.getInmueblesVentas();
+    this.getInmueblesArriendos();
     this.getCategoriasInmuebles();
     this.getCiudades();
     this.getFiltros();
+    this.getTipoPropiedad();
     this.getInmueblesDestacados();
   }
 
@@ -200,6 +207,48 @@ export class VistaInicialComponent implements OnInit {
     );
   }
 
+  getInmueblesVentas() {
+    this.filtrosInmueblesVenta.clear();
+    this.filtrosInmueblesVenta.set('type', 2);
+
+    const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    }
+    console.log('Objeto a enviar:', obj);
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPageInicial).subscribe(
+      (response: any) => {
+        console.log("inmuebles ventas", response.data);
+        this.inmueblesVentasArray = response.data;
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
+  getInmueblesArriendos() {
+    this.filtrosInmueblesArriendo.clear();
+    this.filtrosInmueblesArriendo.set('type', 1);
+
+    const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    }
+    console.log('Objeto a enviar:', obj);
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPageInicial).subscribe(
+      (response: any) => {
+        console.log("inmuebles arriendos", response.data);
+        this.inmueblesArriendosArray = response.data;
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
@@ -229,7 +278,6 @@ export class VistaInicialComponent implements OnInit {
 
     return iconMap?.[code] || defaultIcons[type];
   }
-
 
   selectOption(
     type: 'property' | 'estate',
@@ -278,7 +326,7 @@ export class VistaInicialComponent implements OnInit {
     this.intervalId = setInterval(() => {
       const totalSlides = this.getAliadosPorGrupo().length;
       this.currentSlide = (this.currentSlide + 1) % totalSlides;
-    }, 3000); // cambia cada 3 segundos
+    }, 3000);
   }
 
   goToSlide(index: number) {

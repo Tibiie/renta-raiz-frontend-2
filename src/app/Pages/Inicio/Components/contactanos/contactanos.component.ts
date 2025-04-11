@@ -36,6 +36,7 @@ export class ContactanosComponent {
       email: this.formContacto.get('email')?.value,
       telefono: this.formContacto.get('telefono')?.value,
       mensaje: this.formContacto.get('mensaje')?.value,
+      fuente: 'contactanos',
     };
     console.log('Objeto a enviar:', obj);
     this.inmueblesService.createContacto(obj).subscribe(

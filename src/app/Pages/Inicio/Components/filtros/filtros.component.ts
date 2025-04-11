@@ -25,12 +25,12 @@ export class FiltrosComponent implements OnInit {
   precioVenta = '';
   precioMinimo = '';
   precioMaximo = '';
+  totalDatos = 0;
   paginaActual = 1;
   totalPaginas = 0;
   elementsPerPage = 12;
-  totalDatos = 0;
-  paginas: number[] = [];
-  filtrosSeleccionados: Map<string, any> = new Map();
+  paginas: (number | string)[] = [];
+  bloqueActual: number = 0; filtrosSeleccionados: Map<string, any> = new Map();
   estrato: number[] = [1, 2, 3, 4];
   banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
   parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
@@ -44,6 +44,8 @@ export class FiltrosComponent implements OnInit {
   };
 
   paginacion: any = {};
+  ciudades: any[] = [];
+  ubicacion: string = '';
   resultados: any[] = [];
   isDrawerOpen: boolean = true;
   filtrosVistaInicial: any = {};
@@ -110,6 +112,9 @@ export class FiltrosComponent implements OnInit {
       console.log('Paginacion:', this.paginacion);
       console.log('Filtros:', this.filtrosVistaInicial);
       console.log('Resultados:', this.resultados);
+
+      this.generarPaginas();
+      this.getCiudades();
     }
 
     await this.getDatos();
@@ -199,8 +204,40 @@ export class FiltrosComponent implements OnInit {
     );
   }
 
-  cambiarPagina(pagina: number) {
-    if (pagina !== this.paginaActual) {
+  generarPaginas() {
+    this.paginas = [];
+    const paginasPorBloque = 3;
+    const inicio = this.bloqueActual * paginasPorBloque + 1;
+    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas - 1); // evitar solapar con última
+
+    for (let i = inicio; i <= fin; i++) {
+      this.paginas.push(i);
+    }
+
+    if (fin < this.totalPaginas - 1) {
+      this.paginas.push('...');
+    }
+
+    if (this.totalPaginas > 1) {
+      this.paginas.push(this.totalPaginas);
+    }
+  }
+
+  irAlSiguienteBloque() {
+    const maxBloques = Math.floor((this.totalPaginas - 1) / 3);
+    if (this.bloqueActual < maxBloques) {
+      this.bloqueActual++;
+      this.generarPaginas();
+    }
+  }
+
+  cambiarPagina(pagina: number | string) {
+    if (pagina === '...') {
+      this.irAlSiguienteBloque();
+      return;
+    }
+
+    if (typeof pagina === 'number' && pagina !== this.paginaActual) {
       this.enviarFiltros(pagina);
     }
   }
@@ -252,6 +289,24 @@ export class FiltrosComponent implements OnInit {
 
   prepararFiltros() {
     this.filtrosSeleccionados.clear();
+
+    const limpiarTexto = (texto: string) => {
+      return texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    };
+
+    const ciudad = this.ciudades.find(c =>
+      limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
+    );
+    var codigo = ciudad?.code;
+
+    if (this.ubicacion) {
+      this.filtrosSeleccionados.set('city', codigo);
+    }
+
 
     if (this.selectedProperty) {
       this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
@@ -377,6 +432,18 @@ export class FiltrosComponent implements OnInit {
       const code = typeof option === 'object' ? option.code : '';
       return this.icons.estate[code] || 'fas fa-question-circle';
     }
+  }
+
+  getCiudades() {
+    this.inmueblesService.getCiudades().subscribe(
+      (response: any) => {
+        this.ciudades = response.data;
+        console.log("ciudades", response.data);
+      },
+      (error: any) => {
+        console.error('Error al obtener las ciudades:', error);
+      }
+    );
   }
 
   getCategoriasInmuebles() {

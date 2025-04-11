@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/modal-crear-contacto.component';
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -14,14 +15,20 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
+    ModalCrearContactoComponent
   ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
 })
 export class VerPropiedadComponent implements OnInit {
+
+  @ViewChild(ModalCrearContactoComponent) modalCrearContacto!: ModalCrearContactoComponent;
+
   codPro?: number;
   propiedad: any = {};
+  thumbnailsPerPage = 3;
   selectedIndex: number = 0;
+  visibleThumbnailsStart = 0;
   selectedImage: string = '';
   tabActivo: string = 'fotos';
 
@@ -82,5 +89,27 @@ export class VerPropiedadComponent implements OnInit {
     } else {
       this.selectedIndex++;
     }
+  }
+
+  get visibleThumbnails() {
+    return this.propiedad?.images?.slice(this.visibleThumbnailsStart, this.visibleThumbnailsStart + this.thumbnailsPerPage) || [];
+  }
+
+  prevThumbs() {
+    if (this.visibleThumbnailsStart > 0) {
+      this.visibleThumbnailsStart -= this.thumbnailsPerPage;
+    }
+  }
+
+  nextThumbs() {
+    const maxStart = this.propiedad.images.length - this.thumbnailsPerPage;
+    if (this.visibleThumbnailsStart < maxStart) {
+      this.visibleThumbnailsStart += this.thumbnailsPerPage;
+    }
+  }
+
+  openModalCrearContacto(codPro: number, accion: 'telefonos' | 'whatsapp' | 'soloEnviar') {
+    console.log('codPro', codPro, 'accion', accion);
+    this.modalCrearContacto.abrirModal(codPro, accion);
   }
 }
