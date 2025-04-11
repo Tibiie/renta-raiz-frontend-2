@@ -20,31 +20,31 @@ export class MapaComponent {
 
   propiedades: any[] = [
     {
-      id: 1,
+      id: 5760,
       nombre: 'Apartamento en Chapinero',
       lat: 4.6462,
       lng: -74.0628
     },
     {
-      id: 2,
+      id: 5760,
       nombre: 'Casa en Suba',
       lat: 4.7434,
       lng: -74.0924
     },
     {
-      id: 3,
+      id: 5760,
       nombre: 'Apartamento en Teusaquillo',
       lat: 4.6382,
       lng: -74.0789
     },
     {
-      id: 4,
+      id: 5760,
       nombre: 'Apartamento en Usaquén',
       lat: 4.6925,
       lng: -74.0303
     },
     {
-      id: 5,
+      id: 5760,
       nombre: 'Casa en Kennedy',
       lat: 4.6255,
       lng: -74.1663
