@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,16 +8,22 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-ver-propiedad',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [
+    NavbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule,
+  ],
   templateUrl: './ver-propiedad.component.html',
-  styleUrl: './ver-propiedad.component.scss'
+  styleUrl: './ver-propiedad.component.scss',
 })
 export class VerPropiedadComponent implements OnInit {
-
   codPro?: number;
   propiedad: any = {};
   selectedIndex: number = 0;
   selectedImage: string = '';
+  tabActivo: string = 'fotos';
 
   // Injectaciones
   router = inject(Router);
@@ -26,13 +32,14 @@ export class VerPropiedadComponent implements OnInit {
 
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras?.state || history.state;
+    const state =
+      navigation?.extras?.state ||
+      (typeof window !== 'undefined' ? window.history.state : null);
 
     if (state?.codPro) {
       this.codPro = state.codPro;
     }
     console.log('CodPro:', this.codPro);
-    this.cdRef.detectChanges();
 
     this.getDatos();
   }
@@ -41,10 +48,14 @@ export class VerPropiedadComponent implements OnInit {
     this.getDatosPropiedad();
   }
 
+  seleccionarTab(tab: string) {
+    this.tabActivo = tab;
+  }
+
   getDatosPropiedad() {
     this.inmueblesService.getDatosPropiedad(this.codPro!).subscribe(
       (response: any) => {
-        console.log("propiedad", response.data);
+        console.log('propiedad', response.data);
         this.propiedad = response.data;
       },
       (error: any) => {
@@ -72,6 +83,4 @@ export class VerPropiedadComponent implements OnInit {
       this.selectedIndex++;
     }
   }
-
-
 }

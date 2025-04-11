@@ -1,57 +1,316 @@
 <app-navbar [alwaysScrolled]="true"></app-navbar>
 
-<div class="flex flex-col">
-    <div *ngIf="propiedad?.images?.length > 0" class="w-full flex flex-col items-start ml-40">
-        <!-- Carrusel principal -->
-        <div id="carousel" class="w-full max-w-3xl relative" data-carousel="static">
-            <div class="relative h-[450px] overflow-hidden rounded-xl">
-                <div *ngFor="let img of propiedad.images; let i = index"
-                    [ngClass]="{ 'hidden': selectedIndex !== i, 'block': selectedIndex === i }"
-                    class="duration-700 ease-in-out" data-carousel-item>
-                    <img [src]="img.imageurl" alt="Imagen propiedad"
-                        class="absolute w-full h-full object-cover rounded-xl" />
-                </div>
-            </div>
-
-            <!-- Controles -->
-            <button type="button"
-                class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                (click)="prevImage()">
-                <span
-                    class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </span>
-            </button>
-            <button type="button"
-                class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                (click)="nextImage()">
-                <span
-                    class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </span>
-            </button>
+<div class="flex flex-col mt-28">
+  <nav
+    class="flex px-4 md:px-60 py-6 text-sm text-[#CDAD60]"
+    aria-label="Breadcrumb"
+  >
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+      <li class="inline-flex items-center">
+        <a
+          href="#"
+          class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-900"
+        >
+          <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M10.707 1.293a1 1 0 00-1.414 0L1 9.586V17a2 2 0 002 2h4a1 1 0 001-1v-4h4v4a1 1 0 001 1h4a2 2 0 002-2V9.586l-8.293-8.293z"
+            />
+          </svg>
+          {{ propiedad.biz | titlecase }}
+        </a>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg
+            class="w-4 h-4 text-gray-400 mx-2"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z"
+            />
+          </svg>
+          <a
+            href="#"
+            class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900"
+          >
+            {{ propiedad.type | titlecase }}
+          </a>
         </div>
-
-        <!-- Miniaturas -->
-        <div class="w-full max-w-3xl flex mt-4 gap-3 justify-center">
-            <ng-container *ngFor="let img of propiedad.images.slice(0, 3); let i = index">
-                <div class="relative w-1/3 h-32 rounded-md overflow-hidden cursor-pointer group"
-                    (click)="selectImage(i)">
-                    <img [src]="img.imageurl" [alt]="'Miniatura ' + (i + 1)"
-                        class="w-full h-full object-cover transition duration-300 border-2"
-                        [class.border-blue-500]="selectedIndex === i" />
-
-                    <!-- Superposición para mostrar más imágenes -->
-                    <div *ngIf="i === 2 && propiedad.images.length > 3"
-                        class="absolute inset-0 bg-[#001b3c]/80 flex items-center justify-center text-white text-lg font-semibold rounded-md">
-                        +{{ propiedad.images.length - 3 }}
-                    </div>
-                </div>
-            </ng-container>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg
+            class="w-4 h-4 text-gray-400 mx-2"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z"
+            />
+          </svg>
+          <a
+            href="#"
+            class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900"
+          >
+            {{ propiedad.city | titlecase }}
+          </a>
         </div>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <svg
+            class="w-4 h-4 text-gray-400 mx-2"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z"
+            />
+          </svg>
+          <span class="ml-1 text-sm font-medium text-gray-700">
+            {{ propiedad.neighborhood | titlecase }}
+          </span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="px-4 md:px-10 lg:px-20 xl:px-[440px] mb-4">
+    <div class="flex flex-wrap gap-2 justify-start">
+      <button
+        (click)="seleccionarTab('fotos')"
+        [ngClass]="{
+          'bg-[#080E36] text-white hover:bg-[#080E36]': tabActivo === 'fotos',
+          'bg-gray-200 text-gray-900 hover:bg-gray-300': tabActivo !== 'fotos'
+        }"
+        class="inline-flex items-center px-4 py-2 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300"
+      >
+        <i class="fas fa-image mr-2"></i> Fotos
+      </button>
+
+      <button
+        (click)="seleccionarTab('mapa')"
+        [ngClass]="{
+          'bg-[#080E36] text-white hover:bg-[#080E36]': tabActivo === 'mapa',
+          'bg-gray-200 text-gray-900 hover:bg-gray-300': tabActivo !== 'mapa'
+        }"
+        class="inline-flex items-center px-4 py-2 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300"
+      >
+        <i class="fas fa-map-marker-alt mr-2"></i> Mapa
+      </button>
+
+      <button
+        (click)="seleccionarTab('zona')"
+        [ngClass]="{
+          'bg-[#080E36] text-white hover:bg-[#080E36]': tabActivo === 'zona',
+          'bg-gray-200 text-gray-900 hover:bg-gray-300': tabActivo !== 'zona'
+        }"
+        class="inline-flex items-center px-4 py-2 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300"
+      >
+        <i class="fas fa-street-view mr-2"></i> Conocer la zona
+      </button>
     </div>
+  </div>
+
+  <div class="flex flex-col md:flex-row px-4 md:px-60 gap-2">
+    <div class="w-full md:w-2/3">
+      @if (tabActivo === 'fotos') {
+      <ng-container>
+        <div *ngIf="propiedad?.images?.length > 0" class="flex flex-col">
+          <!-- Carrusel -->
+          <div
+            id="carousel"
+            class="w-full max-w-4xl relative"
+            data-carousel="static"
+          >
+            <div class="relative h-[550px] overflow-hidden rounded-xl">
+              <div
+                *ngFor="let img of propiedad.images; let i = index"
+                [ngClass]="{
+                  hidden: selectedIndex !== i,
+                  block: selectedIndex === i
+                }"
+                class="duration-700 ease-in-out"
+                data-carousel-item
+              >
+                <img
+                  [src]="img.imageurl"
+                  alt="Imagen propiedad"
+                  class="absolute w-full h-full object-cover rounded-xl"
+                />
+              </div>
+            </div>
+            <!-- Controles -->
+            <button
+              type="button"
+              class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+              (click)="prevImage()"
+            >
+              <span
+                class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50"
+              >
+                <svg
+                  class="w-4 h-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+              </span>
+            </button>
+            <button
+              type="button"
+              class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+              (click)="nextImage()"
+            >
+              <span
+                class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50"
+              >
+                <svg
+                  class="w-4 h-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </span>
+            </button>
+          </div>
+          <div class="w-full max-w-4xl flex mt-4 gap-3 justify-center">
+            <ng-container
+              *ngFor="let img of propiedad.images.slice(0, 3); let i = index"
+            >
+              <div
+                class="relative w-1/3 h-32 rounded-md overflow-hidden cursor-pointer group"
+                (click)="selectImage(i)"
+              >
+                <img
+                  [src]="img.imageurl"
+                  [alt]="'Miniatura ' + (i + 1)"
+                  class="w-full h-full object-cover transition duration-300 border-2"
+                  [class.border-blue-500]="selectedIndex === i"
+                />
+                <div
+                  *ngIf="i === 2 && propiedad.images.length > 3"
+                  class="absolute inset-0 bg-[#001b3c]/80 flex items-center justify-center text-white text-lg font-semibold rounded-md"
+                >
+                  +{{ propiedad.images.length - 3 }}
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+      } @if (tabActivo === 'mapa') {
+      <ng-container>
+        <div class="flex flex-col">
+          <div class="w-full max-w-4xl relative">
+            <div class="relative h-[700px] overflow-hidden rounded-xl">
+              <iframe
+                class="w-full h-full rounded-md"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.527264572011!2d-75.57878828820685!3d6.19394229376781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e46825af2bfffff%3A0xe438ca98577bfa7f!2sRenta%20Raiz!5e0!3m2!1ses-419!2sco!4v1744174393181!5m2!1ses-419!2sco"
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      } @if (tabActivo === 'zona') {
+      <ng-container>
+        <div class="flex flex-col">
+          <div class="w-full max-w-4xl relative">
+            <div class="relative h-[700px] overflow-hidden rounded-xl">
+              <iframe
+                class="w-full h-full rounded-md"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.527264572011!2d-75.57878828820685!3d6.19394229376781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e46825af2bfffff%3A0xe438ca98577bfa7f!2sRenta%20Raiz!5e0!3m2!1ses-419!2sco!4v1744174393181!5m2!1ses-419!2sco"
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+          <!-- Opcional: miniaturas o placeholder -->
+        </div>
+      </ng-container>
+      }
+    </div>
+
+    <div class="w-full md:w-1/3 transform hover:scale-[1.02] transition-all duration-300">
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <!-- Precio destacado -->
+        <div class="mb-6">
+          <p class="text-gray-500 text-sm mb-1">Cómpralo desde:</p>
+          <p class="text-3xl font-extrabold text-gray-900 mb-1">
+            <span class="text-blue-600">$183.612.000</span>
+          </p>
+          <p class="text-gray-500 text-sm mb-1">Hasta:</p>
+          <p class="text-2xl font-bold text-gray-800">$203.086.000</p>
+        </div>
+    
+        <!-- Línea divisora con efecto -->
+        <div class="relative my-6">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-200"></div>
+          </div>
+          <div class="relative flex justify-center">
+            <span class="px-2 bg-white text-xs text-gray-500">Detalles clave</span>
+          </div>
+        </div>
+    
+        <!-- Info de entrega y constructora -->
+        <div class="space-y-3 mb-6">
+          <div>
+            <p class="text-gray-500 text-sm">Fecha de entrega:</p>
+            <p class="text-lg font-semibold text-gray-800">20 de diciembre del 2025</p>
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm">Constructora:</p>
+            <p class="text-lg font-semibold text-gray-800">TAKAI SAS</p>
+          </div>
+        </div>
+    
+        <!-- Llamado a la acción destacado -->
+        <div class="bg-blue-50 rounded-lg p-4 mb-6 text-center">
+          <p class="text-blue-700 font-medium">¡Si te gustó este proyecto, contáctanos!</p>
+        </div>
+    
+        <!-- Botones con el estilo EXACTO que pediste -->
+        <div class="space-y-3">
+          <!-- Botón Azul -->
+          <button type="button" class="w-full flex items-center justify-center gap-2 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800">
+            <i class="fas fa-phone-alt fa-sm"></i>
+            Ver teléfonos
+          </button>
+          
+          <!-- Botón Verde -->
+          <button type="button" class="w-full flex items-center justify-center gap-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+            <i class="fab fa-whatsapp fa-sm"></i>
+            Contactar por WhatsApp 😊
+          </button>
+          
+          <!-- Botón Naranja -->
+          <button type="button" class="w-full text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:hover:bg-orange-600 dark:focus:ring-orange-800">
+            Quiero que me contacten
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
