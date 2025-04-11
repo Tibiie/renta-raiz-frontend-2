@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { Router } from 'express';
 
 @Component({
   selector: 'app-mapa',
@@ -11,6 +12,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 })
 export class MapaComponent {
 
+  router = inject(Router);
 
   center = { lat: 4.65, lng: -74.05 }; // centro de Bogotá
   markers: any[] = [];
@@ -70,5 +72,10 @@ export class MapaComponent {
       scaledSize: new google.maps.Size(130, 40),
       anchor: new google.maps.Point(65, 40)
     };
+  }
+
+
+  verDetalle(propiedad: any) {
+    this.router.navigate(['/ver-propiedad', propiedad.id]);
   }
 }
