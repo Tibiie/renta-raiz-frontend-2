@@ -6,6 +6,7 @@ import { ContactanosComponent } from './Components/contactanos/contactanos.compo
 import { VerPropiedadComponent } from './Components/ver-propiedad/ver-propiedad.component';
 import { NuestroEquipoComponent } from './Components/nuestro-equipo/nuestro-equipo.component';
 import { QuienesSomosComponent } from './Components/quienes-somos/quienes-somos.component';
+import { MapaComponent } from './Components/mapa/mapa.component';
 
 export const routes: Routes = [
 
@@ -35,8 +36,11 @@ export const routes: Routes = [
   {
     path: 'quienes-somos',
     component: QuienesSomosComponent
+  },
+  {
+    path: 'mapa',
+    component: MapaComponent
   }
-  
 
 
 

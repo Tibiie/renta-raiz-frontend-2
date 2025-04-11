@@ -1,0 +1,10 @@
+<google-map
+  height="500px"
+  width="100%"
+  [center]="center"
+  [zoom]="12">
+  <map-marker *ngFor="let propiedad of propiedades"
+              [position]="{lat: propiedad.latitud, lng: propiedad.longitud}"
+              [label]="('$' + propiedad.precio)">
+  </map-marker>
+</google-map>
