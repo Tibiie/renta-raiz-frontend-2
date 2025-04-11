@@ -76,7 +76,6 @@ export class MapaComponent {
     };
   }
 
-
   verDetalle(propiedad: any) {
     const url = this.router.serializeUrl(
       this.router.createUrlTree([`/ver-propiedad/${propiedad.id}`])

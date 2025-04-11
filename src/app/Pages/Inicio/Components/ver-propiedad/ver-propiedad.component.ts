@@ -40,20 +40,12 @@ export class VerPropiedadComponent implements OnInit {
 
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
-    const state =
-      navigation?.extras?.state ||
-      (typeof window !== 'undefined' ? window.history.state : null);
+    const state = navigation?.extras?.state || window.history.state;
 
-    if (state?.codPro) {
-      this.codPro = state.codPro;
-    }
-    console.log('CodPro:', this.codPro);
-
-    this.getDatos();
-
-    this.route.paramMap.subscribe((params) => {
-      this.codPro = Number(params.get('codpro'));
+    this.route.paramMap.subscribe(params => {
+      this.codPro = state?.codPro || Number(params.get('codpro'));
       console.log('CodPro:', this.codPro);
+      this.getDatos();
     });
   }
 
