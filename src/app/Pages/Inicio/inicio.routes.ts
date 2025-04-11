@@ -26,7 +26,7 @@ export const routes: Routes = [
     component: ContactanosComponent
   },
   {
-    path: 'ver-propiedad',
+    path: 'ver-propiedad/:codpro',
     component: VerPropiedadComponent
   },
   {

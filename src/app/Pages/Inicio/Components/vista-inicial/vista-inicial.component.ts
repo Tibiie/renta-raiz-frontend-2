@@ -339,7 +339,7 @@ export class VistaInicialComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     console.log("codPro", codPro);
-    this.router.navigate(['/ver-propiedad'], {
+    this.router.navigate(['/ver-propiedad', codPro], {
       state: { codPro: codPro }
     });
   }

@@ -47,6 +47,7 @@ export class FiltrosComponent implements OnInit {
   ciudades: any[] = [];
   ubicacion: string = '';
   resultados: any[] = [];
+  isMapVisible = false;
   isDrawerOpen: boolean = true;
   filtrosVistaInicial: any = {};
   categoriasInmuebles: any[] = [];
@@ -164,6 +165,10 @@ export class FiltrosComponent implements OnInit {
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
+  }
+
+  toggleMap(): void {
+    this.isMapVisible = !this.isMapVisible;
   }
 
   toggleDrawer() {
