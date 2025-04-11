@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/modal-crear-contacto.component';
@@ -36,6 +36,7 @@ export class VerPropiedadComponent implements OnInit {
   router = inject(Router);
   cdRef = inject(ChangeDetectorRef);
   inmueblesService = inject(InmueblesService);
+  route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
@@ -49,6 +50,11 @@ export class VerPropiedadComponent implements OnInit {
     console.log('CodPro:', this.codPro);
 
     this.getDatos();
+
+    this.route.paramMap.subscribe((params) => {
+      this.codPro = Number(params.get('codpro'));
+      console.log('CodPro:', this.codPro);
+    });
   }
 
   getDatos() {

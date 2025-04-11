@@ -13,9 +13,9 @@ import { Router } from '@angular/router';
 })
 export class MapaComponent {
 
-  
 
-  center = { lat: 4.65, lng: -74.05 }; // centro de Bogotá
+
+  center = { lat: 4.65, lng: -74.05 };
   markers: any[] = [];
 
   propiedades: any[] = [
@@ -78,13 +78,12 @@ export class MapaComponent {
 
 
   verDetalle(propiedad: any) {
-
     const url = this.router.serializeUrl(
       this.router.createUrlTree([`/ver-propiedad/${propiedad.id}`])
     );
-  
+
     // abre la nueva pestaña con la URL completa
     window.open(url, '_blank');
-   
+
   }
 }
