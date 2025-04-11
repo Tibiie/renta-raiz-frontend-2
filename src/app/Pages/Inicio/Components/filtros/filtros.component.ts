@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, Inject, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
@@ -22,6 +28,7 @@ export class FiltrosComponent implements OnInit {
   paginaActual = 1;
   totalPaginas = 0;
   elementsPerPage = 12;
+  totalDatos = 0;
   paginas: number[] = [];
   filtrosSeleccionados: Map<string, any> = new Map();
   estrato: number[] = [1, 2, 3, 4];
@@ -173,8 +180,9 @@ export class FiltrosComponent implements OnInit {
 
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        console.log('filtros', response.data);
+        console.log('filtros', response);
         this.resultados = response.data;
+        this.totalDatos = response.total;
 
         this.paginacion = response;
         this.totalPaginas = response.last_page || 1;
