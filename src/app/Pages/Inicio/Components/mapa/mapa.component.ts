@@ -1,18 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 @Component({
   selector: 'app-mapa',
   standalone: true,
-  imports: [GoogleMapsModule],
+  imports: [GoogleMapsModule, CommonModule],
   templateUrl: './mapa.component.html',
   styleUrl: './mapa.component.scss'
 })
 export class MapaComponent {
 
-  
-  center = { lat: 4.65, lng: -74.05 }; // centro de Bogotá
 
+  center = { lat: 4.65, lng: -74.05 }; // centro de Bogotá
+  markers: any[] = [];
 
   propiedades: any[] = [
     {
@@ -46,4 +47,28 @@ export class MapaComponent {
       lng: -74.1663
     }
   ];
+
+
+  constructor() { 
+    this.markers = this.propiedades.map(p => ({
+      position: { lat: p.lat, lng: p.lng },
+      icon: this.createSvgIcon('1.000.000')
+    }));
+  }
+
+
+  createSvgIcon(precio: string) {
+    const svg = `
+      <svg width="130" height="40" xmlns="http://www.w3.org/2000/svg">
+        <rect rx="20" ry="20" width="130" height="40" fill="white" stroke="#007BFF" stroke-width="2"/>
+        <text x="10" y="25" font-size="18" font-family="Arial" fill="#007BFF">🏢</text>
+        <text x="40" y="25" font-size="14" font-weight="bold" font-family="Arial" fill="#007BFF">$${precio}</text>
+      </svg>
+    `;
+    return {
+      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+      scaledSize: new google.maps.Size(130, 40),
+      anchor: new google.maps.Point(65, 40)
+    };
+  }
 }
