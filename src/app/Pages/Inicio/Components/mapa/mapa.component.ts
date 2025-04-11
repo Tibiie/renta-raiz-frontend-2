@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { Router } from 'express';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-mapa',
@@ -12,7 +13,7 @@ import { Router } from 'express';
 })
 export class MapaComponent {
 
-  router = inject(Router);
+  
 
   center = { lat: 4.65, lng: -74.05 }; // centro de Bogotá
   markers: any[] = [];
@@ -51,10 +52,11 @@ export class MapaComponent {
   ];
 
 
-  constructor() { 
+  constructor(private router: Router) {
     this.markers = this.propiedades.map(p => ({
       position: { lat: p.lat, lng: p.lng },
-      icon: this.createSvgIcon('1.000.000')
+      icon: this.createSvgIcon('1.000.000'),
+      propiedad: p
     }));
   }
 
@@ -76,6 +78,13 @@ export class MapaComponent {
 
 
   verDetalle(propiedad: any) {
-    this.router.navigate(['/ver-propiedad', propiedad.id]);
+
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/ver-propiedad/${propiedad.id}`])
+    );
+  
+    // abre la nueva pestaña con la URL completa
+    window.open(url, '_blank');
+   
   }
 }
