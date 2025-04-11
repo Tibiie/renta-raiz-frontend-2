@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,12 +12,17 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
   isScrolled = false;
+  elementsPerPage = 12;
   showNosotrosDropdown = false;
   @Input() alwaysScrolled = false;
   isMobileMenuOpen: boolean = false;
 
+  filtrosInmueblesVenta: Map<string, any> = new Map();
+  filtrosInmueblesArriendo: Map<string, any> = new Map();
+
   // Injecciones
   _router = inject(Router);
+  inmueblesService = inject(InmueblesService);
 
   ngOnInit(): void {
     if (this.alwaysScrolled) {
@@ -51,5 +57,51 @@ export class NavbarComponent implements OnInit {
   navigateTo(route: string) {
     this._router.navigate([route]);
     this.closeDropdown();
+  }
+
+  enviarFiltroVenta() {
+    this.filtrosInmueblesVenta.clear();
+    this.filtrosInmueblesVenta.set('type', '2');
+
+    const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    }
+    console.log('Objeto a enviar:', obj);
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log("filtros", response.data);
+        this._router.navigate(['/filtros'], {
+          state: { resultados: response.data, paginacion: response, filtros: obj }
+        });
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
+  enviarFiltroArriendo() {
+    this.filtrosInmueblesArriendo.clear();
+    this.filtrosInmueblesArriendo.set('type', '1');
+
+    const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    }
+    console.log('Objeto a enviar:', obj);
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log("filtros", response.data);
+        this._router.navigate(['/filtros'], {
+          state: { resultados: response.data, paginacion: response, filtros: obj }
+        });
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
   }
 }

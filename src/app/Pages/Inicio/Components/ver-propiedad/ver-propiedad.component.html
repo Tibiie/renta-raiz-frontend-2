@@ -184,17 +184,32 @@
                 class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300 min-h-[650px] flex flex-col justify-between">
 
                 <div class="mb-2">
-                    @if (propiedad.biz_code === 2) {
+                    @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
                     <p class="text-gray-500 text-sm mb-1">Cómpralo desde:</p>
                     }
 
-                    @if (propiedad.biz_code === 1) {
+                    @if (propiedad.biz_code === 3) {
+                    <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
+                        <span class="text-black"> ${{ propiedad.saleprice | currency:'symbol':'1.0-0' }}</span>
+                    </p>
+
+                    }
+
+                    @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
                     <p class="text-gray-500 text-sm mb-1">Arrienda en:</p>
                     }
 
+                    @if (propiedad.biz_code === 3) {
+                    <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
+                        <span class="text-black"> $ {{ propiedad.rent | currency:'symbol':'1.0-0' }}</span>
+                    </p>
+                    }
+
+                    @if (propiedad.biz_code === 1 || propiedad.biz_code === 2) {
                     <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
                         <span class="text-black"> $ {{ propiedad.price_format }}</span>
                     </p>
+                    }
                 </div>
 
                 <div class="relative my-6">

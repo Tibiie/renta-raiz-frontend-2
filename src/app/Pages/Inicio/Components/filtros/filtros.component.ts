@@ -114,7 +114,6 @@ export class FiltrosComponent implements OnInit {
       console.log('Filtros:', this.filtrosVistaInicial);
       console.log('Resultados:', this.resultados);
 
-      this.generarPaginas();
       this.getCiudades();
     }
 
@@ -162,6 +161,7 @@ export class FiltrosComponent implements OnInit {
       this.selectedEstates = this.estateOptions.length
         ? [this.estateOptions[0]]
         : [];
+      this.generarPaginas();
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
@@ -273,23 +273,7 @@ export class FiltrosComponent implements OnInit {
       );
     }
 
-    this.seleccion.habitaciones = this.inicializarRango(f, 'bedroom');
-    this.seleccion.banos = this.inicializarRango(f, 'bathroom');
-    this.seleccion.parqueadero = this.inicializarParqueadero(f?.minparking);
-    this.seleccion.estrato = f?.stratum?.split(',').map(Number) || [];
-
-    this.AreaMinima = f?.minarea || '';
-    this.AreaMaxima = f?.maxarea || '';
-
     this.cdRef.detectChanges();
-  }
-
-  private inicializarRango(f: any, campo: string): (number | string)[] {
-    return f?.[`${campo}s`]?.split(',') || (f?.[`min${campo}`] ? ['+6'] : []);
-  }
-
-  private inicializarParqueadero(min: string): (number | string)[] {
-    return min === '6' ? ['+6'] : min ? [min] : [];
   }
 
   prepararFiltros() {
@@ -489,5 +473,12 @@ export class FiltrosComponent implements OnInit {
         console.error('Error al obtener los tipos de propiedad:', error);
       }
     );
+  }
+
+  verPropiedad(codPro: number) {
+    console.log("codPro", codPro);
+    this.router.navigate(['/ver-propiedad', codPro], {
+      state: { codPro: codPro }
+    });
   }
 }
