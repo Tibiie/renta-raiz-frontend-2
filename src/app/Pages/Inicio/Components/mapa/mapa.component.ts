@@ -58,9 +58,9 @@ export class MapaComponent {
 
     const svg = `
       <svg width="130" height="40" xmlns="http://www.w3.org/2000/svg">
-        <rect rx="20" ry="20" width="130" height="40" fill="white" stroke="#007BFF" stroke-width="2"/>
-        <text x="10" y="25" font-size="18" font-family="Arial" fill="#007BFF">🏢</text>
-        <text x="40" y="25" font-size="14" font-weight="bold" font-family="Arial" fill="#007BFF">$${precio}</text>
+        <rect rx="20" ry="20" width="130" height="40" fill="#060f29" stroke="#cdad60" stroke-width="2"/>
+        <text x="10" y="25" font-size="18" font-family="Arial" fill="#cdad60">🏢</text>
+        <text x="40" y="25" font-size="14" font-weight="bold" font-family="Arial" fill="#cdad60">$${precio}</text>
       </svg>
     `;
 
