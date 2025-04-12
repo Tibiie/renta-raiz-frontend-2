@@ -147,14 +147,22 @@ export class FiltrosComponent implements OnInit {
         }
         return cat;
       });
+
       this.selectedProperty =
         this.propertyOptions.find((cat) => cat.code === '3') ||
         this.propertyOptions[0];
 
       this.estateOptions = tipoPropiedadResponse.data;
-      this.selectedEstates = this.estateOptions.length
-        ? [this.estateOptions[0]]
-        : [];
+
+      if (!this.filtrosVistaInicial?.type) {
+        this.selectedEstates = [];
+      } else {
+        const estateCodes = this.filtrosVistaInicial.type.split(',');
+        this.selectedEstates = this.estateOptions.filter((opt) =>
+          estateCodes.includes(opt.code)
+        );
+      }
+
       this.generarPaginas();
     } catch (error) {
       console.error('Error al obtener datos:', error);
