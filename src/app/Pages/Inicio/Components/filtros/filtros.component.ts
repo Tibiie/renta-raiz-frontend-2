@@ -47,7 +47,6 @@ export class FiltrosComponent implements OnInit {
   ciudades: any[] = [];
   ubicacion: string = '';
   resultados: any[] = [];
-  isMapVisible = false;
   isDrawerOpen: boolean = true;
   filtrosVistaInicial: any = {};
   categoriasInmuebles: any[] = [];
@@ -169,10 +168,6 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  toggleMap(): void {
-    this.isMapVisible = !this.isMapVisible;
-  }
-
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
     console.log(this.isDrawerOpen);
@@ -182,7 +177,7 @@ export class FiltrosComponent implements OnInit {
     this.paginas = [];
     const paginasPorBloque = 3;
     const inicio = this.bloqueActual * paginasPorBloque + 1;
-    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas - 1); // evitar solapar con última
+    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas - 1);
 
     for (let i = inicio; i <= fin; i++) {
       this.paginas.push(i);
