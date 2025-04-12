@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit {
 
   filtrosInmueblesVenta: Map<string, any> = new Map();
   filtrosInmueblesArriendo: Map<string, any> = new Map();
+  filtrosInmueblesDestacados: Map<string, any> = new Map();
 
   // Injecciones
   _router = inject(Router);
@@ -87,6 +88,29 @@ export class NavbarComponent implements OnInit {
     this.filtrosInmueblesArriendo.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    }
+    console.log('Objeto a enviar:', obj);
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log("filtros", response.data);
+        this._router.navigate(['/filtros'], {
+          state: { resultados: response.data, paginacion: response, filtros: obj }
+        });
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
+  enviarFiltroDestacados() {
+    this.filtrosInmueblesDestacados.clear();
+    this.filtrosInmueblesDestacados.set('biz', '1');
+
+    const filtrosObj = Object.fromEntries(this.filtrosInmueblesDestacados);
     const obj = {
       ...filtrosObj,
       page: 1,
