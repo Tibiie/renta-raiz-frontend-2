@@ -254,6 +254,7 @@ export class FiltrosComponent implements OnInit {
         );
 
         console.log('Paginas', this.paginas);
+        this.generarPaginas();
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
