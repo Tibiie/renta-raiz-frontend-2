@@ -25,18 +25,15 @@ export class MapaComponent implements OnInit {
 
 
   constructor(private router: Router) {
-    this.markers = this.propiedades.map(p => ({
-      position: { lat: p.latitude, lng: p.longitude },
-      icon: this.createSvgIcon(p.price_format),
-      propiedad: p
-    }));
+    
   }
   ngOnInit(): void {
     this.propiedades = this.inmueblesService.getPropiedades();
     if(this.propiedades.length == 0){
-      this.inmueblesService.getFiltrosEnviar({page: 1}, 12).subscribe(
+      this.inmueblesService.getTodosInmuebles().subscribe(
         (response: any) => {
-          this.propiedades = response.data;
+          
+          this.propiedades = response;
           console.log(this.propiedades);
         },
         (error: any) => {
@@ -45,7 +42,14 @@ export class MapaComponent implements OnInit {
       );
     }
     console.log(this.propiedades);
-    
+    this.center = { lat: 6.205925, lng: -75.575136111111 };
+
+    this.markers = this.propiedades.map(p => ({
+      position: { lat: p.latitude, lng: p.longitude },
+      icon: this.createSvgIcon(p.price_format),
+      propiedad: p
+    }));
+    console.log(this.markers);
   }
 
 

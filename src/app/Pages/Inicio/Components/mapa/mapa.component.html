@@ -1,4 +1,4 @@
-<google-map height="500px" width="100%" [center]="center" [zoom]="12">
+<google-map height="500px" width="100%" [center]="center" [zoom]="12.5">
   <map-marker *ngFor="let m of markers"
               [position]="m.position"
               [icon]="m.icon" (mapClick)="verDetalle(m.propiedad)">

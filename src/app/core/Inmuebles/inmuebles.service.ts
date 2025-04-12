@@ -11,6 +11,11 @@ export class InmueblesService {
 
   http = inject(HttpClient);
 
+
+  getTodosInmuebles() {
+    return this.http.get(`${environment.baseUrl}/properties/inmuebles`);
+  }
+
   getInmueblesDestacados() {
     return this.http.get(`${environment.baseUrl}/properties/destacados`);
   }
