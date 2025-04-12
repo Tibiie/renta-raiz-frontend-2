@@ -2,37 +2,61 @@
 
 <div class="flex flex-col md:flex-row">
   <div class="flex-1">
-    <div class="text-center pt-32 fixed z-50 transition-all duration-300" [ngClass]="{
+    <div
+      class="text-center pt-32 fixed z-50 transition-all duration-300"
+      [ngClass]="{
         'left-6': !isDrawerOpen,
         'left-36': isDrawerOpen
-      }">
-      <button type="button" (click)="toggleDrawer()" [attr.data-drawer-target]="'modern-drawer'"
+      }"
+    >
+      <button
+        type="button"
+        (click)="toggleDrawer()"
+        [attr.data-drawer-target]="'modern-drawer'"
         [attr.data-drawer-show]="!isDrawerOpen ? 'modern-drawer' : null"
         [attr.data-drawer-hide]="isDrawerOpen ? 'modern-drawer' : null"
-        class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transition duration-300 shadow-lg">
+        class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transition duration-300 shadow-lg"
+      >
         <i class="fas fa-filter"></i>
         {{ !isDrawerOpen ? "" : "Filtros" }}
       </button>
     </div>
 
-    <div id="modern-drawer"
+    <div
+      id="modern-drawer"
       class="fixed top-48 left-0 z-60 max-h-[calc(100vh-6rem)] w-[28rem] bg-white text-black shadow-xl flex flex-col transition-transform duration-300 ease-in-out"
-      [class.translate-x-0]="isDrawerOpen" [class.-translate-x-full]="!isDrawerOpen" [attr.aria-hidden]="!isDrawerOpen"
-      style="border: 1px solid #cdad60" tabindex="-1">
-      <div class="bg-blue-100/50 rounded-t-lg p-1 flex justify-between items-center mb-1 sticky top-0 z-10">
+      [class.translate-x-0]="isDrawerOpen"
+      [class.-translate-x-full]="!isDrawerOpen"
+      [attr.aria-hidden]="!isDrawerOpen"
+      style="border: 1px solid #cdad60"
+      tabindex="-1"
+    >
+      <div
+        class="bg-blue-100/50 rounded-t-lg p-1 flex justify-between items-center mb-1 sticky top-0 z-10"
+      >
         <h3 class="text-lg font-semibold text-gray-800"></h3>
-        <button type="button" (click)="toggleDrawer()" data-drawer-hide="modern-drawer" aria-controls="modern-drawer"
-          class="text-gray-600 hover:text-black transition-colors duration-200 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:shadow-md">
+        <button
+          type="button"
+          (click)="toggleDrawer()"
+          data-drawer-hide="modern-drawer"
+          aria-controls="modern-drawer"
+          class="text-gray-600 hover:text-black transition-colors duration-200 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:shadow-md"
+        >
           <span class="text-xl leading-none">×</span>
         </button>
       </div>
 
       <div class="flex-1 overflow-y-auto max-h-[calc(100vh-20rem)]">
         <ul class="space-y-3 font-medium">
-          <li class="border-b border-[#d1d5db] pb-4 mb-4" *ngIf="
+          <li
+            class="border-b border-[#d1d5db] pb-4 mb-4"
+            *ngIf="
               selectedProperty?.code === '3' || selectedProperty?.code === '1'
-            ">
-            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+            "
+          >
+            <a
+              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
               <i class="fas fa-money-bill-wave text-xl text-[#000000] mr-3"></i>
               <span class="font-semibold">Rango de precios</span>
             </a>
@@ -40,23 +64,46 @@
             <div class="mt-2 px-3">
               <div class="flex gap-4">
                 <div class="flex flex-col w-44">
-                  <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
-                  <input id="min-price" [(ngModel)]="precioMinimo" type="number" placeholder="Desde $"
-                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                  <label
+                    for="min-price"
+                    class="text-sm font-medium text-gray-700 mb-1"
+                    >Precio mínimo</label
+                  >
+                  <input
+                    id="min-price"
+                    [(ngModel)]="precioMinimo"
+                    type="number"
+                    placeholder="Desde $"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                  />
                 </div>
                 <div class="flex flex-col w-44">
-                  <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
-                  <input id="max-price" [(ngModel)]="precioMaximo" type="number" placeholder="Hasta $"
-                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                  <label
+                    for="max-price"
+                    class="text-sm font-medium text-gray-700 mb-1"
+                    >Precio máximo</label
+                  >
+                  <input
+                    id="max-price"
+                    [(ngModel)]="precioMaximo"
+                    type="number"
+                    placeholder="Hasta $"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                  />
                 </div>
               </div>
             </div>
           </li>
 
-          <li class="border-b border-[#d1d5db] pb-4 mb-4" *ngIf="
+          <li
+            class="border-b border-[#d1d5db] pb-4 mb-4"
+            *ngIf="
               selectedProperty?.code === '3' || selectedProperty?.code === '2'
-            ">
-            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+            "
+          >
+            <a
+              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
               <i class="fas fa-money-bill-wave text-xl text-[#000000] mr-3"></i>
               <span class="font-semibold">Precio de venta</span>
             </a>
@@ -64,35 +111,56 @@
             <div class="mt-2 px-3">
               <div class="flex gap-4">
                 <div class="flex flex-col w-full max-w-[400px]">
-                  <label for="saleprice" class="text-sm font-medium text-gray-700 mb-1">Precio de venta</label>
-                  <input id="saleprice" [(ngModel)]="precioVenta" type="number" placeholder="Precio de venta"
-                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60] w-full" />
+                  <label
+                    for="saleprice"
+                    class="text-sm font-medium text-gray-700 mb-1"
+                    >Precio de venta</label
+                  >
+                  <input
+                    id="saleprice"
+                    [(ngModel)]="precioVenta"
+                    type="number"
+                    placeholder="Precio de venta"
+                    class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60] w-full"
+                  />
                 </div>
               </div>
             </div>
           </li>
 
           <li class="border-b border-[#d1d5db] pb-4 mb-4">
-            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+            <a
+              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
               <i class="fas fa-tags text-xl text-[#000000] mr-3"></i>
               <span class="font-semibold">Categoría</span>
             </a>
 
             <div class="mt-2">
               <div class="flex flex-wrap gap-2">
-                <button *ngFor="let option of propertyOptions" (click)="selectOption('property', option)" [class]="
+                <button
+                  *ngFor="let option of propertyOptions"
+                  (click)="selectOption('property', option)"
+                  [class]="
                     getButtonClass(selectedProperty?.code === option.code)
-                  ">
+                  "
+                >
                   <i [class]="getIcon('property', option)" class="mr-2"></i>
                   {{ option.displayName || option.name | titlecase }}
-                  <span *ngIf="selectedProperty?.code === option.code" class="ml-1">✔</span>
+                  <span
+                    *ngIf="selectedProperty?.code === option.code"
+                    class="ml-1"
+                    >✔</span
+                  >
                 </button>
               </div>
             </div>
           </li>
 
           <li class="border-b border-[#d1d5db] pb-4 mb-4">
-            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+            <a
+              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
               <i class="fas fa-home text-xl text-[#000000] mr-3"></i>
               <span class="font-semibold">Tipo de inmueble</span>
             </a>
@@ -103,8 +171,11 @@
               </p>
 
               <div class="flex flex-wrap gap-2">
-                <button *ngFor="let option of estateOptions" (click)="selectOption('estate', option)"
-                  [class]="getButtonClass(isEstateSelected(option))">
+                <button
+                  *ngFor="let option of estateOptions"
+                  (click)="selectOption('estate', option)"
+                  [class]="getButtonClass(isEstateSelected(option))"
+                >
                   <i [class]="getIcon('estate', option)" class="mr-2"></i>
                   {{ option.name || option.name | titlecase }}
                   <span *ngIf="isEstateSelected(option)" class="ml-1">✔</span>
@@ -114,7 +185,9 @@
           </li>
 
           <li class="border-b border-[#d1d5db] pb-4 mb-4">
-            <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+            <a
+              class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
               <i class="fas fa-ruler-combined text-xl text-[#000000] mr-3"></i>
               <span>Área</span>
             </a>
@@ -122,16 +195,34 @@
             <div class="mt-2 px-3">
               <div class="flex gap-4">
                 <div class="flex flex-col w-44">
-                  <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Mínima</label>
-                  <input id="min-price" type="number" placeholder="Ej. 60 m2"
+                  <label
+                    for="min-price"
+                    class="text-sm font-medium text-gray-700 mb-1"
+                    >Mínima</label
+                  >
+                  <input
+                    id="min-price"
+                    type="number"
+                    placeholder="Ej. 60 m2"
                     class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                    id="AreaMinima" [(ngModel)]="AreaMinima" />
+                    id="AreaMinima"
+                    [(ngModel)]="AreaMinima"
+                  />
                 </div>
                 <div class="flex flex-col w-44">
-                  <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Máxima</label>
-                  <input id="max-price" type="number" placeholder="Ej. 120 m2"
+                  <label
+                    for="max-price"
+                    class="text-sm font-medium text-gray-700 mb-1"
+                    >Máxima</label
+                  >
+                  <input
+                    id="max-price"
+                    type="number"
+                    placeholder="Ej. 120 m2"
                     class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                    id="AreaMaxima" [(ngModel)]="AreaMaxima" />
+                    id="AreaMaxima"
+                    [(ngModel)]="AreaMaxima"
+                  />
                 </div>
               </div>
             </div>
@@ -140,7 +231,9 @@
           <li class="border-b border-[#d1d5db] pb-4 mb-4">
             <div class="p-3">
               <div class="flex items-center mb-4">
-                <i class="fas fa-clipboard-list text-xl text-[#000000] mr-3"></i>
+                <i
+                  class="fas fa-clipboard-list text-xl text-[#000000] mr-3"
+                ></i>
                 <span class="font-semibold text-lg">Detalles del proyecto</span>
               </div>
 
@@ -148,12 +241,17 @@
                 <div>
                   <p class="text-gray-700 font-medium mb-2">Habitaciones</p>
                   <div class="flex gap-2 flex-wrap">
-                    <button *ngFor="let hab of habitaciones" (click)="seleccionar('habitaciones', hab)" [ngClass]="{
+                    <button
+                      *ngFor="let hab of habitaciones"
+                      (click)="seleccionar('habitaciones', hab)"
+                      [ngClass]="{
                         'bg-gray-700 text-white font-semibold':
                           seleccion.habitaciones.includes(hab),
                         'bg-blue-100 text-blue-700':
                           !seleccion.habitaciones.includes(hab)
-                      }" class="w-8 h-8 rounded-md">
+                      }"
+                      class="w-8 h-8 rounded-md"
+                    >
                       {{ hab }}
                     </button>
                   </div>
@@ -163,12 +261,17 @@
                 <div>
                   <p class="text-gray-700 font-medium mb-2">Baños</p>
                   <div class="flex gap-2 flex-wrap">
-                    <button *ngFor="let bano of banos" (click)="seleccionar('banos', bano)" [ngClass]="{
+                    <button
+                      *ngFor="let bano of banos"
+                      (click)="seleccionar('banos', bano)"
+                      [ngClass]="{
                         'bg-gray-700 text-white font-semibold':
                           seleccion.banos.includes(bano),
                         'bg-blue-100 text-blue-700':
                           !seleccion.banos.includes(bano)
-                      }" class="w-8 h-8 rounded-md">
+                      }"
+                      class="w-8 h-8 rounded-md"
+                    >
                       {{ bano }}
                     </button>
                   </div>
@@ -178,12 +281,17 @@
                 <div>
                   <p class="text-gray-700 font-medium mb-2">Parqueadero</p>
                   <div class="flex gap-2 flex-wrap">
-                    <button *ngFor="let p of parqueadero" (click)="seleccionar('parqueadero', p)" [ngClass]="{
+                    <button
+                      *ngFor="let p of parqueadero"
+                      (click)="seleccionar('parqueadero', p)"
+                      [ngClass]="{
                         'bg-gray-700 text-white font-semibold':
                           seleccion.parqueadero.includes(p),
                         'bg-blue-100 text-blue-700':
                           !seleccion.parqueadero.includes(p)
-                      }" class="w-8 h-8 rounded-md">
+                      }"
+                      class="w-8 h-8 rounded-md"
+                    >
                       {{ p }}
                     </button>
                   </div>
@@ -193,12 +301,17 @@
                 <div>
                   <p class="text-gray-700 font-medium mb-2">Estrato</p>
                   <div class="flex gap-2 flex-wrap">
-                    <button *ngFor="let e of estrato" (click)="seleccionar('estrato', e)" [ngClass]="{
+                    <button
+                      *ngFor="let e of estrato"
+                      (click)="seleccionar('estrato', e)"
+                      [ngClass]="{
                         'bg-gray-700 text-white font-semibold':
                           seleccion.estrato.includes(e),
                         'bg-blue-100 text-blue-700':
                           !seleccion.estrato.includes(e)
-                      }" class="w-8 h-8 rounded-md">
+                      }"
+                      class="w-8 h-8 rounded-md"
+                    >
                       {{ e }}
                     </button>
                   </div>
@@ -209,15 +322,19 @@
         </ul>
       </div>
 
-      <div class="sticky bottom-0 bg-white pt-2 pb-4 mt-4 z-10 border-t border-gray-200">
+      <div
+        class="sticky bottom-0 bg-white pt-2 pb-4 mt-4 z-10 border-t border-gray-200"
+      >
         <div class="flex justify-between gap-4 px-4">
           <button
-            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200">
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200"
+          >
             Borrar filtros
           </button>
           <button
             class="flex-1 bg-[#CDAD60] hover:bg-[#b59a50] text-white font-semibold py-2 px-4 rounded-xl transition duration-200"
-            (click)="enviarFiltros()">
+            (click)="enviarFiltros()"
+          >
             Aplicar filtros
           </button>
         </div>
@@ -225,40 +342,86 @@
     </div>
   </div>
 
-  <!-- Cards de resultados filtrados -->
-  <div *ngIf="isMapVisible"
-    class="hidden md:block w-full md:w-1/3 lg:w-1/4 fixed h-[calc(100vh-4rem)] bg-gray-100 z-10">
-    <div class="p-4 h-full">
-      <div class="bg-white rounded-lg shadow-md h-full flex items-center justify-center">
-        <!-- Aquí va tu implementación del mapa (Google Maps, Leaflet, etc.) -->
-        <div class="text-center p-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+  <!-- Drawer derecho sin overlay -->
+  <div
+    id="right-map-drawer"
+    class="fixed top-1/3 right-0 z-40 h-full mt-2 mb-2 w-2/4 transform transition-transform translate-x-full bg-white shadow-2xl rounded-xl overflow-hidden"
+  >
+    <!-- Contenedor interno con bordes redondeados -->
+    <div class="p-4 h-full border-l border-gray-200">
+      <div class="flex justify-between items-center mb-4">
+        <button
+          type="button"
+          data-drawer-hide="right-map-drawer"
+          class="text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
-          <p class="mt-2 text-gray-500">Mapa de propiedades</p>
+        </button>
+      </div>
+
+      <!-- Contenido del mapa con bordes redondeados -->
+      <div class="h-full bg-gray-50 rounded-lg overflow-hidden">
+        <div class="h-full flex items-center justify-center">
+          <iframe
+            class="w-full h-full rounded-lg"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.527264572011!2d-75.57878828820685!3d6.19394229376781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e46825af2bfffff%3A0xe438ca98577bfa7f!2sRenta%20Raiz!5e0!3m2!1ses-419!2sco!4v1744174393181!5m2!1ses-419!2sco"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="w-full mt-32 mb-6 transition-all duration-300 ease-in-out" [ngClass]="{
+  <div
+    class="w-full mt-32 mb-6 transition-all duration-300 ease-in-out"
+    [ngClass]="{
       'md:ml-[28rem] px-6': isDrawerOpen,
       'md:ml-0 px-32': !isDrawerOpen
-    }">
+    }"
+  >
     <div class="bg-white shadow-sm">
       <!-- Barra de búsqueda y filtros -->
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6"
+      >
         <!-- Barra de búsqueda -->
         <div class="relative flex-1 max-w-2xl">
-          <input type="text" id="ubicacion" [(ngModel)]="ubicacion" placeholder="Ciudad, barrio, sector o sitio..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+          <input
+            type="text"
+            id="ubicacion"
+            [(ngModel)]="ubicacion"
+            placeholder="Ciudad, barrio, sector o sitio..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+          />
           <div class="absolute left-3 top-2.5 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           </div>
         </div>
@@ -270,34 +433,62 @@
       </div>
 
       <!-- Sección de título y controles -->
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+      >
         <h2 class="text-xl font-bold text-gray-800">Inmuebles Encontrados</h2>
 
         <div class="flex flex-wrap gap-3 mb-6">
           <!-- Checkbox de búsqueda cercana -->
           <label
-            class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
+            class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer"
+          >
             <input type="checkbox" class="hidden peer" />
             <div
-              class="w-5 h-5 border-2 border-gray-300 rounded-md flex items-center justify-center peer-checked:bg-[#CDAD60] peer-checked:border-[#CDAD60] transition-colors">
-              <svg v-show="busquedaCercana" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+              class="w-5 h-5 border-2 border-gray-300 rounded-md flex items-center justify-center peer-checked:bg-[#CDAD60] peer-checked:border-[#CDAD60] transition-colors"
+            >
+              <svg
+                v-show="busquedaCercana"
+                class="w-3 h-3 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-gray-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
             </svg>
             <span class="select-none">Buscar cerca de mi</span>
           </label>
 
           <!-- Selector de orden -->
           <select
-            class="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#CDAD60]">
+            class="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+          >
             <option selected>Ordenar por</option>
             <option>Precio: más bajo primero</option>
             <option>Precio: más alto primero</option>
@@ -305,50 +496,80 @@
           </select>
 
           <!-- Botón de mapa -->
-          <button (click)="toggleMap()"
-            class="flex items-center gap-2 px-3 py-2 bg-green-600 rounded-xl hover:bg-green-700 text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          <button
+            type="button"
+            data-drawer-target="right-map-drawer"
+            data-drawer-toggle="right-map-drawer"
+            data-drawer-placement="right"
+            data-drawer-backdrop="false"
+            data-drawer-body-scrolling="true"
+            class="flex items-center gap-2 px-3 py-2 bg-green-600 rounded-xl hover:bg-green-700 text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+              />
             </svg>
             <span>Buscar en el mapa</span>
           </button>
-
         </div>
       </div>
     </div>
 
-    <div *ngIf="resultados.length > 0"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10">
-      <div *ngFor="let inmueble of resultados"
-        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-4 text-sm w-full mx-auto">
+    <div
+      *ngIf="resultados.length > 0"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10"
+    >
+      <div
+        *ngFor="let inmueble of resultados"
+        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-4 text-sm w-full mx-auto"
+      >
         <div class="relative group">
           <a href="#">
-            <img class="rounded-t-lg w-full h-44 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-              [alt]="inmueble.address" />
+            <img
+              class="rounded-t-lg w-full h-44 object-cover"
+              [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+              [alt]="inmueble.address"
+            />
           </a>
 
           <div
-            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
-            <a (click)="verPropiedad(inmueble.codpro)"
-              class="bg-white text-[#080E36] px-4 py-1 font-medium rounded shadow hover:bg-[#CDAD60] hover:text-white text-xs">
+            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10"
+          >
+            <a
+              (click)="verPropiedad(inmueble.codpro)"
+              class="bg-white text-[#080E36] px-4 py-1 font-medium rounded shadow hover:bg-[#CDAD60] hover:text-white text-xs"
+            >
               Ver propiedad
             </a>
           </div>
 
           <div
-            class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20
-          before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]">
-            {{inmueble.biz | titlecase}}
+            class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]"
+          >
+            {{ inmueble.biz | titlecase }}
           </div>
 
-
-          <div class="absolute bottom-1 left-1 right-1 flex justify-between items-center px-2 z-20">
-            <span class="bg-[#CDAD60] text-white text-xs font-medium px-2 py-0.5 rounded shadow">
+          <div
+            class="absolute bottom-1 left-1 right-1 flex justify-between items-center px-2 z-20"
+          >
+            <span
+              class="bg-[#CDAD60] text-white text-xs font-medium px-2 py-0.5 rounded shadow"
+            >
               {{ inmueble.type | titlecase }}
             </span>
-            <button class="text-white text-base hover:text-[#ea6666] transition-colors">
+            <button
+              class="text-white text-base hover:text-[#ea6666] transition-colors"
+            >
               <i class="fas fa-heart text-xl"></i>
             </button>
           </div>
@@ -356,7 +577,9 @@
 
         <div class="p-3">
           <a href="#">
-            <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug">
+            <h5
+              class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug"
+            >
               {{ inmueble.neighborhood || "Sin barrio especificado" }}
             </h5>
             <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
@@ -394,10 +617,10 @@
             <span>Precio:</span>
             <span class="text-[#000000] mt-1 text-base font-semibold">
               {{
-              inmueble.price_format ||
-              (inmueble.price
-              | currency : "COP" : "symbol-narrow" : "1.0-0") ||
-              "Consultar"
+                inmueble.price_format ||
+                  (inmueble.price
+                    | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                  "Consultar"
               }}
             </span>
           </div>
@@ -405,7 +628,10 @@
       </div>
     </div>
 
-    <div *ngIf="resultados.length === 0" class="text-center py-10 text-gray-500">
+    <div
+      *ngIf="resultados.length === 0"
+      class="text-center py-10 text-gray-500"
+    >
       No se encontraron inmuebles con los filtros seleccionados.
     </div>
 
@@ -414,33 +640,45 @@
       <nav aria-label="Page navigation">
         <ul class="inline-flex items-center -space-x-px text-sm">
           <li>
-            <button (click)="paginaAnterior()" [disabled]="paginaActual === 1"
-              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+            <button
+              (click)="paginaAnterior()"
+              [disabled]="paginaActual === 1"
+              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+            >
               Anterior
             </button>
           </li>
 
           <li *ngFor="let pagina of paginas" class="mx-0.5">
             <ng-container *ngIf="pagina === '...'; else paginaBtn">
-              <button (click)="cambiarPagina(pagina)"
-                class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded">
+              <button
+                (click)="cambiarPagina(pagina)"
+                class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded"
+              >
                 ...
               </button>
             </ng-container>
             <ng-template #paginaBtn>
-              <button (click)="cambiarPagina(+pagina)" [ngClass]="
-              pagina === paginaActual
-                ? 'text-white bg-[#CDAD60]'
-                : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
-            " class="px-3 py-2 leading-tight border border-gray-300 rounded">
+              <button
+                (click)="cambiarPagina(+pagina)"
+                [ngClass]="
+                  pagina === paginaActual
+                    ? 'text-white bg-[#CDAD60]'
+                    : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
+                "
+                class="px-3 py-2 leading-tight border border-gray-300 rounded"
+              >
                 {{ pagina }}
               </button>
             </ng-template>
           </li>
 
           <li>
-            <button (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas"
-              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+            <button
+              (click)="paginaSiguiente()"
+              [disabled]="paginaActual === totalPaginas"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+            >
               Siguiente
             </button>
           </li>
