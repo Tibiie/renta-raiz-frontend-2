@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/modal-crear-contacto.component';
+import { FooterComponent } from "../../../../shared/footer/footer.component";
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -15,7 +16,8 @@ import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/moda
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
-    ModalCrearContactoComponent
+    ModalCrearContactoComponent,
+    FooterComponent
   ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',

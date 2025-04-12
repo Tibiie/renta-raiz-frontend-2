@@ -215,7 +215,7 @@
       Nuestros inmuebles en venta
     </h1>
     <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
-      Venta en renta a tus inmuebles
+      No sueñes, ¡hagamos que suceda!
     </h2>
     <!-- Cards de propiedades -->
     <div *ngIf="inmueblesDestacadosArray" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
@@ -241,7 +241,7 @@
           <div
             class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20
         before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]">
-            Venta
+            {{inmueble.biz | titlecase}}
           </div>
 
           <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
@@ -306,7 +306,7 @@
       Nuestros inmuebles en arriendo
     </h1>
     <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
-      Venta en renta a tus inmuebles
+      Somos la llave al hogar que buscas
     </h2>
     <!-- Cards de propiedades -->
     <div *ngIf="inmueblesArriendosArray" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
@@ -332,7 +332,8 @@
           <div
             class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20
         before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]">
-            Arriendo
+            {{inmueble.biz | titlecase}}
+
           </div>
 
           <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
@@ -615,71 +616,5 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="relative w-full overflow-hidden min-h-[380px]">
-    <!-- Fondo con diagonal muy pronunciada -->
-    <div class="absolute top-0 left-0 w-full h-full bg-[#060F29] z-0"
-      style="clip-path: polygon(0 20%, 100% 0%, 100% 100%, 0% 100%)"></div>
-
-    <!-- Contenido del footer -->
-    <div class="relative z-10 max-w-screen-xl mx-auto pb-24 px-4 pt-[400px]">
-      <div class="flex flex-col md:flex-row justify-between items-start">
-        <!-- Logo -->
-        <div class="mb-12 md:mb-0 md:w-1/4">
-          <a href="#" class="flex items-center">
-            <img src="assets/images/LogoBlancoyDorado.png" class="h-28" alt="Logo" />
-          </a>
-        </div>
-
-        <!-- Secciones de contacto -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 md:w-3/4">
-          <!-- Contacto -->
-          <div class="text-white">
-            <h2 class="mb-5 text-xl font-semibold">Contáctenos</h2>
-            <p class="text-gray-300 text-lg mb-8">
-              Envíanos tus inquietudes, sugerencias o comentarios
-            </p>
-            <button
-              class="px-8 py-4 bg-[#CDAD60] hover:bg-[#CDAD60]/90 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-lg">
-              Contáctenos
-            </button>
-          </div>
-
-          <!-- Consignar inmueble -->
-          <div class="text-white">
-            <h2 class="mb-5 text-xl font-semibold">Consigna Tu Inmueble</h2>
-            <p class="text-gray-300 text-lg mb-8">
-              Vende o arrienda tu inmueble con nosotros.
-            </p>
-            <button
-              class="px-8 py-4 bg-[#CDAD60] hover:bg-[#CDAD60]/90 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-lg">
-              Consignar Inmueble
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Separador -->
-      <hr class="my-16 border-gray-600" />
-
-      <!-- Pie final -->
-      <div class="flex flex-col sm:flex-row justify-between items-center text-white">
-        <span class="text-base text-gray-300 text-center sm:text-left mb-2 sm:mb-0">
-          © 2025 Renta Raiz S.A.S. Todos los derechos reservados.
-        </span>
-
-        <!-- Redes sociales -->
-        <div class="flex space-x-8">
-          <a href="#" class="text-gray-300 hover:text-[#CDAD60] transition-colors text-2xl" aria-label="WhatsApp">
-            <i class="fa-brands fa-whatsapp"></i>
-          </a>
-          <a href="#" class="text-gray-300 hover:text-[#CDAD60] transition-colors text-2xl" aria-label="Instagram">
-            <i class="fa-brands fa-instagram"></i>
-          </a>
-          <a href="#" class="text-gray-300 hover:text-[#CDAD60] transition-colors text-2xl" aria-label="LinkedIn">
-            <i class="fa-brands fa-linkedin"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <app-footer></app-footer>
 </div>

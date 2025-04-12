@@ -6,12 +6,13 @@ import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { get } from 'http';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { FooterComponent } from "../../../../shared/footer/footer.component";
 
 
 @Component({
   selector: 'app-vista-inicial',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent],
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss'],
 })
@@ -209,7 +210,7 @@ export class VistaInicialComponent implements OnInit {
 
   getInmueblesVentas() {
     this.filtrosInmueblesVenta.clear();
-    this.filtrosInmueblesVenta.set('type', 2);
+    this.filtrosInmueblesVenta.set('biz', 2);
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
     const obj = {
@@ -230,7 +231,7 @@ export class VistaInicialComponent implements OnInit {
 
   getInmueblesArriendos() {
     this.filtrosInmueblesArriendo.clear();
-    this.filtrosInmueblesArriendo.set('type', 1);
+    this.filtrosInmueblesArriendo.set('biz', 1);
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
     const obj = {

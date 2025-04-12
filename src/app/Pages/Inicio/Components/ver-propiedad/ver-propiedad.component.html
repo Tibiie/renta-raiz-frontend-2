@@ -314,13 +314,109 @@
                     </button>
 
                     <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'soloEnviar')"
-                        class="w-full text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:hover:bg-orange-600 dark:focus:ring-orange-800">
+                        class="w-full text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300 dark:border-[#CDAD60] dark:text-[#CDAD60] dark:hover:text-white dark:hover:bg-[#CDAD60] dark:focus:ring-[#CDAD60]">
                         Quiero que me contacten
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    <app-modal-crear-contacto></app-modal-crear-contacto>
+</div>
+
+<div class="w-full md:w-2/3 p-20 bg-white rounded-lg shadow-md text-[#080E36]">
+    <div class="grid grid-cols-1 md:grid-cols-4 text-sm font-medium">
+        <!-- Columna 1 -->
+        <div class="flex flex-col items-center text-center">
+            <span class="text-[#080E36]">Celdas de parqueo adicionales</span>
+            <div class="flex items-center justify-center mt-2 text-gray-700">
+                <i class="fas fa-car mr-2 text-gray-900"></i>
+                <span class="font-semibold">1</span>
+            </div>
+        </div>
+
+        <!-- valor de administración incluida en el arriendo -->
+        <div class="flex flex-col items-center text-center">
+            <p class="text-[#080E36] text-sm">¿Valor de administración incluida en el arriendo?</p>
+            <div class="flex items-center justify-center mt-2 text-gray-700">
+                <i class="fas fa-file-invoice-dollar mr-2 text-gray-900"></i>
+                <span class="font-semibold">Sí</span>
+            </div>
+        </div>
+
+        <!-- disponible en arriendo -->
+        @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
+        <div class="flex flex-col items-center text-center">
+            <p class="text-[#080E36] text-sm">¿Disponible en arriendo?</p>
+            <div class="flex items-center justify-center mt-2 text-gray-700">
+                <i class="fas fa-check-circle mr-2 text-gray-900"></i>
+                @if (propiedad.status_name == 'Disponible') {
+                <span class="font-semibold">Sí</span>
+                }
+                @if (propiedad.status_name != 'Disponible') {
+                <span class="font-semibold">No</span>
+                }
+            </div>
+        </div>
+        }
+
+        <!-- disponible en venta -->
+        @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
+        <div class="flex flex-col items-center text-center">
+            <p class="text-[#080E36] text-sm">¿Disponible en venta?</p>
+            <div class="flex items-center justify-center mt-2 text-gray-700">
+                <i class="fas fa-check-circle mr-2 text-gray-900"></i>
+                @if (propiedad.status_name == 'Disponible') {
+                <span class="font-semibold">Sí</span>
+                }
+                @if (propiedad.status_name != 'Disponible') {
+                <span class="font-semibold">No</span>
+                }
+            </div>
+        </div>
+        }
+
+        <!-- valor en venta -->
+        @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
+        <div class="flex flex-col items-center text-center">
+            <span class="text-[#080E36]">Valor en venta</span>
+            <div class="flex items-center justify-center mt-2 text-gray-700">
+                <i class="fas fa-dollar-sign mr-2 text-gray-900"></i>
+                <span class="font-semibold">{{ propiedad.price_format }}</span>
+            </div>
+        </div>
+        }
+
+        <!-- valor en arriendo -->
+        @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
+        <div class="flex flex-col items-center text-center">
+            <span class="text-[#080E36]">Valor en arriendo</span>
+            <div class="flex items-center justify-center mt-2 text-gray-700">
+                <i class="fas fa-dollar-sign mr-2 text-gray-900"></i>
+                <span class="font-semibold">{{ propiedad.price_format }}</span>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="mt-6">
+        <h2 class="text-lg font-bold text-[#080E36] mb-2">Descripción</h2>
+        <p class="text-gray-700 text-sm leading-relaxed">
+            {{propiedad.description}}
+        </p>
+    </div>
+
+    <div class="mt-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm text-gray-800">
+            <div *ngFor="let amenity of propiedad.amenities" class="flex items-center">
+                <i class="fas fa-check text-yellow-500 mr-2"></i>
+                {{ amenity.name }}
+            </div>
+        </div>
+    </div>
+
 
 </div>
+
+<app-modal-crear-contacto></app-modal-crear-contacto>
+
+<app-footer></app-footer>

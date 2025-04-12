@@ -116,13 +116,7 @@ export class FiltrosComponent implements OnInit {
 
       this.getCiudades();
     }
-
     await this.getDatos();
-
-    console.log('Opciones cargadas:', {
-      propertyOptions: this.propertyOptions,
-      estateOptions: this.estateOptions,
-    });
 
     if (this.filtrosVistaInicial) {
       console.log('Inicializando filtros con:', this.filtrosVistaInicial);
@@ -176,39 +170,6 @@ export class FiltrosComponent implements OnInit {
     console.log(this.isDrawerOpen);
   }
 
-  enviarFiltros(pagina: number = 1) {
-    this.paginaActual = pagina;
-    this.prepararFiltros();
-
-    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-    const obj = {
-      ...filtrosObj,
-      page: pagina,
-    };
-
-    console.log('Objeto a enviar:', obj);
-
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
-      (response: any) => {
-        console.log('filtros', response);
-        this.resultados = response.data;
-        this.totalDatos = response.total;
-
-        this.paginacion = response;
-        this.totalPaginas = response.last_page || 1;
-        this.paginas = Array.from(
-          { length: this.totalPaginas },
-          (_, i) => i + 1
-        );
-
-        console.log('Paginas', this.paginas);
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
-  }
-
   generarPaginas() {
     this.paginas = [];
     const paginasPorBloque = 3;
@@ -257,6 +218,39 @@ export class FiltrosComponent implements OnInit {
     if (this.paginaActual < this.totalPaginas) {
       this.enviarFiltros(this.paginaActual + 1);
     }
+  }
+
+  enviarFiltros(pagina: number = 1) {
+    this.paginaActual = pagina;
+    this.prepararFiltros();
+
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      page: pagina,
+    };
+
+    console.log('Objeto a enviar:', obj);
+
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log('filtros', response);
+        this.resultados = response.data;
+        this.totalDatos = response.total;
+
+        this.paginacion = response;
+        this.totalPaginas = response.last_page || 1;
+        this.paginas = Array.from(
+          { length: this.totalPaginas },
+          (_, i) => i + 1
+        );
+
+        console.log('Paginas', this.paginas);
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
   }
 
   inicializarFiltrosDesdeVistaInicial() {

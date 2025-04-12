@@ -61,7 +61,7 @@ export class NavbarComponent implements OnInit {
 
   enviarFiltroVenta() {
     this.filtrosInmueblesVenta.clear();
-    this.filtrosInmueblesVenta.set('type', '2');
+    this.filtrosInmueblesVenta.set('biz', '2');
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
     const obj = {
@@ -84,7 +84,7 @@ export class NavbarComponent implements OnInit {
 
   enviarFiltroArriendo() {
     this.filtrosInmueblesArriendo.clear();
-    this.filtrosInmueblesArriendo.set('type', '1');
+    this.filtrosInmueblesArriendo.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
     const obj = {
