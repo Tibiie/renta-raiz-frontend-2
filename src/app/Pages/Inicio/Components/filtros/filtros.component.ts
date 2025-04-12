@@ -48,6 +48,7 @@ export class FiltrosComponent implements OnInit {
   ubicacion: string = '';
   resultados: any[] = [];
   isDrawerOpen: boolean = true;
+  drawerMapAbierto: boolean = false;
   filtrosVistaInicial: any = {};
   categoriasInmuebles: any[] = [];
 
@@ -165,6 +166,22 @@ export class FiltrosComponent implements OnInit {
       this.generarPaginas();
     } catch (error) {
       console.error('Error al obtener datos:', error);
+    }
+  }
+
+  toggleMap() {
+    this.drawerMapAbierto = !this.drawerMapAbierto;
+
+    const drawer = document.getElementById('right-map-drawer');
+
+    if (drawer) {
+      if (this.drawerMapAbierto) {
+        drawer.classList.remove('translate-x-full');
+        drawer.classList.add('translate-x-0');
+      } else {
+        drawer.classList.remove('translate-x-0');
+        drawer.classList.add('translate-x-full');
+      }
     }
   }
 
