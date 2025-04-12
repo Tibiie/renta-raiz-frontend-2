@@ -42,7 +42,7 @@ export class MapaComponent implements OnInit {
       );
     }
     console.log(this.propiedades);
-    this.center = { lat: 6.205925, lng: -75.575136111111 };
+    this.center = { lat: this.propiedades[0].latitude, lng: this.propiedades[0].longitude };
 
     this.markers = this.propiedades.map(p => ({
       position: { lat: p.latitude, lng: p.longitude },
