@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
@@ -93,7 +93,12 @@ export class FiltrosComponent implements OnInit {
   // Injectaciones
   router = inject(Router);
   cdRef = inject(ChangeDetectorRef);
+  formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
+
+  formFiltrosSelect = this.formBuilder.group({
+    opcion: ['']
+  });
 
   async ngOnInit(): Promise<void> {
     console.log(this.isDrawerOpen);
@@ -407,6 +412,39 @@ export class FiltrosComponent implements OnInit {
         this.selectedEstates.push(option);
       }
     }
+  }
+
+  enviarFiltrosSelect() {
+
+    if (this.formFiltrosSelect.value.opcion === 'order-mayor') {
+
+      this.filtrosSeleccionados.set('order', 'desc');
+    }
+
+    if (this.formFiltrosSelect.value.opcion === 'order-menor') {
+
+      this.filtrosSeleccionados.set('order', 'asc');
+    }
+
+    if (this.formFiltrosSelect.value.opcion === 'sort-asd') {
+
+      this.filtrosSeleccionados.set('sort', 'asc');
+    }
+
+    if (this.formFiltrosSelect.value.opcion === 'sort-des') {
+
+      this.filtrosSeleccionados.set('sort', 'desc');
+    }
+
+    console.log('Filtros seleccionados:', this.filtrosSeleccionados);
+
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    }
+
+    console.log('Objeto a enviar:', obj);
   }
 
   toggleDropdown(type: 'property' | 'estate'): void {
