@@ -97,6 +97,8 @@ export class FiltrosComponent implements OnInit {
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
 
+  mostrarMapa = false;
+
   formFiltrosSelect = this.formBuilder.group({
     opcion: ['']
   });
@@ -109,7 +111,7 @@ export class FiltrosComponent implements OnInit {
     if (state?.resultados) {
       console.log('Estado recibido:', state);
       this.resultados = state.resultados;
-      
+
       this.filtrosVistaInicial = state.filtros;
       this.paginacion = state.paginacion;
 
@@ -180,6 +182,7 @@ export class FiltrosComponent implements OnInit {
 
   toggleMap() {
     this.drawerMapAbierto = !this.drawerMapAbierto;
+    this.mostrarMapa = true;
 
     const drawer = document.getElementById('right-map-drawer');
 
@@ -196,6 +199,16 @@ export class FiltrosComponent implements OnInit {
 
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
+   
+
+    const drawer = document.getElementById('right-map-drawer');
+    if (drawer) {
+      drawer.classList.remove('translate-x-0');
+      drawer.classList.add('translate-x-full');
+    }
+    setTimeout(() => {
+      this.mostrarMapa = true;
+    }, 500);
     console.log(this.isDrawerOpen);
   }
 
