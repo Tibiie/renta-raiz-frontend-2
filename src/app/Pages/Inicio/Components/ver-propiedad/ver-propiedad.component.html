@@ -131,8 +131,9 @@
               >
                 <img
                   [src]="img.imageurl"
-                  alt="Imagen propiedad"
+                  alt="Imagen ampliada"
                   class="absolute w-full h-full object-cover rounded-xl"
+                  (click)="openModal(i)"
                 />
               </div>
             </div>
@@ -254,6 +255,88 @@
             </div>
           </div>
         </div>
+
+   <div *ngIf="isModalOpen" class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+  <!-- Botón cerrar -->
+  <button
+    (click)="closeModal()"
+    class="absolute top-4 right-4 z-50 text-white hover:text-red-500 transition-colors duration-200 bg-gray-800 hover:bg-gray-700 rounded-full p-2"
+    aria-label="Cerrar modal"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+
+  <!-- Contenedor principal -->
+  <div class="relative w-full max-w-6xl h-full max-h-[90vh]">
+    <!-- Carrusel -->
+    <div class="relative h-full">
+      <!-- Contenedor de slides -->
+      <div class="relative h-full overflow-hidden rounded-lg">
+        <div *ngFor="let img of propiedad.images; let i = index" 
+             [class.block]="i === selectedIndex" 
+             [class.hidden]="i !== selectedIndex"
+             class="duration-700 ease-in-out flex items-center justify-center h-full">
+          <img [src]="img.imageurl" 
+               class="max-w-full max-h-full object-contain cursor-zoom-in" 
+               alt="Imagen de propiedad"
+               [attr.data-zoom-src]="img.imageurl"
+               (click)="handleImageClick($event)"
+               zoom-template>
+        </div>
+      </div>
+      
+      <!-- Flechas de navegación -->
+      <button type="button" 
+              (click)="prevImageM()"
+              class="absolute top-1/2 left-4 z-40 flex items-center justify-center h-10 w-10 bg-gray-800/50 hover:bg-gray-700/70 rounded-full group focus:outline-none">
+        <svg class="w-4 h-4 text-white group-hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <button type="button" 
+              (click)="nextImageM()"
+              class="absolute top-1/2 right-4 z-40 flex items-center justify-center h-10 w-10 bg-gray-800/50 hover:bg-gray-700/70 rounded-full group focus:outline-none">
+        <svg class="w-4 h-4 text-white group-hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+      
+      <!-- Indicadores -->
+      <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40 flex space-x-2">
+        <button *ngFor="let img of propiedad.images; let i = index"
+                (click)="goToImage(i)"
+                type="button"
+                class="w-3 h-3 rounded-full"
+                [class.bg-white]="i === selectedIndex"
+                [class.bg-gray-400]="i !== selectedIndex"
+                aria-current="i === selectedIndex"
+                [attr.aria-label]="'Slide ' + (i + 1)">
+        </button>
+      </div>
+    </div>
+    
+    <!-- Controles de zoom -->
+    <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex space-x-3 bg-gray-800/50 rounded-full p-1">
+      <button (click)="zoomIn()" class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+      </button>
+      <button (click)="zoomOut()" class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+        </svg>
+      </button>
+      <button (click)="resetZoom()" class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
       </ng-container>
       } @if (tabActivo === 'mapa') {
       <ng-container>

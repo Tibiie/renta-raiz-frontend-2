@@ -1,12 +1,19 @@
-import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/modal-crear-contacto.component';
-import { FooterComponent } from "../../../../shared/footer/footer.component";
-import { MapaComponent } from "../mapa/mapa.component";
+import { FooterComponent } from '../../../../shared/footer/footer.component';
+import { MapaComponent } from '../mapa/mapa.component';
+import mediumZoom from 'medium-zoom';
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -19,19 +26,34 @@ import { MapaComponent } from "../mapa/mapa.component";
     RouterModule,
     ModalCrearContactoComponent,
     FooterComponent,
-    MapaComponent
-],
+    MapaComponent,
+  ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
 })
 export class VerPropiedadComponent implements OnInit {
-
-  @ViewChild(ModalCrearContactoComponent) modalCrearContacto!: ModalCrearContactoComponent;
+  @ViewChild(ModalCrearContactoComponent)
+  modalCrearContacto!: ModalCrearContactoComponent;
 
   codPro?: number;
   propiedad: any = {};
   thumbnailsPerPage = 3;
-  selectedIndex: number = 0;
+  selectedImageUrl: string | null = null;
+
+
+  isModalOpen = false;
+  selectedIndex = 0;
+  private isZoomActive = false;
+
+  private zoomInstance: any;
+  private currentScale = 1;
+  private isDragging = false;
+  private startX = 0;
+  private startY = 0;
+  private translateX = 0;
+  private translateY = 0;
+  private currentImageElement: HTMLElement | null = null;
+  
   visibleThumbnailsStart = 0;
   selectedImage: string = '';
   tabActivo: string = 'fotos';
@@ -43,14 +65,135 @@ export class VerPropiedadComponent implements OnInit {
   route = inject(ActivatedRoute);
 
   ngOnInit(): void {
+    this.initZoom();
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras?.state || window.history.state;
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.codPro = state?.codPro || Number(params.get('codpro'));
       console.log('CodPro:', this.codPro);
       this.getDatos();
     });
+  }
+
+  openModal(index: number): void {
+    this.selectedIndex = index;
+    this.isModalOpen = true;
+    
+    // Esperamos a que el modal se renderice completamente
+    setTimeout(() => {
+      this.initZoom();
+    }, 100);
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.destroyZoom();
+  }
+
+  initZoom(): void {
+    this.destroyZoom(); // Limpiamos cualquier instancia previa
+    
+    const images = document.querySelectorAll('[data-zoom-src]');
+    this.zoomInstance = mediumZoom(images, {
+      background: 'rgba(0, 0, 0, 0.9)',
+      margin: 24,
+      scrollOffset: 40,
+      template: '#zoom-template'
+    });
+
+    // Manejar eventos de zoom
+    this.zoomInstance.on('open', () => {
+      this.isZoomActive = true;
+    });
+
+    this.zoomInstance.on('close', () => {
+      this.isZoomActive = false;
+      this.currentScale = 1;
+    });
+  }
+
+  destroyZoom(): void {
+    if (this.zoomInstance) {
+      this.zoomInstance.detach();
+      this.zoomInstance = null;
+    }
+    this.isZoomActive = false;
+    this.currentScale = 1;
+  }
+
+  handleImageClick(event: Event): void {
+    if (this.isZoomActive) {
+      event.stopPropagation();
+    }
+  }
+
+  prevImageM(): void {
+    this.selectedIndex = (this.selectedIndex - 1 + this.propiedad.images.length) % this.propiedad.images.length;
+    this.resetZoom();
+    this.reinitZoom();
+  }
+
+  nextImageM(): void {
+    this.selectedIndex = (this.selectedIndex + 1) % this.propiedad.images.length;
+    this.resetZoom();
+    this.reinitZoom();
+  }
+
+  goToImage(index: number): void {
+    this.selectedIndex = index;
+    this.resetZoom();
+    this.reinitZoom();
+  }
+
+  reinitZoom(): void {
+    setTimeout(() => {
+      this.initZoom();
+    }, 50);
+  }
+
+  zoomIn(): void {
+    if (!this.zoomInstance) return;
+    
+    const img = this.getCurrentImage();
+    if (img) {
+      this.currentScale = Math.min(this.currentScale + 0.25, 3);
+      img.style.transform = `scale(${this.currentScale})`;
+      img.style.cursor = 'grab';
+    }
+  }
+
+  zoomOut(): void {
+    if (!this.zoomInstance) return;
+    
+    const img = this.getCurrentImage();
+    if (img) {
+      this.currentScale = Math.max(this.currentScale - 0.25, 1);
+      img.style.transform = `scale(${this.currentScale})`;
+      if (this.currentScale === 1) {
+        img.style.cursor = 'zoom-in';
+      }
+    }
+  }
+
+  resetZoom(): void {
+    const img = this.getCurrentImage();
+    if (img) {
+      this.currentScale = 1;
+      img.style.transform = 'scale(1)';
+      img.style.cursor = 'zoom-in';
+    }
+    if (this.zoomInstance) {
+      this.zoomInstance.close();
+    }
+  }
+
+  private getCurrentImage(): HTMLElement | null {
+    return document.querySelector(`[data-zoom-src="${this.propiedad.images[this.selectedIndex]?.imageurl}"]`);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyZoom();
   }
 
   getDatos() {
@@ -94,7 +237,12 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   get visibleThumbnails() {
-    return this.propiedad?.images?.slice(this.visibleThumbnailsStart, this.visibleThumbnailsStart + this.thumbnailsPerPage) || [];
+    return (
+      this.propiedad?.images?.slice(
+        this.visibleThumbnailsStart,
+        this.visibleThumbnailsStart + this.thumbnailsPerPage
+      ) || []
+    );
   }
 
   prevThumbs() {
@@ -110,7 +258,10 @@ export class VerPropiedadComponent implements OnInit {
     }
   }
 
-  openModalCrearContacto(codPro: number, accion: 'telefonos' | 'whatsapp' | 'soloEnviar') {
+  openModalCrearContacto(
+    codPro: number,
+    accion: 'telefonos' | 'whatsapp' | 'soloEnviar'
+  ) {
     console.log('codPro', codPro, 'accion', accion);
     this.modalCrearContacto.abrirModal(codPro, accion);
   }
