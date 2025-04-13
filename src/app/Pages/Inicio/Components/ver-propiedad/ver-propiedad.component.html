@@ -442,6 +442,74 @@
           </button>
         </div>
       </div>
+      <!-- Nuevo contenedor para redes sociales -->
+      <div
+        class="bg-white border border-gray-200 mt-3 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]"
+      >
+        <!-- Perfil de Instagram -->
+        <div class="flex items-center mb-4">
+          <!-- Foto de perfil redonda -->
+          <div
+            class="w-12 h-12 rounded-full overflow-hidden border-2 border-pink-500 p-0.5 mr-3"
+          >
+            <img
+              src="assets/images/rentaraiz.webp"
+              alt="Perfil"
+              class="w-full h-full object-cover rounded-full"
+            />
+          </div>
+
+          <!-- Nombre de empresa y botón seguir -->
+          <div class="flex-grow">
+            <h3 class="font-semibold text-gray-800">rentaraiz</h3>
+            <p class="text-xs text-gray-500">𝐈𝐧𝐦𝐨𝐛𝐢𝐥𝐢𝐚𝐫𝐢𝐚 𝐑𝐞𝐧𝐭𝐚 𝐑𝐚𝐢𝐳 𝐒𝐀𝐒</p>
+          </div>
+
+          <a
+            href="https://www.instagram.com/rentaraiz/"
+            target="_blank"
+            class="text-xs font-semibold text-pink-600 hover:text-pink-700 transition-colors cursor-pointer inline-block px-2 py-1"
+          >
+            Seguir
+          </a>
+        </div>
+
+        <!-- Contenedor de imágenes (grid 3x3) -->
+        <div class="grid grid-cols-2 gap-1 mb-3">
+          <!-- Ejemplo de 9 imágenes (reemplaza con tus imágenes reales) -->
+          <div
+            *ngFor="let item of [1, 2, 3, 4]"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden"
+          >
+            <img
+              src="https://via.placeholder.com/300"
+              alt="Post Instagram"
+              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
+            />
+          </div>
+        </div>
+
+        <!-- Botón "Ver más" -->
+        <button
+          class="w-full py-2 text-sm font-medium text-pink-600 hover:text-pink-700 transition-colors flex items-center justify-center"
+        >
+          <svg
+            xmlns="https://www.instagram.com/rentaraiz/"
+            class="h-4 w-4 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+            />
+          </svg>
+          Ver más en Instagram
+        </button>
+      </div>
     </div>
   </div>
 </div>
