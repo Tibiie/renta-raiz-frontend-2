@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { Router } from '@angular/router';
+import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 
 
 @Component({
@@ -18,57 +19,51 @@ export class MapaComponent {
   center = { lat: 4.65, lng: -74.05 };
   markers: any[] = [];
 
-  propiedades: any[] = [
-    {
-      id: 5760,
-      nombre: 'Apartamento en Chapinero',
-      lat: 4.6462,
-      lng: -74.0628
-    },
-    {
-      id: 5760,
-      nombre: 'Casa en Suba',
-      lat: 4.7434,
-      lng: -74.0924
-    },
-    {
-      id: 5760,
-      nombre: 'Apartamento en Teusaquillo',
-      lat: 4.6382,
-      lng: -74.0789
-    },
-    {
-      id: 5760,
-      nombre: 'Apartamento en Usaquén',
-      lat: 4.6925,
-      lng: -74.0303
-    },
-    {
-      id: 5760,
-      nombre: 'Casa en Kennedy',
-      lat: 4.6255,
-      lng: -74.1663
-    }
-  ];
+  @Input() propiedades: any[] = [];
+
+  inmueblesService = inject(InmueblesService);
 
 
   constructor(private router: Router) {
-    this.markers = this.propiedades.map(p => ({
-      position: { lat: p.lat, lng: p.lng },
-      icon: this.createSvgIcon('1.000.000'),
-      propiedad: p
-    }));
+    
+  }
+  ngOnInit(): void {
+    this.inmueblesService.getTodosInmuebles().subscribe(
+      (response: any) => {
+        
+        this.propiedades = response;
+        console.log(this.propiedades);
+        console.log(this.propiedades);
+        this.center = { lat: this.propiedades[0].latitude, lng: this.propiedades[0].longitude };
+    
+        this.markers = this.propiedades.map(p => ({
+          position: { lat: p.latitude, lng: p.longitude },
+          icon: this.createSvgIcon(p.price_format),
+          propiedad: p
+        }));
+        console.log(this.markers);
+      },
+      (error: any) => {
+        console.error('Error al obtener las propiedades:', error);
+      }
+    );
+   
   }
 
 
   createSvgIcon(precio: string) {
+
+
     const svg = `
       <svg width="130" height="40" xmlns="http://www.w3.org/2000/svg">
-        <rect rx="20" ry="20" width="130" height="40" fill="white" stroke="#007BFF" stroke-width="2"/>
-        <text x="10" y="25" font-size="18" font-family="Arial" fill="#007BFF">🏢</text>
-        <text x="40" y="25" font-size="14" font-weight="bold" font-family="Arial" fill="#007BFF">$${precio}</text>
+        <rect rx="20" ry="20" width="130" height="40" fill="#060f29" stroke="#cdad60" stroke-width="2"/>
+        <text x="10" y="25" font-size="18" font-family="Arial" fill="#cdad60">🏢</text>
+        <text x="40" y="25" font-size="14" font-weight="bold" font-family="Arial" fill="#cdad60">$${precio}</text>
       </svg>
     `;
+
+
+
     return {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
       scaledSize: new google.maps.Size(130, 40),
@@ -78,7 +73,7 @@ export class MapaComponent {
 
   verDetalle(propiedad: any) {
     const url = this.router.serializeUrl(
-      this.router.createUrlTree([`/ver-propiedad/${propiedad.id}`])
+      this.router.createUrlTree([`/ver-propiedad/${propiedad.codPro}`])
     );
 
     // abre la nueva pestaña con la URL completa

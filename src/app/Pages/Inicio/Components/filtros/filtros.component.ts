@@ -11,11 +11,12 @@ import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
+import { MapaComponent } from '../mapa/mapa.component';
 
 @Component({
   selector: 'app-filtros',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule, MapaComponent],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
 })
@@ -108,6 +109,7 @@ export class FiltrosComponent implements OnInit {
     if (state?.resultados) {
       console.log('Estado recibido:', state);
       this.resultados = state.resultados;
+      
       this.filtrosVistaInicial = state.filtros;
       this.paginacion = state.paginacion;
 
@@ -118,6 +120,8 @@ export class FiltrosComponent implements OnInit {
       console.log('Paginacion:', this.paginacion);
       console.log('Filtros:', this.filtrosVistaInicial);
       console.log('Resultados:', this.resultados);
+
+      this.inmueblesService.setPropiedades(this.resultados);
 
       this.getCiudades();
     }
