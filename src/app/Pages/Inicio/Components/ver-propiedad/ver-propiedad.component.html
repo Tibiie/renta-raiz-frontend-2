@@ -582,25 +582,72 @@
 
         <!-- Contenedor de imágenes (grid 3x3) -->
         <div class="grid grid-cols-2 gap-1 mb-3">
-          <!-- Ejemplo de 9 imágenes (reemplaza con tus imágenes reales) -->
-          <div
-            *ngFor="let item of [1, 2, 3, 4]"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden"
+          <!-- Publicación 1 -->
+          <a
+            href="https://www.instagram.com/reel/DIRwmbJvb3W/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
           >
             <img
-              src="https://via.placeholder.com/300"
+              src="assets/images/post1.webp"
               alt="Post Instagram"
               class="w-full h-full object-cover hover:opacity-90 transition-opacity"
             />
-          </div>
+          </a>
+
+          <!-- Publicación 2 -->
+          <a
+            href="https://www.instagram.com/reel/DIPw2pQvNKI/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
+          >
+            <img
+              src="assets/images/post2.webp"
+              alt="Post Instagram"
+              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
+            />
+          </a>
+
+          <!-- Publicación 3 -->
+          <a
+            href="https://www.instagram.com/reel/DIKFc0bvLxQ/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
+          >
+            <img
+              src="assets/images/post3.webp"
+              alt="Post Instagram"
+              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
+            />
+          </a>
+
+          <!-- Publicación 4 -->
+          <a
+            href="https://www.instagram.com/p/DIHCJeeR10q/?img_index=1"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
+          >
+            <img
+              src="assets/images/post4.webp"
+              alt="Post Instagram"
+              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
+            />
+          </a>
         </div>
 
         <!-- Botón "Ver más" -->
-        <button
+        <a
+          href="https://www.instagram.com/rentaraiz/"
+          target="_blank"
+          rel="noopener noreferrer"
           class="w-full py-2 text-sm font-medium text-pink-600 hover:text-pink-700 transition-colors flex items-center justify-center"
         >
           <svg
-            xmlns="https://www.instagram.com/rentaraiz/"
+            xmlns="http://www.w3.org/2000/svg"
             class="h-4 w-4 mr-1"
             fill="none"
             viewBox="0 0 24 24"
@@ -614,7 +661,7 @@
             />
           </svg>
           Ver más en Instagram
-        </button>
+        </a>
       </div>
     </div>
   </div>
