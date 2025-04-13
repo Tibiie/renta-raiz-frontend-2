@@ -21,6 +21,7 @@ export class MapaComponent implements AfterViewInit {
   markers: any[] = [];
 
   @Input() propiedades: any[] = [];
+  @Input() activarStreetView: boolean = false;
 
   inmueblesService = inject(InmueblesService);
 
@@ -70,6 +71,9 @@ export class MapaComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.forceResize();
+      if (this.activarStreetView) {
+        this.initializeStreetView(); // Solo si la bandera es true
+      }
     }, 500); // esperamos a que el DOM esté listo
   }
 
@@ -112,5 +116,24 @@ export class MapaComponent implements AfterViewInit {
     // abre la nueva pestaña con la URL completa
     window.open(url, '_blank');
 
+  }
+
+
+   // Método para inicializar el Street View
+   initializeStreetView(): void {
+    if (this.googleMap) {
+      const map = this.googleMap.googleMap;
+      if (!map) {
+        return;
+      }
+      const streetView = map.getStreetView();
+      streetView.setPosition(this.center);  // Establecer la posición de inicio
+      streetView.setPov({
+        heading: 0, // Dirección de la cámara
+        pitch: 0    // Inclinación de la cámara
+      });
+      streetView.setZoom(0); // Nivel de zoom inicial
+      streetView.setVisible(true); // Asegúrate de que el panorama sea visible
+    }
   }
 }
