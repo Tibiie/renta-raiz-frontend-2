@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/modal-crear-contacto.component';
 import { FooterComponent } from "../../../../shared/footer/footer.component";
+import { MapaComponent } from "../mapa/mapa.component";
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -17,8 +18,9 @@ import { FooterComponent } from "../../../../shared/footer/footer.component";
     CommonModule,
     RouterModule,
     ModalCrearContactoComponent,
-    FooterComponent
-  ],
+    FooterComponent,
+    MapaComponent
+],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
 })
