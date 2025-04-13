@@ -442,6 +442,112 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col md:flex-row px-4 md:px-20 gap-2">
+    <div
+      class="w-full md:w-2/3 p-20 bg-white rounded-lg shadow-md text-[#080E36]"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-4 text-sm font-medium">
+        <!-- Columna 1 -->
+        <div class="flex flex-col items-center text-center">
+          <span class="text-[#080E36]">Celdas de parqueo adicionales</span>
+          <div class="flex items-center justify-center mt-2 text-gray-700">
+            <i class="fas fa-car mr-2 text-gray-900"></i>
+            <span class="font-semibold">1</span>
+          </div>
+        </div>
+
+        <!-- valor de administración incluida en el arriendo -->
+        <div class="flex flex-col items-center text-center">
+          <p class="text-[#080E36] text-sm">
+            ¿Valor de administración incluida en el arriendo?
+          </p>
+          <div class="flex items-center justify-center mt-2 text-gray-700">
+            <i class="fas fa-file-invoice-dollar mr-2 text-gray-900"></i>
+            <span class="font-semibold">Sí</span>
+          </div>
+        </div>
+
+        <!-- disponible en arriendo -->
+        @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
+        <div class="flex flex-col items-center text-center">
+          <p class="text-[#080E36] text-sm">¿Disponible en arriendo?</p>
+          <div class="flex items-center justify-center mt-2 text-gray-700">
+            <i class="fas fa-check-circle mr-2 text-gray-900"></i>
+            @if (propiedad.status_name == 'Disponible') {
+            <span class="font-semibold">Sí</span>
+            } @if (propiedad.status_name != 'Disponible') {
+            <span class="font-semibold">No</span>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- disponible en venta -->
+        @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
+        <div class="flex flex-col items-center text-center">
+          <p class="text-[#080E36] text-sm">¿Disponible en venta?</p>
+          <div class="flex items-center justify-center mt-2 text-gray-700">
+            <i class="fas fa-check-circle mr-2 text-gray-900"></i>
+            @if (propiedad.status_name == 'Disponible') {
+            <span class="font-semibold">Sí</span>
+            } @if (propiedad.status_name != 'Disponible') {
+            <span class="font-semibold">No</span>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- valor en venta -->
+        @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
+        <div class="flex flex-col items-center text-center">
+          <span class="text-[#080E36]">Valor en venta</span>
+          <div class="flex items-center justify-center mt-2 text-gray-700">
+            <i class="fas fa-dollar-sign mr-2 text-gray-900"></i>
+            <span class="font-semibold">{{ propiedad.price_format }}</span>
+          </div>
+        </div>
+        }
+
+        <!-- valor en arriendo -->
+        @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
+        <div class="flex flex-col items-center text-center">
+          <span class="text-[#080E36]">Valor en arriendo</span>
+          <div class="flex items-center justify-center mt-2 text-gray-700">
+            <i class="fas fa-dollar-sign mr-2 text-gray-900"></i>
+            <span class="font-semibold">{{ propiedad.price_format }}</span>
+          </div>
+        </div>
+        }
+      </div>
+
+      <div class="mt-6">
+        <h2 class="text-lg font-bold text-[#080E36] mb-2">Descripción</h2>
+        <p class="text-gray-700 text-sm leading-relaxed">
+          {{ propiedad.description }}
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm text-gray-800"
+        >
+          <div
+            *ngFor="let amenity of propiedad.amenities"
+            class="flex items-center"
+          >
+            <i class="fas fa-check text-yellow-500 mr-2"></i>
+            {{ amenity.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="w-full md:w-1/3 transform hover:scale-[1.02] transition-all duration-300"
+    >
       <!-- Nuevo contenedor para redes sociales -->
       <div
         class="bg-white border border-gray-200 mt-3 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]"
@@ -509,103 +615,6 @@
           </svg>
           Ver más en Instagram
         </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="w-full md:w-2/3 p-20 bg-white rounded-lg shadow-md text-[#080E36]">
-  <div class="grid grid-cols-1 md:grid-cols-4 text-sm font-medium">
-    <!-- Columna 1 -->
-    <div class="flex flex-col items-center text-center">
-      <span class="text-[#080E36]">Celdas de parqueo adicionales</span>
-      <div class="flex items-center justify-center mt-2 text-gray-700">
-        <i class="fas fa-car mr-2 text-gray-900"></i>
-        <span class="font-semibold">1</span>
-      </div>
-    </div>
-
-    <!-- valor de administración incluida en el arriendo -->
-    <div class="flex flex-col items-center text-center">
-      <p class="text-[#080E36] text-sm">
-        ¿Valor de administración incluida en el arriendo?
-      </p>
-      <div class="flex items-center justify-center mt-2 text-gray-700">
-        <i class="fas fa-file-invoice-dollar mr-2 text-gray-900"></i>
-        <span class="font-semibold">Sí</span>
-      </div>
-    </div>
-
-    <!-- disponible en arriendo -->
-    @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-    <div class="flex flex-col items-center text-center">
-      <p class="text-[#080E36] text-sm">¿Disponible en arriendo?</p>
-      <div class="flex items-center justify-center mt-2 text-gray-700">
-        <i class="fas fa-check-circle mr-2 text-gray-900"></i>
-        @if (propiedad.status_name == 'Disponible') {
-        <span class="font-semibold">Sí</span>
-        } @if (propiedad.status_name != 'Disponible') {
-        <span class="font-semibold">No</span>
-        }
-      </div>
-    </div>
-    }
-
-    <!-- disponible en venta -->
-    @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
-    <div class="flex flex-col items-center text-center">
-      <p class="text-[#080E36] text-sm">¿Disponible en venta?</p>
-      <div class="flex items-center justify-center mt-2 text-gray-700">
-        <i class="fas fa-check-circle mr-2 text-gray-900"></i>
-        @if (propiedad.status_name == 'Disponible') {
-        <span class="font-semibold">Sí</span>
-        } @if (propiedad.status_name != 'Disponible') {
-        <span class="font-semibold">No</span>
-        }
-      </div>
-    </div>
-    }
-
-    <!-- valor en venta -->
-    @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
-    <div class="flex flex-col items-center text-center">
-      <span class="text-[#080E36]">Valor en venta</span>
-      <div class="flex items-center justify-center mt-2 text-gray-700">
-        <i class="fas fa-dollar-sign mr-2 text-gray-900"></i>
-        <span class="font-semibold">{{ propiedad.price_format }}</span>
-      </div>
-    </div>
-    }
-
-    <!-- valor en arriendo -->
-    @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-    <div class="flex flex-col items-center text-center">
-      <span class="text-[#080E36]">Valor en arriendo</span>
-      <div class="flex items-center justify-center mt-2 text-gray-700">
-        <i class="fas fa-dollar-sign mr-2 text-gray-900"></i>
-        <span class="font-semibold">{{ propiedad.price_format }}</span>
-      </div>
-    </div>
-    }
-  </div>
-
-  <div class="mt-6">
-    <h2 class="text-lg font-bold text-[#080E36] mb-2">Descripción</h2>
-    <p class="text-gray-700 text-sm leading-relaxed">
-      {{ propiedad.description }}
-    </p>
-  </div>
-
-  <div class="mt-6">
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm text-gray-800"
-    >
-      <div
-        *ngFor="let amenity of propiedad.amenities"
-        class="flex items-center"
-      >
-        <i class="fas fa-check text-yellow-500 mr-2"></i>
-        {{ amenity.name }}
       </div>
     </div>
   </div>
