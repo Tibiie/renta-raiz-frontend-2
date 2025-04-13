@@ -28,28 +28,26 @@ export class MapaComponent {
     
   }
   ngOnInit(): void {
-    this.propiedades = this.inmueblesService.getPropiedades();
-    if(this.propiedades.length == 0){
-      this.inmueblesService.getTodosInmuebles().subscribe(
-        (response: any) => {
-          
-          this.propiedades = response;
-          console.log(this.propiedades);
-        },
-        (error: any) => {
-          console.error('Error al obtener las propiedades:', error);
-        }
-      );
-    }
-    console.log(this.propiedades);
-    this.center = { lat: this.propiedades[0].latitude, lng: this.propiedades[0].longitude };
-
-    this.markers = this.propiedades.map(p => ({
-      position: { lat: p.latitude, lng: p.longitude },
-      icon: this.createSvgIcon(p.price_format),
-      propiedad: p
-    }));
-    console.log(this.markers);
+    this.inmueblesService.getTodosInmuebles().subscribe(
+      (response: any) => {
+        
+        this.propiedades = response;
+        console.log(this.propiedades);
+        console.log(this.propiedades);
+        this.center = { lat: this.propiedades[0].latitude, lng: this.propiedades[0].longitude };
+    
+        this.markers = this.propiedades.map(p => ({
+          position: { lat: p.latitude, lng: p.longitude },
+          icon: this.createSvgIcon(p.price_format),
+          propiedad: p
+        }));
+        console.log(this.markers);
+      },
+      (error: any) => {
+        console.error('Error al obtener las propiedades:', error);
+      }
+    );
+   
   }
 
 
