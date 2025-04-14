@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
@@ -11,6 +11,16 @@ export class InmueblesService {
 
   http = inject(HttpClient);
 
+
+  url = "https://api.domus.la/3.0/properties/map";
+
+  getPolygon(polygon: any) {
+    return this.http.get(`${this.url}`, {
+          params: {
+            polygon: polygon
+          }
+        });
+  }
  
   getTodosInmuebles() {
     return this.http.get(`${environment.baseUrl}/properties/inmuebles`);

@@ -69,7 +69,7 @@ export class FiltrosComponent implements OnInit {
   selectedEstates: { code: string; name: string }[] = [];
 
   //geolocalizacion
-  coordinates: {latitude: number, longitude: number} | null = null;
+  coordinates: { latitude: number, longitude: number } | null = null;
   error: string | null = null;
   loading = false;
 
@@ -111,26 +111,51 @@ export class FiltrosComponent implements OnInit {
   });
 
 
+  buildPolygon(lat: any, lng: any, delta = 0.001) {
+    return [[
+      [lat + delta, lng - delta],
+      [lat + delta, lng + delta],
+      [lat - delta, lng + delta],
+      [lat - delta, lng - delta]
+    ]];
+  }
 
   async getLocation() {
     this.loading = true;
     this.error = null;
     this.coordinates = null;
-    
+
     try {
       this.coordinates = await this.geolocalizacionService.getCurrentPosition();
       console.log('Coordenadas:', this.coordinates);
 
 
-       // 2. Obtener dirección
-       this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
-       .subscribe((response: any) => {
-         if (response.results[0]) {
-           this.address = response.results[0].formatted_address;
-           console.log('Dirección:', this.address);
-           
-         }
-       });
+      var polygon = this.buildPolygon(this.coordinates.latitude, this.coordinates.longitude);
+      console.log(polygon);
+      
+
+      // Codificar como string JSON y luego como componente de URL
+      const polygonString = JSON.stringify(polygon);
+      this.inmueblesService.getPolygon(polygonString).subscribe(
+        (response: any) => {
+          console.log(response);
+
+        },
+        (error: any) => {
+          console.error('Error al obtener los inmuebles:', error);
+        }
+      );
+
+
+      //  // 2. Obtener dirección
+      //  this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
+      //  .subscribe((response: any) => {
+      //    if (response.results[0]) {
+      //      this.address = response.results[0].formatted_address;
+      //      console.log('Dirección:', this.address);
+
+      //    }
+      //  });
     } catch (err) {
       this.error = err as string;
     } finally {
