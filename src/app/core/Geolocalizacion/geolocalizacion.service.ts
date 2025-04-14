@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class GeolocalizacionService {
 
-  constructor() { }
+  private apiKey = 'AIzaSyDOhR1u0pvve78PeYEdUsVRTs1hLOU9VVg'; // Reemplaza con tu API Key
+  private apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+
+  constructor(private http: HttpClient) { }
 
 
   getCurrentPosition(): Promise<{latitude: number, longitude: number}> {
@@ -13,6 +16,8 @@ export class GeolocalizacionService {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
+            console.log(position);
+            
             resolve({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude
@@ -44,6 +49,18 @@ export class GeolocalizacionService {
       default:
         return 'Error desconocido al obtener la ubicación.';
     }
+  }
+
+
+  getAddress(lat: number, lng: number) {
+
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${this.apiKey}`;
+    return this.http.get(url, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      })
+    });
   }
 
 }

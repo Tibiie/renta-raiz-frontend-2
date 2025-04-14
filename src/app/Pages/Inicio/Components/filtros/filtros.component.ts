@@ -105,7 +105,7 @@ export class FiltrosComponent implements OnInit {
   geolocalizacionService = inject(GeolocalizacionService);
 
   mostrarMapa = false;
-
+  address: string | null = null;
   formFiltrosSelect = this.formBuilder.group({
     opcion: ['']
   });
@@ -120,6 +120,17 @@ export class FiltrosComponent implements OnInit {
     try {
       this.coordinates = await this.geolocalizacionService.getCurrentPosition();
       console.log('Coordenadas:', this.coordinates);
+
+
+       // 2. Obtener dirección
+       this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
+       .subscribe((response: any) => {
+         if (response.results[0]) {
+           this.address = response.results[0].formatted_address;
+           console.log('Dirección:', this.address);
+           
+         }
+       });
     } catch (err) {
       this.error = err as string;
     } finally {
