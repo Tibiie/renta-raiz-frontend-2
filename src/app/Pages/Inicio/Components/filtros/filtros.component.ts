@@ -199,7 +199,7 @@ export class FiltrosComponent implements OnInit {
 
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
-   
+
 
     const drawer = document.getElementById('right-map-drawer');
     if (drawer) {
@@ -262,40 +262,6 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  enviarFiltros(pagina: number = 1) {
-    this.paginaActual = pagina;
-    this.prepararFiltros();
-
-    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-    const obj = {
-      ...filtrosObj,
-      page: pagina,
-    };
-
-    console.log('Objeto a enviar:', obj);
-
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
-      (response: any) => {
-        console.log('filtros', response);
-        this.resultados = response.data;
-        this.totalDatos = response.total;
-
-        this.paginacion = response;
-        this.totalPaginas = response.last_page || 1;
-        this.paginas = Array.from(
-          { length: this.totalPaginas },
-          (_, i) => i + 1
-        );
-
-        console.log('Paginas', this.paginas);
-        this.generarPaginas();
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
-  }
-
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
 
@@ -314,7 +280,6 @@ export class FiltrosComponent implements OnInit {
   }
 
   prepararFiltros() {
-    this.filtrosSeleccionados.clear();
 
     const limpiarTexto = (texto: string) => {
       return texto
@@ -402,6 +367,59 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
+  enviarFiltros(pagina: number = 1) {
+    this.paginaActual = pagina;
+    this.prepararFiltros();
+
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      page: pagina,
+    };
+
+    console.log('Objeto a enviar:', obj);
+
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log('filtros', response);
+        this.resultados = response.data;
+        this.totalDatos = response.total;
+
+        this.paginacion = response;
+        this.totalPaginas = response.last_page || 1;
+        this.paginas = Array.from(
+          { length: this.totalPaginas },
+          (_, i) => i + 1
+        );
+
+        console.log('Paginas', this.paginas);
+        this.generarPaginas();
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
+  enviarFiltrosSelect() {
+    this.prepararFiltros();
+
+    const opcion = this.formFiltrosSelect.value.opcion;
+    if (opcion === 'order-mayor') {
+      this.filtrosSeleccionados.set('order', 'pricemin');
+    } else if (opcion === 'order-menor') {
+      this.filtrosSeleccionados.set('order', 'pricemax');
+    } else if (opcion === 'sort-asc') {
+      this.filtrosSeleccionados.set('sort', 'asc');
+      this.filtrosSeleccionados.set('order', 'consignation_date');
+    } else if (opcion === 'sort-des') {
+      this.filtrosSeleccionados.set('sort', 'desc');
+      this.filtrosSeleccionados.set('order', 'consignation_date');
+    }
+
+    this.enviarFiltros(1);
+  }
+
   seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
     const arr = this.seleccion[categoria] as (number | string)[];
     const index = arr.indexOf(valor);
@@ -429,39 +447,6 @@ export class FiltrosComponent implements OnInit {
         this.selectedEstates.push(option);
       }
     }
-  }
-
-  enviarFiltrosSelect() {
-
-    if (this.formFiltrosSelect.value.opcion === 'order-mayor') {
-
-      this.filtrosSeleccionados.set('order', 'desc');
-    }
-
-    if (this.formFiltrosSelect.value.opcion === 'order-menor') {
-
-      this.filtrosSeleccionados.set('order', 'asc');
-    }
-
-    if (this.formFiltrosSelect.value.opcion === 'sort-asd') {
-
-      this.filtrosSeleccionados.set('sort', 'asc');
-    }
-
-    if (this.formFiltrosSelect.value.opcion === 'sort-des') {
-
-      this.filtrosSeleccionados.set('sort', 'desc');
-    }
-
-    console.log('Filtros seleccionados:', this.filtrosSeleccionados);
-
-    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    }
-
-    console.log('Objeto a enviar:', obj);
   }
 
   toggleDropdown(type: 'property' | 'estate'): void {
@@ -550,5 +535,9 @@ export class FiltrosComponent implements OnInit {
     this.router.navigate(['/ver-propiedad', codPro], {
       state: { codPro: codPro }
     });
+  }
+
+  borrarFiltros() {
+    this.filtrosSeleccionados.clear();
   }
 }

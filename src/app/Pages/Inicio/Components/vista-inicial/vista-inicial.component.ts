@@ -7,12 +7,13 @@ import { get } from 'http';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FooterComponent } from "../../../../shared/footer/footer.component";
+import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
 
 
 @Component({
   selector: 'app-vista-inicial',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent, BotonesFlotantesComponent],
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss'],
 })

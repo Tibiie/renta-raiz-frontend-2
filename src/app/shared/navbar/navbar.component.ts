@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
   isScrolled = false;
   elementsPerPage = 12;
   showNosotrosDropdown = false;
+  showClientesDropdown = false;
   @Input() alwaysScrolled = false;
   isMobileMenuOpen: boolean = false;
 
@@ -49,6 +50,11 @@ export class NavbarComponent implements OnInit {
   toggleNosotrosDropdown(event: MouseEvent) {
     event.preventDefault();
     this.showNosotrosDropdown = !this.showNosotrosDropdown;
+  }
+
+  toggleClientesDropdown(event: MouseEvent) {
+    event.preventDefault();
+    this.showClientesDropdown = !this.showClientesDropdown;
   }
 
   closeDropdown() {
