@@ -15,6 +15,7 @@ import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { MapaComponent } from '../mapa/mapa.component';
 import mediumZoom from 'medium-zoom';
 import { log } from 'console';
+import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -28,6 +29,7 @@ import { log } from 'console';
     ModalCrearContactoComponent,
     FooterComponent,
     MapaComponent,
+    BotonesFlotantesComponent
   ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',

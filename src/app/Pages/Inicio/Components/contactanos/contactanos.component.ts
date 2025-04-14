@@ -3,12 +3,14 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
+import { FooterComponent } from "../../../../shared/footer/footer.component";
 
 
 @Component({
   selector: 'app-contactanos',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, BotonesFlotantesComponent, FooterComponent],
   templateUrl: './contactanos.component.html',
   styleUrl: './contactanos.component.scss'
 })

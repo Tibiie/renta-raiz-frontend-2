@@ -3,34 +3,18 @@
 <div class="flex flex-col">
   <section class="banner-contacto relative flex items-center justify-center">
     <div class="overlay relative flex flex-col items-center justify-center">
-      <img
-        src="assets/images/contactanos.png"
-        alt="Contáctanos"
-        class="w-full max-w-5xl animate-fade-in"
-      />
+      <img src="assets/images/contactanos.png" alt="Contáctanos" class="w-full max-w-5xl animate-fade-in" />
 
-      <button
-        type="button"
-        (click)="
+      <button type="button" (click)="
           abrirPestana(
             'https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU'
           )
         "
-        class="absolute top-[80%] sm:top-[75%] flex items-center justify-center text-white bg-[#CDAD60] hover:bg-[#CDAD60]/90 font-bold rounded-full text-xs px-3 py-2 sm:text-lg sm:px-8 sm:py-4 transition-all duration-300 transform hover:scale-105"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4 mr-1 sm:w-8 sm:h-8 sm:mr-3"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2 2v10a2 2 0 002 2z"
-          />
+        class="absolute top-[80%] sm:top-[75%] flex items-center justify-center text-white bg-[#CDAD60] hover:bg-[#CDAD60]/90 font-bold rounded-full text-xs px-3 py-2 sm:text-lg sm:px-8 sm:py-4 transition-all duration-300 transform hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 sm:w-8 sm:h-8 sm:mr-3" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
         CONTÁCTANOS
       </button>
@@ -39,14 +23,9 @@
   <!-- Formulario y mapa -->
   <section class="contacto-formulario">
     <div class="mapa-info">
-      <iframe
-        class="w-full h-72 rounded-md"
+      <iframe class="w-full h-72 rounded-md"
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.527264572011!2d-75.57878828820685!3d6.19394229376781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e46825af2bfffff%3A0xe438ca98577bfa7f!2sRenta%20Raiz!5e0!3m2!1ses-419!2sco!4v1744174393181!5m2!1ses-419!2sco"
-        style="border: 0"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
+        style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 
     <div class="formulario-container">
@@ -55,18 +34,10 @@
           <input type="text" placeholder="Nombre" formControlName="nombre" />
         </div>
         <div>
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            formControlName="email"
-          />
+          <input type="email" placeholder="Correo electrónico" formControlName="email" />
         </div>
         <div>
-          <input
-            type="tel"
-            placeholder="Tu teléfono"
-            formControlName="telefono"
-          />
+          <input type="tel" placeholder="Tu teléfono" formControlName="telefono" />
         </div>
         <div>
           <textarea placeholder="Mensaje" formControlName="mensaje"></textarea>
@@ -114,22 +85,14 @@
 </div>
 
 @if (mostrarAlerta) {
-<div
-  id="alert-success"
+<div id="alert-success"
   class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-100 dark:bg-green-200 dark:text-green-800 transition-all duration-500 ease-in-out shadow-lg"
-  role="alert"
->
-  <svg
-    class="flex-shrink-0 inline w-5 h-5 mr-3"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      fill-rule="evenodd"
+  role="alert">
+  <svg class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd"
       d="M18 10c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zM9 13a1 1 0 102 0 1 1 0 00-2 0zm.293-7.707a1 1 0 011.414 0L12 6.586l.293-.293a1 1 0 011.414 1.414L12.414 9l1.293 1.293a1 1 0 01-1.414 1.414L12 10.414l-1.293 1.293a1 1 0 01-1.414-1.414L10.586 9 9.293 7.707a1 1 0 010-1.414z"
-      clip-rule="evenodd"
-    ></path>
+      clip-rule="evenodd"></path>
   </svg>
   <span class="sr-only">Success</span>
   <div>
@@ -138,3 +101,7 @@
   </div>
 </div>
 }
+
+<app-botones-flotantes></app-botones-flotantes>
+
+<app-footer></app-footer>
