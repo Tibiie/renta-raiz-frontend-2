@@ -110,7 +110,7 @@ export class MapaComponent implements AfterViewInit {
 
   verDetalle(propiedad: any) {
     const url = this.router.serializeUrl(
-      this.router.createUrlTree([`/ver-propiedad/${propiedad.codPro}`])
+      this.router.createUrlTree([`/ver-propiedad/${propiedad.codpro}`])
     );
 
     // abre la nueva pestaña con la URL completa
