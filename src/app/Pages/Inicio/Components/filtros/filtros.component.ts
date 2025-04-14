@@ -130,32 +130,15 @@ export class FiltrosComponent implements OnInit {
       console.log('Coordenadas:', this.coordinates);
 
 
-      var polygon = this.buildPolygon(this.coordinates.latitude, this.coordinates.longitude);
-      console.log(polygon);
-      
+       // 2. Obtener dirección
+       this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
+       .subscribe((response: any) => {
+         if (response.results[0]) {
+           this.address = response.results[0].formatted_address;
+           console.log('Dirección:', this.address);
 
-      // Codificar como string JSON y luego como componente de URL
-      const polygonString = JSON.stringify(polygon);
-      this.inmueblesService.getPolygon(polygonString).subscribe(
-        (response: any) => {
-          console.log(response);
-
-        },
-        (error: any) => {
-          console.error('Error al obtener los inmuebles:', error);
-        }
-      );
-
-
-      //  // 2. Obtener dirección
-      //  this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
-      //  .subscribe((response: any) => {
-      //    if (response.results[0]) {
-      //      this.address = response.results[0].formatted_address;
-      //      console.log('Dirección:', this.address);
-
-      //    }
-      //  });
+         }
+       });
     } catch (err) {
       this.error = err as string;
     } finally {
