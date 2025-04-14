@@ -3,9 +3,9 @@
 <div class="flex flex-col md:flex-row">
   <div class="flex-1">
     <div class="text-center pt-32 fixed z-50 transition-all duration-300" [ngClass]="{
-        'left-6': !isDrawerOpen,
-        'left-36': isDrawerOpen
-      }">
+      'left-6': !isDrawerOpen,
+      'left-36': isDrawerOpen
+    }">
       <button type="button" (click)="toggleDrawer()" [attr.data-drawer-target]="'modern-drawer'"
         [attr.data-drawer-show]="!isDrawerOpen ? 'modern-drawer' : null"
         [attr.data-drawer-hide]="isDrawerOpen ? 'modern-drawer' : null"
@@ -16,7 +16,7 @@
     </div>
 
     <div id="modern-drawer"
-      class="fixed top-48 left-0 z-60 max-h-[calc(100vh-6rem)] w-[28rem] bg-white text-black shadow-xl flex flex-col transition-transform duration-300 ease-in-out"
+      class="fixed top-48 left-0 z-z-[999] max-h-[calc(100vh-6rem)] w-[28rem] md:w-[20rem] lg:w-[28rem] bg-white text-black shadow-xl flex flex-col transition-transform duration-300 ease-in-out"
       [class.translate-x-0]="isDrawerOpen" [class.-translate-x-full]="!isDrawerOpen" [attr.aria-hidden]="!isDrawerOpen"
       style="border: 1px solid #cdad60" tabindex="-1">
       <div class="bg-blue-100/50 rounded-t-lg p-1 flex justify-between items-center mb-1 sticky top-0 z-10">

@@ -14,6 +14,7 @@ import { ModalCrearContactoComponent } from '../Modals/modal-crear-contacto/moda
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { MapaComponent } from '../mapa/mapa.component';
 import mediumZoom from 'medium-zoom';
+import { log } from 'console';
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -36,24 +37,19 @@ export class VerPropiedadComponent implements OnInit {
   modalCrearContacto!: ModalCrearContactoComponent;
 
   codPro?: number;
+  selectedIndex = 0;
   propiedad: any = {};
+  isModalOpen = false;
+  elementsPerPage = 3;
   thumbnailsPerPage = 3;
   selectedImageUrl: string | null = null;
+  resultadosFiltros: any[] = [];
+  filtrosSeleccionados: Map<string, any> = new Map();
 
-
-  isModalOpen = false;
-  selectedIndex = 0;
   private isZoomActive = false;
-
   private zoomInstance: any;
   private currentScale = 1;
-  private isDragging = false;
-  private startX = 0;
-  private startY = 0;
-  private translateX = 0;
-  private translateY = 0;
-  private currentImageElement: HTMLElement | null = null;
-  
+
   visibleThumbnailsStart = 0;
   selectedImage: string = '';
   tabActivo: string = 'fotos';
@@ -66,20 +62,23 @@ export class VerPropiedadComponent implements OnInit {
 
   ngOnInit(): void {
     this.initZoom();
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras?.state || window.history.state;
-
     this.route.paramMap.subscribe((params) => {
-      this.codPro = state?.codPro || Number(params.get('codpro'));
+      this.codPro = Number(params.get('codpro'));
       console.log('CodPro:', this.codPro);
       this.getDatos();
     });
+
+  }
+
+  getDatos() {
+    this.getDatosPropiedad();
+    this.prepararFiltros();
   }
 
   openModal(index: number): void {
     this.selectedIndex = index;
     this.isModalOpen = true;
-    
+
     // Esperamos a que el modal se renderice completamente
     setTimeout(() => {
       this.initZoom();
@@ -93,7 +92,7 @@ export class VerPropiedadComponent implements OnInit {
 
   initZoom(): void {
     this.destroyZoom(); // Limpiamos cualquier instancia previa
-    
+
     const images = document.querySelectorAll('[data-zoom-src]');
     this.zoomInstance = mediumZoom(images, {
       background: 'rgba(0, 0, 0, 0.9)',
@@ -154,7 +153,7 @@ export class VerPropiedadComponent implements OnInit {
 
   zoomIn(): void {
     if (!this.zoomInstance) return;
-    
+
     const img = this.getCurrentImage();
     if (img) {
       this.currentScale = Math.min(this.currentScale + 0.25, 3);
@@ -165,7 +164,7 @@ export class VerPropiedadComponent implements OnInit {
 
   zoomOut(): void {
     if (!this.zoomInstance) return;
-    
+
     const img = this.getCurrentImage();
     if (img) {
       this.currentScale = Math.max(this.currentScale - 0.25, 1);
@@ -196,10 +195,6 @@ export class VerPropiedadComponent implements OnInit {
     this.destroyZoom();
   }
 
-  getDatos() {
-    this.getDatosPropiedad();
-  }
-
   seleccionarTab(tab: string) {
     this.tabActivo = tab;
   }
@@ -209,6 +204,8 @@ export class VerPropiedadComponent implements OnInit {
       (response: any) => {
         console.log('propiedad', response.data);
         this.propiedad = response.data;
+        this.prepararFiltros();
+        this.enviarFiltros()
       },
       (error: any) => {
         console.error('Error al obtener la propiedad:', error);
@@ -264,5 +261,46 @@ export class VerPropiedadComponent implements OnInit {
   ) {
     console.log('codPro', codPro, 'accion', accion);
     this.modalCrearContacto.abrirModal(codPro, accion);
+  }
+
+  prepararFiltros() {
+    this.filtrosSeleccionados.clear();
+    this.filtrosSeleccionados.set('city', this.propiedad.city_code);
+    this.filtrosSeleccionados.set('biz', this.propiedad.biz_code);
+
+    console.log('Filtros:', this.filtrosSeleccionados);
+  }
+
+  enviarFiltros() {
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = { ...filtrosObj, page: 1 };
+    console.log('Objeto a enviar:', obj);
+
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        const idActual = this.propiedad.idpro;
+        let filtrados = response.data.filter((inmueble: any) => inmueble.idpro !== idActual);
+
+        const faltantes = 3 - filtrados.length;
+        if (faltantes > 0) {
+          this.inmueblesService.getFiltrosEnviar({ ...filtrosObj, page: obj.page + 1 }, this.elementsPerPage)
+            .subscribe((respuestaSiguiente: any) => {
+              filtrados.push(...respuestaSiguiente.data.slice(0, faltantes));
+              this.resultadosFiltros = filtrados;
+              console.log("Inmuebles completos:", this.resultadosFiltros);
+            });
+        } else {
+          this.resultadosFiltros = filtrados;
+          console.log("Inmuebles completos:", this.resultadosFiltros);
+        }
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
+  verPropiedad(codPro: number) {
+    this.router.navigate(['/ver-propiedad', codPro]);
   }
 }

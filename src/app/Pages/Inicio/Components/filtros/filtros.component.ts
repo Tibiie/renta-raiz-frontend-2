@@ -9,7 +9,7 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 
@@ -104,42 +104,16 @@ export class FiltrosComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
-    console.log(this.isDrawerOpen);
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras?.state || history.state;
-
-    if (state?.resultados) {
-      console.log('Estado recibido:', state);
-      this.resultados = state.resultados;
-
-      this.filtrosVistaInicial = state.filtros;
-      this.paginacion = state.paginacion;
-
-      this.totalPaginas = this.paginacion.last_page || 1;
-      this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
-      this.paginaActual = this.filtrosVistaInicial.page || 1;
-
-      console.log('Paginacion:', this.paginacion);
-      console.log('Filtros:', this.filtrosVistaInicial);
-      console.log('Resultados:', this.resultados);
-
-      this.inmueblesService.setPropiedades(this.resultados);
-
-      this.getCiudades();
-    }
+    const state = window.history.state;
     await this.getDatos();
+    this.cargarDesdeState(state);
 
-    if (this.filtrosVistaInicial) {
-      console.log('Inicializando filtros con:', this.filtrosVistaInicial);
-      this.inicializarFiltrosDesdeVistaInicial();
-      console.log('Filtros inicializados:', {
-        selectedProperty: this.selectedProperty,
-        selectedEstates: this.selectedEstates,
-        seleccion: this.seleccion,
-      });
-    }
-
-    this.cdRef.detectChanges();
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const newState = window.history.state;
+        this.cargarDesdeState(newState);
+      }
+    });
   }
 
   async getDatos(): Promise<void> {
@@ -280,7 +254,6 @@ export class FiltrosComponent implements OnInit {
   }
 
   prepararFiltros() {
-
     const limpiarTexto = (texto: string) => {
       return texto
         .normalize("NFD")
@@ -540,4 +513,40 @@ export class FiltrosComponent implements OnInit {
   borrarFiltros() {
     this.filtrosSeleccionados.clear();
   }
+
+  async cargarDesdeState(state: any) {
+    if (state?.resultados) {
+      console.log('Estado recibido:', state);
+      this.resultados = [...state.resultados];
+      this.filtrosVistaInicial = state.filtros;
+      this.paginacion = state.paginacion;
+      this.totalDatos = this.paginacion.total;
+
+      this.totalPaginas = this.paginacion.last_page || 1;
+      this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+      this.paginaActual = this.filtrosVistaInicial.page || 1;
+
+      console.log('Paginacion:', this.paginacion);
+      console.log('Filtros:', this.filtrosVistaInicial);
+      console.log('Resultados:', this.resultados);
+
+      this.inmueblesService.setPropiedades(this.resultados);
+
+      await this.getCiudades();
+
+      if (this.filtrosVistaInicial) {
+        this.inicializarFiltrosDesdeVistaInicial();
+        console.log('Filtros inicializados:', {
+          selectedProperty: this.selectedProperty,
+          selectedEstates: this.selectedEstates,
+          seleccion: this.seleccion,
+        });
+      }
+
+      this.generarPaginas();
+      this.cdRef.detectChanges();
+
+    }
+  }
+
 }

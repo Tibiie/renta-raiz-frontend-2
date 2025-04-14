@@ -79,8 +79,14 @@ export class NavbarComponent implements OnInit {
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
-        this._router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this._router.navigate(['/filtros'], {
+            state: {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          });
         });
       },
       (error: any) => {
@@ -102,8 +108,14 @@ export class NavbarComponent implements OnInit {
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
-        this._router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this._router.navigate(['/filtros'], {
+            state: {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          });
         });
       },
       (error: any) => {
