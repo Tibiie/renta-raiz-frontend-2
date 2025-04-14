@@ -12,6 +12,7 @@ import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
+import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 
 @Component({
   selector: 'app-filtros',
@@ -67,6 +68,11 @@ export class FiltrosComponent implements OnInit {
   estateOptions: { code: string; name: string }[] = [];
   selectedEstates: { code: string; name: string }[] = [];
 
+  //geolocalizacion
+  coordinates: {latitude: number, longitude: number} | null = null;
+  error: string | null = null;
+  loading = false;
+
   private readonly icons = {
     property: {
       '': 'fas fa-list-ul',
@@ -96,12 +102,30 @@ export class FiltrosComponent implements OnInit {
   cdRef = inject(ChangeDetectorRef);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
+  geolocalizacionService = inject(GeolocalizacionService);
 
   mostrarMapa = false;
 
   formFiltrosSelect = this.formBuilder.group({
     opcion: ['']
   });
+
+
+
+  async getLocation() {
+    this.loading = true;
+    this.error = null;
+    this.coordinates = null;
+    
+    try {
+      this.coordinates = await this.geolocalizacionService.getCurrentPosition();
+      console.log('Coordenadas:', this.coordinates);
+    } catch (err) {
+      this.error = err as string;
+    } finally {
+      this.loading = false;
+    }
+  }
 
   async ngOnInit(): Promise<void> {
     console.log(this.isDrawerOpen);
