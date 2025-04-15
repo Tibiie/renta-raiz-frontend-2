@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  HostListener,
   Inject,
   inject,
   OnInit,
@@ -152,6 +153,12 @@ export class FiltrosComponent implements OnInit {
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
+  }
+  isMobileView = window.innerWidth < 768;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.isMobileView = window.innerWidth < 768;
   }
 
   toggleMap() {
