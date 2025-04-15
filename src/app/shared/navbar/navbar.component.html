@@ -21,31 +21,67 @@
 
         <!-- Menú desktop (oculto en móvil) -->
         <div class="hidden md:block">
-            <ul class="flex flex-col md:flex-row md:space-x-8 font-medium text-white">
-                <li><a (click)="enviarFiltroVenta()" class="cursor-pointer hover:text-gray-300 block py-2">Venta</a></li>
-                <li><a (click)="enviarFiltroArriendo()" class="cursor-pointer hover:text-gray-300 block py-2">Arriendo</a></li>
-                <li><a (click)="enviarFiltroDestacados()" class="cursor-pointer hover:text-gray-300 block py-2">Destacadas</a></li>
+            <ul class="flex flex-col md:flex-row md:space-x-8 font-medium text-white items-center">
+                <li><a (click)="enviarFiltroVenta()" class="cursor-pointer hover:text-gray-300 block py-2">Venta</a>
+                </li>
+                <li><a (click)="enviarFiltroArriendo()"
+                        class="cursor-pointer hover:text-gray-300 block py-2">Arriendo</a></li>
+                <li><a (click)="enviarFiltroDestacados()"
+                        class="cursor-pointer hover:text-gray-300 block py-2">Destacadas</a></li>
+
                 <li class="relative">
                     <a href="#" class="hover:text-gray-300 block py-2"
                         (click)="toggleNosotrosDropdown($event)">Nosotros</a>
- 
+
                     <!-- Submenú -->
-                    <ul *ngIf="showNosotrosDropdown"
-                        class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48">
+                    @if (showNosotrosDropdown) {
+                    <ul class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48">
                         <li>
-                            <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('quienes-somos')">Quiénes
-                                Somos</a>
+                            <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
+                                (click)="navigateTo('quienes-somos')">Quiénes Somos</a>
                         </li>
                         <li>
-                            <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('nuestro-equipo')">Expertos</a>
+                            <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
+                                (click)="navigateTo('nuestro-equipo')">Expertos</a>
                         </li>
                         <li>
-                            <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('historia')">Brochure</a>
+                            <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
+                                onclick="window.open('https://rentaraiz.co/brochure/')">Brochure</a>
                         </li>
                     </ul>
+                    }
                 </li>
-                <li><a href="#" class="hover:text-gray-300 block py-2">Clientes</a></li>
-                <li><a class="cursor-pointer hover:text-gray-300 block py-2" (click)="redirectTo('contacto')">Contactanos</a></li>
+                <li class="relative">
+                    <a href="#" class="hover:text-gray-300 block py-2"
+                        (click)="toggleClientesDropdown($event)">Clientes</a>
+
+                    <!-- Submenú -->
+                    @if (showClientesDropdown) {
+                    <ul class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48">
+                        <li>
+                            <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
+                                onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=1')">Propietarios</a>
+                        </li>
+                        <li>
+                            <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
+                                onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=2')">Arrendatarios</a>
+                        </li>
+                    </ul>
+                    }
+                </li>
+
+                <li><a href="#" class="hover:text-gray-300 block py-2" (click)="redirectTo('contacto')">Contáctanos</a>
+                </li>
+
+                <!-- Botón PSE  -->
+                <li class="hidden md:block ml-4">
+                    <a target="_blank"
+                        onclick="window.open('https://gateway2.tucompra.com.co/sites/RentaRaiz/facturacion.xhtml')"
+                        class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:brightness-110 transition duration-200 relative overflow-hidden bg-[#003366] flex items-center justify-center">
+                        <img src="assets/images/pse-findo.png" alt="PSE"
+                            class="absolute inset-0 w-full h-full object-contain scale-150" />
+                    </a>
+                </li>
             </ul>
         </div>
 

@@ -9,7 +9,7 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 
@@ -104,42 +104,16 @@ export class FiltrosComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
-    console.log(this.isDrawerOpen);
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras?.state || history.state;
-
-    if (state?.resultados) {
-      console.log('Estado recibido:', state);
-      this.resultados = state.resultados;
-
-      this.filtrosVistaInicial = state.filtros;
-      this.paginacion = state.paginacion;
-
-      this.totalPaginas = this.paginacion.last_page || 1;
-      this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
-      this.paginaActual = this.filtrosVistaInicial.page || 1;
-
-      console.log('Paginacion:', this.paginacion);
-      console.log('Filtros:', this.filtrosVistaInicial);
-      console.log('Resultados:', this.resultados);
-
-      this.inmueblesService.setPropiedades(this.resultados);
-
-      this.getCiudades();
-    }
+    const state = window.history.state;
     await this.getDatos();
+    this.cargarDesdeState(state);
 
-    if (this.filtrosVistaInicial) {
-      console.log('Inicializando filtros con:', this.filtrosVistaInicial);
-      this.inicializarFiltrosDesdeVistaInicial();
-      console.log('Filtros inicializados:', {
-        selectedProperty: this.selectedProperty,
-        selectedEstates: this.selectedEstates,
-        seleccion: this.seleccion,
-      });
-    }
-
-    this.cdRef.detectChanges();
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const newState = window.history.state;
+        this.cargarDesdeState(newState);
+      }
+    });
   }
 
   async getDatos(): Promise<void> {
@@ -199,7 +173,7 @@ export class FiltrosComponent implements OnInit {
 
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
-   
+
 
     const drawer = document.getElementById('right-map-drawer');
     if (drawer) {
@@ -262,40 +236,6 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  enviarFiltros(pagina: number = 1) {
-    this.paginaActual = pagina;
-    this.prepararFiltros();
-
-    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-    const obj = {
-      ...filtrosObj,
-      page: pagina,
-    };
-
-    console.log('Objeto a enviar:', obj);
-
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
-      (response: any) => {
-        console.log('filtros', response);
-        this.resultados = response.data;
-        this.totalDatos = response.total;
-
-        this.paginacion = response;
-        this.totalPaginas = response.last_page || 1;
-        this.paginas = Array.from(
-          { length: this.totalPaginas },
-          (_, i) => i + 1
-        );
-
-        console.log('Paginas', this.paginas);
-        this.generarPaginas();
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
-  }
-
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
 
@@ -314,8 +254,6 @@ export class FiltrosComponent implements OnInit {
   }
 
   prepararFiltros() {
-    this.filtrosSeleccionados.clear();
-
     const limpiarTexto = (texto: string) => {
       return texto
         .normalize("NFD")
@@ -402,6 +340,59 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
+  enviarFiltros(pagina: number = 1) {
+    this.paginaActual = pagina;
+    this.prepararFiltros();
+
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      page: pagina,
+    };
+
+    console.log('Objeto a enviar:', obj);
+
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log('filtros', response);
+        this.resultados = response.data;
+        this.totalDatos = response.total;
+
+        this.paginacion = response;
+        this.totalPaginas = response.last_page || 1;
+        this.paginas = Array.from(
+          { length: this.totalPaginas },
+          (_, i) => i + 1
+        );
+
+        console.log('Paginas', this.paginas);
+        this.generarPaginas();
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
+  enviarFiltrosSelect() {
+    this.prepararFiltros();
+
+    const opcion = this.formFiltrosSelect.value.opcion;
+    if (opcion === 'order-mayor') {
+      this.filtrosSeleccionados.set('order', 'pricemin');
+    } else if (opcion === 'order-menor') {
+      this.filtrosSeleccionados.set('order', 'pricemax');
+    } else if (opcion === 'sort-asc') {
+      this.filtrosSeleccionados.set('sort', 'asc');
+      this.filtrosSeleccionados.set('order', 'consignation_date');
+    } else if (opcion === 'sort-des') {
+      this.filtrosSeleccionados.set('sort', 'desc');
+      this.filtrosSeleccionados.set('order', 'consignation_date');
+    }
+
+    this.enviarFiltros(1);
+  }
+
   seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
     const arr = this.seleccion[categoria] as (number | string)[];
     const index = arr.indexOf(valor);
@@ -429,39 +420,6 @@ export class FiltrosComponent implements OnInit {
         this.selectedEstates.push(option);
       }
     }
-  }
-
-  enviarFiltrosSelect() {
-
-    if (this.formFiltrosSelect.value.opcion === 'order-mayor') {
-
-      this.filtrosSeleccionados.set('order', 'desc');
-    }
-
-    if (this.formFiltrosSelect.value.opcion === 'order-menor') {
-
-      this.filtrosSeleccionados.set('order', 'asc');
-    }
-
-    if (this.formFiltrosSelect.value.opcion === 'sort-asd') {
-
-      this.filtrosSeleccionados.set('sort', 'asc');
-    }
-
-    if (this.formFiltrosSelect.value.opcion === 'sort-des') {
-
-      this.filtrosSeleccionados.set('sort', 'desc');
-    }
-
-    console.log('Filtros seleccionados:', this.filtrosSeleccionados);
-
-    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    }
-
-    console.log('Objeto a enviar:', obj);
   }
 
   toggleDropdown(type: 'property' | 'estate'): void {
@@ -551,4 +509,44 @@ export class FiltrosComponent implements OnInit {
       state: { codPro: codPro }
     });
   }
+
+  borrarFiltros() {
+    this.filtrosSeleccionados.clear();
+  }
+
+  async cargarDesdeState(state: any) {
+    if (state?.resultados) {
+      console.log('Estado recibido:', state);
+      this.resultados = [...state.resultados];
+      this.filtrosVistaInicial = state.filtros;
+      this.paginacion = state.paginacion;
+      this.totalDatos = this.paginacion.total;
+
+      this.totalPaginas = this.paginacion.last_page || 1;
+      this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+      this.paginaActual = this.filtrosVistaInicial.page || 1;
+
+      console.log('Paginacion:', this.paginacion);
+      console.log('Filtros:', this.filtrosVistaInicial);
+      console.log('Resultados:', this.resultados);
+
+      this.inmueblesService.setPropiedades(this.resultados);
+
+      await this.getCiudades();
+
+      if (this.filtrosVistaInicial) {
+        this.inicializarFiltrosDesdeVistaInicial();
+        console.log('Filtros inicializados:', {
+          selectedProperty: this.selectedProperty,
+          selectedEstates: this.selectedEstates,
+          seleccion: this.seleccion,
+        });
+      }
+
+      this.generarPaginas();
+      this.cdRef.detectChanges();
+
+    }
+  }
+
 }

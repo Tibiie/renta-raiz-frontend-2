@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
   isScrolled = false;
   elementsPerPage = 12;
   showNosotrosDropdown = false;
+  showClientesDropdown = false;
   @Input() alwaysScrolled = false;
   isMobileMenuOpen: boolean = false;
 
@@ -51,6 +52,11 @@ export class NavbarComponent implements OnInit {
     this.showNosotrosDropdown = !this.showNosotrosDropdown;
   }
 
+  toggleClientesDropdown(event: MouseEvent) {
+    event.preventDefault();
+    this.showClientesDropdown = !this.showClientesDropdown;
+  }
+
   closeDropdown() {
     this.showNosotrosDropdown = false;
   }
@@ -73,8 +79,14 @@ export class NavbarComponent implements OnInit {
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
-        this._router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this._router.navigate(['/filtros'], {
+            state: {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          });
         });
       },
       (error: any) => {
@@ -96,8 +108,14 @@ export class NavbarComponent implements OnInit {
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
-        this._router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this._router.navigate(['/filtros'], {
+            state: {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          });
         });
       },
       (error: any) => {
