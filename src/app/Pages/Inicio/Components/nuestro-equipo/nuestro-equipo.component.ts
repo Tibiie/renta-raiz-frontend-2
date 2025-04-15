@@ -6,7 +6,7 @@ import { FooterComponent } from "../../../../shared/footer/footer.component";
 @Component({
   selector: 'app-nuestro-equipo',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, FooterComponent, BotonesFlotantesComponent],
   templateUrl: './nuestro-equipo.component.html',
   styleUrl: './nuestro-equipo.component.scss'
 })

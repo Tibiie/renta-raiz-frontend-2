@@ -93,7 +93,7 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   initZoom(): void {
-    this.destroyZoom(); // Limpiamos cualquier instancia previa
+    this.destroyZoom(); 
 
     const images = document.querySelectorAll('[data-zoom-src]');
     this.zoomInstance = mediumZoom(images, {
@@ -103,7 +103,6 @@ export class VerPropiedadComponent implements OnInit {
       template: '#zoom-template'
     });
 
-    // Manejar eventos de zoom
     this.zoomInstance.on('open', () => {
       this.isZoomActive = true;
     });

@@ -13,6 +13,7 @@ import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 export class NavbarComponent implements OnInit {
   isScrolled = false;
   elementsPerPage = 12;
+  showDestacadosDropdown = false;
   showNosotrosDropdown = false;
   showClientesDropdown = false;
   @Input() alwaysScrolled = false;
@@ -55,6 +56,11 @@ export class NavbarComponent implements OnInit {
   toggleClientesDropdown(event: MouseEvent) {
     event.preventDefault();
     this.showClientesDropdown = !this.showClientesDropdown;
+  }
+
+  toggleDestacadosDropdown(event: MouseEvent) {
+    event.preventDefault();
+    this.showDestacadosDropdown = !this.showDestacadosDropdown;
   }
 
   closeDropdown() {
@@ -124,9 +130,16 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  enviarFiltroDestacados() {
+  enviarFiltroDestacados(tipo: string) {
     this.filtrosInmueblesDestacados.clear();
+
+    if (tipo === 'arriendo') {
     this.filtrosInmueblesDestacados.set('biz', '1');
+    }
+
+    if (tipo === 'venta') {
+      this.filtrosInmueblesDestacados.set('biz', '2');
+    }
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesDestacados);
     const obj = {
@@ -137,8 +150,14 @@ export class NavbarComponent implements OnInit {
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
-        this._router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this._router.navigate(['/filtros'], {
+            state: {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          });
         });
       },
       (error: any) => {
