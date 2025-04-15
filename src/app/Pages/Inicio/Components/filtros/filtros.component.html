@@ -2,7 +2,7 @@
 
 <div class="flex flex-col md:flex-row">
   <div class="flex-1">
-    <div class="text-center pt-32 fixed z-50 transition-all duration-300" [ngClass]="{
+    <div class="text-center pt-20 z-50 transition-all duration-300 md:pt-32 md:fixed" [ngClass]="{
       'left-6': !isDrawerOpen,
       'left-36': isDrawerOpen
     }">
@@ -233,7 +233,7 @@
 
   <!-- Drawer derecho sin overlay -->
   <div id="right-map-drawer"
-    class="fixed top-1/3 right-0 z-40 h-full mt-2 mb-2 w-2/4 transform transition-transform translate-x-full bg-white shadow-2xl rounded-xl overflow-hidden">
+    class="fixed top-1/3 right-0 z-40 h-full mt-2 mb-2 w-full md:w-2/4 transform transition-transform translate-x-full bg-white shadow-2xl rounded-xl overflow-hidden">
     <!-- Contenedor interno con bordes redondeados -->
     <div class="p-4 h-full border-l border-gray-200">
       <div class="flex justify-between items-center mb-4">
@@ -245,31 +245,32 @@
       <!-- Contenido del mapa con bordes redondeados -->
       <div class="h-full bg-gray-50 rounded-lg overflow-hidden">
         <div class="h-full flex items-center justify-center">
-          <!-- <iframe class="w-full h-full rounded-lg"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.527264572011!2d-75.57878828820685!3d6.19394229376781!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e46825af2bfffff%3A0xe438ca98577bfa7f!2sRenta%20Raiz!5e0!3m2!1ses-419!2sco!4v1744174393181!5m2!1ses-419!2sco"
-            style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
           <app-mapa *ngIf="mostrarMapa" [activarStreetView]="false"></app-mapa>
         </div>
       </div>
     </div>
-  </div>
+</div>
 
-  <div class="w-full mt-32 mb-6 transition-all duration-300 ease-in-out" [ngClass]="{
-      'md:ml-[28rem] px-6': isDrawerOpen,
-      'md:ml-0 px-32': !isDrawerOpen
-    }">
+<div class="w-full mt-12 mb-6 transition-all duration-300 ease-in-out px-4 md:px-0 md:mt-32"  
+[ngClass]="{
+  'md:ml-[28rem] md:px-6': isDrawerOpen,
+  'md:ml-0 md:px-32': !isDrawerOpen
+}">
     <div class="bg-white shadow-sm">
       <!-- Barra de búsqueda y filtros -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <!-- Barra de búsqueda -->
-        <div class="relative flex-1 max-w-2xl">
-          <input type="text" id="ubicacion" [(ngModel)]="ubicacion" placeholder="Ciudad, barrio, sector o sitio..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+        <div class="relative flex-1 w-full max-w-2xl">
+          <input 
+            type="text" 
+            id="ubicacion" 
+            [(ngModel)]="ubicacion" 
+            placeholder="Ciudad, barrio, sector o sitio..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" 
+          />
           <div class="absolute left-3 top-2.5 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
         </div>
@@ -283,11 +284,12 @@
       <!-- Sección de título y controles -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h2 class="text-xl font-bold text-gray-800">Inmuebles Encontrados</h2>
-
-        <div class="flex flex-wrap gap-3 mb-6">
+      
+        <!-- Contenedor modificado para mantener alineación derecha en web -->
+        <div class="w-full md:w-auto flex flex-col sm:flex-row flex-wrap gap-3 mb-6 md:mb-0">
           <!-- Checkbox de búsqueda cercana -->
           <label
-            class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
+            class="w-full sm:w-auto flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
             <input type="checkbox" class="hidden peer" />
             <div
               class="w-5 h-5 border-2 border-gray-300 rounded-md flex items-center justify-center peer-checked:bg-[#CDAD60] peer-checked:border-[#CDAD60] transition-colors">
@@ -305,27 +307,27 @@
             </svg>
             <span class="select-none">Buscar cerca de mi</span>
           </label>
-
+      
           <!-- Selector de orden -->
-          <form [formGroup]="formFiltrosSelect">
+          <form [formGroup]="formFiltrosSelect" class="w-full sm:w-auto">
             <select formControlName="opcion" (change)="enviarFiltrosSelect()"
-              class="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#CDAD60]">
-
-              <option disabled selected value="">Ordenar por</option>
-              <option value="order-mayor">Menor precio</option>
-              <option value="order-menor">Mayor precio</option>
-              <option value="sort-asc">Más recientes</option>
-              <option value="sort-des">Menos recientes</option>
+              class="w-full sm:w-auto px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#CDAD60]">
+              <form [formGroup]="formFiltrosSelect">
+                <option disabled selected value="">Ordenar por</option>
+                  <option value="order-mayor">Menor precio</option>
+                  <option value="order-menor">Mayor precio</option>
+                  <option value="sort-asc">Más recientes</option>
+                  <option value="sort-des">Menos recientes</option>
+              </form>
             </select>
           </form>
-
+      
           <!-- Botón de mapa -->
           <button type="button" (click)="toggleMap()"
-            class="flex items-center gap-2 px-3 py-2 bg-green-600 rounded-xl hover:bg-green-700 text-white">
+            class="w-full sm:w-auto flex items-center justify-center md:justify-start gap-2 px-3 py-2 bg-green-600 rounded-xl hover:bg-green-700 text-white">
             <i class="fas" [ngClass]="drawerMapAbierto ? 'fa-times-circle' : 'fa-map-marker-alt'"></i>
             <span>{{ drawerMapAbierto ? 'Ocultar el mapa' : 'Buscar en el mapa' }}</span>
           </button>
-
         </div>
       </div>
     </div>
