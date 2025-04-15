@@ -39,10 +39,10 @@ export class FiltrosComponent implements OnInit {
   habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
 
   seleccion = {
-    habitaciones: [] as (number | string)[],
+    estrato: [] as number[],
     banos: [] as (number | string)[],
     parqueadero: [] as (number | string)[],
-    estrato: [] as number[],
+    habitaciones: [] as (number | string)[],
   };
 
   paginacion: any = {};

@@ -44,8 +44,8 @@ export class VerPropiedadComponent implements OnInit {
   isModalOpen = false;
   elementsPerPage = 3;
   thumbnailsPerPage = 3;
-  selectedImageUrl: string | null = null;
   resultadosFiltros: any[] = [];
+  selectedImageUrl: string | null = null;
   filtrosSeleccionados: Map<string, any> = new Map();
 
   private isZoomActive = false;
@@ -58,9 +58,9 @@ export class VerPropiedadComponent implements OnInit {
 
   // Injectaciones
   router = inject(Router);
+  route = inject(ActivatedRoute);
   cdRef = inject(ChangeDetectorRef);
   inmueblesService = inject(InmueblesService);
-  route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.initZoom();
@@ -93,7 +93,7 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   initZoom(): void {
-    this.destroyZoom(); 
+    this.destroyZoom();
 
     const images = document.querySelectorAll('[data-zoom-src]');
     this.zoomInstance = mediumZoom(images, {
