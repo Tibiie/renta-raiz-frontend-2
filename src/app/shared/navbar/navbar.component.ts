@@ -81,10 +81,8 @@ export class NavbarComponent implements OnInit {
       ...filtrosObj,
       page: 1,
     }
-    console.log('Objeto a enviar:', obj);
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        console.log("filtros", response.data);
         this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this._router.navigate(['/filtros'], {
             state: {
@@ -110,10 +108,8 @@ export class NavbarComponent implements OnInit {
       ...filtrosObj,
       page: 1,
     }
-    console.log('Objeto a enviar:', obj);
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        console.log("filtros", response.data);
         this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this._router.navigate(['/filtros'], {
             state: {
@@ -129,40 +125,4 @@ export class NavbarComponent implements OnInit {
       }
     );
   }
-
-  // enviarFiltroDestacados(tipo: string) {
-  //   this.filtrosInmueblesDestacados.clear();
-
-  //   if (tipo === 'arriendo') {
-  //     this.filtrosInmueblesDestacados.set('biz', '1');
-  //   }
-
-  //   if (tipo === 'venta') {
-  //     this.filtrosInmueblesDestacados.set('biz', '2');
-  //   }
-
-  //   const filtrosObj = Object.fromEntries(this.filtrosInmueblesDestacados);
-  //   const obj = {
-  //     ...filtrosObj,
-  //     page: 1,
-  //   }
-  //   console.log('Objeto a enviar:', obj);
-  //   this.inmueblesService.getInmueblesDestacados(obj, this.elementsPerPage).subscribe(
-  //     (response: any) => {
-  //       console.log("filtros", response.data);
-  //       this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-  //         this._router.navigate(['/filtros'], {
-  //           state: {
-  //             resultados: response.data,
-  //             paginacion: response,
-  //             filtros: obj,
-  //           },
-  //         });
-  //       });
-  //     },
-  //     (error: any) => {
-  //       console.error('Error al enviar los filtros:', error);
-  //     }
-  //   );
-  // }
 }

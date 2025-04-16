@@ -35,8 +35,6 @@ export class MapaComponent implements AfterViewInit {
         (response: any) => {
 
           this.propiedades = response;
-          console.log(this.propiedades);
-          console.log(this.propiedades);
           this.center = { lat: this.propiedades[0].latitude, lng: this.propiedades[0].longitude };
 
           this.markers = this.propiedades.map(p => ({
@@ -44,29 +42,25 @@ export class MapaComponent implements AfterViewInit {
             icon: this.createSvgIcon(p.price_format),
             propiedad: p
           }));
-          console.log(this.markers);
         },
         (error: any) => {
           console.error('Error al obtener las propiedades:', error);
         }
       );
-    }else{
-      
-      console.log("Propiedades recibidas:",this.propiedades);
+    } else {
+
+      console.log("Propiedades recibidas:", this.propiedades);
       this.zoom = 16;
       var latitude = Number(this.propiedades[0].latitude);
       var longitude = Number(this.propiedades[0].longitude);
       this.center = { lat: latitude, lng: longitude };
       this.markers = this.propiedades.map(p => ({
-        position: { lat: latitude, lng:longitude },
+        position: { lat: latitude, lng: longitude },
         // icon: this.createSvgIcon(p.price_format),
         propiedad: p
       }));
-      
     }
-    
   }
-
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -89,8 +83,6 @@ export class MapaComponent implements AfterViewInit {
   }
 
   createSvgIcon(precio: string) {
-
-
     const svg = `
       <svg width="130" height="40" xmlns="http://www.w3.org/2000/svg">
         <rect rx="20" ry="20" width="130" height="40" fill="#060f29" stroke="#cdad60" stroke-width="2"/>
@@ -98,8 +90,6 @@ export class MapaComponent implements AfterViewInit {
         <text x="40" y="25" font-size="14" font-weight="bold" font-family="Arial" fill="#cdad60">$${precio}</text>
       </svg>
     `;
-
-
 
     return {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
@@ -119,8 +109,8 @@ export class MapaComponent implements AfterViewInit {
   }
 
 
-   // Método para inicializar el Street View
-   initializeStreetView(): void {
+  // Método para inicializar el Street View
+  initializeStreetView(): void {
     if (this.googleMap) {
       const map = this.googleMap.googleMap;
       if (!map) {

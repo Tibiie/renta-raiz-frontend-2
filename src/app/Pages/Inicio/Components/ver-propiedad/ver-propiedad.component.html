@@ -73,7 +73,7 @@
     </div>
   </div>
 
-  <div class="flex flex-col md:flex-row px-4 md:px-20 gap-2">
+  <div class="flex flex-col md:flex-row px-4 md:px-20 gap-2 mb-0">
     <div class="w-full md:w-2/3">
       @if (tabActivo === 'fotos') {
       <ng-container>
@@ -384,80 +384,70 @@
     </div>
   </div>
 
-  <div class="flex flex-col md:flex-row px-4 md:px-20 gap-2">
-    <div class="w-full md:w-2/3 p-20 bg-white rounded-lg shadow-md text-[#080E36]">
-      <div class="grid grid-cols-1 md:grid-cols-4 text-sm font-medium">
-        <!-- Columna 1 -->
-        <div class="flex flex-col items-center text-center">
-          <span class="text-[#080E36]">Celdas de parqueo adicionales</span>
-          <div class="flex items-center justify-center mt-2 text-gray-700">
-            <i class="fas fa-car mr-2 text-gray-900"></i>
-            <span class="font-semibold">1</span>
+  <div class="flex flex-col md:flex-row px-4 md:px-10 gap-2">
+    <div class="w-full md:w-2/3 pt-4 px-6 pb-6 bg-white rounded-lg shadow-md text-[#080E36]">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+        <!-- Card -->
+        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
+          <div class="flex flex-col items-center">
+            <i class="fas fa-car text-xl mb-2" style="color: #CDAD60;"></i>
+            <span class="text-sm font-medium text-gray-600">Celdas de parqueo adicionales</span>
+            <span class="text-lg font-bold text-gray-800 mt-1">1</span>
           </div>
         </div>
 
-        <!-- valor de administración incluida en el arriendo -->
-        <div class="flex flex-col items-center text-center">
-          <p class="text-[#080E36] text-sm">
-            ¿Valor de administración incluida en el arriendo?
-          </p>
-          <div class="flex items-center justify-center mt-2 text-gray-700">
-            <i class="fas fa-file-invoice-dollar mr-2 text-gray-900"></i>
-            <span class="font-semibold">Sí</span>
+        <!-- Admin incluida -->
+        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
+          <div class="flex flex-col items-center">
+            <i class="fas fa-file-invoice-dollar text-xl mb-2" style="color: #CDAD60;"></i>
+            <span class="text-sm font-medium text-gray-600">Admin incluida en arriendo</span>
+            <span class="text-lg font-bold text-gray-800 mt-1">Sí</span>
           </div>
         </div>
 
-        <!-- disponible en arriendo -->
-        @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-        <div class="flex flex-col items-center text-center">
-          <p class="text-[#080E36] text-sm">¿Disponible en arriendo?</p>
-          <div class="flex items-center justify-center mt-2 text-gray-700">
-            <i class="fas fa-check-circle mr-2 text-gray-900"></i>
-            @if (propiedad.status_name == 'Disponible') {
-            <span class="font-semibold">Sí</span>
-            } @if (propiedad.status_name != 'Disponible') {
-            <span class="font-semibold">No</span>
-            }
+        <!-- Disponible en arriendo -->
+        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
+          <div class="flex flex-col items-center">
+            <i class="fas fa-check-circle text-xl mb-2" style="color: #CDAD60;"></i>
+            <span class="text-sm font-medium text-gray-600">Disponible en arriendo</span>
+            <span class="text-lg font-bold text-gray-800 mt-1">
+              {{ propiedad.biz_code === 1 || propiedad.biz_code === 3 ? (propiedad.status_name === 'Disponible' ? 'Sí' :
+              'No') : '-' }}
+            </span>
           </div>
         </div>
-        }
 
-        <!-- disponible en venta -->
-        @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
-        <div class="flex flex-col items-center text-center">
-          <p class="text-[#080E36] text-sm">¿Disponible en venta?</p>
-          <div class="flex items-center justify-center mt-2 text-gray-700">
-            <i class="fas fa-check-circle mr-2 text-gray-900"></i>
-            @if (propiedad.status_name == 'Disponible') {
-            <span class="font-semibold">Sí</span>
-            } @if (propiedad.status_name != 'Disponible') {
-            <span class="font-semibold">No</span>
-            }
+        <!-- Valor en arriendo -->
+        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
+          <div class="flex flex-col items-center">
+            <i class="fas fa-dollar-sign text-xl mb-2" style="color: #CDAD60;"></i>
+            <span class="text-sm font-medium text-gray-600">Valor en arriendo</span>
+            <span class="text-lg font-bold text-gray-800 mt-1">{{ propiedad.rent | currency : "COP" : "symbol-narrow" :
+              "1.0-0" }}</span>
           </div>
         </div>
-        }
 
-        <!-- valor en venta -->
-        @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
-        <div class="flex flex-col items-center text-center">
-          <span class="text-[#080E36]">Valor en venta</span>
-          <div class="flex items-center justify-center mt-2 text-gray-700">
-            <i class="fas fa-dollar-sign mr-2 text-gray-900"></i>
-            <span class="font-semibold">{{ propiedad.price_format }}</span>
+        <!-- Disponible en venta -->
+        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
+          <div class="flex flex-col items-center">
+            <i class="fas fa-check-circle text-xl mb-2" style="color: #CDAD60;"></i>
+            <span class="text-sm font-medium text-gray-600">Disponible en venta</span>
+            <span class="text-lg font-bold text-gray-800 mt-1">
+              {{ propiedad.biz_code === 2 || propiedad.biz_code === 3 ? (propiedad.status_name === 'Disponible' ? 'Sí' :
+              'No') : '-' }}
+            </span>
           </div>
         </div>
-        }
 
-        <!-- valor en arriendo -->
-        @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-        <div class="flex flex-col items-center text-center">
-          <span class="text-[#080E36]">Valor en arriendo</span>
-          <div class="flex items-center justify-center mt-2 text-gray-700">
-            <i class="fas fa-dollar-sign mr-2 text-gray-900"></i>
-            <span class="font-semibold">{{ propiedad.price_format }}</span>
+        <!-- Valor en venta -->
+        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
+          <div class="flex flex-col items-center">
+            <i class="fas fa-dollar-sign text-xl mb-2" style="color: #CDAD60;"></i>
+            <span class="text-sm font-medium text-gray-600">Valor en venta</span>
+            <span class="text-lg font-bold text-gray-800 mt-1">{{ propiedad.saleprice | currency : "COP" :
+              "symbol-narrow" : "1.0-0" }}</span>
           </div>
         </div>
-        }
       </div>
 
       <div class="mt-6">

@@ -1,39 +1,28 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
-import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { get } from 'http';
-import { HttpClientModule } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { FooterComponent } from "../../../../shared/footer/footer.component";
-import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
-
+import { FooterComponent } from '../../../../shared/footer/footer.component';
+import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 
 @Component({
-  selector: 'app-vista-inicial',
+  selector: 'app-blogs',
   standalone: true,
   imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent, BotonesFlotantesComponent],
-  templateUrl: './vista-inicial.component.html',
-  styleUrls: ['./vista-inicial.component.scss'],
+  templateUrl: './blogs.component.html',
+  styleUrl: './blogs.component.scss'
 })
-export class VistaInicialComponent implements OnInit {
+export class BlogsComponent {
 
-  intervalId: any;
-  currentSlide = 0;
   elementsPerPage = 12;
-  elementsPerPageInicial = 3;
   ubicacion: string = '';
   filtrosSeleccionados: Map<string, any> = new Map();
-  filtrosInmueblesVenta: Map<string, any> = new Map();
-  filtrosInmueblesArriendo: Map<string, any> = new Map();
 
-  filtros: any = {};
   ciudades: any[] = [];
   categoriasInmuebles: any[] = [];
-  inmueblesVentasArray: any[] = [];
   inmueblesDestacadosArray: any = {};
-  inmueblesArriendosArray: any[] = [];
 
   // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
@@ -69,17 +58,6 @@ export class VistaInicialComponent implements OnInit {
     } as Record<string, string>
   };
 
-  aliados: string[] = [
-    'assets/images/sura.png',
-    'assets/images/experian.png',
-    'assets/images/fianzacredito.png',
-    'assets/images/libertador.png',
-    'assets/images/lonja.png',
-    'assets/images/sura.png',
-    'assets/images/experian.png',
-    'assets/images/fianzacredito.png',
-  ];
-
   // Injectaciones
   inmueblesService = inject(InmueblesService);
   router = inject(Router);
@@ -89,11 +67,8 @@ export class VistaInicialComponent implements OnInit {
   }
 
   getDatos() {
-    this.getInmueblesVentas();
-    this.getInmueblesArriendos();
     this.getCategoriasInmuebles();
     this.getCiudades();
-    this.getFiltros();
     this.getTipoPropiedad();
     this.getInmueblesDestacados();
   }
@@ -134,23 +109,11 @@ export class VistaInicialComponent implements OnInit {
     this.inmueblesService.getTipoPropiedad().subscribe(
       (response: any) => {
         this.estateOptions = response.data;
+
         this.selectedEstate = this.estateOptions[0] || null;
       },
       (error: any) => {
         console.error('Error al obtener los tipos de propiedad:', error);
-      }
-    );
-  }
-
-  getFiltros() {
-    this.inmueblesService.getFiltros().subscribe(
-      (data: any) => {
-        this.filtros = data;
-      },
-      (error: any) => {
-        console.log(error);
-
-        console.error('Error al obtener los filtros:', error);
       }
     );
   }
@@ -195,44 +158,6 @@ export class VistaInicialComponent implements OnInit {
         this.router.navigate(['/filtros'], {
           state: { resultados: response.data, paginacion: response, filtros: obj }
         });
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
-  }
-
-  getInmueblesVentas() {
-    this.filtrosInmueblesVenta.clear();
-    this.filtrosInmueblesVenta.set('biz', 2);
-
-    const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    }
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPageInicial).subscribe(
-      (response: any) => {
-        this.inmueblesVentasArray = response.data;
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
-  }
-
-  getInmueblesArriendos() {
-    this.filtrosInmueblesArriendo.clear();
-    this.filtrosInmueblesArriendo.set('biz', 1);
-
-    const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    }
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPageInicial).subscribe(
-      (response: any) => {
-        this.inmueblesArriendosArray = response.data;
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -302,34 +227,5 @@ export class VistaInicialComponent implements OnInit {
   redirigirFiltros() {
     this.prepararFiltros();
     this.getEnviarFiltros();
-  }
-
-  getAliadosPorGrupo(): string[][] {
-    const grupos: string[][] = [];
-    for (let i = 0; i < this.aliados.length; i += 4) {
-      grupos.push(this.aliados.slice(i, i + 4));
-    }
-    return grupos;
-  }
-
-  startAutoSlide() {
-    this.intervalId = setInterval(() => {
-      const totalSlides = this.getAliadosPorGrupo().length;
-      this.currentSlide = (this.currentSlide + 1) % totalSlides;
-    }, 3000);
-  }
-
-  goToSlide(index: number) {
-    this.currentSlide = index;
-  }
-
-  abrirPestana(url: string) {
-    window.open(url, '_blank');
-  }
-
-  verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro }
-    });
   }
 }

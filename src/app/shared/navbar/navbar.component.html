@@ -100,6 +100,10 @@
           }
         </li>
 
+        <!-- <li>
+          <a class="cursor-pointer hover:text-gray-300 block py-2" (click)="redirectTo('blogs')">Blogs</a>
+        </li> -->
+
         <li>
           <a class="cursor-pointer hover:text-gray-300 block py-2" (click)="redirectTo('contacto')">Contáctanos</a>
         </li>
@@ -146,33 +150,37 @@
               <a href="/nuestro-equipo" class="block py-1 hover:text-gray-300" (click)="toggleMobileMenu()">Expertos</a>
             </li>
             <li>
-              <a class="block py-1 hover:text-gray-300" onclick="window.open('https://rentaraiz.co/brochure/')">Brochure</a>
+              <a class="block py-1 hover:text-gray-300"
+                onclick="window.open('https://rentaraiz.co/brochure/')">Brochure</a>
             </li>
           </ul>
         </li>
 
         <li>
           <div class="flex items-center justify-between py-2 cursor-pointer hover:text-gray-300"
-               (click)="toggleClientesDropdown($event)">
+            (click)="toggleClientesDropdown($event)">
             <span>Clientes</span>
             <svg class="w-4 h-4 transition-transform duration-300" [ngClass]="{ 'rotate-180': showClientesDropdown }"
-                 fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </div>
-        
+
           <!-- Submenú desplegable -->
           <ul *ngIf="showClientesDropdown" class="pl-4 mt-2 space-y-1 text-sm">
             <li>
               <a class="block py-1 hover:text-gray-300 cursor-pointer"
-                 onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=1')">Propietarios</a>
+                onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=1')">Propietarios</a>
             </li>
             <li>
               <a class="block py-1 hover:text-gray-300 cursor-pointer"
-                 onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=2')">Arrendatarios</a>
+                onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=2')">Arrendatarios</a>
             </li>
           </ul>
         </li>
+        <!-- <li>
+          <a href="/blogs" class="hover:text-gray-300 block py-2">Blogs</a>
+        </li> -->
         <li>
           <a href="#" class="hover:text-gray-300 block py-2" (click)="toggleMobileMenu()">Contáctanos</a>
         </li>

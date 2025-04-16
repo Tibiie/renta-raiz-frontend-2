@@ -7,6 +7,7 @@ import { VerPropiedadComponent } from './Components/ver-propiedad/ver-propiedad.
 import { NuestroEquipoComponent } from './Components/nuestro-equipo/nuestro-equipo.component';
 import { QuienesSomosComponent } from './Components/quienes-somos/quienes-somos.component';
 import { MapaComponent } from './Components/mapa/mapa.component';
+import { BlogsComponent } from './Components/blogs/blogs.component';
 
 export const routes: Routes = [
 
@@ -40,10 +41,11 @@ export const routes: Routes = [
   {
     path: 'mapa',
     component: MapaComponent
+  },
+  {
+    path: 'blogs',
+    component: BlogsComponent
   }
-
-
-
 ];
 
 @NgModule({

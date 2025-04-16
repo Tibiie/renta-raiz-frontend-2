@@ -37,8 +37,6 @@ export class ModalCrearContactoComponent {
     this.codPro = codPro;
     this.accion = accion;
 
-    console.log('Abriendo modal:', codPro, 'Acción:', accion);
-
     const yaEnviado = this.contactoEnviadoPorCodPro[codPro];
 
     if (accion === 'telefonos' && yaEnviado) {
@@ -51,7 +49,6 @@ export class ModalCrearContactoComponent {
 
   cerrarModal() {
     this.visible = false;
-    console.log('Cerrando modal');
   }
 
   abrirModalTelefonos() {
@@ -85,11 +82,8 @@ export class ModalCrearContactoComponent {
       fuente: 'propiedad',
     };
 
-    console.log('Objeto a enviar:', obj);
-
     this.inmuebleService.createContacto(obj).subscribe(
       (response: any) => {
-        console.log('Contacto enviado:', response);
         this.isLoading = false;
         this.cerrarModal();
 

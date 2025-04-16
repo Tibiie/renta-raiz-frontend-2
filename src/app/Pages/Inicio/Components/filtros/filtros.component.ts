@@ -65,6 +65,7 @@ export class FiltrosComponent implements OnInit {
 
   // Para Inmueble
   isEstateDropdownOpen = false;
+  isMobileView = window.innerWidth < 768;
   estateOptions: { code: string; name: string }[] = [];
   selectedEstates: { code: string; name: string }[] = [];
 
@@ -154,7 +155,6 @@ export class FiltrosComponent implements OnInit {
       console.error('Error al obtener datos:', error);
     }
   }
-  isMobileView = window.innerWidth < 768;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
@@ -180,7 +180,6 @@ export class FiltrosComponent implements OnInit {
 
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
-
 
     const drawer = document.getElementById('right-map-drawer');
     if (drawer) {
@@ -357,11 +356,8 @@ export class FiltrosComponent implements OnInit {
       page: pagina,
     };
 
-    console.log('Objeto a enviar:', obj);
-
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        console.log('filtros', response);
         this.resultados = response.data;
         this.totalDatos = response.total;
 
@@ -372,7 +368,6 @@ export class FiltrosComponent implements OnInit {
           (_, i) => i + 1
         );
 
-        console.log('Paginas', this.paginas);
         this.generarPaginas();
       },
       (error: any) => {
@@ -462,7 +457,6 @@ export class FiltrosComponent implements OnInit {
     this.inmueblesService.getCiudades().subscribe(
       (response: any) => {
         this.ciudades = response.data;
-        console.log("ciudades", response.data);
       },
       (error: any) => {
         console.error('Error al obtener las ciudades:', error);
@@ -474,7 +468,6 @@ export class FiltrosComponent implements OnInit {
     this.inmueblesService.getCategoriasInmuebles().subscribe(
       (response: any) => {
         this.categoriasInmuebles = response.data;
-        console.log('categorias', response.data);
 
         this.propertyOptions = response.data.map((cat: any) => {
           if (cat.code === '3') {
@@ -498,7 +491,6 @@ export class FiltrosComponent implements OnInit {
     this.inmueblesService.getTipoPropiedad().subscribe(
       (response: any) => {
         this.estateOptions = response.data;
-        console.log('tipoPropiedad', response.data);
 
         this.selectedEstates = this.estateOptions.length
           ? [this.estateOptions[0]]
@@ -511,7 +503,6 @@ export class FiltrosComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    console.log("codPro", codPro);
     this.router.navigate(['/ver-propiedad', codPro], {
       state: { codPro: codPro }
     });
@@ -523,7 +514,6 @@ export class FiltrosComponent implements OnInit {
 
   async cargarDesdeState(state: any) {
     if (state?.resultados) {
-      console.log('Estado recibido:', state);
       this.resultados = [...state.resultados];
       this.filtrosVistaInicial = state.filtros;
       this.paginacion = state.paginacion;
@@ -532,10 +522,6 @@ export class FiltrosComponent implements OnInit {
       this.totalPaginas = this.paginacion.last_page || 1;
       this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
       this.paginaActual = this.filtrosVistaInicial.page || 1;
-
-      console.log('Paginacion:', this.paginacion);
-      console.log('Filtros:', this.filtrosVistaInicial);
-      console.log('Resultados:', this.resultados);
 
       this.inmueblesService.setPropiedades(this.resultados);
 
@@ -555,5 +541,4 @@ export class FiltrosComponent implements OnInit {
 
     }
   }
-
 }

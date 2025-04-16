@@ -66,7 +66,6 @@ export class VerPropiedadComponent implements OnInit {
     this.initZoom();
     this.route.paramMap.subscribe((params) => {
       this.codPro = Number(params.get('codpro'));
-      console.log('CodPro:', this.codPro);
       this.getDatos();
     });
 
@@ -203,7 +202,6 @@ export class VerPropiedadComponent implements OnInit {
   getDatosPropiedad() {
     this.inmueblesService.getDatosPropiedad(this.codPro!).subscribe(
       (response: any) => {
-        console.log('propiedad', response.data);
         this.propiedad = response.data;
         this.prepararFiltros();
         this.enviarFiltros()
@@ -260,7 +258,6 @@ export class VerPropiedadComponent implements OnInit {
     codPro: number,
     accion: 'telefonos' | 'whatsapp' | 'soloEnviar'
   ) {
-    console.log('codPro', codPro, 'accion', accion);
     this.modalCrearContacto.abrirModal(codPro, accion);
   }
 
@@ -268,14 +265,11 @@ export class VerPropiedadComponent implements OnInit {
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('city', this.propiedad.city_code);
     this.filtrosSeleccionados.set('biz', this.propiedad.biz_code);
-
-    console.log('Filtros:', this.filtrosSeleccionados);
   }
 
   enviarFiltros() {
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = { ...filtrosObj, page: 1 };
-    console.log('Objeto a enviar:', obj);
 
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
@@ -288,11 +282,9 @@ export class VerPropiedadComponent implements OnInit {
             .subscribe((respuestaSiguiente: any) => {
               filtrados.push(...respuestaSiguiente.data.slice(0, faltantes));
               this.resultadosFiltros = filtrados;
-              console.log("Inmuebles completos:", this.resultadosFiltros);
             });
         } else {
           this.resultadosFiltros = filtrados;
-          console.log("Inmuebles completos:", this.resultadosFiltros);
         }
       },
       (error: any) => {
