@@ -1,1 +1,728 @@
-<p>vista-inicial works!</p>
+<app-navbar></app-navbar>
+
+<div class="flex flex-col">
+  <!-- Sección del video hero -->
+  <div class="banner-contacto w-full max-h-[77vh] overflow-hidden">
+    <div class="relative w-full pb-[56.25%] h-0">
+      <!-- Imagen de fondo (preload) -->
+      <img id="video-placeholder" src="assets/images/casa-finca.jpg"
+        class="absolute top-0 left-0 w-full h-full object-cover z-0 transition-opacity duration-700"
+        alt="Placeholder" />
+
+      <!-- Video iframe -->
+      <iframe id="vimeo-video"
+        src="https://player.vimeo.com/video/420041930?loop=1&autoplay=1&title=0&byline=0&portrait=0&background=1"
+        class="absolute top-0 left-0 w-full h-full object-cover z-10" frameborder="0" allow="autoplay; fullscreen">
+      </iframe>
+
+      <!-- Overlay con imagen adicional -->
+      <div class="absolute inset-0 bg-black/50 flex items-start justify-center pt-10 sm:pt-14 z-20">
+        <img src="assets/images/encuentra.png"
+          class="w-[100%] sm:w-full h-auto object-contain max-h-[70%] sm:max-h-[60%]" alt="Imagen" />
+      </div>
+
+      <!-- Botón -->
+      <div
+        class="absolute top-[65%] sm:top-[45%] left-1/2 transform -translate-x-1/2 flex items-center justify-center z-30">
+        <button type="button"
+          onclick="window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU')"
+          class="flex items-center justify-center text-white bg-[#CDAD60] hover:bg-[#CDAD60]/90 font-bold rounded-full text-xs px-3 py-2 sm:text-lg sm:px-8 sm:py-4 transition-all duration-300 transform hover:scale-105">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 sm:w-8 sm:h-8 sm:mr-3" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          CONTÁCTANOS
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de filtros -->
+  <div class="relative w-full flex justify-center mt-4 md:-mt-14 px-4 z-30">
+    <div class="bg-white rounded-lg p-6 w-full max-w-6xl shadow-2xl shadow-gray-600/40">
+      <div class="flex flex-col md:flex-row gap-4 items-end">
+        <!-- UBICACIÓN -->
+        <div class="w-full md:w-1/3">
+          <label for="ubicacion" class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+          <div class="relative">
+            <input type="text" id="ubicacion" [(ngModel)]="ubicacion"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#CDAD60] focus:border-[#CDAD60] pr-12"
+              placeholder="Ej. Medellin, Colombia" />
+          </div>
+        </div>
+
+        <!-- TIPO DE PROPIEDAD -->
+        <div class="relative w-full md:w-1/3">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de propiedad</label>
+          <button (click)="toggleDropdown('property')"
+            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+            <span>
+              <i [class]="getIcon('property', selectedProperty)" class="mr-2"></i>
+              {{
+              selectedProperty?.displayName || selectedProperty?.name
+              | titlecase
+              }}
+            </span>
+            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <div *ngIf="isPropertyDropdownOpen"
+            class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200">
+            <div class="p-4">
+              <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
+              <div class="grid grid-cols-2 gap-2">
+                <button *ngFor="let option of propertyOptions" (click)="selectOption('property', option)" [class]="
+                    getButtonClass(selectedProperty?.code === option.code)
+                  ">
+                  <i [class]="getIcon('property', option)" class="mr-2"></i>
+                  {{ option.displayName || option.name | titlecase }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INMUEBLE -->
+        <div class="relative w-full md:w-1/3">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Inmueble</label>
+          <button (click)="toggleDropdown('estate')"
+            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+            <span>
+              <i [class]="getIcon('estate', selectedEstate)" class="mr-2"></i>
+              {{
+              selectedEstate
+              ? (selectedEstate.name | titlecase)
+              : "Seleccionar"
+              }}
+            </span>
+            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <div *ngIf="isEstateDropdownOpen"
+            class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200">
+            <div class="p-4">
+              <p class="text-gray-500 text-sm font-medium mb-2">
+                Tipo de inmueble
+              </p>
+              <div class="grid grid-cols-2 gap-2">
+                <button *ngFor="let option of estateOptions" (click)="selectOption('estate', option)"
+                  [class]="getButtonClass(selectedEstate?.code === option.code)">
+                  <i [class]="getIcon('estate', option)" class="mr-2"></i>
+                  {{ option.name | titlecase }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón Buscar -->
+        <button type="button" (click)="redirigirFiltros()"
+          class="flex items-center justify-center mx-auto md:ml-auto text-white bg-[#080E36] hover:bg-[#CDAD60] font-bold rounded-full text-lg px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Buscar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de inmuebles destacados -->
+  <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4">
+    <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center w-full max-w-6xl">
+      Nuestros destacados
+    </h1>
+
+    <h2 class="text-2xl font-normal text-[#9a9b9c] text-center w-full max-w-6xl mt-4">
+      Encuentra tu lugar ideal
+    </h2>
+
+    <!-- Cards de propiedades -->
+    <div *ngIf="inmueblesDestacadosArray" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
+      <div *ngFor="let inmueble of inmueblesDestacadosArray.data"
+        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
+        <!-- Imagen con efecto hover -->
+        <div class="relative group">
+          <!-- Imagen -->
+          <a href="#">
+            <img class="rounded-t-lg w-full h-70 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+              [alt]="inmueble.address" />
+          </a>
+
+          <div
+            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+            <a class="cursor-pointer bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+              (click)="verPropiedad(inmueble.codpro)">
+              Ver propiedad
+            </a>
+          </div>
+
+          <div
+            class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]">
+            Destacado
+          </div>
+
+          <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+            <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
+              {{ inmueble.type | titlecase }}
+            </span>
+
+            <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+              <i class="fas fa-heart text-2xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-5">
+          <a href="#">
+            <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
+              {{ inmueble.neighborhood || "Sin barrio especificado" }}
+            </h5>
+            <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
+              {{ inmueble.description }}
+            </p>
+          </a>
+
+          <div class="flex justify-between text-[#080E36] mt-5">
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Habitaciones</span>
+              <div class="flex items-center">
+                <i class="fas fa-bed text-lg"></i>
+                <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Baños</span>
+              <div class="flex items-center">
+                <i class="fas fa-bath text-lg"></i>
+                <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Área</span>
+              <div class="flex items-center">
+                <i class="fas fa-ruler-combined text-lg"></i>
+                <span class="ml-2">{{
+                  inmueble.area_cons || inmueble.area_lot || "N/A"
+                  }}
+                  m²</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold">
+            <span>Precio:</span>
+            <span class="text-[#000000]">
+              {{
+              inmueble.price_format ||
+              (inmueble.price
+              | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+              "Consultar"
+              }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seccion de inmuebles en venta -->
+  <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4">
+    <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-4">
+      Nuestros inmuebles en venta
+    </h1>
+    <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
+      No sueñes, ¡hagamos que suceda!
+    </h2>
+    <!-- Cards de propiedades -->
+    <div *ngIf="inmueblesDestacadosArray" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
+      <div *ngFor="let inmueble of inmueblesVentasArray"
+        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
+        <!-- Imagen con efecto hover -->
+        <div class="relative group">
+          <!-- Imagen -->
+          <a href="#">
+            <img class="rounded-t-lg w-full h-70 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+              [alt]="inmueble.address" />
+          </a>
+
+          <div
+            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+            <a class="cursor-pointer bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+              (click)="verPropiedad(inmueble.codpro)">
+              Ver propiedad
+            </a>
+          </div>
+
+          <div
+            class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]">
+            {{ inmueble.biz | titlecase }}
+          </div>
+
+          <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+            <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
+              {{ inmueble.type | titlecase }}
+            </span>
+
+            <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+              <i class="fas fa-heart text-2xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-5">
+          <a href="#">
+            <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
+              {{ inmueble.neighborhood || "Sin barrio especificado" }}
+            </h5>
+            <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
+              {{ inmueble.description }}
+            </p>
+          </a>
+
+          <div class="flex justify-between text-[#080E36] mt-5">
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Habitaciones</span>
+              <div class="flex items-center">
+                <i class="fas fa-bed text-lg"></i>
+                <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Baños</span>
+              <div class="flex items-center">
+                <i class="fas fa-bath text-lg"></i>
+                <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Área</span>
+              <div class="flex items-center">
+                <i class="fas fa-ruler-combined text-lg"></i>
+                <span class="ml-2">{{
+                  inmueble.area_cons || inmueble.area_lot || "N/A"
+                  }}
+                  m²</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold">
+            <span>Precio:</span>
+            <span class="text-[#000000]">
+              {{
+              inmueble.price_format ||
+              (inmueble.price
+              | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+              "Consultar"
+              }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seccion de inmuebles en arriendo -->
+  <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4">
+    <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-4">
+      Nuestros inmuebles en arriendo
+    </h1>
+    <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
+      Somos la llave al hogar que buscas
+    </h2>
+    <div *ngIf="inmueblesArriendosArray" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
+      <div *ngFor="let inmueble of inmueblesArriendosArray"
+        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
+        <div class="relative group">
+          <a href="#">
+            <img class="rounded-t-lg w-full h-70 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+              [alt]="inmueble.address" />
+          </a>
+
+          <div
+            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+            <a class="cursor-pointer bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+              (click)="verPropiedad(inmueble.codpro)">
+              Ver propiedad
+            </a>
+          </div>
+
+          <div
+            class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]">
+            {{ inmueble.biz | titlecase }}
+          </div>
+
+          <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+            <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
+              {{ inmueble.type | titlecase }}
+            </span>
+
+            <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+              <i class="fas fa-heart text-2xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-5">
+          <a href="#">
+            <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
+              {{ inmueble.neighborhood || "Sin barrio especificado" }}
+            </h5>
+            <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
+              {{ inmueble.description }}
+            </p>
+          </a>
+
+          <div class="flex justify-between text-[#080E36] mt-5">
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Habitaciones</span>
+              <div class="flex items-center">
+                <i class="fas fa-bed text-lg"></i>
+                <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Baños</span>
+              <div class="flex items-center">
+                <i class="fas fa-bath text-lg"></i>
+                <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="text-sm font-semibold">Área</span>
+              <div class="flex items-center">
+                <i class="fas fa-ruler-combined text-lg"></i>
+                <span class="ml-2">{{
+                  inmueble.area_cons || inmueble.area_lot || "N/A"
+                  }}
+                  m²</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold">
+            <span>Precio:</span>
+            <span class="text-[#000000]">
+              {{
+              inmueble.price_format ||
+              (inmueble.price
+              | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+              "Consultar"
+              }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección azul con frase -->
+  <div class="relative w-full flex flex-col justify-center items-center py-20 md:py-48 my-10 md:my-20 overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full bg-[#060F29] z-0"
+      style="clip-path: polygon(0 10%, 100% 0%, 100% 90%, 0% 100%)"></div>
+
+    <img src="assets/images/frase3.png" alt="Texto decorativo"
+      class="w-[80%] sm:w-[60%] md:w-[50%] h-auto relative z-10 mb-8" />
+
+    <div class="flex flex-wrap justify-center gap-3 relative z-10">
+      <button type="button"
+        class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+        <i class="fas fa-envelope mr-2"></i> Contactanos
+      </button>
+
+      <button type="button"
+        class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+        <i class="fas fa-search mr-2"></i> Buscar Inmueble
+      </button>
+    </div>
+  </div>
+
+  <!-- Sección "Por qué elegirnos" -->
+  <div class="w-full flex flex-col items-center px-4 py-28 bg-white">
+    <!-- Título -->
+    <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center max-w-6xl mb-4">
+      ¿Por qué elegirnos?
+    </h1>
+
+    <!-- Subtítulo -->
+    <h2 class="text-lg sm:text-2xl text-[#9a9b9c] text-center max-w-4xl mb-12">
+      Porque en Renta Raíz, hacemos del lujo una experiencia sin complicaciones.
+    </h2>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full px-4">
+      <!-- Tarjeta 1 -->
+      <div
+        class="bg-white shadow-lg rounded-2xl p-6 text-center border-2 border-yellow-500 transition-transform duration-300 hover:scale-105">
+        <div class="flex justify-center mb-6">
+          <img src="assets/images/card1.png" alt="Visión" class="w-24 h-24 sm:w-28 sm:h-28 object-contain" />
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800">
+          Visión de Liderazgo en el Mercado de Lujo
+        </h3>
+        <p class="text-gray-600 mt-4">
+          Si hablamos de lujo, Renta Raíz es la mejor opción para encontrar
+          propiedades de alto valor o confiar en nosotros la gestión de
+          propiedades exclusivas.
+        </p>
+      </div>
+
+      <!-- Tarjeta 2 -->
+      <div
+        class="bg-white shadow-lg rounded-2xl p-6 text-center border-2 border-yellow-500 transition-transform duration-300 hover:scale-105">
+        <div class="flex justify-center mb-6">
+          <img src="assets/images/card2.png" alt="Experiencia" class="w-24 h-24 sm:w-28 sm:h-28 object-contain" />
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800">
+          Experiencia Personalizada
+        </h3>
+        <p class="text-gray-600 mt-4">
+          Nuestro equipo de asesores se especializa en ser personal shoppers
+          inmobiliarios, brindando una atención personalizada para una
+          experiencia fluida y sin preocupaciones.
+        </p>
+      </div>
+
+      <!-- Tarjeta 3 -->
+      <div
+        class="bg-white shadow-lg rounded-2xl p-6 text-center border-2 border-yellow-500 transition-transform duration-300 hover:scale-105">
+        <div class="flex justify-center mb-6">
+          <img src="assets/images/card3.png" alt="Marketing" class="w-24 h-24 sm:w-28 sm:h-28 object-contain" />
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800">
+          Publicidad y Marketing de Alto Impacto
+        </h3>
+        <p class="text-gray-600 mt-4">
+          Nos enfocamos en posicionar la marca y maximizar la visibilidad de
+          cada propiedad con estrategias innovadoras en redes sociales.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS DE MIEMBROS DEL EQUIPO -->
+  <section class="w-full px-4 py-16 bg-white flex flex-col items-center">
+    <h1 class="text-4xl md:text-5xl font-bold text-[#080E36] text-center mb-4">
+      Conoce al increíble equipo
+    </h1>
+    <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
+      Que nadie venga a nosotros sin irse mejor y más feliz
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-6xl">
+
+      <!-- Tarjeta -->
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300">
+        <img src="assets/images/JuanHoyos-rr24-210x210.jpg" alt="Juan Pablo Hoyos"
+          class="w-32 h-32 rounded-full object-cover" />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Juan Pablo Hoyos
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">350 223 9363</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">juanpabloh.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300">
+        <img src="assets/images/SebastianOspina-rr24-210x210.jpg" alt="Sebastián Ospina"
+          class="w-32 h-32 rounded-full object-cover" />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Sebastián Ospina
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">301 205 0207</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">sebas.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300">
+        <img src="assets/images/AndresAldana-rr24-210x210.jpg" alt="Andrés Felipe Aldana"
+          class="w-32 h-32 rounded-full object-cover" />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Andrés Felipe Aldana
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">323 224 4884</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">andres.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300">
+        <img src="assets/images/Lenys-rr24-210x210.jpg" alt="Lenys Cuberos"
+          class="w-32 h-32 rounded-full object-cover" />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Lenys Cuberos
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Coordinadora Comercial
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">314 543 8665</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">direccioncomercial.com&#64;gmail.com</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-8 w-full max-w-6xl mt-12">
+      <!-- Tarjeta -->
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300">
+        <img src="assets/images/AndresMejia-rr24-210x210.jpg" alt="Juan Pablo Hoyos"
+          class="w-32 h-32 rounded-full object-cover" />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Andres Mejia
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">311 785 8793</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">andresmejia.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300">
+        <img src="assets/images/DavidPelaez-rr24-210x210.jpg" alt="Sebastián Ospina"
+          class="w-32 h-32 rounded-full object-cover" />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          David Peláez
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">300 202 5783</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm"> david.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300">
+        <img src="assets/images/JuanOspina-rr24-210x210.jpg" alt="Andrés Felipe Aldana"
+          class="w-32 h-32 rounded-full object-cover" />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Juan Pablo Ospina
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm"> 350 223 9393</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">Juanpablo.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGEN DE CASA FINCA CON FRASE -->
+  <div class="relative w-full flex flex-col justify-center items-center py-48 mt-[-2px] overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full z-0" style="
+        background-image: url('assets/images/casa-finca.jpg');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.5;
+        filter: blur(2px);
+        clip-path: polygon(0 10%, 100% 0%, 100% 90%, 0% 100%);
+      "></div>
+
+    <div class="absolute top-0 left-0 w-full h-full bg-[#060F29]/90 z-0"
+      style="clip-path: polygon(0 10%, 100% 0%, 100% 90%, 0% 100%)"></div>
+
+    <img src="assets/images/frase-confia.png" alt="Texto decorativo"
+      class="w-[80%] sm:w-[60%] md:w-[50%] h-auto relative z-10 mb-8" />
+
+    <div class="flex gap-3 justify-center relative z-10 space-x-4">
+      <button type="button"
+        class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-lg px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+        <i class="fas fa-search mr-2"></i> Buscar Inmueble
+      </button>
+    </div>
+  </div>
+
+  <!-- Sección nuestros aliados -->
+  <section class="bg-gray-50 py-10">
+    <div class="max-w-screen-xl mx-auto text-center">
+      <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] mb-4">
+        Nuestros Aliados
+      </h1>
+      <h2 class="text-lg sm:text-2xl text-[#9a9b9c] mb-12">
+        Tenemos el honor de poder contar con nuestros socios
+      </h2>
+
+      <div class="relative mt-8">
+        <div class="overflow-hidden relative h-44">
+          <div *ngFor="let grupo of getAliadosPorGrupo(); let i = index"
+            class="flex items-center justify-center space-x-20 absolute top-0 left-0 w-full transition-opacity duration-700"
+            [class.opacity-0]="currentSlide !== i" [class.opacity-100]="currentSlide === i">
+            <img *ngFor="let aliado of grupo" [src]="aliado"
+              class="h-36 w-auto object-contain transition-transform duration-300" alt="Logo aliado" />
+          </div>
+        </div>
+
+        <!-- Indicadores -->
+        <div class="flex justify-center items-center space-x-3 mt-4">
+          <button *ngFor="let _ of getAliadosPorGrupo(); let i = index" type="button" class="w-3 h-3 rounded-full"
+            [ngClass]="currentSlide === i ? 'bg-blue-700' : 'bg-gray-300'" (click)="goToSlide(i)"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <app-footer></app-footer>
+</div>
+
+<app-botones-flotantes></app-botones-flotantes>

@@ -1,17 +1,16 @@
 import { Routes } from '@angular/router';
-import { VistaInicialComponent } from './Pages/Inicio/Components/vista-inicial/vista-inicial.component';
+import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () =>
+      import('./Pages/Inicio/inicio.routes').then((m) => m.InicioRoutingModule),
+  },
 
-    {
-        path: '',
-        redirectTo: 'vista-inicial',
-        pathMatch: 'full'
-    },
-
-    {
-        path: 'vista-inicial',
-        component: VistaInicialComponent
-
-    }
+  {
+    path: '**',
+    component: PageNotFoundComponent,
+  },
+ 
 ];

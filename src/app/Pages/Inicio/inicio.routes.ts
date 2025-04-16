@@ -1,0 +1,53 @@
+import { RouterModule, Routes } from '@angular/router';
+import { VistaInicialComponent } from './Components/vista-inicial/vista-inicial.component';
+import { NgModule } from '@angular/core';
+import { FiltrosComponent } from './Components/filtros/filtros.component';
+import { ContactanosComponent } from './Components/contactanos/contactanos.component';
+import { VerPropiedadComponent } from './Components/ver-propiedad/ver-propiedad.component';
+import { NuestroEquipoComponent } from './Components/nuestro-equipo/nuestro-equipo.component';
+import { QuienesSomosComponent } from './Components/quienes-somos/quienes-somos.component';
+import { MapaComponent } from './Components/mapa/mapa.component';
+
+export const routes: Routes = [
+
+  { path: '', redirectTo: 'venta', pathMatch: 'full' },
+
+  {
+    path: 'venta',
+    component: VistaInicialComponent
+  },
+
+  {
+    path: 'filtros',
+    component: FiltrosComponent
+  },
+  {
+    path: 'contacto',
+    component: ContactanosComponent
+  },
+  {
+    path: 'ver-propiedad/:codpro',
+    component: VerPropiedadComponent
+  },
+  {
+    path: 'nuestro-equipo',
+    component: NuestroEquipoComponent
+  },
+  {
+    path: 'quienes-somos',
+    component: QuienesSomosComponent
+  },
+  {
+    path: 'mapa',
+    component: MapaComponent
+  }
+
+
+
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class InicioRoutingModule { }

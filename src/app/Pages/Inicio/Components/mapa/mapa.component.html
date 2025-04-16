@@ -1,0 +1,8 @@
+<google-map #map height="600px" width="1000px" [center]="center" [zoom]="zoom">
+  <map-marker *ngFor="let m of markers"
+              [position]="m.position"
+              [icon]="m.icon" (mapClick)="verDetalle(m.propiedad)">
+  </map-marker>
+</google-map>
+
+<div id="street-view" style="height: 500px; width: 100%"></div>
