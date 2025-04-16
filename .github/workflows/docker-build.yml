@@ -34,7 +34,7 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        cd renta_raiz_frontend-2 # Cambia esto al directorio de tu aplicación Angular
+        # cd renta_raiz_frontend-2 # Cambia esto al directorio de tu aplicación Angular
         docker build -t duhudico/renta_raiz_frontend_2 .
         docker push duhudico/renta_raiz_frontend-2
       env:
