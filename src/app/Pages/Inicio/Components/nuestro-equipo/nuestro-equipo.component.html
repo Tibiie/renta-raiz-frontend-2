@@ -2,25 +2,21 @@
 
 <div class="flex flex-col">
   <section class="banner-contacto relative flex items-center justify-center">
-    <div class="overlay relative flex flex-col items-center justify-center">
-      <img
-        src="assets/images/1.TEXTslider.png"
-        alt="Contáctanos"
-        class="w-full max-w-8xl animate-fade-in"
-      />
-
+    <div class="overlay relative flex flex-col items-center justify-center w-full px-4">
+      <!-- Imagen de texto con tamaño aumentado en móvil -->
+      <img src="assets/images/1.TEXTslider.png" 
+           alt="Contáctanos"
+           class="w-full max-w-4xl md:max-w-6xl lg:max-w-8xl animate-fade-in scale-125 md:scale-100 transform origin-center" />
+  
+      <!-- Botón reposicionado -->
       <button
         type="button"
-        (click)="
-          abrirPestana(
-            'https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU'
-          )
-        "
-        class="absolute top-[40%] sm:top-[75%] flex items-center justify-center text-white bg-[#CDAD60] hover:bg-[#CDAD60]/90 font-bold rounded-full text-xs px-3 py-2 sm:text-lg sm:px-8 sm:py-4 transition-all duration-300 transform hover:scale-105"
+        (click)="abrirPestana('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU')"
+        class="mt-12 md:absolute md:top-[75%] flex items-center justify-center text-white bg-[#CDAD60] hover:bg-[#CDAD60]/90 font-bold rounded-full text-sm px-6 py-3 sm:text-lg sm:px-8 sm:py-4 transition-all duration-300 transform hover:scale-105"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4 mr-1 sm:w-8 sm:h-8 sm:mr-3"
+          class="w-6 h-6 mr-2 sm:w-8 sm:h-8 sm:mr-3"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
