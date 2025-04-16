@@ -36,7 +36,7 @@ jobs:
       run: |
         
         docker build -t duhudico/renta_raiz_frontend_2 .
-        docker push duhudico/renta_raiz_frontend-2
+        docker push duhudico/renta_raiz_frontend_2
       env:
         DOCKER_BUILDKIT: 1
 
