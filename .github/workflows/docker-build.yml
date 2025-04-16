@@ -20,11 +20,11 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-      working-directory: ./renta_raiz_frontend-2 # Cambia esto al directorio de tu aplicación Angular
+      # working-directory: ./renta_raiz_frontend-2 # Cambia esto al directorio de tu aplicación Angular
 
     - name: Build Angular app
       run: npm run build --prod
-      working-directory: ./renta_raiz_frontend-2 # Cambia esto al directorio de tu aplicación Angular
+      # working-directory: ./renta_raiz_frontend-2 # Cambia esto al directorio de tu aplicación Angular
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
