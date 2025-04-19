@@ -2,7 +2,7 @@ export const token = 'APP_PORTAL_RENTA_Wm1SaFptbGhhR1pyYUd4aGJHUm0=_YmYyZjMzNjAt
 
 export const environment = {
   production: false,
-  baseUrl: 'https://apiportalrenta.duckdns.org/api/v1',
+  baseUrl: 'http://portal.rentaraiz.co/api/v1',
 };
 
 export const conexionVault = {
