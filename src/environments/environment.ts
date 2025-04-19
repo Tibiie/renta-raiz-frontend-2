@@ -2,7 +2,7 @@ export const token = 'APP_PORTAL_RENTA_Wm1SaFptbGhhR1pyYUd4aGJHUm0=_YmYyZjMzNjAt
 
 export const environment = {
   production: false,
-  baseUrl: 'http://rentaraiz.com/api/v1',
+  baseUrl: 'http://rentaraiz.io/api/v1',
 };
 
 export const conexionVault = {
