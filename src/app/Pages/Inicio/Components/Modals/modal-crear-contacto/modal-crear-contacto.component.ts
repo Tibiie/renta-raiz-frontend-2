@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { InmueblesService } from '../../../../../core/Inmuebles/inmuebles.service';
 import { FormBuilder, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-crear-contacto',
@@ -64,6 +65,16 @@ export class ModalCrearContactoComponent {
   enviarContacto() {
     this.isLoading = true;
 
+    if (!this.contacto.valid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Complete todos los campos',
+        text: 'Estas enviando campos vacios o invalidos en el formulario!',
+        draggable: false,
+      });
+      return;
+    }
+
     const obj = {
       nombre: this.contacto.value.nombre,
       email: this.contacto.value.email,
@@ -87,6 +98,12 @@ export class ModalCrearContactoComponent {
         }
 
         if (this.accion === 'soloEnviar') {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Gracias!',
+            text: 'Tu mensaje ha sido enviado con éxito!',
+            draggable: true,
+          });
           return;
         }
 

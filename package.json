@@ -31,6 +31,7 @@
     "ngx-ui-loader": "^13.0.0",
     "renta-raiz-frontend-2": "file:",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.18.0",
     "swiper": "^11.2.6",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

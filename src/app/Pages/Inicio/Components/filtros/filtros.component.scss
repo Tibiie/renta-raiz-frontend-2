@@ -16,3 +16,22 @@
     background-color: #b59a50;
   }
   
+  /* Asegurar que el drawer no desplace el contenido en móvil */
+  @media (max-width: 767px) {
+    #modern-drawer {
+      top: 0;
+      height: 100vh;
+      max-height: 100vh !important;
+      width: 90%;
+      border-right: 1px solid #cdad60;
+    }
+    
+    #modern-drawer .flex-1 {
+      max-height: calc(100vh - 120px) !important;
+    }
+    
+    #modern-drawer .sticky.bottom-0 {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+

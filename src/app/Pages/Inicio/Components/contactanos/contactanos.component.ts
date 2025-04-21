@@ -3,12 +3,15 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
+import { FooterComponent } from "../../../../shared/footer/footer.component";
+import Swal from 'sweetalert2';
 
 
 @Component({
   selector: 'app-contactanos',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, BotonesFlotantesComponent, FooterComponent],
   templateUrl: './contactanos.component.html',
   styleUrl: './contactanos.component.scss'
 })
@@ -31,6 +34,16 @@ export class ContactanosComponent {
   });
 
   createContacto() {
+    if (this.formContacto.invalid) {
+      Swal.fire({
+        icon: "error",
+        title: "Complete todos los campos",
+        text: "Estas enviando campos vacios o invalidos en el formulario!",
+        draggable: false,
+      });
+      return;
+    }
+
     const obj = {
       nombre: this.formContacto.get('nombre')?.value,
       email: this.formContacto.get('email')?.value,
@@ -43,11 +56,12 @@ export class ContactanosComponent {
       (response: any) => {
         console.log("contacto", response);
         this.vaciarFormulario();
-        this.mostrarAlerta = true;
-
-        setTimeout(() => {
-          this.mostrarAlerta = false;
-        }, 4000);
+        Swal.fire({
+          icon: "success",
+          title: "¡Gracias!",
+          text: "Tu mensaje ha sido enviado con éxito!",
+          draggable: true,
+        });
       },
       (error: any) => {
         console.error('Error al enviar el contacto:', error);

@@ -1,39 +1,229 @@
 <app-navbar></app-navbar>
 
 <div class="flex flex-col">
-    <section class="banner-contacto relative flex items-center justify-center">
-        <div class="overlay relative flex flex-col items-center justify-center">
-          <img
-            src="assets/images/1.TEXTslider.png"
-            alt="Contáctanos"
-            class="w-full max-w-8xl animate-fade-in"
+  <section class="banner-contacto relative flex items-center justify-center">
+    <div class="overlay relative flex flex-col items-center justify-center w-full px-4">
+      <!-- Imagen de texto con tamaño aumentado en móvil -->
+      <img src="assets/images/1.TEXTslider.png" 
+           alt="Contáctanos"
+           class="w-full max-w-4xl md:max-w-6xl lg:max-w-8xl animate-fade-in scale-125 md:scale-100 transform origin-center" />
+  
+      <!-- Botón reposicionado -->
+      <button
+        type="button"
+        (click)="abrirPestana('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU')"
+        class="mt-12 md:absolute md:top-[75%] flex items-center justify-center text-white bg-[#CDAD60] hover:bg-[#CDAD60]/90 font-bold rounded-full text-sm px-6 py-3 sm:text-lg sm:px-8 sm:py-4 transition-all duration-300 transform hover:scale-105"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-6 h-6 mr-2 sm:w-8 sm:h-8 sm:mr-3"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2 2v10a2 2 0 002 2z"
           />
-    
-          <button
-            type="button"
-            (click)="
-              abrirPestana(
-                'https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU'
-              )
-            "
-            class="absolute top-[40%] sm:top-[75%] flex items-center justify-center text-white bg-[#CDAD60] hover:bg-[#CDAD60]/90 font-bold rounded-full text-xs px-3 py-2 sm:text-lg sm:px-8 sm:py-4 transition-all duration-300 transform hover:scale-105"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-4 h-4 mr-1 sm:w-8 sm:h-8 sm:mr-3"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
-            </svg>
-            CONTÁCTANOS
-          </button>
+        </svg>
+        CONTÁCTANOS
+      </button>
+    </div>
+  </section>
+
+  <!-- CARDS DE MIEMBROS DEL EQUIPO -->
+  <section class="w-full px-4 py-40 bg-white flex flex-col items-center">
+    <h1 class="text-4xl md:text-5xl font-bold text-[#080E36] text-center mb-4">
+      Conoce al increíble equipo
+    </h1>
+    <h2
+      class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12"
+    >
+      Que nadie venga a nosotros sin irse mejor y más feliz
+    </h2>
+
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-6xl"
+    >
+      <!-- Tarjeta -->
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300"
+      >
+        <img
+          src="assets/images/JuanHoyos-rr24-210x210.jpg"
+          alt="Juan Pablo Hoyos"
+          class="w-32 h-32 rounded-full object-cover"
+        />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Juan Pablo Hoyos
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">350 223 9363</span>
         </div>
-      </section>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">juanpabloh.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300"
+      >
+        <img
+          src="assets/images/SebastianOspina-rr24-210x210.jpg"
+          alt="Sebastián Ospina"
+          class="w-32 h-32 rounded-full object-cover"
+        />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Sebastián Ospina
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">301 205 0207</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">sebas.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300"
+      >
+        <img
+          src="assets/images/AndresAldana-rr24-210x210.jpg"
+          alt="Andrés Felipe Aldana"
+          class="w-32 h-32 rounded-full object-cover"
+        />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Andrés Felipe Aldana
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">323 224 4884</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">andres.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300"
+      >
+        <img
+          src="assets/images/Lenys-rr24-210x210.jpg"
+          alt="Lenys Cuberos"
+          class="w-32 h-32 rounded-full object-cover"
+        />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Lenys Cuberos
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Coordinadora Comercial
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">314 543 8665</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">direccioncomercial.com&#64;gmail.com</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-8 w-full max-w-6xl mt-12">
+      <!-- Tarjeta -->
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300"
+      >
+        <img
+          src="assets/images/AndresMejia-rr24-210x210.jpg"
+          alt="Juan Pablo Hoyos"
+          class="w-32 h-32 rounded-full object-cover"
+        />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Andres Mejia
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">311 785 8793</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">andresmejia.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300"
+      >
+        <img
+          src="assets/images/DavidPelaez-rr24-210x210.jpg"
+          alt="Sebastián Ospina"
+          class="w-32 h-32 rounded-full object-cover"
+        />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          David Peláez
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm">300 202 5783</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm"> david.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl shadow-md p-8 py-10 flex flex-col items-center transition hover:scale-105 duration-300"
+      >
+        <img
+          src="assets/images/JuanOspina-rr24-210x210.jpg"
+          alt="Andrés Felipe Aldana"
+          class="w-32 h-32 rounded-full object-cover"
+        />
+        <h3 class="text-lg font-bold text-gray-900 mt-4 text-center">
+          Juan Pablo Ospina
+        </h3>
+        <p class="text-sm font-medium text-gray-900 text-center">
+          Ejecutivo Comercial de Alto Valor
+        </p>
+        <div class="flex items-center text-gray-600 mt-2">
+          <i class="fa-solid fa-phone text-lg"></i>
+          <span class="ml-2 text-sm"> 350 223 9393</span>
+        </div>
+        <div class="flex items-center text-gray-600 mt-1">
+          <i class="fa-solid fa-envelope text-lg"></i>
+          <span class="ml-2 text-sm">Juanpablo.rentaraiz&#64;gmail.com</span>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
+
+<app-footer></app-footer>
+
+<app-botones-flotantes></app-botones-flotantes>
+

@@ -13,6 +13,7 @@ import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 export class NavbarComponent implements OnInit {
   isScrolled = false;
   elementsPerPage = 12;
+  showDestacadosDropdown = false;
   showNosotrosDropdown = false;
   showClientesDropdown = false;
   @Input() alwaysScrolled = false;
@@ -57,6 +58,11 @@ export class NavbarComponent implements OnInit {
     this.showClientesDropdown = !this.showClientesDropdown;
   }
 
+  toggleDestacadosDropdown(event: MouseEvent) {
+    event.preventDefault();
+    this.showDestacadosDropdown = !this.showDestacadosDropdown;
+  }
+
   closeDropdown() {
     this.showNosotrosDropdown = false;
   }
@@ -79,8 +85,14 @@ export class NavbarComponent implements OnInit {
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
-        this._router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this._router.navigate(['/filtros'], {
+            state: {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          });
         });
       },
       (error: any) => {
@@ -102,8 +114,14 @@ export class NavbarComponent implements OnInit {
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log("filtros", response.data);
-        this._router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this._router.navigate(['/filtros'], {
+            state: {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          });
         });
       },
       (error: any) => {
@@ -112,26 +130,39 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  enviarFiltroDestacados() {
-    this.filtrosInmueblesDestacados.clear();
-    this.filtrosInmueblesDestacados.set('biz', '1');
+  // enviarFiltroDestacados(tipo: string) {
+  //   this.filtrosInmueblesDestacados.clear();
 
-    const filtrosObj = Object.fromEntries(this.filtrosInmueblesDestacados);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    }
-    console.log('Objeto a enviar:', obj);
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
-      (response: any) => {
-        console.log("filtros", response.data);
-        this._router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
-        });
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
-  }
+  //   if (tipo === 'arriendo') {
+  //     this.filtrosInmueblesDestacados.set('biz', '1');
+  //   }
+
+  //   if (tipo === 'venta') {
+  //     this.filtrosInmueblesDestacados.set('biz', '2');
+  //   }
+
+  //   const filtrosObj = Object.fromEntries(this.filtrosInmueblesDestacados);
+  //   const obj = {
+  //     ...filtrosObj,
+  //     page: 1,
+  //   }
+  //   console.log('Objeto a enviar:', obj);
+  //   this.inmueblesService.getInmueblesDestacados(obj, this.elementsPerPage).subscribe(
+  //     (response: any) => {
+  //       console.log("filtros", response.data);
+  //       this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+  //         this._router.navigate(['/filtros'], {
+  //           state: {
+  //             resultados: response.data,
+  //             paginacion: response,
+  //             filtros: obj,
+  //           },
+  //         });
+  //       });
+  //     },
+  //     (error: any) => {
+  //       console.error('Error al enviar los filtros:', error);
+  //     }
+  //   );
+  // }
 }
