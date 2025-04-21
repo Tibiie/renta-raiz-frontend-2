@@ -7,6 +7,8 @@ import { environment } from '../../../environments/environment';
 })
 export class InmueblesService {
 
+  
+
   Propiedades: any[] = [];
 
   http = inject(HttpClient);
@@ -55,4 +57,7 @@ export class InmueblesService {
   getPropiedades() {
     return this.Propiedades;
   }
+
+
+ 
 }

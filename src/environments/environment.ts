@@ -3,7 +3,7 @@ export const token =
 
 export const environment = {
   production: false,
-  baseUrl: 'http://portal.rentaraiz.co/api/v1',
+  baseUrl: 'http://portalbackend.duckdns.org/api/v1',
 };
 
 export const conexionVault = {

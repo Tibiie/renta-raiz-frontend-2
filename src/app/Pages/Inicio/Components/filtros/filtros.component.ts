@@ -1,3 +1,4 @@
+declare var fbq: Function;
 import {
   ChangeDetectorRef,
   Component,
@@ -23,6 +24,7 @@ import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geoloca
   styleUrl: './filtros.component.scss',
 })
 export class FiltrosComponent implements OnInit {
+  
   AreaMinima = '';
   AreaMaxima = '';
   precioVenta = '';
@@ -554,10 +556,24 @@ export class FiltrosComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
+
+
     console.log("codPro", codPro);
     this.router.navigate(['/ver-propiedad', codPro], {
       state: { codPro: codPro }
     });
+
+    var inm = this.inmueblesService.getPropiedades().find(i => i.codpro === codPro);
+
+    var obj = {
+      "content_name": codPro,
+      "address": inm.address,
+      "price": inm.price_format,
+    };
+
+
+    this.crearEventoFacebook('track', 'Lead', obj);
+
   }
 
   borrarFiltros() {
@@ -597,6 +613,11 @@ export class FiltrosComponent implements OnInit {
       this.cdRef.detectChanges();
 
     }
+  }
+
+
+  crearEventoFacebook(evento: string, valor: string, valor2: any) {
+    fbq(evento, evento, valor2);
   }
 
 }

@@ -1,3 +1,5 @@
+declare var fbq: Function;
+
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -314,6 +316,9 @@ export class VistaInicialComponent implements OnInit {
   redirigirFiltros() {
     this.prepararFiltros();
     this.getEnviarFiltros();
+    fbq('trackCustom', 'FiltrosInmueble', {
+      custom_param: `${this.ubicacion}`,
+    });
   }
 
   getAliadosPorGrupo(): string[][] {
@@ -345,4 +350,11 @@ export class VistaInicialComponent implements OnInit {
       state: { codPro: codPro }
     });
   }
+
+  enviarWhatsapp() {
+    fbq('track', 'Contact');
+    window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU');
+  }
+
+  
 }
