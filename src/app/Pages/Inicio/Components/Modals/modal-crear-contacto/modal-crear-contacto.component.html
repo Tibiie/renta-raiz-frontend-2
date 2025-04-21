@@ -21,80 +21,16 @@
 
             <!-- Modal body -->
             <div class="p-4 md:p-5">
-                <form class="space-y-6" [formGroup]="contacto">
-                    <!-- Input Nombre -->
-                    <div class="relative z-0 w-full group">
-                        <input type="text" id="nombre" name="nombre" formControlName="nombre"
-                            class="block py-3 px-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 peer"
-                            required />
-                        <label for="nombre"
-                            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 left-4 bg-white px-1 z-10 origin-[0] peer-focus:left-4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
-                            Tu nombre
-                        </label>
-                    </div>
-
-                    <!-- Input Email -->
-                    <div class="relative z-0 w-full group">
-                        <input type="email" id="email" name="email" formControlName="email"
-                            class="block py-3 px-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 peer"
-                            required />
-                        <label for="email"
-                            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 left-4 bg-white px-1 z-10 origin-[0] peer-focus:left-4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
-                            Correo electrónico
-                        </label>
-                    </div>
-
-                    <!-- Input Teléfono -->
-                    <div class="relative z-0 w-full group">
-                        <input type="text" id="telefono" name="telefono" formControlName="telefono"
-                            class="block py-3 px-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 peer"
-                            required />
-                        <label for="telefono"
-                            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 left-4 bg-white px-1 z-10 origin-[0] peer-focus:left-4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
-                            Tu número de teléfono
-                        </label>
-                    </div>
-
-                    <!-- Input Cédula -->
-                    <div class="relative z-0 w-full group">
-                        <input type="text" id="cedula" name="cedula" formControlName="cedula"
-                            class="block py-3 px-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 peer"
-                            required />
-                        <label for="cedula"
-                            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 left-4 bg-white px-1 z-10 origin-[0] peer-focus:left-4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
-                            Tu número de cédula
-                        </label>
-                    </div>
-
-                    <!-- Textarea Mensaje -->
-                    <div class="relative z-0 w-full group">
-                        <textarea id="mensaje" name="mensaje" rows="4" formControlName="mensaje"
-                            class="block py-3 px-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 peer"
-                            required></textarea>
-                        <label for="mensaje"
-                            class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 left-4 bg-white px-1 z-10 origin-[0] peer-focus:left-4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
-                            Escribe tu mensaje aquí
-                        </label>
-                    </div>
-                    <button type="submit" (click)="enviarContacto()" [disabled]="isLoading"
-                        class="w-full flex justify-center items-center gap-2 rounded-md bg-[#080E36] px-4 py-2 text-white hover:bg-[#080E36] focus:outline-none focus:ring-2 focus:ring-[#080E36] focus:ring-opacity-50">
-
-                        <ng-container *ngIf="!isLoading; else loading">
-                            Enviar
-                        </ng-container>
-
-                        <ng-template #loading>
-                            <svg class="w-5 h-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
-                                </path>
-                            </svg>
-                        </ng-template>
-                    </button>
-                </form>
+                <iframe src="https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
+                    style="width:100%;height:600px;border:none;border-radius:3px" id="inline-9SRYMPh2FynzdxY045gg"
+                    data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-trigger-value=""
+                    data-activation-type="alwaysActivated" data-activation-value=""
+                    data-deactivation-type="neverDeactivate" data-deactivation-value="" data-form-name="Leads"
+                    data-height="432" data-layout-iframe-id="inline-9SRYMPh2FynzdxY045gg"
+                    data-form-id="9SRYMPh2FynzdxY045gg" title="Leads">
+                </iframe>
             </div>
+
         </div>
     </div>
 </div>
