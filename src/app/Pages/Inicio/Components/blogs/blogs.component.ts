@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import { AfterContentInit, Component, inject, OnInit } from '@angular/core';
+import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -10,12 +10,17 @@ import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/
 @Component({
   selector: 'app-blogs',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent, BotonesFlotantesComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NavbarComponent,
+    FooterComponent,
+    BotonesFlotantesComponent,
+  ],
   templateUrl: './blogs.component.html',
-  styleUrl: './blogs.component.scss'
+  styleUrl: './blogs.component.scss',
 })
-export class BlogsComponent {
-
+export class BlogsComponent implements OnInit {
   elementsPerPage = 12;
   ubicacion: string = '';
   filtrosSeleccionados: Map<string, any> = new Map();
@@ -26,13 +31,17 @@ export class BlogsComponent {
 
   // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
-  selectedProperty: { code: string, name: string, displayName?: string } | null = null;
-  propertyOptions: { code: string, name: string, displayName?: string }[] = [];
+  selectedProperty: {
+    code: string;
+    name: string;
+    displayName?: string;
+  } | null = null;
+  propertyOptions: { code: string; name: string; displayName?: string }[] = [];
 
   // Para tipos de propiedades
   isEstateDropdownOpen = false;
-  selectedEstate: { code: string, name: string } | null = null;
-  estateOptions: { code: string, name: string }[] = [];
+  selectedEstate: { code: string; name: string } | null = null;
+  estateOptions: { code: string; name: string }[] = [];
 
   private readonly icons = {
     property: {
@@ -54,8 +63,8 @@ export class BlogsComponent {
       '11': 'fas fa-car',
       '12': 'fas fa-umbrella-beach',
       '13': 'fas fa-store',
-      '14': 'fas fa-home'
-    } as Record<string, string>
+      '14': 'fas fa-home',
+    } as Record<string, string>,
   };
 
   // Injectaciones
@@ -63,7 +72,7 @@ export class BlogsComponent {
   router = inject(Router);
 
   ngOnInit(): void {
-    this.getDatos()
+    this.getDatos();
   }
 
   getDatos() {
@@ -96,7 +105,9 @@ export class BlogsComponent {
           return cat;
         });
 
-        const defaultOption = this.propertyOptions.find(cat => cat.code === '3') || this.propertyOptions[0];
+        const defaultOption =
+          this.propertyOptions.find((cat) => cat.code === '3') ||
+          this.propertyOptions[0];
         this.selectedProperty = defaultOption;
       },
       (error: any) => {
@@ -123,14 +134,14 @@ export class BlogsComponent {
 
     const limpiarTexto = (texto: string) => {
       return texto
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
         .trim()
         .toLowerCase();
     };
 
-    const ciudad = this.ciudades.find(c =>
-      limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
+    const ciudad = this.ciudades.find(
+      (c) => limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
     );
     var codigo = ciudad?.code;
 
@@ -152,11 +163,15 @@ export class BlogsComponent {
     const obj = {
       ...filtrosObj,
       page: 1,
-    }
+    };
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         this.router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+          state: {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
         });
       },
       (error: any) => {
@@ -181,23 +196,26 @@ export class BlogsComponent {
   getIcon(type: 'property' | 'estate', option: any): string {
     const defaultIcons = {
       property: 'fas fa-home',
-      estate: 'fas fa-question-circle'
+      estate: 'fas fa-question-circle',
     };
 
     if (!option && type === 'property') {
       return 'fas fa-list-ul';
     }
 
-    const code = typeof option === 'object' ? option.code : '';
-    const iconMap = this.icons[type];
+    console.log(option);
 
-    return iconMap?.[code] || defaultIcons[type];
+    if (option) {
+      const code = typeof option === 'object' ? option.code : '';
+      const iconMap = this.icons[type];
+
+      return iconMap?.[code] || defaultIcons[type];
+    } else {
+      return '';
+    }
   }
 
-  selectOption(
-    type: 'property' | 'estate',
-    option: any
-  ): void {
+  selectOption(type: 'property' | 'estate', option: any): void {
     if (type === 'property') {
       this.selectedProperty = option;
       this.isPropertyDropdownOpen = false;
@@ -222,6 +240,12 @@ export class BlogsComponent {
     return selected
       ? `${base} bg-[#080E36] text-white`
       : `${base} bg-blue-100 text-blue-700`;
+  }
+
+  verPropiedad(codPro: number) {
+    this.router.navigate(['/ver-propiedad', codPro], {
+      state: { codPro: codPro },
+    });
   }
 
   redirigirFiltros() {
