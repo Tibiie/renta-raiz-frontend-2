@@ -203,6 +203,9 @@ export class VerPropiedadComponent implements OnInit {
     this.inmueblesService.getDatosPropiedad(this.codPro!).subscribe(
       (response: any) => {
         this.propiedad = response.data;
+
+        console.log('propiedad', this.propiedad);
+
         this.prepararFiltros();
         this.enviarFiltros()
       },

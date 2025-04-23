@@ -394,25 +394,40 @@
     <div class="w-full md:w-2/3 pt-4 px-6 pb-6 bg-white rounded-lg shadow-md text-[#080E36]">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
         <!-- Card -->
+        @if (propiedad.parking > 0) {
         <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
           <div class="flex flex-col items-center">
             <i class="fas fa-car text-xl mb-2" style="color: #cdad60"></i>
             <span class="text-sm font-medium text-gray-600">Celdas de parqueo adicionales</span>
-            <span class="text-lg font-bold text-gray-800 mt-1">1</span>
+            <span class="text-lg font-bold text-gray-800 mt-1">{{propiedad.parking }}</span>
           </div>
         </div>
+        }
 
-        <!-- Admin incluida -->
+        <!-- Administracion incluida -->
+        @if (propiedad.administration == 0) {
         <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
           <div class="flex flex-col items-center">
             <i class="fas fa-file-invoice-dollar text-xl mb-2" style="color: #cdad60"></i>
-            <span class="text-sm font-medium text-gray-600">Admin incluida en arriendo</span>
+            <span class="text-sm font-medium text-gray-600">¿La administración está incluida?</span>
             <span class="text-lg font-bold text-gray-800 mt-1">Sí</span>
           </div>
         </div>
+        }
+
+        <!-- Administracion no incluida -->
+        @if (propiedad.administration > 0) {
+        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
+          <div class="flex flex-col items-center">
+            <i class="fas fa-file-invoice-dollar text-xl mb-2" style="color: #cdad60"></i>
+            <span class="text-sm font-medium text-gray-600">Valor de la administración</span>
+            <span class="text-lg font-bold text-gray-800 mt-1">{{ propiedad.administration | currency : "COP" :
+              "symbol-narrow" : "1.0-0" }}</span>
+          </div>
+        </div>
+        }
 
         <!-- Disponible en arriendo -->
-
         @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
         <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
           <div class="flex flex-col items-center">
