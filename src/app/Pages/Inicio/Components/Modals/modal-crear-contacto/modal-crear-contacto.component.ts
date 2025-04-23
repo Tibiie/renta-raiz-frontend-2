@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { InmueblesService } from '../../../../../core/Inmuebles/inmuebles.service';
 import { FormBuilder, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -15,6 +15,7 @@ export class ModalCrearContactoComponent {
 
   visible = false;
   isLoading = false;
+  iframeListo = false;
   mostrarModalTelefonos = false;
   private contactoEnviadoPorCodPro: { [codPro: number]: boolean } = {};
 
@@ -45,10 +46,28 @@ export class ModalCrearContactoComponent {
     }
 
     this.visible = true;
+
+    setTimeout(() => {
+      const iframe = document.getElementById('formIframe');
+      const container = document.getElementById('iframe-container');
+
+      if (iframe && container && !container.contains(iframe)) {
+        container.appendChild(iframe);
+        iframe.style.display = 'block';
+      }
+    }, 0);
   }
 
   cerrarModal() {
     this.visible = false;
+
+    const iframe = document.getElementById('formIframe');
+    const wrapper = document.getElementById('iframe-wrapper');
+
+    if (iframe && wrapper) {
+      wrapper.appendChild(iframe);
+      iframe.style.display = 'none';
+    }
   }
 
   abrirModalTelefonos() {
