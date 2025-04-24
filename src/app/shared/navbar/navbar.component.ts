@@ -129,6 +129,9 @@ export class NavbarComponent implements OnInit {
       page: 1,
     }
 
+    console.log('filtros enviados:', obj);
+
+
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         this._router.navigate(['/filtros', tipo], {

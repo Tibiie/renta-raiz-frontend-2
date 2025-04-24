@@ -132,15 +132,15 @@ export class FiltrosComponent implements OnInit {
       console.log('Coordenadas:', this.coordinates);
 
 
-       // 2. Obtener dirección
-       this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
-       .subscribe((response: any) => {
-         if (response.results[0]) {
-           this.address = response.results[0].formatted_address;
-           console.log('Dirección:', this.address);
+      // 2. Obtener dirección
+      this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
+        .subscribe((response: any) => {
+          if (response.results[0]) {
+            this.address = response.results[0].formatted_address;
+            console.log('Dirección:', this.address);
 
-         }
-       });
+          }
+        });
     } catch (err) {
       this.error = err as string;
     } finally {
@@ -572,6 +572,7 @@ export class FiltrosComponent implements OnInit {
 
       if (this.filtrosVistaInicial) {
         this.inicializarFiltrosDesdeVistaInicial();
+        console.log('Filtros inicializados:', this.filtrosVistaInicial);
         console.log('Filtros inicializados:', {
           selectedProperty: this.selectedProperty,
           selectedEstates: this.selectedEstates,
