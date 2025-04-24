@@ -13,9 +13,10 @@ import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 export class NavbarComponent implements OnInit {
   isScrolled = false;
   elementsPerPage = 12;
-  showDestacadosDropdown = false;
   showNosotrosDropdown = false;
   showClientesDropdown = false;
+  showArriendosDropdown = false;
+  showDestacadosDropdown = false;
   @Input() alwaysScrolled = false;
   isMobileMenuOpen: boolean = false;
 
@@ -51,6 +52,11 @@ export class NavbarComponent implements OnInit {
   toggleNosotrosDropdown(event: MouseEvent) {
     event.preventDefault();
     this.showNosotrosDropdown = !this.showNosotrosDropdown;
+  }
+
+  toggleArriendosDropdown(event: MouseEvent) {
+    event.preventDefault();
+    this.showArriendosDropdown = !this.showArriendosDropdown;
   }
 
   toggleClientesDropdown(event: MouseEvent) {
@@ -99,8 +105,28 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  enviarFiltroArriendo() {
+  enviarFiltroArriendo(tipo: string) {
     this.filtrosInmueblesArriendo.clear();
+
+    if (tipo === 'diamante') {
+      this.filtrosInmueblesArriendo.set('""pcmin""', 15000001);
+    }
+
+    if (tipo === 'oro') {
+      this.filtrosInmueblesArriendo.set('""pcmin""', 8000001);
+      this.filtrosInmueblesArriendo.set('""pcmax""', 15000000);
+    }
+
+    if (tipo === 'plata') {
+      this.filtrosInmueblesArriendo.set('""pcmin""', 2000000);
+      this.filtrosInmueblesArriendo.set('""pcmax""', 8000000);
+    }
+
+    if (tipo === 'otros') {
+      this.filtrosInmueblesArriendo.set('""pcmin""', 0);
+      this.filtrosInmueblesArriendo.set('""pcmax""', 1999999);
+    }
+
     this.filtrosInmueblesArriendo.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);

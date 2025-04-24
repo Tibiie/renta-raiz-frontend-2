@@ -1,10 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { get } from 'http';
-import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FooterComponent } from "../../../../shared/footer/footer.component";
 import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
@@ -79,13 +77,15 @@ export class VistaInicialComponent implements OnInit {
     'assets/images/experian.png',
     'assets/images/fianzacredito.png',
   ];
+  grupos: string[][] = [];
+  isLoading = true;
 
   // Injectaciones
   inmueblesService = inject(InmueblesService);
   router = inject(Router);
 
   ngOnInit(): void {
-    this.getDatos()
+    this.getDatos();
   }
 
   getDatos() {
@@ -96,7 +96,35 @@ export class VistaInicialComponent implements OnInit {
     this.getFiltros();
     this.getTipoPropiedad();
     this.getInmueblesDestacados();
-    this.startAutoSlide();
+  }
+
+  getAliadosPorGrupo(): string[][] {
+    const grupos: string[][] = [];
+    for (let i = 0; i < this.aliados.length; i += 4) {
+      grupos.push(this.aliados.slice(i, i + 4));
+    }
+    return grupos;
+  }
+
+  startAutoSlide() {
+    this.intervalId = setInterval(() => {
+      const totalSlides = this.getAliadosPorGrupo().length;
+      this.currentSlide = (this.currentSlide + 1) % totalSlides;
+    }, 3000);
+  }
+
+  goToSlide(index: number) {
+    this.currentSlide = index;
+  }
+
+  abrirPestana(url: string) {
+    window.open(url, '_blank');
+  }
+
+  verPropiedad(codPro: number) {
+    this.router.navigate(['/ver-propiedad', codPro], {
+      state: { codPro: codPro }
+    });
   }
 
   getCiudades() {
@@ -275,6 +303,7 @@ export class VistaInicialComponent implements OnInit {
       return '';
     }
   }
+
   selectOption(
     type: 'property' | 'estate',
     option: any
@@ -308,53 +337,5 @@ export class VistaInicialComponent implements OnInit {
   redirigirFiltros() {
     this.prepararFiltros();
     this.getEnviarFiltros();
-  }
-
-  getAliadosPorGrupo(): string[][] {
-    const grupos: string[][] = [];
-    // Mostrar 4 logos por slide
-    for (let i = 0; i < this.aliados.length; i += 4) {
-      grupos.push(this.aliados.slice(i, i + 4));
-    }
-    return grupos;
-  }
-
-  startAutoSlide() {
-    this.intervalId = setInterval(() => {
-      this.nextSlide();
-    }, 3000); // Cambia cada 3 segundos
-  }
-
-  nextSlide() {
-    const totalSlides = this.getAliadosPorGrupo().length;
-    this.currentSlide = (this.currentSlide + 1) % totalSlides;
-  }
-
-  prevSlide() {
-    const totalSlides = this.getAliadosPorGrupo().length;
-    this.currentSlide = (this.currentSlide - 1 + totalSlides) % totalSlides;
-  }
-
-  goToSlide(index: number) {
-    this.currentSlide = index;
-    // Reiniciar el temporizador al hacer clic manual
-    this.resetTimer();
-  }
-
-  resetTimer() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-    this.startAutoSlide();
-  }
-
-  abrirPestana(url: string) {
-    window.open(url, '_blank');
-  }
-
-  verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro }
-    });
   }
 }

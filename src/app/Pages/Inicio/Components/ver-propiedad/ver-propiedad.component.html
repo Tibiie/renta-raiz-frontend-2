@@ -256,7 +256,7 @@
         class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300 min-h-[650px] flex flex-col justify-between">
         <div class="mb-2">
           @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
-          <p class="text-gray-500 text-sm mb-1">Cómpralo desde:</p>
+          <p class="text-gray-500 text-sm mb-1">Valor de venta en:</p>
           } @if (propiedad.biz_code === 3) {
           <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
             <span class="text-black">
@@ -264,7 +264,7 @@
           </p>
 
           } @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-          <p class="text-gray-500 text-sm mb-1">Arrienda en:</p>
+          <p class="text-gray-500 text-sm mb-1">Valor de arrienda en:</p>
           } @if (propiedad.biz_code === 3) {
           <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
             <span class="text-black"> {{ propiedad.rent | currency }}</span>
@@ -365,7 +365,7 @@
         </div>
 
         <div class="rounded-lg p-10 text-center">
-          <p class="text-[#080E36] font-medium">¡Si te gusta contáctanos!</p>
+          <p class="text-[#080E36] font-medium">¿Conectaste con este espacio? Nuestro equipo te acompaña.</p>
         </div>
 
         <div class="space-y-3">
@@ -500,6 +500,7 @@
       </div>
 
       <div class="mt-6">
+        <h2 class="text-lg font-bold text-[#080E36] mb-2">Comodidades de la propiedad</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm text-gray-800">
           <div *ngFor="let amenity of propiedad.amenities" class="flex items-center">
             <i class="fas fa-check text-yellow-500 mr-2"></i>
