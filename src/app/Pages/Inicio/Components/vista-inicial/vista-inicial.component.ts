@@ -96,6 +96,7 @@ export class VistaInicialComponent implements OnInit {
     this.getFiltros();
     this.getTipoPropiedad();
     this.getInmueblesDestacados();
+    this.startAutoSlide();
   }
 
   getCiudades() {
@@ -256,19 +257,24 @@ export class VistaInicialComponent implements OnInit {
   getIcon(type: 'property' | 'estate', option: any): string {
     const defaultIcons = {
       property: 'fas fa-home',
-      estate: 'fas fa-question-circle'
+      estate: 'fas fa-question-circle',
     };
 
     if (!option && type === 'property') {
       return 'fas fa-list-ul';
     }
 
-    const code = typeof option === 'object' ? option.code : '';
-    const iconMap = this.icons[type];
+    console.log(option);
 
-    return iconMap?.[code] || defaultIcons[type];
+    if (option) {
+      const code = typeof option === 'object' ? option.code : '';
+      const iconMap = this.icons[type];
+
+      return iconMap?.[code] || defaultIcons[type];
+    } else {
+      return '';
+    }
   }
-
   selectOption(
     type: 'property' | 'estate',
     option: any
@@ -306,6 +312,7 @@ export class VistaInicialComponent implements OnInit {
 
   getAliadosPorGrupo(): string[][] {
     const grupos: string[][] = [];
+    // Mostrar 4 logos por slide
     for (let i = 0; i < this.aliados.length; i += 4) {
       grupos.push(this.aliados.slice(i, i + 4));
     }
@@ -314,13 +321,31 @@ export class VistaInicialComponent implements OnInit {
 
   startAutoSlide() {
     this.intervalId = setInterval(() => {
-      const totalSlides = this.getAliadosPorGrupo().length;
-      this.currentSlide = (this.currentSlide + 1) % totalSlides;
-    }, 3000);
+      this.nextSlide();
+    }, 3000); // Cambia cada 3 segundos
+  }
+
+  nextSlide() {
+    const totalSlides = this.getAliadosPorGrupo().length;
+    this.currentSlide = (this.currentSlide + 1) % totalSlides;
+  }
+
+  prevSlide() {
+    const totalSlides = this.getAliadosPorGrupo().length;
+    this.currentSlide = (this.currentSlide - 1 + totalSlides) % totalSlides;
   }
 
   goToSlide(index: number) {
     this.currentSlide = index;
+    // Reiniciar el temporizador al hacer clic manual
+    this.resetTimer();
+  }
+
+  resetTimer() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+    this.startAutoSlide();
   }
 
   abrirPestana(url: string) {
