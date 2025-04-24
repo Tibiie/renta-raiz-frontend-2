@@ -109,16 +109,16 @@ export class NavbarComponent implements OnInit {
     this.filtrosInmueblesArriendo.clear();
 
     if (tipo === 'diamante') {
-      this.filtrosInmueblesArriendo.set('""pcmin""', 15000001);
+      this.filtrosInmueblesArriendo.set('pcmin', 15000001);
     } else if (tipo === 'oro') {
-      this.filtrosInmueblesArriendo.set('""pcmin""', 8000001);
-      this.filtrosInmueblesArriendo.set('""pcmax""', 15000000);
+      this.filtrosInmueblesArriendo.set('pcmin', 8000001);
+      this.filtrosInmueblesArriendo.set('pcmax', 15000000);
     } else if (tipo === 'plata') {
-      this.filtrosInmueblesArriendo.set('""pcmin""', 2000000);
-      this.filtrosInmueblesArriendo.set('""pcmax""', 8000000);
+      this.filtrosInmueblesArriendo.set('pcmin', 2000000);
+      this.filtrosInmueblesArriendo.set('pcmax', 8000000);
     } else if (tipo === 'otros') {
-      this.filtrosInmueblesArriendo.set('""pcmin""', 0);
-      this.filtrosInmueblesArriendo.set('""pcmax""', 1999999);
+      this.filtrosInmueblesArriendo.set('pcmin', 0);
+      this.filtrosInmueblesArriendo.set('pcmax', 1999999);
     }
 
     this.filtrosInmueblesArriendo.set('biz', '1');

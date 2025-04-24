@@ -333,31 +333,31 @@ export class FiltrosComponent implements OnInit {
     if (this.seleccion.habitaciones.length > 0) {
       const values = this.seleccion.habitaciones;
       if (values.includes('+6')) {
-        this.filtrosSeleccionados.set('"maxbedroom"', 100);
-        this.filtrosSeleccionados.set('"minbedroom"', 6);
+        this.filtrosSeleccionados.set('maxbedroom', 100);
+        this.filtrosSeleccionados.set('minbedroom', 6);
       } else {
-        this.filtrosSeleccionados.set('"bedrooms"', values.join(','));
+        this.filtrosSeleccionados.set('bedrooms', values.join(','));
       }
     }
 
     if (this.seleccion.banos.length > 0) {
       const values = this.seleccion.banos;
       if (values.includes('+6')) {
-        this.filtrosSeleccionados.set('"maxbathroom"', 100);
-        this.filtrosSeleccionados.set('"minbathroom"', 6);
+        this.filtrosSeleccionados.set('maxbathroom', 100);
+        this.filtrosSeleccionados.set('minbathroom', 6);
       } else {
-        this.filtrosSeleccionados.set('"bathroom"', values.join(','));
+        this.filtrosSeleccionados.set('bathroom', values.join(','));
       }
     }
 
     if (this.seleccion.parqueadero.length > 0) {
       const values = this.seleccion.parqueadero;
       if (values.includes('+6')) {
-        this.filtrosSeleccionados.set('"maxparking"', 100);
-        this.filtrosSeleccionados.set('"minparking"', 6);
+        this.filtrosSeleccionados.set('maxparking', 100);
+        this.filtrosSeleccionados.set('minparking', 6);
       } else {
-        this.filtrosSeleccionados.set('"maxparking"', values.join(','));
-        this.filtrosSeleccionados.set('"minparking"', values.join(','));
+        this.filtrosSeleccionados.set('maxparking', values.join(','));
+        this.filtrosSeleccionados.set('minparking', values.join(','));
       }
     }
 
@@ -369,23 +369,23 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (this.AreaMinima) {
-      this.filtrosSeleccionados.set('"minarea"', this.AreaMinima);
+      this.filtrosSeleccionados.set('minarea', this.AreaMinima);
     }
 
     if (this.AreaMaxima) {
-      this.filtrosSeleccionados.set('"maxarea"', this.AreaMaxima);
+      this.filtrosSeleccionados.set('maxarea', this.AreaMaxima);
     }
 
     if (this.precioMinimo) {
-      this.filtrosSeleccionados.set('""pcmin""', this.precioMinimo);
+      this.filtrosSeleccionados.set('pcmin', this.precioMinimo);
     }
 
     if (this.precioMaximo) {
-      this.filtrosSeleccionados.set('""pcmax""', this.precioMaximo);
+      this.filtrosSeleccionados.set('pcmax', this.precioMaximo);
     }
 
     if (this.precioVenta) {
-      this.filtrosSeleccionados.set('""saleprice""', this.precioVenta);
+      this.filtrosSeleccionados.set('saleprice', this.precioVenta);
     }
   }
 
