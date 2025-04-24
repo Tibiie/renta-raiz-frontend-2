@@ -8,6 +8,7 @@ import { NuestroEquipoComponent } from './Components/nuestro-equipo/nuestro-equi
 import { QuienesSomosComponent } from './Components/quienes-somos/quienes-somos.component';
 import { MapaComponent } from './Components/mapa/mapa.component';
 import { BlogsComponent } from './Components/blogs/blogs.component';
+import { VerBlogComponent } from './Components/ver-blog/ver-blog.component';
 
 export const routes: Routes = [
 
@@ -49,7 +50,11 @@ export const routes: Routes = [
   {
     path: 'blogs',
     component: BlogsComponent
-  }
+  },
+  {
+    path: 'ver-blog/:id',
+    component: VerBlogComponent
+  },
 ];
 
 @NgModule({

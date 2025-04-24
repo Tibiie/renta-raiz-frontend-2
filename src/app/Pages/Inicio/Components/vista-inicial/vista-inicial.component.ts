@@ -338,4 +338,8 @@ export class VistaInicialComponent implements OnInit {
     this.prepararFiltros();
     this.getEnviarFiltros();
   }
+
+  redirigirVerBlog(id: number) {
+    this.router.navigate(['/ver-blog', id]);
+  }
 }
