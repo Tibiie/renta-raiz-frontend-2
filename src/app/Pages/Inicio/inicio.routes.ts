@@ -23,6 +23,10 @@ export const routes: Routes = [
     component: FiltrosComponent
   },
   {
+    path: 'filtros/:tipo',
+    component: FiltrosComponent
+  },
+  {
     path: 'contacto',
     component: ContactanosComponent
   },

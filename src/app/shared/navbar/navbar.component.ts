@@ -110,19 +110,13 @@ export class NavbarComponent implements OnInit {
 
     if (tipo === 'diamante') {
       this.filtrosInmueblesArriendo.set('""pcmin""', 15000001);
-    }
-
-    if (tipo === 'oro') {
+    } else if (tipo === 'oro') {
       this.filtrosInmueblesArriendo.set('""pcmin""', 8000001);
       this.filtrosInmueblesArriendo.set('""pcmax""', 15000000);
-    }
-
-    if (tipo === 'plata') {
+    } else if (tipo === 'plata') {
       this.filtrosInmueblesArriendo.set('""pcmin""', 2000000);
       this.filtrosInmueblesArriendo.set('""pcmax""', 8000000);
-    }
-
-    if (tipo === 'otros') {
+    } else if (tipo === 'otros') {
       this.filtrosInmueblesArriendo.set('""pcmin""', 0);
       this.filtrosInmueblesArriendo.set('""pcmax""', 1999999);
     }
@@ -134,16 +128,16 @@ export class NavbarComponent implements OnInit {
       ...filtrosObj,
       page: 1,
     }
+
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this._router.navigate(['/filtros'], {
-            state: {
-              resultados: response.data,
-              paginacion: response,
-              filtros: obj,
-            },
-          });
+        this._router.navigate(['/filtros', tipo], {
+          state: {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+          skipLocationChange: false
         });
       },
       (error: any) => {
