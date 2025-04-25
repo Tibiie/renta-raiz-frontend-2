@@ -4,19 +4,23 @@ import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
-import { FooterComponent } from "../../../../shared/footer/footer.component";
-import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
-
+import { FooterComponent } from '../../../../shared/footer/footer.component';
+import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 
 @Component({
   selector: 'app-vista-inicial',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent, BotonesFlotantesComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NavbarComponent,
+    FooterComponent,
+    BotonesFlotantesComponent,
+  ],
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss'],
 })
 export class VistaInicialComponent implements OnInit {
-
   intervalId: any;
   currentSlide = 0;
   elementsPerPage = 12;
@@ -32,16 +36,21 @@ export class VistaInicialComponent implements OnInit {
   inmueblesVentasArray: any[] = [];
   inmueblesDestacadosArray: any = {};
   inmueblesArriendosArray: any[] = [];
+  aliadosPorGrupo: string[][] = [];
 
   // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
-  selectedProperty: { code: string, name: string, displayName?: string } | null = null;
-  propertyOptions: { code: string, name: string, displayName?: string }[] = [];
+  selectedProperty: {
+    code: string;
+    name: string;
+    displayName?: string;
+  } | null = null;
+  propertyOptions: { code: string; name: string; displayName?: string }[] = [];
 
   // Para tipos de propiedades
   isEstateDropdownOpen = false;
-  selectedEstate: { code: string, name: string } | null = null;
-  estateOptions: { code: string, name: string }[] = [];
+  selectedEstate: { code: string; name: string } | null = null;
+  estateOptions: { code: string; name: string }[] = [];
 
   private readonly icons = {
     property: {
@@ -63,8 +72,8 @@ export class VistaInicialComponent implements OnInit {
       '11': 'fas fa-car',
       '12': 'fas fa-umbrella-beach',
       '13': 'fas fa-store',
-      '14': 'fas fa-home'
-    } as Record<string, string>
+      '14': 'fas fa-home',
+    } as Record<string, string>,
   };
 
   aliados: string[] = [
@@ -97,11 +106,15 @@ export class VistaInicialComponent implements OnInit {
     this.getFiltros();
     this.getTipoPropiedad();
     this.getInmueblesDestacados();
+    this.getAliadosPorGrupo();
   }
 
   getAliadosPorGrupo(): void {
     this.aliadosPorGrupo = [];
+  getAliadosPorGrupo(): void {
+    this.aliadosPorGrupo = [];
     for (let i = 0; i < this.aliados.length; i += 4) {
+      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
     }
     console.log(this.aliadosPorGrupo);
@@ -113,7 +126,7 @@ export class VistaInicialComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro }
+      state: { codPro: codPro },
     });
   }
 
@@ -140,7 +153,9 @@ export class VistaInicialComponent implements OnInit {
           return cat;
         });
 
-        const defaultOption = this.propertyOptions.find(cat => cat.code === '3') || this.propertyOptions[0];
+        const defaultOption =
+          this.propertyOptions.find((cat) => cat.code === '3') ||
+          this.propertyOptions[0];
         this.selectedProperty = defaultOption;
       },
       (error: any) => {
@@ -179,14 +194,14 @@ export class VistaInicialComponent implements OnInit {
 
     const limpiarTexto = (texto: string) => {
       return texto
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
         .trim()
         .toLowerCase();
     };
 
-    const ciudad = this.ciudades.find(c =>
-      limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
+    const ciudad = this.ciudades.find(
+      (c) => limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
     );
     var codigo = ciudad?.code;
 
@@ -208,11 +223,15 @@ export class VistaInicialComponent implements OnInit {
     const obj = {
       ...filtrosObj,
       page: 1,
-    }
+    };
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         this.router.navigate(['/filtros'], {
-          state: { resultados: response.data, paginacion: response, filtros: obj }
+          state: {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
         });
       },
       (error: any) => {
@@ -229,15 +248,17 @@ export class VistaInicialComponent implements OnInit {
     const obj = {
       ...filtrosObj,
       page: 1,
-    }
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPageInicial).subscribe(
-      (response: any) => {
-        this.inmueblesVentasArray = response.data;
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
+    };
+    this.inmueblesService
+      .getFiltrosEnviar(obj, this.elementsPerPageInicial)
+      .subscribe(
+        (response: any) => {
+          this.inmueblesVentasArray = response.data;
+        },
+        (error: any) => {
+          console.error('Error al enviar los filtros:', error);
+        }
+      );
   }
 
   getInmueblesArriendos() {
@@ -248,15 +269,17 @@ export class VistaInicialComponent implements OnInit {
     const obj = {
       ...filtrosObj,
       page: 1,
-    }
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPageInicial).subscribe(
-      (response: any) => {
-        this.inmueblesArriendosArray = response.data;
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
+    };
+    this.inmueblesService
+      .getFiltrosEnviar(obj, this.elementsPerPageInicial)
+      .subscribe(
+        (response: any) => {
+          this.inmueblesArriendosArray = response.data;
+        },
+        (error: any) => {
+          console.error('Error al enviar los filtros:', error);
+        }
+      );
   }
 
   getInmueblesDestacados() {
@@ -294,10 +317,7 @@ export class VistaInicialComponent implements OnInit {
     }
   }
 
-  selectOption(
-    type: 'property' | 'estate',
-    option: any
-  ): void {
+  selectOption(type: 'property' | 'estate', option: any): void {
     if (type === 'property') {
       this.selectedProperty = option;
       this.isPropertyDropdownOpen = false;
