@@ -12,5 +12,4 @@ export class FooterComponent {
   abrirPestana(url: string) {
     window.open(url, '_blank');
   }
-
 }

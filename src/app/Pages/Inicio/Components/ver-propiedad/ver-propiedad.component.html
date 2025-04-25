@@ -455,11 +455,15 @@
       </div>
 
       <div class="mt-6">
-        <h2 class="text-lg font-bold text-[#080E36] mb-2">Descripción</h2>
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-lg font-bold text-[#080E36]">Descripción</h2>
+          <span class="text-[16px] text-[#CDAD60] mr-6 border-b-2 border-[#CDAD60]"><strong class="font-bold">Código propiedad: </strong> <strong class="font-semibold">{{ propiedad.codpro }}</strong></span>
+        </div>
         <p class="text-gray-700 text-sm leading-relaxed">
           {{ propiedad.description }}
         </p>
       </div>
+      
 
       <div class="mt-6">
         <h2 class="text-lg font-bold text-[#080E36] mb-8">Comodidades de la propiedad</h2>

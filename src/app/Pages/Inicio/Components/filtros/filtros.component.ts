@@ -346,7 +346,7 @@ export class FiltrosComponent implements OnInit {
         this.filtrosSeleccionados.set('"maxbathroom', 100);
         this.filtrosSeleccionados.set('minbathroom', 6);
       } else {
-        this.filtrosSeleccionados.set('bathroom', values.join(','));
+        this.filtrosSeleccionados.set('bathrooms', values.join(','));
       }
     }
 

@@ -77,7 +77,7 @@ export class VistaInicialComponent implements OnInit {
     'assets/images/experian.png',
     'assets/images/fianzacredito.png',
   ];
-  grupos: string[][] = [];
+  aliadosPorGrupo: string[][] = [];
   isLoading = true;
 
   // Injectaciones
@@ -86,6 +86,7 @@ export class VistaInicialComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDatos();
+    this.getAliadosPorGrupo();
   }
 
   getDatos() {
@@ -98,24 +99,13 @@ export class VistaInicialComponent implements OnInit {
     this.getInmueblesDestacados();
   }
 
-  getAliadosPorGrupo(): string[][] {
-    const grupos: string[][] = [];
+  getAliadosPorGrupo(): void {
+    this.aliadosPorGrupo = [];
     for (let i = 0; i < this.aliados.length; i += 4) {
-      grupos.push(this.aliados.slice(i, i + 4));
+      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
     }
-    return grupos;
-  }
-
-  startAutoSlide() {
-    this.intervalId = setInterval(() => {
-      const totalSlides = this.getAliadosPorGrupo().length;
-      this.currentSlide = (this.currentSlide + 1) % totalSlides;
-    }, 3000);
-  }
-
-  goToSlide(index: number) {
-    this.currentSlide = index;
-  }
+    console.log(this.aliadosPorGrupo);
+  }
 
   abrirPestana(url: string) {
     window.open(url, '_blank');
