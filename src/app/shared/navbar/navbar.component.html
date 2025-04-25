@@ -33,19 +33,28 @@
           @if (showArriendosDropdown) {
           <ul class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48">
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
-                (click)="enviarFiltroArriendo('diamante')">Diamante</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                (click)="enviarFiltroArriendo('diamante')">
+                <i class="fas fa-gem text-blue-500"></i> Diamante
+              </a>
             </li>
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100" (click)="enviarFiltroArriendo('oro')">Oro</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                (click)="enviarFiltroArriendo('oro')">
+                <i class="fas fa-crown text-yellow-500"></i> Oro
+              </a>
             </li>
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
-                (click)="enviarFiltroArriendo('plata')">Plata</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                (click)="enviarFiltroArriendo('plata')">
+                <i class="fas fa-medal text-gray-400"></i> Plata
+              </a>
             </li>
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
-                (click)="enviarFiltroArriendo('otros')">Otros</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                (click)="enviarFiltroArriendo('otros')">
+                <i class="fas fa-ellipsis-h text-gray-600"></i> Otros
+              </a>
             </li>
           </ul>
           }
@@ -58,16 +67,22 @@
           @if (showNosotrosDropdown) {
           <ul class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48">
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100" (click)="navigateTo('quienes-somos')">Quiénes
-                Somos</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                (click)="navigateTo('quienes-somos')">
+                <i class="fas fa-building text-blue-500"></i> Quiénes Somos
+              </a>
             </li>
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
-                (click)="navigateTo('nuestro-equipo')">Expertos</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                (click)="navigateTo('nuestro-equipo')">
+                <i class="fas fa-users text-purple-500"></i> Expertos
+              </a>
             </li>
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
-                onclick="window.open('https://rentaraiz.co/brochure/')">Brochure</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                onclick="window.open('https://rentaraiz.co/brochure/')">
+                <i class="fas fa-file-pdf text-red-500"></i> Brochure
+              </a>
             </li>
           </ul>
           }
@@ -80,12 +95,16 @@
           @if (showClientesDropdown) {
           <ul class="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-lg z-50 w-48">
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
-                onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=1')">Propietarios</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=1')">
+                <i class="fas fa-key text-amber-600"></i> Propietarios
+              </a>
             </li>
             <li>
-              <a class="cursor-pointer block px-4 py-2 hover:bg-gray-100"
-                onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=2')">Arrendatarios</a>
+              <a class="cursor-pointer flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                onclick="window.open('https://simidocs.siminmobiliarias.com/base/simired/simidocsapi1.0/index.php?inmo=1127&tipo=2')">
+                <i class="fas fa-file-signature text-emerald-600"></i> Arrendatarios
+              </a>
             </li>
           </ul>
           }
