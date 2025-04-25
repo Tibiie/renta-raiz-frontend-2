@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
     NavbarComponent,
     FooterComponent,
@@ -25,18 +26,33 @@ export class VistaInicialComponent implements OnInit {
   currentSlide = 0;
   elementsPerPage = 12;
   elementsPerPageInicial = 3;
-  ubicacion: string = '';
   filtrosSeleccionados: Map<string, any> = new Map();
   filtrosInmueblesVenta: Map<string, any> = new Map();
   filtrosInmueblesArriendo: Map<string, any> = new Map();
 
   filtros: any = {};
+  barrios: any[] = [];
   ciudades: any[] = [];
   categoriasInmuebles: any[] = [];
+  aliadosPorGrupo: string[][] = [];
   inmueblesVentasArray: any[] = [];
   inmueblesDestacadosArray: any = {};
   inmueblesArriendosArray: any[] = [];
-  aliadosPorGrupo: string[][] = [];
+
+  estrato: number[] = [1, 2, 3, 4];
+  banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+
+  seleccion = {
+    estrato: [] as number[],
+    banos: [] as (number | string)[],
+    parqueadero: [] as (number | string)[],
+    habitaciones: [] as (number | string)[],
+  };
+
+  isPreciosOpen = false;
+  isMasFiltrosOpen = false;
 
   // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
@@ -86,12 +102,20 @@ export class VistaInicialComponent implements OnInit {
     'assets/images/experian.png',
     'assets/images/fianzacredito.png',
   ];
-  aliadosPorGrupo: string[][] = [];
   isLoading = true;
 
   // Injectaciones
-  inmueblesService = inject(InmueblesService);
   router = inject(Router);
+  formBuilder = inject(FormBuilder);
+  inmueblesService = inject(InmueblesService);
+
+  formRangos = this.formBuilder.group({
+    AreaMinima: [''],
+    AreaMaxima: [''],
+    precioMinimo: [''],
+    precioMaximo: [''],
+    ubicacion: ['']
+  });
 
   ngOnInit(): void {
     this.getDatos();
@@ -99,18 +123,132 @@ export class VistaInicialComponent implements OnInit {
   }
 
   getDatos() {
+    this.getBarrios();
+    this.getFiltros();
+    this.getCiudades();
+    this.getTipoPropiedad();
+    this.getAliadosPorGrupo();
     this.getInmueblesVentas();
     this.getInmueblesArriendos();
     this.getCategoriasInmuebles();
-    this.getCiudades();
-    this.getFiltros();
-    this.getTipoPropiedad();
     this.getInmueblesDestacados();
-    this.getAliadosPorGrupo();
   }
 
-  getAliadosPorGrupo(): void {
-    this.aliadosPorGrupo = [];
+  seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
+    const arr = this.seleccion[categoria] as (number | string)[];
+    const index = arr.indexOf(valor);
+    index > -1 ? arr.splice(index, 1) : arr.push(valor);
+  }
+
+  prepararFiltros() {
+    this.filtrosSeleccionados.clear();
+
+    const limpiarTexto = (texto: string) => {
+      return texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLowerCase();
+    };
+
+    const ciudad = this.ciudades.find(
+      (c) => limpiarTexto(c.name) === limpiarTexto(this.formRangos.value.ubicacion!)
+    );
+    var codigo = ciudad?.code;
+
+    if (this.formRangos.value.ubicacion) {
+      this.filtrosSeleccionados.set('city', codigo);
+    }
+
+    if (this.selectedProperty) {
+      this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
+    }
+
+    if (this.selectedEstate) {
+      this.filtrosSeleccionados.set('type', this.selectedEstate.code);
+    }
+
+    if (this.formRangos.value.AreaMinima != '' || this.formRangos.value.AreaMaxima != '') {
+      this.filtrosSeleccionados.set('minarea', this.formRangos.value.AreaMinima);
+      this.filtrosSeleccionados.set('maxarea', this.formRangos.value.AreaMaxima);
+    }
+
+    if (this.formRangos.value.precioMinimo != '' || this.formRangos.value.precioMaximo != '') {
+      if (this.selectedProperty?.code == '1' || this.selectedEstate?.code == '3') {
+        this.filtrosSeleccionados.set('pcmin', this.formRangos.value.precioMinimo);
+        this.filtrosSeleccionados.set('pcmax', this.formRangos.value.precioMaximo);
+      }
+
+      if (this.selectedEstate?.code == '2' || this.selectedProperty?.code == '3') {
+        this.filtrosSeleccionados.set('pvmin', this.formRangos.value.precioMinimo);
+        this.filtrosSeleccionados.set('pvmax', this.formRangos.value.precioMaximo);
+      }
+    }
+
+    if (this.seleccion.banos.length > 0) {
+      const values = this.seleccion.banos;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('maxbathroom', 100);
+        this.filtrosSeleccionados.set('minbathroom', 6);
+      } else {
+        this.filtrosSeleccionados.set('bathrooms', values.join(','));
+      }
+    }
+
+    if (this.seleccion.parqueadero.length > 0) {
+      const values = this.seleccion.parqueadero;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('maxparking', 100);
+        this.filtrosSeleccionados.set('minparking', 6);
+      } else {
+        this.filtrosSeleccionados.set('maxparking', values.join(','));
+        this.filtrosSeleccionados.set('minparking', values.join(','));
+      }
+    }
+
+    if (this.seleccion.estrato.length > 0) {
+      this.filtrosSeleccionados.set(
+        'stratum',
+        this.seleccion.estrato.join(',')
+      );
+    }
+
+    if (this.seleccion.habitaciones.length > 0) {
+      const values = this.seleccion.habitaciones;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('maxbedroom', 100);
+        this.filtrosSeleccionados.set('minbedroom', 6);
+      } else {
+        this.filtrosSeleccionados.set('bedrooms', values.join(','));
+      }
+    }
+  }
+
+  getEnviarFiltros() {
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    };
+
+    console.log('filtrosObj', filtrosObj);
+
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        this.router.navigate(['/filtros'], {
+          state: {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+        });
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
   getAliadosPorGrupo(): void {
     this.aliadosPorGrupo = [];
     for (let i = 0; i < this.aliados.length; i += 4) {
@@ -118,7 +256,7 @@ export class VistaInicialComponent implements OnInit {
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
     }
     console.log(this.aliadosPorGrupo);
-  }
+  }
 
   abrirPestana(url: string) {
     window.open(url, '_blank');
@@ -189,57 +327,6 @@ export class VistaInicialComponent implements OnInit {
     );
   }
 
-  prepararFiltros() {
-    this.filtrosSeleccionados.clear();
-
-    const limpiarTexto = (texto: string) => {
-      return texto
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .trim()
-        .toLowerCase();
-    };
-
-    const ciudad = this.ciudades.find(
-      (c) => limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
-    );
-    var codigo = ciudad?.code;
-
-    if (this.ubicacion) {
-      this.filtrosSeleccionados.set('city', codigo);
-    }
-
-    if (this.selectedProperty) {
-      this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
-    }
-
-    if (this.selectedEstate) {
-      this.filtrosSeleccionados.set('type', this.selectedEstate.code);
-    }
-  }
-
-  getEnviarFiltros() {
-    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    };
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
-      (response: any) => {
-        this.router.navigate(['/filtros'], {
-          state: {
-            resultados: response.data,
-            paginacion: response,
-            filtros: obj,
-          },
-        });
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
-  }
-
   getInmueblesVentas() {
     this.filtrosInmueblesVenta.clear();
     this.filtrosInmueblesVenta.set('biz', 2);
@@ -286,11 +373,26 @@ export class VistaInicialComponent implements OnInit {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
         this.inmueblesDestacadosArray = data;
+        console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
+
       },
       (error: any) => {
         console.log(error);
 
         console.error('Error al obtener los inmuebles:', error);
+      }
+    );
+  }
+
+  getBarrios() {
+    this.inmueblesService.getBarrios().subscribe(
+      (data: any) => {
+        this.barrios = data;
+        console.log('Barrios:', this.barrios);
+      },
+      (error: any) => {
+        console.log(error);
+        console.error('Error al obtener los barrios:', error);
       }
     );
   }
@@ -327,13 +429,29 @@ export class VistaInicialComponent implements OnInit {
     }
   }
 
-  toggleDropdown(type: 'property' | 'estate'): void {
+  toggleDropdown(type: 'property' | 'estate' | 'masFiltros' | 'precios'): void {
     if (type === 'property') {
       this.isPropertyDropdownOpen = !this.isPropertyDropdownOpen;
       this.isEstateDropdownOpen = false;
+      this.isMasFiltrosOpen = false;
+      this.isPreciosOpen = false;
+
+    } else if (type === 'masFiltros') {
+      this.isMasFiltrosOpen = !this.isMasFiltrosOpen;
+      this.isPropertyDropdownOpen = false;
+      this.isEstateDropdownOpen = false;
+      this.isPreciosOpen = false;
+
+    } else if (type === 'precios') {
+      this.isPreciosOpen = !this.isPreciosOpen;
+      this.isPropertyDropdownOpen = false;
+      this.isEstateDropdownOpen = false;
+      this.isMasFiltrosOpen = false;
     } else {
       this.isEstateDropdownOpen = !this.isEstateDropdownOpen;
       this.isPropertyDropdownOpen = false;
+      this.isMasFiltrosOpen = false;
+      this.isPreciosOpen = false;
     }
   }
 

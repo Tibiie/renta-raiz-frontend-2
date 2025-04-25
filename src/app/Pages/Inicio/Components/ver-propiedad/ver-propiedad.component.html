@@ -294,31 +294,23 @@
               <p class="font-semibold">{{ propiedad.bathrooms }}</p>
             </div>
           </div>
-        
-          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+
+          <div class="relative w-24 h-full rounded-md overflow-hidden cursor-pointer group">
             <i class="fas fa-bed text-xl text-gray-500"></i>
             <div>
               <p class="text-sm text-gray-500">Habitaciones</p>
               <p class="font-semibold">{{ propiedad.bedrooms }}</p>
             </div>
           </div>
-        
-          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+
+          <div class="relative w-24 h-full rounded-md overflow-hidden cursor-pointer group">
             <i class="fas fa-parking text-xl text-gray-500"></i>
             <div>
               <p class="text-sm text-gray-500">Parqueaderos</p>
               <p class="font-semibold">{{ propiedad.parking }}</p>
             </div>
           </div>
-        
-          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
-            <i class="fa-regular fa-calendar-days text-xl text-gray-500"></i>
-            <div>
-              <p class="text-sm text-gray-500">Año construcción</p>
-              <p class="font-semibold">{{ propiedad.build_year || "N/A" }}</p>
-            </div>
-          </div>
-        
+
           <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
             <i class="fas fa-ruler-combined text-xl text-gray-500"></i>
             <div>
@@ -326,16 +318,24 @@
               <p class="font-semibold">{{ propiedad.area_cons || propiedad.area_lot || "N/A" }} m²</p>
             </div>
           </div>
-      
-          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+
+          <div class="relative w-24 h-full rounded-md overflow-hidden cursor-pointer group">
             <i class="fas fa-calendar-check text-xl text-gray-500"></i>
             <div>
               <p class="text-sm text-gray-500">Estrato</p>
               <p class="font-semibold">{{ propiedad.status || "N/A" }}</p>
             </div>
           </div>
+
+          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+            <i class="fa-regular fa-calendar-days text-xl text-gray-500"></i>
+            <div>
+              <p class="text-sm text-gray-500">Año construcción</p>
+              <p class="font-semibold">{{ propiedad.build_year || "N/A" }}</p>
+            </div>
+          </div>
         </div>
-        
+
         <div class="rounded-lg p-10 text-center">
           <p class="text-[20px] text-[#080E36] font-bold">¿Conectaste con este espacio? Nuestro equipo te acompaña.</p>
         </div>
@@ -457,13 +457,14 @@
       <div class="mt-6">
         <div class="flex justify-between items-center mb-2">
           <h2 class="text-lg font-bold text-[#080E36]">Descripción</h2>
-          <span class="text-[16px] text-[#CDAD60] mr-6 border-b-2 border-[#CDAD60]"><strong class="font-bold">Código propiedad: </strong> <strong class="font-semibold">{{ propiedad.codpro }}</strong></span>
+          <span class="text-[16px] text-[#CDAD60] mr-6 border-b-2 border-[#CDAD60]"><strong class="font-bold">Código
+              propiedad: </strong> <strong class="font-semibold">{{ propiedad.codpro }}</strong></span>
         </div>
         <p class="text-gray-700 text-sm leading-relaxed">
           {{ propiedad.description }}
         </p>
       </div>
-      
+
 
       <div class="mt-6">
         <h2 class="text-lg font-bold text-[#080E36] mb-8">Comodidades de la propiedad</h2>
