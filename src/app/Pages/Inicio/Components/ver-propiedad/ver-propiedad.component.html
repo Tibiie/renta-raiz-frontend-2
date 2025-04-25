@@ -281,91 +281,63 @@
             <div class="w-full border-t border-gray-400"></div>
           </div>
           <div class="relative flex justify-center">
-            <span class="px-2 bg-white text-xs text-gray-500">Detalles clave</span>
+            <span class="px-2 bg-white text-xs text-gray-500">Detalles claves</span>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 mt-5 text-[#080E36]">
-          <!-- Baños -->
-          <div class="flex flex-col items-center">
-            <span class="text-sm font-semibold">Baños</span>
-            <div class="flex items-center">
-              <i class="fas fa-bath text-lg"></i>
-              <span class="ml-2">{{ propiedad.bathrooms }}</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 text-[#080E36]">
+          <!-- Característica -->
+          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+            <i class="fas fa-bath text-xl text-gray-500"></i>
+            <div>
+              <p class="text-sm text-gray-500">Baños</p>
+              <p class="font-semibold">{{ propiedad.bathrooms }}</p>
             </div>
           </div>
-
-          <!-- habitaciones -->
-          <div class="flex flex-col items-center">
-            <span class="text-sm font-semibold">Habitaciones</span>
-            <div class="flex items-center">
-              <i class="fas fa-bed text-lg"></i>
-              <span class="ml-2">{{ propiedad.bedrooms }}</span>
+        
+          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+            <i class="fas fa-bed text-xl text-gray-500"></i>
+            <div>
+              <p class="text-sm text-gray-500">Habitaciones</p>
+              <p class="font-semibold">{{ propiedad.bedrooms }}</p>
             </div>
           </div>
-
-          <!-- Parqueaderos -->
-          <div class="flex flex-col items-center">
-            <span class="text-sm font-semibold">Parqueaderos</span>
-            <div class="flex items-center">
-              <i class="fas fa-parking text-lg"></i>
-              <span class="ml-2">{{ propiedad.parking }}</span>
+        
+          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+            <i class="fas fa-parking text-xl text-gray-500"></i>
+            <div>
+              <p class="text-sm text-gray-500">Parqueaderos</p>
+              <p class="font-semibold">{{ propiedad.parking }}</p>
             </div>
           </div>
-
-          <!-- Baños -->
-          <div class="flex flex-col items-center">
-            <span class="text-sm font-semibold">Año construcción</span>
-            <div class="flex items-center">
-              <i class="fa-regular fa-calendar-days"></i>
-              <span class="ml-2">{{ propiedad.build_year || "N/A" }}</span>
+        
+          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+            <i class="fa-regular fa-calendar-days text-xl text-gray-500"></i>
+            <div>
+              <p class="text-sm text-gray-500">Año construcción</p>
+              <p class="font-semibold">{{ propiedad.build_year || "N/A" }}</p>
             </div>
           </div>
-
-          <!-- Área construida o lote -->
-          <div class="flex flex-col items-center">
-            <span class="text-sm font-semibold">Área</span>
-            <div class="flex items-center">
-              <i class="fas fa-ruler-combined text-lg"></i>
-              <span class="ml-2">{{
-                propiedad.area_cons || propiedad.area_lot || "N/A"
-                }}
-                m²</span>
+        
+          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+            <i class="fas fa-ruler-combined text-xl text-gray-500"></i>
+            <div>
+              <p class="text-sm text-gray-500">Área</p>
+              <p class="font-semibold">{{ propiedad.area_cons || propiedad.area_lot || "N/A" }} m²</p>
             </div>
           </div>
-
-          <!-- Parqueadero -->
-          <div class="flex flex-col items-center">
-            <span class="text-sm font-semibold">Tamaño lote</span>
-            <div class="flex items-center">
-              <i class="fas fa-parking text-lg"></i>
-              <span class="ml-2">{{ propiedad.parqueaderos || "N/A" }}</span>
-            </div>
-          </div>
-
-          <!-- Estrato -->
-          <div class="flex flex-col items-center">
-            <span class="text-sm font-semibold">Codigo</span>
-            <div class="flex items-center">
-              <i class="fas fa-layer-group text-lg"></i>
-              <span class="ml-2">{{
-                propiedad.neighborhood_code || "N/A"
-                }}</span>
-            </div>
-          </div>
-
-          <!-- Año de entrega -->
-          <div class="flex flex-col items-center">
-            <span class="text-sm font-semibold">Estrato</span>
-            <div class="flex items-center">
-              <i class="fas fa-calendar-check text-lg"></i>
-              <span class="ml-2">{{ propiedad.status || "N/A" }}</span>
+      
+          <div class="flex items-center bg-white rounded-xl shadow-sm p-4 gap-4">
+            <i class="fas fa-calendar-check text-xl text-gray-500"></i>
+            <div>
+              <p class="text-sm text-gray-500">Estrato</p>
+              <p class="font-semibold">{{ propiedad.status || "N/A" }}</p>
             </div>
           </div>
         </div>
-
+        
         <div class="rounded-lg p-10 text-center">
-          <p class="text-[#080E36] font-medium">¿Conectaste con este espacio? Nuestro equipo te acompaña.</p>
+          <p class="text-[20px] text-[#080E36] font-bold">¿Conectaste con este espacio? Nuestro equipo te acompaña.</p>
         </div>
 
         <div class="space-y-3">
@@ -391,22 +363,12 @@
   </div>
 
   <div class="flex flex-col md:flex-row px-4 md:px-10 gap-2">
-    <div class="w-full md:w-2/3 pt-4 px-6 pb-6 bg-white rounded-lg shadow-md text-[#080E36]">
+    <div class="w-full md:w-2/3 pt-4 px-6 pb-6  text-[#080E36]">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-        <!-- Card -->
-        @if (propiedad.parking > 0) {
-        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
-          <div class="flex flex-col items-center">
-            <i class="fas fa-car text-xl mb-2" style="color: #cdad60"></i>
-            <span class="text-sm font-medium text-gray-600">Celdas de parqueo adicionales</span>
-            <span class="text-lg font-bold text-gray-800 mt-1">{{propiedad.parking }}</span>
-          </div>
-        </div>
-        }
 
         <!-- Administracion incluida -->
         @if (propiedad.administration == 0) {
-        <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
+        <div class="bg-white rounded-lg shadow p-4 text-center">
           <div class="flex flex-col items-center">
             <i class="fas fa-file-invoice-dollar text-xl mb-2" style="color: #cdad60"></i>
             <span class="text-sm font-medium text-gray-600">¿La administración está incluida?</span>
@@ -500,7 +462,7 @@
       </div>
 
       <div class="mt-6">
-        <h2 class="text-lg font-bold text-[#080E36] mb-2">Comodidades de la propiedad</h2>
+        <h2 class="text-lg font-bold text-[#080E36] mb-8">Comodidades de la propiedad</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm text-gray-800">
           <div *ngFor="let amenity of propiedad.amenities" class="flex items-center">
             <i class="fas fa-check text-yellow-500 mr-2"></i>
@@ -578,7 +540,7 @@
   </div>
 
   <!-- Titulo inmuebles similares -->
-  <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4">
+  <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4 mb-24">
     <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center w-full max-w-6xl">
       Inmuebles similares
     </h1>

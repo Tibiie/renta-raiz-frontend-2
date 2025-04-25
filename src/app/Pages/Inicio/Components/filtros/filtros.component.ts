@@ -343,7 +343,7 @@ export class FiltrosComponent implements OnInit {
     if (this.seleccion.banos.length > 0) {
       const values = this.seleccion.banos;
       if (values.includes('+6')) {
-        this.filtrosSeleccionados.set('maxbathroom', 100);
+        this.filtrosSeleccionados.set('"maxbathroom', 100);
         this.filtrosSeleccionados.set('minbathroom', 6);
       } else {
         this.filtrosSeleccionados.set('bathroom', values.join(','));
@@ -398,6 +398,9 @@ export class FiltrosComponent implements OnInit {
       ...filtrosObj,
       page: pagina,
     };
+
+    console.log('filtrosObj', filtrosObj);
+    
 
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
