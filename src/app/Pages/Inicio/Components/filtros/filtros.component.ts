@@ -709,9 +709,8 @@ export class FiltrosComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro },
-    });
+    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    window.open(url, '_blank');
   }
 
   borrarFiltros() {

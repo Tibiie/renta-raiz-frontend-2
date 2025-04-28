@@ -45,12 +45,14 @@
                 <div class="flex gap-4">
                   <div class="flex flex-col w-44">
                     <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
-                    <input id="min-price" formControlName="precioMinimo" type="number" placeholder="Desde $"
+                    <input id="min-price" formControlName="precioMinimo" type="number" min="100000"
+                      placeholder="Desde $"
                       class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                   </div>
                   <div class="flex flex-col w-44">
                     <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
-                    <input id="max-price" formControlName="precioMaximo" type="number" placeholder="Hasta $"
+                    <input id="max-price" formControlName="precioMaximo" type="number" min="100000"
+                      placeholder="Hasta $"
                       class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                   </div>
                 </div>
@@ -69,12 +71,14 @@
                 <div class="flex gap-4">
                   <div class="flex flex-col w-44">
                     <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
-                    <input id="min-price" formControlName="precioVentaMinimo" type="number" placeholder="Desde $"
+                    <input id="min-price" formControlName="precioVentaMinimo" min="100000" type="number"
+                      placeholder="Desde $"
                       class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                   </div>
                   <div class="flex flex-col w-44">
                     <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
-                    <input id="max-price" formControlName="precioVentaMaximo" type="number" placeholder="Hasta $"
+                    <input id="max-price" formControlName="precioVentaMaximo" min="100000" type="number"
+                      placeholder="Hasta $"
                       class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                   </div>
                 </div>
@@ -149,13 +153,13 @@
                 <div class="flex gap-4">
                   <div class="flex flex-col w-44">
                     <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Mínima</label>
-                    <input id="min-price" type="number" placeholder="Ej. 60 m2"
+                    <input id="min-price" type="number" placeholder="Ej. 60 m2" min="10"
                       class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
                       id="AreaMinima" formControlName="AreaMinima" />
                   </div>
                   <div class="flex flex-col w-44">
                     <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Máxima</label>
-                    <input id="max-price" type="number" placeholder="Ej. 120 m2"
+                    <input id="max-price" type="number" placeholder="Ej. 120 m2" min="10"
                       class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
                       id="AreaMaxima" formControlName="AreaMaxima" />
                   </div>
