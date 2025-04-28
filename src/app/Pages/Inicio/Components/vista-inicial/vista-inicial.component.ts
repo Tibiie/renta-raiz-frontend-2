@@ -249,25 +249,6 @@ export class VistaInicialComponent implements OnInit {
     );
   }
 
-  getAliadosPorGrupo(): void {
-    this.aliadosPorGrupo = [];
-    for (let i = 0; i < this.aliados.length; i += 4) {
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
-    }
-    console.log(this.aliadosPorGrupo);
-  }
-
-  abrirPestana(url: string) {
-    window.open(url, '_blank');
-  }
-
-  verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro },
-    });
-  }
-
   getCiudades() {
     this.inmueblesService.getCiudades().subscribe(
       (response: any) => {
@@ -469,5 +450,24 @@ export class VistaInicialComponent implements OnInit {
 
   redirigirVerBlog(id: number) {
     this.router.navigate(['/ver-blog', id]);
+  }
+
+  getAliadosPorGrupo(): void {
+    this.aliadosPorGrupo = [];
+    for (let i = 0; i < this.aliados.length; i += 4) {
+      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
+      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
+    }
+    console.log(this.aliadosPorGrupo);
+  }
+
+  abrirPestana(url: string) {
+    window.open(url, '_blank');
+  }
+
+  verPropiedad(codPro: number) {
+    this.router.navigate(['/ver-propiedad', codPro], {
+      state: { codPro: codPro },
+    });
   }
 }

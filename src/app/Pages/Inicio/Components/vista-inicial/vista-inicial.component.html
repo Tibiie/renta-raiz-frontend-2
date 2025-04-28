@@ -20,7 +20,7 @@
   </div>
 
   <!-- Sección de filtros -->
-  <div class="bg-gray-100">
+  <div class="bg-gray-200">
     <div [formGroup]="formRangos" class="relative w-full flex justify-center mt-4 md:-mt-14 px-4 z-30">
       <div class="bg-white rounded-lg p-6 w-full max-w-7xl shadow-2xl shadow-gray-600/40">
         <div class="flex flex-col md:flex-row gap-4 items-end">
@@ -151,7 +151,7 @@
             </button>
 
             <div *ngIf="isMasFiltrosOpen" id="modern-drawer"
-              class="absolute z-10 mt-2 w-[400px] max-h-[300px] overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200">
+              class="absolute z-10 mt-2 w-[350px] max-h-[300px] overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200">
               <div class="p-4">
                 <!-- Habitaciones -->
                 <p class="text-gray-500 text-sm font-medium mb-2">Habitaciones</p>
@@ -239,12 +239,13 @@
       </h2>
 
       <div *ngIf="inmueblesDestacadosArray" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
-        <div *ngFor="let inmueble of inmueblesDestacadosArray.data"
+        <div *ngFor="let inmueble of inmueblesDestacadosArray.data; let i = index"
           class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
           <div class="relative group">
             <a href="#">
-              <img class="rounded-t-lg w-full h-70 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-                [alt]="inmueble.address" />
+              <img class="rounded-t-lg w-full h-60 object-cover"
+                [src]="(inmueblesDestacadosArray.dataDetails[i]?.images?.[0]?.thumburl)  || 'assets/images/renta-1.jpg'"
+                [alt]="inmueble?.address || 'Imagen de propiedad'" />
             </a>
 
             <div
@@ -423,7 +424,7 @@
   </div>
 
   <!-- Seccion de inmuebles en arriendo -->
-  <div class="bg-gray-100">
+  <div class="bg-gray-200">
     <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4">
       <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-4">
         Nuestros inmuebles en arriendo

@@ -1,1 +1,411 @@
 <app-navbar [alwaysScrolled]="true"></app-navbar>
+
+<div class="flex flex-col">
+    <!-- Sección del video hero -->
+    <div class="banner-contacto w-full max-h-[50vh] overflow-hidden">
+        <div class="relative w-full pb-[56.25%] h-0">
+            <!-- Overlay con imagen adicional -->
+            <div class="absolute inset-0 bg-[#080E36] flex items-end sm:items-start justify-start z-20">
+                <img src="assets/images/noticias.png"
+                    class="w-[100%] sm:w-full h-auto object-contain max-h-[50%] sm:max-h-[60%]" alt="Imagen" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de filtros -->
+    <div class="bg-gray-200">
+        <div [formGroup]="formRangos" class="relative w-full flex justify-center mt-4 md:-mt-14 px-4 z-30">
+            <div class="bg-white rounded-lg p-6 w-full max-w-7xl shadow-2xl shadow-gray-600/40">
+                <div class="flex flex-col md:flex-row gap-4 items-end">
+                    <!-- UBICACIÓN -->
+                    <div class="w-full md:w-[20%] min-w-[200px]">
+                        <label for="ubicacion" class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+                        <div class="relative">
+                            <input type="text" id="ubicacion" formControlName="ubicacion"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#CDAD60] focus:border-[#CDAD60] pr-12"
+                                placeholder="Ej. Medellin, Colombia" />
+                        </div>
+                    </div>
+
+                    <!-- TIPO DE PROPIEDAD -->
+                    <div class="relative w-full md:w-1/3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de propiedad</label>
+                        <button (click)="toggleDropdown('property')"
+                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                            <span>
+                                <i [class]="getIcon('property', selectedProperty)" class="mr-2"></i>
+                                {{
+                                selectedProperty?.displayName || selectedProperty?.name
+                                | titlecase
+                                }}
+                            </span>
+                            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+
+                        <div *ngIf="isPropertyDropdownOpen"
+                            class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
+                            <div class="p-4">
+                                <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button *ngFor="let option of propertyOptions"
+                                        (click)="selectOption('property', option)" [class]="
+                      getButtonClass(selectedProperty?.code === option.code)
+                    ">
+                                        <i [class]="getIcon('property', option)" class="mr-2"></i>
+                                        {{ option.displayName || option.name | titlecase }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INMUEBLE -->
+                    <div class="relative w-full md:w-1/3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de inmueble</label>
+                        <button (click)="toggleDropdown('estate')"
+                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                            <span>
+                                <i [class]="getIcon('estate', selectedEstate)" class="mr-2"></i>
+                                {{
+                                selectedEstate
+                                ? (selectedEstate.name | titlecase)
+                                : "Seleccionar"
+                                }}
+                            </span>
+                            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+
+                        <div *ngIf="isEstateDropdownOpen"
+                            class="absolute z-10 mt-2 w-[350px] bg-white rounded-lg shadow-lg border border-gray-200">
+
+                            <div class="p-4">
+                                <p class="text-gray-500 text-sm font-medium mb-2">
+                                    Tipo de inmueble
+                                </p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button *ngFor="let option of estateOptions"
+                                        (click)="selectOption('estate', option)" [class]="
+                      getButtonClass(selectedEstate?.code === option.code)
+                    ">
+                                        <i [class]="getIcon('estate', option)" class="mr-2"></i>
+                                        {{ option.name | titlecase }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtro por Precios -->
+                    <div class="relative w-full md:w-1/4 mb-4 md:mb-0">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Precios</label>
+                        <button (click)="toggleDropdown('precios')"
+                            class="flex items-center justify-between w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                            <span>Precios</span>
+                            <svg class="w-4 h-4 ml-2 text-gray-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown de Precios -->
+                        <div *ngIf="isPreciosOpen"
+                            class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+                            <p class="text-gray-500 text-sm font-medium mb-2">Rangos de precios</p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Mínimo</label>
+                                    <input formControlName="precioMinimo" type="number" placeholder="Desde $"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Máximo</label>
+                                    <input formControlName="precioMaximo" type="number" placeholder="Hasta $"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Más filtros -->
+                    <div class="relative w-full md:w-1/3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Más filtros</label>
+                        <button (click)="toggleDropdown('masFiltros')"
+                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                            <span>
+                                Filtros adicionales
+                            </span>
+                            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+
+                        <div *ngIf="isMasFiltrosOpen" id="modern-drawer"
+                            class="absolute z-10 mt-2 w-[350px] max-h-[300px] overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200">
+                            <div class="p-4">
+                                <!-- Habitaciones -->
+                                <p class="text-gray-500 text-sm font-medium mb-2">Habitaciones</p>
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <button *ngFor="let hab of habitaciones" (click)="seleccionar('habitaciones', hab)"
+                                        [ngClass]="{
+            'bg-gray-700 text-white font-semibold': seleccion.habitaciones.includes(hab),
+            'bg-blue-100 text-blue-700': !seleccion.habitaciones.includes(hab)
+          }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                                        {{ hab }}
+                                    </button>
+                                </div>
+
+                                <!-- Baños -->
+                                <p class="text-gray-500 text-sm font-medium mb-2">Baños</p>
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <button *ngFor="let bano of banos" (click)="seleccionar('banos', bano)" [ngClass]="{
+            'bg-gray-700 text-white font-semibold': seleccion.banos.includes(bano),
+            'bg-blue-100 text-blue-700': !seleccion.banos.includes(bano)
+          }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                                        {{ bano }}
+                                    </button>
+                                </div>
+
+                                <!-- Parqueadores -->
+                                <p class="text-gray-500 text-sm font-medium mb-2">Parqueadores</p>
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <button *ngFor="let parqueador of parqueadero"
+                                        (click)="seleccionar('parqueadero', parqueador)" [ngClass]="{
+            'bg-gray-700 text-white font-semibold': seleccion.parqueadero.includes(parqueador),
+            'bg-blue-100 text-blue-700': !seleccion.parqueadero.includes(parqueador)
+          }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                                        {{ parqueador }}
+                                    </button>
+                                </div>
+
+                                <!-- Estratos-->
+                                <p class="text-gray-500 text-sm font-medium mb-2">Estratos</p>
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <button *ngFor="let estrato of estrato" (click)="seleccionar('estrato', estrato)"
+                                        [ngClass]="{
+            'bg-gray-700 text-white font-semibold': seleccion.estrato.includes(estrato),
+            'bg-blue-100 text-blue-700': !seleccion.estrato.includes(estrato)
+          }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                                        {{ estrato }}
+                                    </button>
+                                </div>
+
+                                <!-- Rangos de area -->
+                                <p class="text-gray-500 text-sm font-medium mb-2">Rangos de áreas</p>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Mínimo</label>
+                                        <input id="pcmin" formControlName="AreaMinima" type="number"
+                                            placeholder="Ej. 60 m2"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Máximo</label>
+                                        <input id="pcmax" formControlName="AreaMaxima" type="number"
+                                            placeholder="Ej. 200 m2"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" (click)="redirigirFiltros()"
+                        class="flex items-center justify-center mx-auto md:ml-auto text-white bg-[#080E36] hover:bg-[#CDAD60] font-bold rounded-full text-lg px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <article class="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-xl shadow-md">
+        <!-- Encabezado -->
+        <header class="mb-6 mt-10">
+            @if (blogId === 1) {
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
+                Medellín brilla en los Stella Awards 2025: la ciudad que enamora al mundo y se vuelve epicentro de
+                inversión inmobiliaria
+            </h1>
+            }
+
+            <div class="flex items-center text-sm text-gray-500 space-x-4 mb-4">
+                <span class="flex items-center">
+                    <i class="fas fa-user-edit mr-2 text-[#CDAD60]"></i>
+                    por Renta Raíz
+                </span>
+                @if (blogId === 1) {
+                <span class="flex items-center">
+                    <i class="far fa-calendar-alt mr-2 text-[#CDAD60]"></i>
+                    24 de abril 2024
+                </span>
+                }
+                <span class="flex items-center">
+                    <i class="far fa-comment mr-2 text-[#CDAD60]"></i>
+                    Sin comentarios
+                </span>
+            </div>
+
+            <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
+        </header>
+
+        <!-- Imagen destacada -->
+        <div class="w-full h-64 md:h-96">
+            @if (blogId === 1) {
+            <img src="/assets/images/blog-1.jpg" alt="Medellín de noche con edificios iluminados"
+                class="w-full h-full object-cover">
+            }
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="prose max-w-none mt-10">
+            @if (blogId === 1) {
+            <p class="text-lg text-gray-700 leading-relaxed mb-6 ">
+                <strong class="text-[#080E36]">Medellín</strong> ha sido nominada a los <strong>Stella Awards
+                    2025</strong>, conocidos como los “Óscar del turismo de reuniones”, por su liderazgo en la industria
+                MICE (Meetings, Incentives, Conferences and Exhibitions). Estos premios reconocen la excelencia global
+                en destinos, hoteles y servicios relacionados con grandes eventos y turismo corporativo.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                Este tipo de nominaciones no solo posicionan a la ciudad como un referente internacional, sino que
+                también encienden el radar de miles de personas que buscan dónde vivir, invertir o expandir sus
+                proyectos. Medellín no solo está de moda: está en crecimiento. Y eso lo están viendo empresarios,
+                turistas y nuevos residentes de todo el mundo.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">Medellín en los Stella Awards: un
+                reconocimiento con
+                peso internacional</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Medellín ha sido nominada en los Stella Awards 2025 como “Mejor destino internacional para turismo de
+                reuniones”, junto a ciudades como Toronto, Singapur u Orlando. Este reconocimiento no es gratuito:
+                responde al crecimiento sostenido en eventos internacionales, ferias, convenciones y una infraestructura
+                urbana que sorprende a los visitantes.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">¿Por qué todos quieren vivir en Medellín?</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Clima primaveral todo el año, cultura vibrante, gastronomía en expansión, movilidad inteligente,
+                conexión digital avanzada y un estilo de vida que mezcla lo moderno con lo humano. Medellín está en el
+                mapa global no solo como destino de paso, sino como ciudad de residencia ideal para nómadas digitales,
+                empresarios, artistas y familias internacionales.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">Turismo en expansión = inversión inmobiliaria en
+                crecimiento</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                El turismo impulsa no solo hoteles y restaurantes: también transforma zonas residenciales. Las
+                premiaciones como los Stella Awards aumentan el interés de inversionistas, extranjeros y locales en
+                adquirir propiedades o vivir por temporadas largas. Esto ha generado un incremento en la demanda de
+                vivienda amoblada, arriendos premium y desarrollos verticales de alta gama.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">La centralización de Medellín: vivir cerca del
+                corazón del progreso
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Sectores como El Poblado, Laureles, Manila o Provenza concentran no solo la vida social y cultural, sino
+                también el mayor desarrollo inmobiliario. Estas zonas se han convertido en epicentros de lujo urbano,
+                donde vivir significa acceder a una calidad de vida superior y a una inversión en constante
+                valorización.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">¿Estás pensando en mudarte o invertir en Medellín?
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                En Renta Raíz te ayudamos a encontrar propiedades excepcionales para un estilo de vida incomparable.
+                <a href="https://www.rentaraiz.co"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#CDAD60] to-[#080E36] text-white rounded-lg hover:shadow-md transition-all">
+                    👉 Agenda tu asesoría
+                </a> y descubre por qué Medellín es tu
+                próxima gran decisión.
+            </p>
+
+            <div class="bg-gray-50 p-4 md:p-6 rounded-lg border-l-4 border-[#CDAD60] mb-6 mt-10">
+                <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                    Conclusión: El reconocimiento internacional de Medellín no es solo una noticia para celebrar; es una
+                    señal de
+                    oportunidades. Cada premio, cada feria internacional y cada turista que se enamora de la ciudad
+                    impulsa su desarrollo y su mercado inmobiliario. En Renta Raíz, te acompañamos a vivir y rentar en
+                    una ciudad que no para de brillar.
+                </p>
+            </div>
+
+            <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
+
+            <div class="mt-4 p-4 rounded-lg text-sm text-gray-700">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="text-lg fas fa-tools text-[#CDAD60] mt-4"></i>
+                    <h3 class="text-lg font-bold text-[#080E36] mt-8 mb-4">SEO Técnico sugerido</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="font-semibold mb-1">Palabras clave:</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Principal: <span class="text-[#080E36]">Medellín destino turístico</span></li>
+                            <li>Secundarias: Stella Awards, vivir en Medellín, inversión inmobiliaria en Medellín,
+                                turismo en Medellín</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <p class="font-semibold mb-1">Meta descripción:</p>
+                        <p class="bg-white p-2 rounded border border-gray-200 italic">"Medellín sigue brillando en el
+                            mapa internacional. Descubre por qué su crecimiento turístico, premios y calidad de vida
+                            están impulsando el auge inmobiliario en la ciudad."</p>
+                    </div>
+
+                    <div>
+                        <p class="font-semibold mb-1">Slug URL:</p>
+                        <code
+                            class="bg-white p-2 rounded border border-gray-200 block break-all">/blog/medellin-destino-turistico-inmobiliario-2025</code>
+                    </div>
+
+                    <div>
+                        <p class="font-semibold mb-1">Alt text imágenes:</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>"Vista panorámica de Medellín"</li>
+                            <li>"Premios Stella Awards"</li>
+                            <li>"Zonas residenciales de alta valorización"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- <p class="mt-3 text-xs text-gray-500 flex items-center gap-1">
+                    <i class="fas fa-info-circle"></i> Esta sección es solo de referencia para el equipo editorial.
+                </p> -->
+            </div>
+            }
+        </div>
+
+        <!-- Pie de artículo -->
+        @if (blogId === 1) {
+        <footer class="pt-6 border-t border-gray-200 mb-20">
+            <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Stella Awards</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Turismo</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Inversión</span>
+            </div>
+        </footer>
+        }
+    </article>
+</div>
+
+<app-botones-flotantes></app-botones-flotantes>
+<app-footer></app-footer>

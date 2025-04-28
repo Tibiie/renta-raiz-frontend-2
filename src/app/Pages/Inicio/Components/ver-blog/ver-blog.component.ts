@@ -1,11 +1,23 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
 import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FooterComponent } from '../../../../shared/footer/footer.component';
+import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 
 @Component({
   selector: 'app-ver-blog',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NavbarComponent,
+    FooterComponent,
+    BotonesFlotantesComponent,
+  ],
   templateUrl: './ver-blog.component.html',
   styleUrl: './ver-blog.component.scss'
 })
@@ -13,14 +25,374 @@ export class VerBlogComponent implements OnInit {
 
   blogId: number = 0;
 
+  elementsPerPage = 12;
+  ubicacion: string = '';
+  filtrosSeleccionados: Map<string, any> = new Map();
+
+  filtros: any = {};
+  barrios: any[] = [];
+  ciudades: any[] = [];
+  categoriasInmuebles: any[] = [];
+  inmueblesDestacadosArray: any = {};
+
+  estrato: number[] = [1, 2, 3, 4];
+  banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+
+  seleccion = {
+    estrato: [] as number[],
+    banos: [] as (number | string)[],
+    parqueadero: [] as (number | string)[],
+    habitaciones: [] as (number | string)[],
+  };
+
+  isPreciosOpen = false;
+  isMasFiltrosOpen = false
+
+  // Para Categorias de inmuebles
+  isPropertyDropdownOpen = false;
+  selectedProperty: {
+    code: string;
+    name: string;
+    displayName?: string;
+  } | null = null;
+  propertyOptions: { code: string; name: string; displayName?: string }[] = [];
+
+  // Para tipos de propiedades
+  isEstateDropdownOpen = false;
+  selectedEstate: { code: string; name: string } | null = null;
+  estateOptions: { code: string; name: string }[] = [];
+
+  private readonly icons = {
+    property: {
+      '': 'fas fa-list-ul',
+      '1': 'fas fa-building',
+      '2': 'fas fa-dollar-sign',
+      '3': 'fas fa-home',
+    } as Record<string, string>,
+    estate: {
+      '1': 'fas fa-building',
+      '2': 'fas fa-home',
+      '3': 'fas fa-home-user',
+      '4': 'fas fa-store',
+      '5': 'fas fa-warehouse',
+      '6': 'fas fa-briefcase',
+      '7': 'fas fa-map-marked-alt',
+      '8': 'fas fa-tractor',
+      '10': 'fas fa-home',
+      '11': 'fas fa-car',
+      '12': 'fas fa-umbrella-beach',
+      '13': 'fas fa-store',
+      '14': 'fas fa-home',
+    } as Record<string, string>,
+  };
+
+  router = inject(Router);
   route = inject(ActivatedRoute);
+  formBuilder = inject(FormBuilder);
+  inmueblesService = inject(InmueblesService);
+
+  formRangos = this.formBuilder.group({
+    AreaMinima: [''],
+    AreaMaxima: [''],
+    precioMinimo: [''],
+    precioMaximo: [''],
+    ubicacion: ['']
+  });
 
   ngOnInit(): void {
+    this.getDatos();
     this.route.params.subscribe(params => {
       this.blogId = +params['id'];
     });
 
     console.log(this.blogId);
+  }
 
+  getDatos() {
+    this.getCategoriasInmuebles();
+    this.getCiudades();
+    this.getTipoPropiedad();
+    this.getInmueblesDestacados();
+  }
+
+  seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
+    const arr = this.seleccion[categoria] as (number | string)[];
+    const index = arr.indexOf(valor);
+    index > -1 ? arr.splice(index, 1) : arr.push(valor);
+  }
+
+  prepararFiltros() {
+    this.filtrosSeleccionados.clear();
+
+    const limpiarTexto = (texto: string) => {
+      return texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLowerCase();
+    };
+
+    const ciudad = this.ciudades.find(
+      (c) => limpiarTexto(c.name) === limpiarTexto(this.formRangos.value.ubicacion!)
+    );
+    var codigo = ciudad?.code;
+
+    if (this.formRangos.value.ubicacion) {
+      this.filtrosSeleccionados.set('city', codigo);
+    }
+
+    if (this.selectedProperty) {
+      this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
+    }
+
+    if (this.selectedEstate) {
+      this.filtrosSeleccionados.set('type', this.selectedEstate.code);
+    }
+
+    if (this.formRangos.value.AreaMinima != '' || this.formRangos.value.AreaMaxima != '') {
+      this.filtrosSeleccionados.set('minarea', this.formRangos.value.AreaMinima);
+      this.filtrosSeleccionados.set('maxarea', this.formRangos.value.AreaMaxima);
+    }
+
+    if (this.formRangos.value.precioMinimo != '' || this.formRangos.value.precioMaximo != '') {
+      if (this.selectedProperty?.code == '1' || this.selectedEstate?.code == '3') {
+        this.filtrosSeleccionados.set('pcmin', this.formRangos.value.precioMinimo);
+        this.filtrosSeleccionados.set('pcmax', this.formRangos.value.precioMaximo);
+      }
+
+      if (this.selectedEstate?.code == '2' || this.selectedProperty?.code == '3') {
+        this.filtrosSeleccionados.set('pvmin', this.formRangos.value.precioMinimo);
+        this.filtrosSeleccionados.set('pvmax', this.formRangos.value.precioMaximo);
+      }
+    }
+
+    if (this.seleccion.banos.length > 0) {
+      const values = this.seleccion.banos;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('maxbathroom', 100);
+        this.filtrosSeleccionados.set('minbathroom', 6);
+      } else {
+        this.filtrosSeleccionados.set('bathrooms', values.join(','));
+      }
+    }
+
+    if (this.seleccion.parqueadero.length > 0) {
+      const values = this.seleccion.parqueadero;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('maxparking', 100);
+        this.filtrosSeleccionados.set('minparking', 6);
+      } else {
+        this.filtrosSeleccionados.set('maxparking', values.join(','));
+        this.filtrosSeleccionados.set('minparking', values.join(','));
+      }
+    }
+
+    if (this.seleccion.estrato.length > 0) {
+      this.filtrosSeleccionados.set(
+        'stratum',
+        this.seleccion.estrato.join(',')
+      );
+    }
+
+    if (this.seleccion.habitaciones.length > 0) {
+      const values = this.seleccion.habitaciones;
+      if (values.includes('+6')) {
+        this.filtrosSeleccionados.set('maxbedroom', 100);
+        this.filtrosSeleccionados.set('minbedroom', 6);
+      } else {
+        this.filtrosSeleccionados.set('bedrooms', values.join(','));
+      }
+    }
+  }
+
+  getEnviarFiltros() {
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    };
+
+    console.log('filtrosObj', filtrosObj);
+
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        this.router.navigate(['/filtros'], {
+          state: {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+        });
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
+  getCiudades() {
+    this.inmueblesService.getCiudades().subscribe(
+      (response: any) => {
+        this.ciudades = response.data;
+      },
+      (error: any) => {
+        console.error('Error al obtener las ciudades:', error);
+      }
+    );
+  }
+
+  getCategoriasInmuebles() {
+    this.inmueblesService.getCategoriasInmuebles().subscribe(
+      (response: any) => {
+        this.categoriasInmuebles = response.data;
+
+        this.propertyOptions = response.data.map((cat: any) => {
+          if (cat.code === '3') {
+            return { ...cat, displayName: 'Todas' };
+          }
+          return cat;
+        });
+
+        const defaultOption =
+          this.propertyOptions.find((cat) => cat.code === '3') ||
+          this.propertyOptions[0];
+        this.selectedProperty = defaultOption;
+      },
+      (error: any) => {
+        console.error('Error al obtener las categorias:', error);
+      }
+    );
+  }
+
+  getTipoPropiedad() {
+    this.inmueblesService.getTipoPropiedad().subscribe(
+      (response: any) => {
+        this.estateOptions = response.data;
+        this.selectedEstate = this.estateOptions[0] || null;
+      },
+      (error: any) => {
+        console.error('Error al obtener los tipos de propiedad:', error);
+      }
+    );
+  }
+
+  getFiltros() {
+    this.inmueblesService.getFiltros().subscribe(
+      (data: any) => {
+        this.filtros = data;
+      },
+      (error: any) => {
+        console.log(error);
+
+        console.error('Error al obtener los filtros:', error);
+      }
+    );
+  }
+
+  getInmueblesDestacados() {
+    this.inmueblesService.getInmueblesDestacados().subscribe(
+      (data: any) => {
+        this.inmueblesDestacadosArray = data;
+        console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
+
+      },
+      (error: any) => {
+        console.log(error);
+
+        console.error('Error al obtener los inmuebles:', error);
+      }
+    );
+  }
+
+  getBarrios() {
+    this.inmueblesService.getBarrios().subscribe(
+      (data: any) => {
+        this.barrios = data;
+        console.log('Barrios:', this.barrios);
+      },
+      (error: any) => {
+        console.log(error);
+        console.error('Error al obtener los barrios:', error);
+      }
+    );
+  }
+
+  getIcon(type: 'property' | 'estate', option: any): string {
+    const defaultIcons = {
+      property: 'fas fa-home',
+      estate: 'fas fa-question-circle',
+    };
+
+    if (!option && type === 'property') {
+      return 'fas fa-list-ul';
+    }
+
+    console.log(option);
+
+    if (option) {
+      const code = typeof option === 'object' ? option.code : '';
+      const iconMap = this.icons[type];
+
+      return iconMap?.[code] || defaultIcons[type];
+    } else {
+      return '';
+    }
+  }
+
+  selectOption(type: 'property' | 'estate', option: any): void {
+    if (type === 'property') {
+      this.selectedProperty = option;
+      this.isPropertyDropdownOpen = false;
+    } else {
+      this.selectedEstate = option;
+      this.isEstateDropdownOpen = false;
+    }
+  }
+
+  toggleDropdown(type: 'property' | 'estate' | 'masFiltros' | 'precios'): void {
+    if (type === 'property') {
+      this.isPropertyDropdownOpen = !this.isPropertyDropdownOpen;
+      this.isEstateDropdownOpen = false;
+      this.isMasFiltrosOpen = false;
+      this.isPreciosOpen = false;
+
+    } else if (type === 'masFiltros') {
+      this.isMasFiltrosOpen = !this.isMasFiltrosOpen;
+      this.isPropertyDropdownOpen = false;
+      this.isEstateDropdownOpen = false;
+      this.isPreciosOpen = false;
+
+    } else if (type === 'precios') {
+      this.isPreciosOpen = !this.isPreciosOpen;
+      this.isPropertyDropdownOpen = false;
+      this.isEstateDropdownOpen = false;
+      this.isMasFiltrosOpen = false;
+    } else {
+      this.isEstateDropdownOpen = !this.isEstateDropdownOpen;
+      this.isPropertyDropdownOpen = false;
+      this.isMasFiltrosOpen = false;
+      this.isPreciosOpen = false;
+    }
+  }
+
+  getButtonClass(selected: boolean): string {
+    const base = 'flex items-center px-3 py-2 text-sm rounded-md';
+    return selected
+      ? `${base} bg-[#080E36] text-white`
+      : `${base} bg-blue-100 text-blue-700`;
+  }
+
+  redirigirFiltros() {
+    this.prepararFiltros();
+    this.getEnviarFiltros();
+  }
+
+
+  verPropiedad(codPro: number) {
+    this.router.navigate(['/ver-propiedad', codPro], {
+      state: { codPro: codPro },
+    });
   }
 }
