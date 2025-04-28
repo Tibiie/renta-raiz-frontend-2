@@ -17,13 +17,30 @@
         <div [formGroup]="formRangos" class="relative w-full flex justify-center mt-4 md:-mt-14 px-4 z-30">
             <div class="bg-white rounded-lg p-6 w-full max-w-7xl shadow-2xl shadow-gray-600/40">
                 <div class="flex flex-col md:flex-row gap-4 items-end">
-                    <!-- UBICACIÓN -->
-                    <div class="w-full md:w-[20%] min-w-[200px]">
-                        <label for="ubicacion" class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+                    <!-- Template actualizado -->
+                    <div class="relative w-full md:w-1/3">
                         <div class="relative">
-                            <input type="text" id="ubicacion" formControlName="ubicacion"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#CDAD60] focus:border-[#CDAD60] pr-12"
-                                placeholder="Ej. Medellin, Colombia" />
+                            <input type="text" formControlName="ubicacion" [(ngModel)]="searchTerm"
+                                (input)="filterLocations()" placeholder="Buscar ubicación..."
+                                class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-[#CDAD60] focus:border-[#CDAD60]" />
+
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-1xl text-gray-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Lista de sugerencias -->
+                        <div *ngIf="filteredBarrios.length > 0" id="modern-drawer"
+                            class="absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
+                            <div *ngFor="let barrio of filteredBarrios" (click)="selectLocation(barrio)"
+                                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <i class="fas fa-location-dot text-1xl text-gray-500 mt-1 mr-2"></i>
+
+                                <div>
+                                    <p class="text-medium text-gray-900">{{ barrio.city_name }}</p>
+                                    <p class="font-sm text-gray-500">{{ barrio.name }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -244,10 +261,26 @@
             </h1>
             }
 
+            @if (blogId === 2) {
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
+                Medellín: El nuevo epicentro del lujo en
+                América Latina para invertir, rentar o
+                comprar propiedades exclusivas
+            </h1>
+            }
+
+            @if (blogId === 3) {
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
+                ¿Por qué Medellín se ha convertido en el
+                lugar ideal para vivir e invertir en tiempos
+                de cambio?
+            </h1>
+            }
+
             <div class="flex items-center text-sm text-gray-500 space-x-4 mb-4">
                 <span class="flex items-center">
                     <i class="fas fa-user-edit mr-2 text-[#CDAD60]"></i>
-                    por Renta Raíz
+                    Por Renta Raíz
                 </span>
                 @if (blogId === 1) {
                 <span class="flex items-center">
@@ -255,6 +288,7 @@
                     24 de abril 2024
                 </span>
                 }
+
                 <span class="flex items-center">
                     <i class="far fa-comment mr-2 text-[#CDAD60]"></i>
                     Sin comentarios
@@ -268,6 +302,16 @@
         <div class="w-full h-64 md:h-96">
             @if (blogId === 1) {
             <img src="/assets/images/blog-1.jpg" alt="Medellín de noche con edificios iluminados"
+                class="w-full h-full object-cover">
+            }
+
+            @if (blogId === 2) {
+            <img src="/assets/images/blog-2.jpg" alt="Medellín de noche con edificios iluminados"
+                class="w-full h-full object-cover">
+            }
+
+            @if (blogId === 3) {
+            <img src="/assets/images/blog-3.jpg" alt="Medellín de noche con edificios iluminados"
                 class="w-full h-full object-cover">
             }
         </div>
@@ -392,19 +436,323 @@
                 </p> -->
             </div>
             }
+
+            @if (blogId === 2) {
+            <p class="text-lg text-gray-700 leading-relaxed mb-6 ">
+                <strong class="text-[#080E36]">El fenómeno inmobiliario de lujo que está transformando Medellín</strong>
+                En los últimos años, Medellín ha dejado de ser solo la “Ciudad de la Eterna Primavera” para
+                convertirse en uno de los destinos más deseados para vivir con estilo, invertir con
+                estrategia o rentar propiedades de lujo.
+            </p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                Empresarios, nómadas digitales, artistas, ejecutivos internacionales e inversionistas de alto
+                perfil están fijando su mirada —y su patrimonio— en Medellín. ¿La razón? Una combinación
+                única de valorización constante, calidad de vida premium, costos competitivos y una cultura
+                vibrante que enamora.
+            </p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                Las ventas y rentas de inmuebles de lujo en Medellín han crecido de forma sostenida,
+                impulsadas por una ciudad que cada vez ofrece más: gastronomía de autor, diseño
+                arquitectónico vanguardista, zonas exclusivas en expansión, seguridad y conexión directa
+                con los grandes centros económicos del mundo.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">Zonas hot: donde todos quieren vivir o invertir</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Zonas como El Poblado, Provenza, Manila, Los Balsos y Laureles concentran hoy la mayor
+                parte de la oferta premium. Allí se encuentran propiedades de lujo con acabados de alto
+                nivel, domótica, amenities tipo hotel 5 estrellas y ubicaciones estratégicas, tanto para uso
+                residencial como para proyectos de renta tipo Airbnb o larga estancia.
+            </p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Comprar una propiedad de lujo en Medellín hoy es más que una inversión: es una
+                declaración de estilo de vida.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">El turismo premium impulsa la demanda de propiedades
+                exclusivas</h2>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                El turismo de lujo ha elevado la categoría de la ciudad. Medellín ya no es solo un destino
+                para viajeros aventureros, sino también para turistas que buscan experiencias exclusivas,
+                alojamientos boutique, gastronomía sofisticada y bienestar integral.
+            </p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Esto ha disparado la demanda de arriendos de lujo, ideal para inversionistas que desean
+                rentabilizar inmuebles con alto nivel de ocupación y tarifas premium.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">Medellín en el mapa global gracias a sus artistas
+            </h2>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">Otro factor que ha proyectado a Medellín como ciudad
+                deseada a nivel internacional es el
+                reconocimiento cultural impulsado por sus artistas globales. Karol G, Maluma, J Balvin y
+                otros nombres que hoy dominan la escena musical mundial han hecho de Medellín su hogar,
+                su cuna creativa, su refugio.</p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Esto ha posicionado a Medellín como una ciudad aspiracional, moderna, vibrante y con
+                carácter. No solo se percibe como un buen lugar para visitar, sino como el lugar donde
+                quieres vivir.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">Diseño consciente, lujo sostenible</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                El nuevo lujo no es solo estético: también es consciente.
+            </p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Por eso, los desarrollos más destacados en Medellín incluyen:
+            </p>
+
+            <ul class="list-disc pl-5 space-y-1 text-lg text-gray-700 leading-relaxed mb-4">
+                <li>Certificaciones ecológicas</li>
+                <li>Arquitectura integrada al entorno natural</li>
+                <li>Domótica inteligente</li>
+                <li>Diseño interior de autor</li>
+            </ul>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Este enfoque ha captado a un perfil de inversionista más exigente, interesado en vivir o
+                rentar propiedades alineadas con un estilo de vida sostenible y elevado.
+            </p>
+
+            <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">¿Medellín está en tu mente para vivir, invertir o
+                rentar con estilo?</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                En Renta Raíz, acompañamos a quienes entienden que una propiedad no es solo un
+                inmueble: es una elección de vida.
+            </p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Ya sea que estés buscando tu nuevo hogar en Medellín, una propiedad para renta de lujo o
+                una inversión inteligente en el mercado premium, nuestro equipo te asesora con visión,
+                experiencia y exclusividad.
+            </p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Visítanos
+                <a href="https://www.rentaraiz.co" target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#CDAD60] to-[#080E36] text-white rounded-md hover:shadow-md transition-all text-center">
+                    <span class="font-medium">👉 Aquí</span>
+                </a>
+                y agenda tu asesoría personalizada hoy mismo.
+            </p>
+
+            <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
+            }
+
+            @if (blogId === 3) {
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                En un mundo donde la incertidumbre política, económica y social ha llevado a millones de
+                personas a repensar su lugar en el mundo, Medellín se posiciona como un refugio para
+                quienes buscan equilibrio, inversión estratégica y calidad de vida. Esta ciudad no solo ha
+                superado sus propios retos históricos, sino que ha sabido reinventarse como un destino
+                inteligente, innovador y cada vez más deseado para vivir o invertir en propiedades de lujo.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">Un cambio de mentalidad global</h2>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                La pandemia global aceleró decisiones de vida: más personas quieren vivir en lugares con
+                mejor clima, tranquilidad, naturaleza y comunidad. Medellín cumple con todos esos
+                factores, ofreciendo una mezcla única de clima primaveral, montañas verdes, arquitectura
+                moderna y un estilo de vida vibrante, conectado y humano.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">Medellín: ciudad refugio para inversión consciente
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Inversionistas nacionales y extranjeros han comenzado a ver a Medellín como un punto de
+                equilibrio: una ciudad donde el lujo es alcanzable, la valorización es real y la rentabilidad,
+                especialmente en el sector inmobiliario, es estable y creciente. Propiedades bien ubicadas,
+                especialmente en zonas como El Poblado, Laureles o Envigado, se están consolidando como
+                activos seguros para quienes desean invertir con visión a largo plazo.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">Infraestructura, seguridad y bienestar</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Medellín es una de las ciudades con mejor infraestructura urbana del país. Con un sistema
+                de transporte eficiente, proyectos sostenibles en crecimiento y una fuerte apuesta por la
+                cultura, el deporte y la tecnología, cada día más personas deciden establecerse aquí.
+                Además, zonas como Alto de Palmas, El Tesoro o La Calera ofrecen opciones de vivienda de
+                lujo rodeadas de naturaleza, con vistas impresionantes y privacidad.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">El atractivo internacional: Medellín como ciudad
+                destino</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Gracias a la visibilidad de Medellín en medios internacionales, eventos culturales y la
+                influencia de artistas globales que han nacido aquí o la han convertido en su hogar, la ciudad
+                hoy está en el radar de inversionistas, empresarios, creativos y nómadas digitales. La inversión
+                extranjera en propiedades de lujo no ha parado de crecer, generando un mercado
+                dinámico y sofisticado para vivir o generar ingresos pasivos por arriendo.
+            </p>
+
+            <h2 class="text-lg font-bold text-[#080E36] mt-8 mb-4">¿Estás considerando mudarte o invertir en Medellín?
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                En Renta Raíz te ayudamos a encontrar propiedades excepcionales, adaptadas a tu estilo de
+                vida y tus objetivos financieros. Ya sea para rentar, comprar o invertir, nuestro equipo te
+                acompaña con asesoría personalizada, enfoque humano y una curaduría de inmuebles de
+                lujo que marcan la diferencia.
+            </p>
+
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Visítanos
+                <a href="https://www.rentaraiz.co" target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#CDAD60] to-[#080E36] text-white rounded-md hover:shadow-md transition-all text-center">
+                    <span class="font-medium">👉 Aquí</span>
+                </a>
+                y agenda una llamada hoy mismo.
+            </p>
+
+            <div class="bg-gray-50 p-4 md:p-6 rounded-lg border-l-4 border-[#CDAD60] mb-6 mt-10">
+                <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                    Conclusión: Medellín no es una moda pasajera: es una ciudad que se ha ganado su lugar como destino
+                    para vivir con estilo, invertir con sentido y construir futuro con visión. En tiempos de
+                    cambio, quienes eligen Medellín eligen estabilidad, belleza y proyección.
+                </p>
+            </div>
+            }
         </div>
 
         <!-- Pie de artículo -->
-        @if (blogId === 1) {
         <footer class="pt-6 border-t border-gray-200 mb-20">
             <div class="flex flex-wrap gap-2">
+                @if (blogId === 1) {
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Stella Awards</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Corazón del progreso</span>
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Turismo</span>
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Inversión</span>
+                }
+
+                @if (blogId === 2) {
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Propiedades
+                    exclusivas</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Turismo premium</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Epicentro</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Inversión</span>
+                }
+
+                @if (blogId === 3) {
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Lugar ideal</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Inversión consciente</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Seguridad</span>
+                <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Bienestar</span>
+                }
             </div>
         </footer>
-        }
+
     </article>
+
+    @if (blogId === 2) {
+    <!-- Sección de inmuebles destacados -->
+    <div class="bg-gray-200">
+        <div class="w-full flex flex-col items-center pt-20 md:pt-16 px-4">
+            <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center w-full max-w-6xl">
+                Nuestros destacados
+            </h1>
+
+            <h2 class="text-2xl font-normal text-[#9a9b9c] text-center w-full max-w-6xl mt-4">
+                Encuentra tu lugar ideal
+            </h2>
+
+            <div *ngIf="inmueblesDestacadosArray"
+                class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
+                <div *ngFor="let inmueble of inmueblesDestacadosArray.data"
+                    class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
+                    <div class="relative group">
+                        <a href="#">
+                            <img class="rounded-t-lg w-full h-70 object-cover"
+                                [src]="inmueble.image1 || 'assets/images/renta-1.jpg'" [alt]="inmueble.address" />
+                        </a>
+
+                        <div
+                            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+                            <a class="cursor-pointer bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+                                (click)="verPropiedad(inmueble.codpro)">
+                                Ver propiedad
+                            </a>
+                        </div>
+
+                        <div
+                            class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]">
+                            Destacado
+                        </div>
+
+                        <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+                            <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
+                                {{ inmueble.type | titlecase }}
+                            </span>
+
+                            <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                                <i class="fas fa-heart text-2xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <a href="#">
+                            <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
+                                {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                            </h5>
+                            <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
+                                {{ inmueble.description }}
+                            </p>
+                        </a>
+
+                        <div class="flex justify-between text-[#080E36] mt-5">
+                            <div class="flex flex-col items-center">
+                                <span class="text-sm font-semibold">Habitaciones</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-bed text-lg"></i>
+                                    <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="text-sm font-semibold">Baños</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-bath text-lg"></i>
+                                    <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="text-sm font-semibold">Área</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-ruler-combined text-lg"></i>
+                                    <span class="ml-2">{{
+                                        inmueble.area_cons || inmueble.area_lot || "N/A"
+                                        }}
+                                        m²</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold">
+                            <span>Precio:</span>
+                            <span class="text-[#000000]">
+                                {{
+                                inmueble.price_format ||
+                                (inmueble.price
+                                | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                                "Consultar"
+                                }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
 </div>
 
 <app-botones-flotantes></app-botones-flotantes>

@@ -33,7 +33,6 @@ export class VistaInicialComponent implements OnInit {
   filtrosInmueblesArriendo: Map<string, any> = new Map();
 
   filtros: any = {};
-  barrios: { data: any[] } = { data: [] };
   ciudades: any[] = [];
   filteredBarrios: any[] = [];
   categoriasInmuebles: any[] = [];
@@ -41,6 +40,7 @@ export class VistaInicialComponent implements OnInit {
   inmueblesVentasArray: any[] = [];
   inmueblesDestacadosArray: any = {};
   inmueblesArriendosArray: any[] = [];
+  barrios: { data: any[] } = { data: [] };
 
   estrato: number[] = [1, 2, 3, 4];
   banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
@@ -144,45 +144,45 @@ export class VistaInicialComponent implements OnInit {
   }
 
   prepararFiltros() {
-  const skipUbicacion = this.filtrosSeleccionados.get('isManualSelection') === 'true';
-  this.filtrosSeleccionados.delete('isManualSelection');
+    const skipUbicacion = this.filtrosSeleccionados.get('isManualSelection') === 'true';
+    this.filtrosSeleccionados.delete('isManualSelection');
 
-  if (!skipUbicacion) {
-    const limpiarTexto = (texto: string) => {
-      return texto?.normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .trim()
-        .toLowerCase() || '';
-    };
+    if (!skipUbicacion) {
+      const limpiarTexto = (texto: string) => {
+        return texto?.normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .trim()
+          .toLowerCase() || '';
+      };
 
-    const ubicacionValue = this.formRangos.value.ubicacion;
-    
-    if (ubicacionValue) {
-      // Buscar en barrios primero
-      if (this.barrios?.data) {
-        const barrioEncontrado = this.barrios.data.find(
-          b => limpiarTexto(`${b.city_name},${b.name}`) === limpiarTexto(ubicacionValue)
-        );
-        
-        if (barrioEncontrado) {
-          this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
-          this.filtrosSeleccionados.set('neighborhood', barrioEncontrado.code);
+      const ubicacionValue = this.formRangos.value.ubicacion;
+
+      if (ubicacionValue) {
+        // Buscar en barrios primero
+        if (this.barrios?.data) {
+          const barrioEncontrado = this.barrios.data.find(
+            b => limpiarTexto(`${b.city_name},${b.name}`) === limpiarTexto(ubicacionValue)
+          );
+
+          if (barrioEncontrado) {
+            this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
+            this.filtrosSeleccionados.set('neighborhood', barrioEncontrado.code);
+          }
         }
-      }
-      
-      // Buscar en ciudades si no se encontró en barrios
-      if (!this.filtrosSeleccionados.has('city')) {
-        const ciudad = this.ciudades.find(
-          c => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
-        );
-        this.filtrosSeleccionados.set('city', ciudad?.code);
+
+        // Buscar en ciudades si no se encontró en barrios
+        if (!this.filtrosSeleccionados.has('city')) {
+          const ciudad = this.ciudades.find(
+            c => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
+          );
+          this.filtrosSeleccionados.set('city', ciudad?.code);
+          this.filtrosSeleccionados.delete('neighborhood');
+        }
+      } else {
+        this.filtrosSeleccionados.delete('city');
         this.filtrosSeleccionados.delete('neighborhood');
       }
-    } else {
-      this.filtrosSeleccionados.delete('city');
-      this.filtrosSeleccionados.delete('neighborhood');
     }
-  }
 
     if (this.selectedProperty) {
       this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
@@ -523,7 +523,8 @@ export class VistaInicialComponent implements OnInit {
   }
 
   redirigirVerBlog(id: number) {
-    this.router.navigate(['/ver-blog', id]);
+    const url = this.router.createUrlTree(['/ver-blog', id]).toString();
+    window.open(url, '_blank');
   }
 
   getAliadosPorGrupo(): void {
@@ -540,8 +541,7 @@ export class VistaInicialComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro },
-    });
+    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    window.open(url, '_blank');
   }
 }

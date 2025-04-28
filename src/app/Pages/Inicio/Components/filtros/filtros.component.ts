@@ -30,16 +30,10 @@ import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geoloca
 })
 export class FiltrosComponent implements OnInit {
   totalDatos = 0;
-  paginaActual = 1;
   totalPaginas = 0;
+  paginaActual = 1;
   elementsPerPage = 12;
-  paginas: (number | string)[] = [];
   bloqueActual: number = 0;
-  filtrosSeleccionados: Map<string, any> = new Map();
-  estrato: number[] = [1, 2, 3, 4];
-  banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
-  parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
-  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
 
   seleccion = {
     estrato: [] as number[],
@@ -48,16 +42,32 @@ export class FiltrosComponent implements OnInit {
     habitaciones: [] as (number | string)[],
   };
 
-  paginacion: any = {};
-  ciudades: any[] = [];
   ubicacion: string = '';
-  resultados: any[] = [];
   isDrawerOpen: boolean = true;
   drawerMapAbierto: boolean = false;
+
+  paginacion: any = {};
+  ciudades: any[] = [];
+  resultados: any[] = [];
+  filteredBarrios: any[] = [];
   filtrosVistaInicial: any = {};
   categoriasInmuebles: any[] = [];
-  filteredBarrios: any[] = [];
+  estrato: number[] = [1, 2, 3, 4];
+  paginas: (number | string)[] = [];
   barrios: { data: any[] } = { data: [] };
+  banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  filtrosSeleccionados: Map<string, any> = new Map();
+  parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+
+  // Para los Rangos de Precios
+  selectedPriceRange: { min: number, max: number | null } | null = null;
+  priceRanges = [
+    { min: 0, max: 2000000, displayName: '100.000 - 2.000.000' },
+    { min: 2000000, max: 8000000, displayName: '2.000.000 - 8.000.000' },
+    { min: 8000000, max: 15000000, displayName: '8.000.000 - 15.000.000' },
+    { min: 15000000, max: null, displayName: '15.000.000 +' }
+  ];
 
   // Para Tipo de Propiedad
   isPropertyDropdownOpen = false;
@@ -112,9 +122,6 @@ export class FiltrosComponent implements OnInit {
 
   mostrarMapa = false;
   address: string | null = null;
-  formFiltrosSelect = this.formBuilder.group({
-    opcion: [''],
-  });
 
   formRangos = this.formBuilder.group({
     AreaMinima: [''],
@@ -124,6 +131,23 @@ export class FiltrosComponent implements OnInit {
     precioMinimo: [''],
     precioMaximo: [''],
   });
+
+  formFiltrosSelect = this.formBuilder.group({
+    opcion: [''],
+  });
+
+  async ngOnInit(): Promise<void> {
+    const state = window.history.state;
+    await this.getDatos();
+    this.cargarDesdeState(state);
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const newState = window.history.state;
+        this.cargarDesdeState(newState);
+      }
+    });
+  }
 
   buildPolygon(lat: any, lng: any, delta = 0.001) {
     return [
@@ -159,19 +183,6 @@ export class FiltrosComponent implements OnInit {
     } finally {
       this.loading = false;
     }
-  }
-
-  async ngOnInit(): Promise<void> {
-    const state = window.history.state;
-    await this.getDatos();
-    this.cargarDesdeState(state);
-
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const newState = window.history.state;
-        this.cargarDesdeState(newState);
-      }
-    });
   }
 
   async getDatos(): Promise<void> {
@@ -311,6 +322,23 @@ export class FiltrosComponent implements OnInit {
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
 
+    if (f?.pcmin !== undefined) {
+      const pcmin = Number(f.pcmin);
+      const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
+
+      this.selectedPriceRange = this.priceRanges.find(range => {
+        return range.min === pcmin &&
+          (range.max === pcmax || (range.max === null && pcmax === null));
+      }) || null;
+
+      if (!this.selectedPriceRange) {
+        this.selectedPriceRange = this.priceRanges.find(range => {
+          return pcmin >= range.min &&
+            (range.max === null || (pcmax !== null && pcmax <= range.max));
+        }) || null;
+      }
+    }
+
     this.selectedProperty =
       this.propertyOptions.find((opt) => opt.code === f?.biz) ||
       this.selectedProperty;
@@ -385,6 +413,7 @@ export class FiltrosComponent implements OnInit {
       this.formRangos.value.precioVentaMaximo =
         f?.type === '2' ? f?.pvmax : f?.pcmax;
     }
+
 
     this.cdRef.detectChanges();
   }
@@ -716,6 +745,23 @@ export class FiltrosComponent implements OnInit {
 
       this.generarPaginas();
       this.cdRef.detectChanges();
+    }
+  }
+
+  selectPriceRange(range: { min: number, max: number | null }): void {
+    if (this.selectedPriceRange?.min === range.min) {
+      this.selectedPriceRange = null;
+      this.filtrosSeleccionados.delete('pcmin');
+      this.filtrosSeleccionados.delete('pcmax');
+    } else {
+      this.selectedPriceRange = range;
+      this.filtrosSeleccionados.set('pcmin', range.min);
+
+      if (range.max !== null) {
+        this.filtrosSeleccionados.set('pcmax', range.max);
+      } else {
+        this.filtrosSeleccionados.delete('pcmax');
+      }
     }
   }
 }

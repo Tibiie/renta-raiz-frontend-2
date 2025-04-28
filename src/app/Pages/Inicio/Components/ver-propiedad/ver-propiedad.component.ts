@@ -68,7 +68,6 @@ export class VerPropiedadComponent implements OnInit {
       this.codPro = Number(params.get('codpro'));
       this.getDatos();
     });
-
   }
 
   getDatos() {

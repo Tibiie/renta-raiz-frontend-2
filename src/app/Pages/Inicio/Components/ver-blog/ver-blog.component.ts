@@ -27,13 +27,15 @@ export class VerBlogComponent implements OnInit {
 
   elementsPerPage = 12;
   ubicacion: string = '';
+  searchTerm: string = '';
   filtrosSeleccionados: Map<string, any> = new Map();
 
   filtros: any = {};
-  barrios: any[] = [];
   ciudades: any[] = [];
+  filteredBarrios: any[] = [];
   categoriasInmuebles: any[] = [];
   inmueblesDestacadosArray: any = {};
+  barrios: { data: any[] } = { data: [] };
 
   estrato: number[] = [1, 2, 3, 4];
   banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
@@ -106,8 +108,6 @@ export class VerBlogComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.blogId = +params['id'];
     });
-
-    console.log(this.blogId);
   }
 
   getDatos() {
@@ -124,23 +124,44 @@ export class VerBlogComponent implements OnInit {
   }
 
   prepararFiltros() {
-    this.filtrosSeleccionados.clear();
+    const skipUbicacion = this.filtrosSeleccionados.get('isManualSelection') === 'true';
+    this.filtrosSeleccionados.delete('isManualSelection');
 
-    const limpiarTexto = (texto: string) => {
-      return texto
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .trim()
-        .toLowerCase();
-    };
+    if (!skipUbicacion) {
+      const limpiarTexto = (texto: string) => {
+        return texto?.normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .trim()
+          .toLowerCase() || '';
+      };
 
-    const ciudad = this.ciudades.find(
-      (c) => limpiarTexto(c.name) === limpiarTexto(this.formRangos.value.ubicacion!)
-    );
-    var codigo = ciudad?.code;
+      const ubicacionValue = this.formRangos.value.ubicacion;
 
-    if (this.formRangos.value.ubicacion) {
-      this.filtrosSeleccionados.set('city', codigo);
+      if (ubicacionValue) {
+        // Buscar en barrios primero
+        if (this.barrios?.data) {
+          const barrioEncontrado = this.barrios.data.find(
+            b => limpiarTexto(`${b.city_name},${b.name}`) === limpiarTexto(ubicacionValue)
+          );
+
+          if (barrioEncontrado) {
+            this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
+            this.filtrosSeleccionados.set('neighborhood', barrioEncontrado.code);
+          }
+        }
+
+        // Buscar en ciudades si no se encontró en barrios
+        if (!this.filtrosSeleccionados.has('city')) {
+          const ciudad = this.ciudades.find(
+            c => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
+          );
+          this.filtrosSeleccionados.set('city', ciudad?.code);
+          this.filtrosSeleccionados.delete('neighborhood');
+        }
+      } else {
+        this.filtrosSeleccionados.delete('city');
+        this.filtrosSeleccionados.delete('neighborhood');
+      }
     }
 
     if (this.selectedProperty) {
@@ -207,7 +228,32 @@ export class VerBlogComponent implements OnInit {
     }
   }
 
+
+  filterLocations() {
+    const search = this.searchTerm.toLowerCase();
+    this.filteredBarrios = this.barrios.data.filter(
+      (barrio: any) =>
+        barrio.name.toLowerCase().includes(search) ||
+        barrio.city_name.toLowerCase().includes(search)
+    );
+  }
+
+  selectLocation(barrio: any) {
+    this.searchTerm = `${barrio.city_name}, ${barrio.name}`;
+    this.filteredBarrios = [];
+
+    this.formRangos
+      .get('ubicacion')
+      ?.setValue(`${barrio.city_name},${barrio.name}`);
+
+    this.filtrosSeleccionados.set('city', barrio.city_code);
+    this.filtrosSeleccionados.set('neighborhood', barrio.code);
+    this.filtrosSeleccionados.set('isManualSelection', 'true');
+  }
+
   getEnviarFiltros() {
+    this.prepararFiltros();
+
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = {
       ...filtrosObj,
@@ -389,10 +435,8 @@ export class VerBlogComponent implements OnInit {
     this.getEnviarFiltros();
   }
 
-
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro },
-    });
+    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    window.open(url, '_blank');
   }
 }
