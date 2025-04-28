@@ -18,7 +18,13 @@ import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geoloca
 @Component({
   selector: 'app-filtros',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule, MapaComponent],
+  imports: [
+    NavbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    MapaComponent,
+  ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
 })
@@ -28,7 +34,8 @@ export class FiltrosComponent implements OnInit {
   totalPaginas = 0;
   elementsPerPage = 12;
   paginas: (number | string)[] = [];
-  bloqueActual: number = 0; filtrosSeleccionados: Map<string, any> = new Map();
+  bloqueActual: number = 0;
+  filtrosSeleccionados: Map<string, any> = new Map();
   estrato: number[] = [1, 2, 3, 4];
   banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
   parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
@@ -49,6 +56,8 @@ export class FiltrosComponent implements OnInit {
   drawerMapAbierto: boolean = false;
   filtrosVistaInicial: any = {};
   categoriasInmuebles: any[] = [];
+  filteredBarrios: any[] = [];
+  barrios: { data: any[] } = { data: [] };
 
   // Para Tipo de Propiedad
   isPropertyDropdownOpen = false;
@@ -66,7 +75,7 @@ export class FiltrosComponent implements OnInit {
   selectedEstates: { code: string; name: string }[] = [];
 
   //geolocalizacion
-  coordinates: { latitude: number, longitude: number } | null = null;
+  coordinates: { latitude: number; longitude: number } | null = null;
   error: string | null = null;
   loading = false;
 
@@ -104,7 +113,7 @@ export class FiltrosComponent implements OnInit {
   mostrarMapa = false;
   address: string | null = null;
   formFiltrosSelect = this.formBuilder.group({
-    opcion: ['']
+    opcion: [''],
   });
 
   formRangos = this.formBuilder.group({
@@ -117,12 +126,14 @@ export class FiltrosComponent implements OnInit {
   });
 
   buildPolygon(lat: any, lng: any, delta = 0.001) {
-    return [[
-      [lat + delta, lng - delta],
-      [lat + delta, lng + delta],
-      [lat - delta, lng + delta],
-      [lat - delta, lng - delta]
-    ]];
+    return [
+      [
+        [lat + delta, lng - delta],
+        [lat + delta, lng + delta],
+        [lat - delta, lng + delta],
+        [lat - delta, lng - delta],
+      ],
+    ];
   }
 
   async getLocation() {
@@ -134,14 +145,13 @@ export class FiltrosComponent implements OnInit {
       this.coordinates = await this.geolocalizacionService.getCurrentPosition();
       console.log('Coordenadas:', this.coordinates);
 
-
       // 2. Obtener dirección
-      this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
+      this.geolocalizacionService
+        .getAddress(this.coordinates.latitude, this.coordinates.longitude)
         .subscribe((response: any) => {
           if (response.results[0]) {
             this.address = response.results[0].formatted_address;
             console.log('Dirección:', this.address);
-
           }
         });
     } catch (err) {
@@ -156,7 +166,7 @@ export class FiltrosComponent implements OnInit {
     await this.getDatos();
     this.cargarDesdeState(state);
 
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const newState = window.history.state;
         this.cargarDesdeState(newState);
@@ -196,6 +206,7 @@ export class FiltrosComponent implements OnInit {
         );
       }
 
+      this.getBarrios();
       this.generarPaginas();
     } catch (error) {
       console.error('Error al obtener datos:', error);
@@ -288,23 +299,42 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
+  filterLocations() {
+    const search = this.ubicacion.toLowerCase();
+    this.filteredBarrios = this.barrios.data.filter(
+      (barrio: any) =>
+        barrio.name.toLowerCase().includes(search) ||
+        barrio.city_name.toLowerCase().includes(search)
+    );
+  }
+
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
 
-    this.selectedProperty = this.propertyOptions.find((opt) => opt.code === f?.biz) || this.selectedProperty;
+    this.selectedProperty =
+      this.propertyOptions.find((opt) => opt.code === f?.biz) ||
+      this.selectedProperty;
 
     if (f?.type) {
       const estateCodes = f.type.split(',');
-      this.selectedEstates = this.estateOptions.filter((opt) => estateCodes.includes(opt.code));
+      this.selectedEstates = this.estateOptions.filter((opt) =>
+        estateCodes.includes(opt.code)
+      );
     }
 
     const convertirSoloNumeros = (valores: string | string[] | undefined) => {
       if (!valores) return [];
-      const valoresArray = Array.isArray(valores) ? valores : valores.split(',');
-      return valoresArray.map(Number).filter(v => !isNaN(v));
+      const valoresArray = Array.isArray(valores)
+        ? valores
+        : valores.split(',');
+      return valoresArray.map(Number).filter((v) => !isNaN(v));
     };
 
-    const convertirConPlusSeis = (min: any, max: any, raw?: string | string[]) => {
+    const convertirConPlusSeis = (
+      min: any,
+      max: any,
+      raw?: string | string[]
+    ) => {
       const minVal = Number(min);
       const maxVal = Number(max);
 
@@ -312,9 +342,12 @@ export class FiltrosComponent implements OnInit {
         return ['+6'];
       }
 
-      const valores = Array.isArray(raw) ? raw : (raw ? raw.split(',') : []);
+      const valores = Array.isArray(raw) ? raw : raw ? raw.split(',') : [];
 
-      const valoresProcesados = valores.map(v => v === '+6' ? '+6' : Number(v)).filter(v => v || v === 0) || [];
+      const valoresProcesados =
+        valores
+          .map((v) => (v === '+6' ? '+6' : Number(v)))
+          .filter((v) => v || v === 0) || [];
 
       if (minVal === 6 && maxVal === 100) {
         valoresProcesados.push('+6');
@@ -324,9 +357,17 @@ export class FiltrosComponent implements OnInit {
     };
 
     this.seleccion = {
-      habitaciones: convertirConPlusSeis(f?.minbedroom, f?.maxbedroom, f?.bedrooms),
+      habitaciones: convertirConPlusSeis(
+        f?.minbedroom,
+        f?.maxbedroom,
+        f?.bedrooms
+      ),
       banos: convertirConPlusSeis(f?.minbathroom, f?.maxbathroom, f?.bathrooms),
-      parqueadero: convertirConPlusSeis(f?.minparking, f?.maxparking, f?.minparking),
+      parqueadero: convertirConPlusSeis(
+        f?.minparking,
+        f?.maxparking,
+        f?.minparking
+      ),
       estrato: convertirSoloNumeros(f?.stratum),
     };
 
@@ -339,8 +380,10 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (f?.type === '2' || f?.type === '3') {
-      this.formRangos.value.precioVentaMinimo = f?.type === '2' ? f?.pvmin : f?.pcmin;
-      this.formRangos.value.precioVentaMaximo = f?.type === '2' ? f?.pvmax : f?.pcmax;
+      this.formRangos.value.precioVentaMinimo =
+        f?.type === '2' ? f?.pvmin : f?.pcmin;
+      this.formRangos.value.precioVentaMaximo =
+        f?.type === '2' ? f?.pvmax : f?.pcmax;
     }
 
     this.cdRef.detectChanges();
@@ -349,20 +392,20 @@ export class FiltrosComponent implements OnInit {
   prepararFiltros() {
     const limpiarTexto = (texto: string) => {
       return texto
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
         .trim()
         .toLowerCase();
     };
 
-    const ciudad = this.ciudades.find(c =>
-      limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
+    const ciudad = this.ciudades.find(
+      (c) => limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
     );
     var codigo = ciudad?.code;
 
-    if (this.ubicacion) {
-      this.filtrosSeleccionados.set('city', codigo);
-    }
+    // if (this.ubicacion) {
+    //   this.filtrosSeleccionados.set('city', codigo);
+    // }
 
     if (this.selectedProperty) {
       this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
@@ -412,27 +455,45 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (this.formRangos.value.AreaMinima) {
-      this.filtrosSeleccionados.set('minarea', this.formRangos.value.AreaMinima);
+      this.filtrosSeleccionados.set(
+        'minarea',
+        this.formRangos.value.AreaMinima
+      );
     }
 
     if (this.formRangos.value.AreaMaxima) {
-      this.filtrosSeleccionados.set('maxarea', this.formRangos.value.AreaMaxima);
+      this.filtrosSeleccionados.set(
+        'maxarea',
+        this.formRangos.value.AreaMaxima
+      );
     }
 
     if (this.formRangos.value.precioMinimo) {
-      this.filtrosSeleccionados.set('pcmin', this.formRangos.value.precioMinimo);
+      this.filtrosSeleccionados.set(
+        'pcmin',
+        this.formRangos.value.precioMinimo
+      );
     }
 
     if (this.formRangos.value.precioMaximo) {
-      this.filtrosSeleccionados.set('pcmax', this.formRangos.value.precioMaximo);
+      this.filtrosSeleccionados.set(
+        'pcmax',
+        this.formRangos.value.precioMaximo
+      );
     }
 
     if (this.formRangos.value.precioVentaMaximo) {
-      this.filtrosSeleccionados.set('pvmax', this.formRangos.value.precioVentaMaximo);
+      this.filtrosSeleccionados.set(
+        'pvmax',
+        this.formRangos.value.precioVentaMaximo
+      );
     }
 
     if (this.formRangos.value.precioVentaMinimo) {
-      this.filtrosSeleccionados.set('pvmin', this.formRangos.value.precioVentaMinimo);
+      this.filtrosSeleccionados.set(
+        'pvmin',
+        this.formRangos.value.precioVentaMinimo
+      );
     }
   }
 
@@ -448,9 +509,10 @@ export class FiltrosComponent implements OnInit {
 
     console.log('filtrosObj', filtrosObj);
 
-
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
+        console.log('response', response);
+
         this.resultados = response.data;
         this.totalDatos = response.total;
 
@@ -467,6 +529,15 @@ export class FiltrosComponent implements OnInit {
         console.error('Error al enviar los filtros:', error);
       }
     );
+  }
+
+  selectLocation(barrio: any) {
+    this.ubicacion = `${barrio.city_name}, ${barrio.name}`;
+    this.filteredBarrios = [];
+
+    this.filtrosSeleccionados.set('city', barrio.city_code);
+    this.filtrosSeleccionados.set('neighborhood', barrio.code);
+    this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
 
   enviarFiltrosSelect() {
@@ -557,6 +628,19 @@ export class FiltrosComponent implements OnInit {
     );
   }
 
+  getBarrios() {
+    this.inmueblesService.getBarrios().subscribe(
+      (data: any) => {
+        this.barrios = data;
+        console.log('Barrios:', this.barrios);
+      },
+      (error: any) => {
+        console.log(error);
+        console.error('Error al obtener los barrios:', error);
+      }
+    );
+  }
+
   getCategoriasInmuebles() {
     this.inmueblesService.getCategoriasInmuebles().subscribe(
       (response: any) => {
@@ -597,7 +681,7 @@ export class FiltrosComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro }
+      state: { codPro: codPro },
     });
   }
 
@@ -632,7 +716,6 @@ export class FiltrosComponent implements OnInit {
 
       this.generarPaginas();
       this.cdRef.detectChanges();
-
     }
   }
 }

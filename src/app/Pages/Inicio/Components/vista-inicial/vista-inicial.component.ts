@@ -22,17 +22,20 @@ import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/
   styleUrls: ['./vista-inicial.component.scss'],
 })
 export class VistaInicialComponent implements OnInit {
+
   intervalId: any;
   currentSlide = 0;
   elementsPerPage = 12;
+  searchTerm: string = '';
   elementsPerPageInicial = 3;
   filtrosSeleccionados: Map<string, any> = new Map();
   filtrosInmueblesVenta: Map<string, any> = new Map();
   filtrosInmueblesArriendo: Map<string, any> = new Map();
 
   filtros: any = {};
-  barrios: any[] = [];
+  barrios: { data: any[] } = { data: [] };
   ciudades: any[] = [];
+  filteredBarrios: any[] = [];
   categoriasInmuebles: any[] = [];
   aliadosPorGrupo: string[][] = [];
   inmueblesVentasArray: any[] = [];
@@ -114,7 +117,7 @@ export class VistaInicialComponent implements OnInit {
     AreaMaxima: [''],
     precioMinimo: [''],
     precioMaximo: [''],
-    ubicacion: ['']
+    ubicacion: [''],
   });
 
   ngOnInit(): void {
@@ -141,24 +144,45 @@ export class VistaInicialComponent implements OnInit {
   }
 
   prepararFiltros() {
-    this.filtrosSeleccionados.clear();
+  const skipUbicacion = this.filtrosSeleccionados.get('isManualSelection') === 'true';
+  this.filtrosSeleccionados.delete('isManualSelection');
 
+  if (!skipUbicacion) {
     const limpiarTexto = (texto: string) => {
-      return texto
-        .normalize('NFD')
+      return texto?.normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .trim()
-        .toLowerCase();
+        .toLowerCase() || '';
     };
 
-    const ciudad = this.ciudades.find(
-      (c) => limpiarTexto(c.name) === limpiarTexto(this.formRangos.value.ubicacion!)
-    );
-    var codigo = ciudad?.code;
-
-    if (this.formRangos.value.ubicacion) {
-      this.filtrosSeleccionados.set('city', codigo);
+    const ubicacionValue = this.formRangos.value.ubicacion;
+    
+    if (ubicacionValue) {
+      // Buscar en barrios primero
+      if (this.barrios?.data) {
+        const barrioEncontrado = this.barrios.data.find(
+          b => limpiarTexto(`${b.city_name},${b.name}`) === limpiarTexto(ubicacionValue)
+        );
+        
+        if (barrioEncontrado) {
+          this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
+          this.filtrosSeleccionados.set('neighborhood', barrioEncontrado.code);
+        }
+      }
+      
+      // Buscar en ciudades si no se encontró en barrios
+      if (!this.filtrosSeleccionados.has('city')) {
+        const ciudad = this.ciudades.find(
+          c => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
+        );
+        this.filtrosSeleccionados.set('city', ciudad?.code);
+        this.filtrosSeleccionados.delete('neighborhood');
+      }
+    } else {
+      this.filtrosSeleccionados.delete('city');
+      this.filtrosSeleccionados.delete('neighborhood');
     }
+  }
 
     if (this.selectedProperty) {
       this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
@@ -168,20 +192,50 @@ export class VistaInicialComponent implements OnInit {
       this.filtrosSeleccionados.set('type', this.selectedEstate.code);
     }
 
-    if (this.formRangos.value.AreaMinima != '' || this.formRangos.value.AreaMaxima != '') {
-      this.filtrosSeleccionados.set('minarea', this.formRangos.value.AreaMinima);
-      this.filtrosSeleccionados.set('maxarea', this.formRangos.value.AreaMaxima);
+    if (
+      this.formRangos.value.AreaMinima != '' ||
+      this.formRangos.value.AreaMaxima != ''
+    ) {
+      this.filtrosSeleccionados.set(
+        'minarea',
+        this.formRangos.value.AreaMinima
+      );
+      this.filtrosSeleccionados.set(
+        'maxarea',
+        this.formRangos.value.AreaMaxima
+      );
     }
 
-    if (this.formRangos.value.precioMinimo != '' || this.formRangos.value.precioMaximo != '') {
-      if (this.selectedProperty?.code == '1' || this.selectedEstate?.code == '3') {
-        this.filtrosSeleccionados.set('pcmin', this.formRangos.value.precioMinimo);
-        this.filtrosSeleccionados.set('pcmax', this.formRangos.value.precioMaximo);
+    if (
+      this.formRangos.value.precioMinimo != '' ||
+      this.formRangos.value.precioMaximo != ''
+    ) {
+      if (
+        this.selectedProperty?.code == '1' ||
+        this.selectedEstate?.code == '3'
+      ) {
+        this.filtrosSeleccionados.set(
+          'pcmin',
+          this.formRangos.value.precioMinimo
+        );
+        this.filtrosSeleccionados.set(
+          'pcmax',
+          this.formRangos.value.precioMaximo
+        );
       }
 
-      if (this.selectedEstate?.code == '2' || this.selectedProperty?.code == '3') {
-        this.filtrosSeleccionados.set('pvmin', this.formRangos.value.precioMinimo);
-        this.filtrosSeleccionados.set('pvmax', this.formRangos.value.precioMaximo);
+      if (
+        this.selectedEstate?.code == '2' ||
+        this.selectedProperty?.code == '3'
+      ) {
+        this.filtrosSeleccionados.set(
+          'pvmin',
+          this.formRangos.value.precioMinimo
+        );
+        this.filtrosSeleccionados.set(
+          'pvmax',
+          this.formRangos.value.precioMaximo
+        );
       }
     }
 
@@ -224,7 +278,31 @@ export class VistaInicialComponent implements OnInit {
     }
   }
 
+  filterLocations() {
+    const search = this.searchTerm.toLowerCase();
+    this.filteredBarrios = this.barrios.data.filter(
+      (barrio: any) =>
+        barrio.name.toLowerCase().includes(search) ||
+        barrio.city_name.toLowerCase().includes(search)
+    );
+  }
+
+  selectLocation(barrio: any) {
+    this.searchTerm = `${barrio.city_name}, ${barrio.name}`;
+    this.filteredBarrios = [];
+
+    this.formRangos
+      .get('ubicacion')
+      ?.setValue(`${barrio.city_name},${barrio.name}`);
+
+    this.filtrosSeleccionados.set('city', barrio.city_code);
+    this.filtrosSeleccionados.set('neighborhood', barrio.code);
+    this.filtrosSeleccionados.set('isManualSelection', 'true');
+  }
+
   getEnviarFiltros() {
+    this.prepararFiltros();
+
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = {
       ...filtrosObj,
@@ -253,6 +331,7 @@ export class VistaInicialComponent implements OnInit {
     this.inmueblesService.getCiudades().subscribe(
       (response: any) => {
         this.ciudades = response.data;
+        console.log('ciudades:', this.ciudades);
       },
       (error: any) => {
         console.error('Error al obtener las ciudades:', error);
@@ -355,7 +434,6 @@ export class VistaInicialComponent implements OnInit {
       (data: any) => {
         this.inmueblesDestacadosArray = data;
         console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
-
       },
       (error: any) => {
         console.log(error);
@@ -388,8 +466,6 @@ export class VistaInicialComponent implements OnInit {
       return 'fas fa-list-ul';
     }
 
-    console.log(option);
-
     if (option) {
       const code = typeof option === 'object' ? option.code : '';
       const iconMap = this.icons[type];
@@ -416,13 +492,11 @@ export class VistaInicialComponent implements OnInit {
       this.isEstateDropdownOpen = false;
       this.isMasFiltrosOpen = false;
       this.isPreciosOpen = false;
-
     } else if (type === 'masFiltros') {
       this.isMasFiltrosOpen = !this.isMasFiltrosOpen;
       this.isPropertyDropdownOpen = false;
       this.isEstateDropdownOpen = false;
       this.isPreciosOpen = false;
-
     } else if (type === 'precios') {
       this.isPreciosOpen = !this.isPreciosOpen;
       this.isPropertyDropdownOpen = false;
