@@ -781,5 +781,7 @@ export class FiltrosComponent implements OnInit {
     });
 
     this.cdRef.detectChanges();
+
+    this.enviarFiltros();
   }
 }
