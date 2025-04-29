@@ -288,7 +288,6 @@
             placeholder="Ciudad, barrio, sector o sitio..."
             class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
 
-          <!-- Icono de lupa -->
           <div class="absolute left-3 top-2.5 text-gray-400">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -297,7 +296,6 @@
             </svg>
           </div>
 
-          <!-- Botón de limpiar (X) -->
           <button *ngIf="searchTerm" type="button" (click)="clearSearch()"
             class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -306,7 +304,6 @@
             </svg>
           </button>
 
-          <!-- Lista de sugerencias -->
           <div *ngIf="filteredBarrios.length > 0" id="modern-drawer"
             class="absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
             <div *ngFor="let barrio of filteredBarrios" (click)="selectLocation(barrio)"
@@ -319,7 +316,6 @@
             </div>
           </div>
         </div>
-
 
         <!-- Contador de resultados -->
         <div class="text-gray-600 text-lg font-bold">
