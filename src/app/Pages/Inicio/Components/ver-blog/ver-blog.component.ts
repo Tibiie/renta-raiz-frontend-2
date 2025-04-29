@@ -438,4 +438,9 @@ export class VerBlogComponent implements OnInit {
     const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
     window.open(url, '_blank');
   }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.filteredBarrios = [];
+  }
 }
