@@ -50,6 +50,10 @@ export class InmueblesService {
     return this.http.get(`${environment.baseUrl}/properties/ciudades`);
   }
 
+  getBarrios() {
+    return this.http.get(`${environment.baseUrl}/properties/barrios`);
+  }
+
   setPropiedades(propiedades: any[]) {
     this.Propiedades = propiedades;
   }

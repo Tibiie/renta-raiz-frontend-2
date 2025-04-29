@@ -19,27 +19,22 @@ import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geoloca
 @Component({
   selector: 'app-filtros',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, ReactiveFormsModule, CommonModule, MapaComponent],
+  imports: [
+    NavbarComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    MapaComponent,
+  ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
 })
 export class FiltrosComponent implements OnInit {
-  
-  AreaMinima = '';
-  AreaMaxima = '';
-  precioVenta = '';
-  precioMinimo = '';
-  precioMaximo = '';
   totalDatos = 0;
-  paginaActual = 1;
   totalPaginas = 0;
+  paginaActual = 1;
   elementsPerPage = 12;
-  paginas: (number | string)[] = [];
-  bloqueActual: number = 0; filtrosSeleccionados: Map<string, any> = new Map();
-  estrato: number[] = [1, 2, 3, 4];
-  banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
-  parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
-  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  bloqueActual: number = 0;
 
   seleccion = {
     estrato: [] as number[],
@@ -48,14 +43,32 @@ export class FiltrosComponent implements OnInit {
     habitaciones: [] as (number | string)[],
   };
 
-  paginacion: any = {};
-  ciudades: any[] = [];
   ubicacion: string = '';
-  resultados: any[] = [];
   isDrawerOpen: boolean = true;
   drawerMapAbierto: boolean = false;
+
+  paginacion: any = {};
+  ciudades: any[] = [];
+  resultados: any[] = [];
+  filteredBarrios: any[] = [];
   filtrosVistaInicial: any = {};
   categoriasInmuebles: any[] = [];
+  estrato: number[] = [1, 2, 3, 4];
+  paginas: (number | string)[] = [];
+  barrios: { data: any[] } = { data: [] };
+  banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  filtrosSeleccionados: Map<string, any> = new Map();
+  parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+  habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
+
+  // Para los Rangos de Precios
+  selectedPriceRange: { min: number, max: number | null } | null = null;
+  priceRanges = [
+    { min: 0, max: 2000000, displayName: '100.000 - 2.000.000' },
+    { min: 2000000, max: 8000000, displayName: '2.000.000 - 8.000.000' },
+    { min: 8000000, max: 15000000, displayName: '8.000.000 - 15.000.000' },
+    { min: 15000000, max: null, displayName: '15.000.000 +' }
+  ];
 
   // Para Tipo de Propiedad
   isPropertyDropdownOpen = false;
@@ -68,11 +81,12 @@ export class FiltrosComponent implements OnInit {
 
   // Para Inmueble
   isEstateDropdownOpen = false;
+  isMobileView = window.innerWidth < 768;
   estateOptions: { code: string; name: string }[] = [];
   selectedEstates: { code: string; name: string }[] = [];
 
   //geolocalizacion
-  coordinates: { latitude: number, longitude: number } | null = null;
+  coordinates: { latitude: number; longitude: number } | null = null;
   error: string | null = null;
   loading = false;
 
@@ -109,18 +123,42 @@ export class FiltrosComponent implements OnInit {
 
   mostrarMapa = false;
   address: string | null = null;
-  formFiltrosSelect = this.formBuilder.group({
-    opcion: ['']
+
+  formRangos = this.formBuilder.group({
+    AreaMinima: [''],
+    AreaMaxima: [''],
+    precioVentaMinimo: [''],
+    precioVentaMaximo: [''],
+    precioMinimo: [''],
+    precioMaximo: [''],
   });
 
+  formFiltrosSelect = this.formBuilder.group({
+    opcion: [''],
+  });
+
+  async ngOnInit(): Promise<void> {
+    const state = window.history.state;
+    await this.getDatos();
+    this.cargarDesdeState(state);
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const newState = window.history.state;
+        this.cargarDesdeState(newState);
+      }
+    });
+  }
 
   buildPolygon(lat: any, lng: any, delta = 0.001) {
-    return [[
-      [lat + delta, lng - delta],
-      [lat + delta, lng + delta],
-      [lat - delta, lng + delta],
-      [lat - delta, lng - delta]
-    ]];
+    return [
+      [
+        [lat + delta, lng - delta],
+        [lat + delta, lng + delta],
+        [lat - delta, lng + delta],
+        [lat - delta, lng - delta],
+      ],
+    ];
   }
 
   async getLocation() {
@@ -132,34 +170,20 @@ export class FiltrosComponent implements OnInit {
       this.coordinates = await this.geolocalizacionService.getCurrentPosition();
       console.log('Coordenadas:', this.coordinates);
 
-
-       // 2. Obtener dirección
-       this.geolocalizacionService.getAddress(this.coordinates.latitude, this.coordinates.longitude)
-       .subscribe((response: any) => {
-         if (response.results[0]) {
-           this.address = response.results[0].formatted_address;
-           console.log('Dirección:', this.address);
-
-         }
-       });
+      // 2. Obtener dirección
+      this.geolocalizacionService
+        .getAddress(this.coordinates.latitude, this.coordinates.longitude)
+        .subscribe((response: any) => {
+          if (response.results[0]) {
+            this.address = response.results[0].formatted_address;
+            console.log('Dirección:', this.address);
+          }
+        });
     } catch (err) {
       this.error = err as string;
     } finally {
       this.loading = false;
     }
-  }
-
-  async ngOnInit(): Promise<void> {
-    const state = window.history.state;
-    await this.getDatos();
-    this.cargarDesdeState(state);
-
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        const newState = window.history.state;
-        this.cargarDesdeState(newState);
-      }
-    });
   }
 
   async getDatos(): Promise<void> {
@@ -194,12 +218,12 @@ export class FiltrosComponent implements OnInit {
         );
       }
 
+      this.getBarrios();
       this.generarPaginas();
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
   }
-  isMobileView = window.innerWidth < 768;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
@@ -225,7 +249,6 @@ export class FiltrosComponent implements OnInit {
 
   toggleDrawer() {
     this.isDrawerOpen = !this.isDrawerOpen;
-
 
     const drawer = document.getElementById('right-map-drawer');
     if (drawer) {
@@ -288,8 +311,34 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
+  filterLocations() {
+    const search = this.ubicacion.toLowerCase();
+    this.filteredBarrios = this.barrios.data.filter(
+      (barrio: any) =>
+        barrio.name.toLowerCase().includes(search) ||
+        barrio.city_name.toLowerCase().includes(search)
+    );
+  }
+
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
+
+    if (f?.pcmin !== undefined) {
+      const pcmin = Number(f.pcmin);
+      const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
+
+      this.selectedPriceRange = this.priceRanges.find(range => {
+        return range.min === pcmin &&
+          (range.max === pcmax || (range.max === null && pcmax === null));
+      }) || null;
+
+      if (!this.selectedPriceRange) {
+        this.selectedPriceRange = this.priceRanges.find(range => {
+          return pcmin >= range.min &&
+            (range.max === null || (pcmax !== null && pcmax <= range.max));
+        }) || null;
+      }
+    }
 
     this.selectedProperty =
       this.propertyOptions.find((opt) => opt.code === f?.biz) ||
@@ -302,27 +351,91 @@ export class FiltrosComponent implements OnInit {
       );
     }
 
+    const convertirSoloNumeros = (valores: string | string[] | undefined) => {
+      if (!valores) return [];
+      const valoresArray = Array.isArray(valores)
+        ? valores
+        : valores.split(',');
+      return valoresArray.map(Number).filter((v) => !isNaN(v));
+    };
+
+    const convertirConPlusSeis = (
+      min: any,
+      max: any,
+      raw?: string | string[]
+    ) => {
+      const minVal = Number(min);
+      const maxVal = Number(max);
+
+      if (minVal === 6 && maxVal === 100) {
+        return ['+6'];
+      }
+
+      const valores = Array.isArray(raw) ? raw : raw ? raw.split(',') : [];
+
+      const valoresProcesados =
+        valores
+          .map((v) => (v === '+6' ? '+6' : Number(v)))
+          .filter((v) => v || v === 0) || [];
+
+      if (minVal === 6 && maxVal === 100) {
+        valoresProcesados.push('+6');
+      }
+
+      return valoresProcesados;
+    };
+
+    this.seleccion = {
+      habitaciones: convertirConPlusSeis(
+        f?.minbedroom,
+        f?.maxbedroom,
+        f?.bedrooms
+      ),
+      banos: convertirConPlusSeis(f?.minbathroom, f?.maxbathroom, f?.bathrooms),
+      parqueadero: convertirConPlusSeis(
+        f?.minparking,
+        f?.maxparking,
+        f?.minparking
+      ),
+      estrato: convertirSoloNumeros(f?.stratum),
+    };
+
+    this.formRangos.value.AreaMinima = f?.minarea;
+    this.formRangos.value.AreaMaxima = f?.maxarea;
+
+    if (f?.type === '1' || f?.type === '3') {
+      this.formRangos.value.precioMinimo = f?.pcmin;
+      this.formRangos.value.precioMaximo = f?.pcmax;
+    }
+
+    if (f?.type === '2' || f?.type === '3') {
+      this.formRangos.value.precioVentaMinimo =
+        f?.type === '2' ? f?.pvmin : f?.pcmin;
+      this.formRangos.value.precioVentaMaximo =
+        f?.type === '2' ? f?.pvmax : f?.pcmax;
+    }
+
+
     this.cdRef.detectChanges();
   }
 
   prepararFiltros() {
     const limpiarTexto = (texto: string) => {
       return texto
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
         .trim()
         .toLowerCase();
     };
 
-    const ciudad = this.ciudades.find(c =>
-      limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
+    const ciudad = this.ciudades.find(
+      (c) => limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
     );
     var codigo = ciudad?.code;
 
-    if (this.ubicacion) {
-      this.filtrosSeleccionados.set('city', codigo);
-    }
-
+    // if (this.ubicacion) {
+    //   this.filtrosSeleccionados.set('city', codigo);
+    // }
 
     if (this.selectedProperty) {
       this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
@@ -336,31 +449,31 @@ export class FiltrosComponent implements OnInit {
     if (this.seleccion.habitaciones.length > 0) {
       const values = this.seleccion.habitaciones;
       if (values.includes('+6')) {
-        this.filtrosSeleccionados.set('"maxbedroom"', 100);
-        this.filtrosSeleccionados.set('"minbedroom"', 6);
+        this.filtrosSeleccionados.set('maxbedroom', 100);
+        this.filtrosSeleccionados.set('minbedroom', 6);
       } else {
-        this.filtrosSeleccionados.set('"bedrooms"', values.join(','));
+        this.filtrosSeleccionados.set('bedrooms', values.join(','));
       }
     }
 
     if (this.seleccion.banos.length > 0) {
       const values = this.seleccion.banos;
       if (values.includes('+6')) {
-        this.filtrosSeleccionados.set('"maxbathroom"', 100);
-        this.filtrosSeleccionados.set('"minbathroom"', 6);
+        this.filtrosSeleccionados.set('"maxbathroom', 100);
+        this.filtrosSeleccionados.set('minbathroom', 6);
       } else {
-        this.filtrosSeleccionados.set('"bathroom"', values.join(','));
+        this.filtrosSeleccionados.set('bathrooms', values.join(','));
       }
     }
 
     if (this.seleccion.parqueadero.length > 0) {
       const values = this.seleccion.parqueadero;
       if (values.includes('+6')) {
-        this.filtrosSeleccionados.set('"maxparking"', 100);
-        this.filtrosSeleccionados.set('"minparking"', 6);
+        this.filtrosSeleccionados.set('maxparking', 100);
+        this.filtrosSeleccionados.set('minparking', 6);
       } else {
-        this.filtrosSeleccionados.set('"maxparking"', values.join(','));
-        this.filtrosSeleccionados.set('"minparking"', values.join(','));
+        this.filtrosSeleccionados.set('maxparking', values.join(','));
+        this.filtrosSeleccionados.set('minparking', values.join(','));
       }
     }
 
@@ -371,24 +484,46 @@ export class FiltrosComponent implements OnInit {
       );
     }
 
-    if (this.AreaMinima) {
-      this.filtrosSeleccionados.set('"minarea"', this.AreaMinima);
+    if (this.formRangos.value.AreaMinima) {
+      this.filtrosSeleccionados.set(
+        'minarea',
+        this.formRangos.value.AreaMinima
+      );
     }
 
-    if (this.AreaMaxima) {
-      this.filtrosSeleccionados.set('"maxarea"', this.AreaMaxima);
+    if (this.formRangos.value.AreaMaxima) {
+      this.filtrosSeleccionados.set(
+        'maxarea',
+        this.formRangos.value.AreaMaxima
+      );
     }
 
-    if (this.precioMinimo) {
-      this.filtrosSeleccionados.set('""pcmin""', this.precioMinimo);
+    if (this.formRangos.value.precioMinimo) {
+      this.filtrosSeleccionados.set(
+        'pcmin',
+        this.formRangos.value.precioMinimo
+      );
     }
 
-    if (this.precioMaximo) {
-      this.filtrosSeleccionados.set('""pcmax""', this.precioMaximo);
+    if (this.formRangos.value.precioMaximo) {
+      this.filtrosSeleccionados.set(
+        'pcmax',
+        this.formRangos.value.precioMaximo
+      );
     }
 
-    if (this.precioVenta) {
-      this.filtrosSeleccionados.set('""saleprice""', this.precioVenta);
+    if (this.formRangos.value.precioVentaMaximo) {
+      this.filtrosSeleccionados.set(
+        'pvmax',
+        this.formRangos.value.precioVentaMaximo
+      );
+    }
+
+    if (this.formRangos.value.precioVentaMinimo) {
+      this.filtrosSeleccionados.set(
+        'pvmin',
+        this.formRangos.value.precioVentaMinimo
+      );
     }
   }
 
@@ -402,11 +537,12 @@ export class FiltrosComponent implements OnInit {
       page: pagina,
     };
 
-    console.log('Objeto a enviar:', obj);
+    console.log('filtrosObj', filtrosObj);
 
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        console.log('filtros', response);
+        console.log('response', response);
+
         this.resultados = response.data;
         this.totalDatos = response.total;
 
@@ -417,13 +553,21 @@ export class FiltrosComponent implements OnInit {
           (_, i) => i + 1
         );
 
-        console.log('Paginas', this.paginas);
         this.generarPaginas();
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
       }
     );
+  }
+
+  selectLocation(barrio: any) {
+    this.ubicacion = `${barrio.city_name}, ${barrio.name}`;
+    this.filteredBarrios = [];
+
+    this.filtrosSeleccionados.set('city', barrio.city_code);
+    this.filtrosSeleccionados.set('neighborhood', barrio.code);
+    this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
 
   enviarFiltrosSelect() {
@@ -507,10 +651,22 @@ export class FiltrosComponent implements OnInit {
     this.inmueblesService.getCiudades().subscribe(
       (response: any) => {
         this.ciudades = response.data;
-        console.log("ciudades", response.data);
       },
       (error: any) => {
         console.error('Error al obtener las ciudades:', error);
+      }
+    );
+  }
+
+  getBarrios() {
+    this.inmueblesService.getBarrios().subscribe(
+      (data: any) => {
+        this.barrios = data;
+        console.log('Barrios:', this.barrios);
+      },
+      (error: any) => {
+        console.log(error);
+        console.error('Error al obtener los barrios:', error);
       }
     );
   }
@@ -519,7 +675,6 @@ export class FiltrosComponent implements OnInit {
     this.inmueblesService.getCategoriasInmuebles().subscribe(
       (response: any) => {
         this.categoriasInmuebles = response.data;
-        console.log('categorias', response.data);
 
         this.propertyOptions = response.data.map((cat: any) => {
           if (cat.code === '3') {
@@ -543,7 +698,6 @@ export class FiltrosComponent implements OnInit {
     this.inmueblesService.getTipoPropiedad().subscribe(
       (response: any) => {
         this.estateOptions = response.data;
-        console.log('tipoPropiedad', response.data);
 
         this.selectedEstates = this.estateOptions.length
           ? [this.estateOptions[0]]
@@ -556,24 +710,8 @@ export class FiltrosComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-
-
-    console.log("codPro", codPro);
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro }
-    });
-
-    var inm = this.inmueblesService.getPropiedades().find(i => i.codpro === codPro);
-
-    var obj = {
-      "content_name": codPro,
-      "address": inm.address,
-      "price": inm.price_format,
-    };
-
-
-    this.crearEventoFacebook('track', 'Lead', obj);
-
+    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    window.open(url, '_blank');
   }
 
   borrarFiltros() {
@@ -582,7 +720,6 @@ export class FiltrosComponent implements OnInit {
 
   async cargarDesdeState(state: any) {
     if (state?.resultados) {
-      console.log('Estado recibido:', state);
       this.resultados = [...state.resultados];
       this.filtrosVistaInicial = state.filtros;
       this.paginacion = state.paginacion;
@@ -592,16 +729,13 @@ export class FiltrosComponent implements OnInit {
       this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
       this.paginaActual = this.filtrosVistaInicial.page || 1;
 
-      console.log('Paginacion:', this.paginacion);
-      console.log('Filtros:', this.filtrosVistaInicial);
-      console.log('Resultados:', this.resultados);
-
       this.inmueblesService.setPropiedades(this.resultados);
 
       await this.getCiudades();
 
       if (this.filtrosVistaInicial) {
         this.inicializarFiltrosDesdeVistaInicial();
+        console.log('Filtros inicializados:', this.filtrosVistaInicial);
         console.log('Filtros inicializados:', {
           selectedProperty: this.selectedProperty,
           selectedEstates: this.selectedEstates,
@@ -611,13 +745,23 @@ export class FiltrosComponent implements OnInit {
 
       this.generarPaginas();
       this.cdRef.detectChanges();
-
     }
   }
 
+  selectPriceRange(range: { min: number, max: number | null }): void {
+    if (this.selectedPriceRange?.min === range.min) {
+      this.selectedPriceRange = null;
+      this.filtrosSeleccionados.delete('pcmin');
+      this.filtrosSeleccionados.delete('pcmax');
+    } else {
+      this.selectedPriceRange = range;
+      this.filtrosSeleccionados.set('pcmin', range.min);
 
-  crearEventoFacebook(evento: string, valor: string, valor2: any) {
-    fbq(evento, evento, valor2);
+      if (range.max !== null) {
+        this.filtrosSeleccionados.set('pcmax', range.max);
+      } else {
+        this.filtrosSeleccionados.delete('pcmax');
+      }
+    }
   }
-
 }

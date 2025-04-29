@@ -3,6 +3,7 @@ import { AfterViewInit, Component, inject, Input, ViewChild } from '@angular/cor
 import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
 import { Router } from '@angular/router';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
+import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class MapaComponent implements AfterViewInit {
   @Input() activarStreetView: boolean = false;
 
   inmueblesService = inject(InmueblesService);
+  geolocalizacionService = inject(GeolocalizacionService);
 
 
   constructor(private router: Router) {
@@ -35,8 +37,11 @@ export class MapaComponent implements AfterViewInit {
         (response: any) => {
 
           this.propiedades = response;
-          console.log(this.propiedades);
-          console.log(this.propiedades);
+
+
+          this.geoDecoder();
+
+
           this.center = { lat: this.propiedades[0].latitude, lng: this.propiedades[0].longitude };
 
           this.markers = this.propiedades.map(p => ({
@@ -44,29 +49,29 @@ export class MapaComponent implements AfterViewInit {
             icon: this.createSvgIcon(p.price_format),
             propiedad: p
           }));
-          console.log(this.markers);
         },
         (error: any) => {
           console.error('Error al obtener las propiedades:', error);
         }
       );
-    }else{
-      
-      console.log("Propiedades recibidas:",this.propiedades);
+    } else {
+
+      console.log("Propiedades recibidas:", this.propiedades);
       this.zoom = 16;
       var latitude = Number(this.propiedades[0].latitude);
       var longitude = Number(this.propiedades[0].longitude);
+
+      this.geoDecoder();
+
+
       this.center = { lat: latitude, lng: longitude };
       this.markers = this.propiedades.map(p => ({
-        position: { lat: latitude, lng:longitude },
+        position: { lat: latitude, lng: longitude },
         // icon: this.createSvgIcon(p.price_format),
         propiedad: p
       }));
-      
     }
-    
   }
-
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -89,8 +94,6 @@ export class MapaComponent implements AfterViewInit {
   }
 
   createSvgIcon(precio: string) {
-
-
     const svg = `
       <svg width="130" height="40" xmlns="http://www.w3.org/2000/svg">
         <rect rx="20" ry="20" width="130" height="40" fill="#060f29" stroke="#cdad60" stroke-width="2"/>
@@ -98,8 +101,6 @@ export class MapaComponent implements AfterViewInit {
         <text x="40" y="25" font-size="14" font-weight="bold" font-family="Arial" fill="#cdad60">$${precio}</text>
       </svg>
     `;
-
-
 
     return {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
@@ -119,8 +120,8 @@ export class MapaComponent implements AfterViewInit {
   }
 
 
-   // Método para inicializar el Street View
-   initializeStreetView(): void {
+  // Método para inicializar el Street View
+  initializeStreetView(): void {
     if (this.googleMap) {
       const map = this.googleMap.googleMap;
       if (!map) {
@@ -135,5 +136,19 @@ export class MapaComponent implements AfterViewInit {
       streetView.setZoom(0); // Nivel de zoom inicial
       streetView.setVisible(true); // Asegúrate de que el panorama sea visible
     }
+  }
+
+
+  geoDecoder() {
+    const geocoder = new google.maps.Geocoder();
+    const latlng = { lat: 6.167377687303, lng: -75.574062281344 };
+
+    geocoder.geocode({ location: latlng }, (results, status) => {
+      if (status === 'OK' && results) {
+        console.log(results[0].formatted_address);
+      } else {
+        console.error('Geocoder failed due to: ' + status);
+      }
+    });
   }
 }

@@ -7,9 +7,6 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './botones-flotantes.component.html',
   styleUrl: './botones-flotantes.component.scss'
 })
-export class BotonesFlotantesComponent implements OnInit {
-
-  ngOnInit(): void {
-  }
+export class BotonesFlotantesComponent {
 
 }

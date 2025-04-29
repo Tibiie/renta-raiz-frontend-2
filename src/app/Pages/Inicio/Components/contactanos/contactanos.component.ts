@@ -51,10 +51,8 @@ export class ContactanosComponent {
       mensaje: this.formContacto.get('mensaje')?.value,
       fuente: 'contactanos',
     };
-    console.log('Objeto a enviar:', obj);
     this.inmueblesService.createContacto(obj).subscribe(
       (response: any) => {
-        console.log("contacto", response);
         this.vaciarFormulario();
         Swal.fire({
           icon: "success",

@@ -7,6 +7,8 @@ import { VerPropiedadComponent } from './Components/ver-propiedad/ver-propiedad.
 import { NuestroEquipoComponent } from './Components/nuestro-equipo/nuestro-equipo.component';
 import { QuienesSomosComponent } from './Components/quienes-somos/quienes-somos.component';
 import { MapaComponent } from './Components/mapa/mapa.component';
+import { BlogsComponent } from './Components/blogs/blogs.component';
+import { VerBlogComponent } from './Components/ver-blog/ver-blog.component';
 
 export const routes: Routes = [
 
@@ -19,6 +21,10 @@ export const routes: Routes = [
 
   {
     path: 'filtros',
+    component: FiltrosComponent
+  },
+  {
+    path: 'filtros/:tipo',
     component: FiltrosComponent
   },
   {
@@ -40,10 +46,15 @@ export const routes: Routes = [
   {
     path: 'mapa',
     component: MapaComponent
-  }
-
-
-
+  },
+  {
+    path: 'blogs',
+    component: BlogsComponent
+  },
+  {
+    path: 'ver-blog/:id',
+    component: VerBlogComponent
+  },
 ];
 
 @NgModule({

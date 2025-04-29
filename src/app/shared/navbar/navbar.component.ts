@@ -13,9 +13,10 @@ import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 export class NavbarComponent implements OnInit {
   isScrolled = false;
   elementsPerPage = 12;
-  showDestacadosDropdown = false;
   showNosotrosDropdown = false;
   showClientesDropdown = false;
+  showArriendosDropdown = false;
+  showDestacadosDropdown = false;
   @Input() alwaysScrolled = false;
   isMobileMenuOpen: boolean = false;
 
@@ -53,6 +54,11 @@ export class NavbarComponent implements OnInit {
     this.showNosotrosDropdown = !this.showNosotrosDropdown;
   }
 
+  toggleArriendosDropdown(event: MouseEvent) {
+    event.preventDefault();
+    this.showArriendosDropdown = !this.showArriendosDropdown;
+  }
+
   toggleClientesDropdown(event: MouseEvent) {
     event.preventDefault();
     this.showClientesDropdown = !this.showClientesDropdown;
@@ -81,10 +87,8 @@ export class NavbarComponent implements OnInit {
       ...filtrosObj,
       page: 1,
     }
-    console.log('Objeto a enviar:', obj);
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        console.log("filtros", response.data);
         this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this._router.navigate(['/filtros'], {
             state: {
@@ -101,8 +105,22 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  enviarFiltroArriendo() {
+  enviarFiltroArriendo(tipo: string) {
     this.filtrosInmueblesArriendo.clear();
+
+    if (tipo === 'diamante') {
+      this.filtrosInmueblesArriendo.set('pcmin', 15000000);
+    } else if (tipo === 'oro') {
+      this.filtrosInmueblesArriendo.set('pcmin', 8000000);
+      this.filtrosInmueblesArriendo.set('pcmax', 15000000);
+    } else if (tipo === 'plata') {
+      this.filtrosInmueblesArriendo.set('pcmin', 2000000);
+      this.filtrosInmueblesArriendo.set('pcmax', 8000000);
+    } else if (tipo === 'otros') {
+      this.filtrosInmueblesArriendo.set('pcmin', 0);
+      this.filtrosInmueblesArriendo.set('pcmax', 2000000);
+    }
+
     this.filtrosInmueblesArriendo.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
@@ -110,18 +128,19 @@ export class NavbarComponent implements OnInit {
       ...filtrosObj,
       page: 1,
     }
-    console.log('Objeto a enviar:', obj);
+
+    console.log('filtros enviados:', obj);
+
+
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        console.log("filtros", response.data);
-        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this._router.navigate(['/filtros'], {
-            state: {
-              resultados: response.data,
-              paginacion: response,
-              filtros: obj,
-            },
-          });
+        this._router.navigate(['/filtros', tipo], {
+          state: {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+          skipLocationChange: false
         });
       },
       (error: any) => {
@@ -129,40 +148,4 @@ export class NavbarComponent implements OnInit {
       }
     );
   }
-
-  // enviarFiltroDestacados(tipo: string) {
-  //   this.filtrosInmueblesDestacados.clear();
-
-  //   if (tipo === 'arriendo') {
-  //     this.filtrosInmueblesDestacados.set('biz', '1');
-  //   }
-
-  //   if (tipo === 'venta') {
-  //     this.filtrosInmueblesDestacados.set('biz', '2');
-  //   }
-
-  //   const filtrosObj = Object.fromEntries(this.filtrosInmueblesDestacados);
-  //   const obj = {
-  //     ...filtrosObj,
-  //     page: 1,
-  //   }
-  //   console.log('Objeto a enviar:', obj);
-  //   this.inmueblesService.getInmueblesDestacados(obj, this.elementsPerPage).subscribe(
-  //     (response: any) => {
-  //       console.log("filtros", response.data);
-  //       this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-  //         this._router.navigate(['/filtros'], {
-  //           state: {
-  //             resultados: response.data,
-  //             paginacion: response,
-  //             filtros: obj,
-  //           },
-  //         });
-  //       });
-  //     },
-  //     (error: any) => {
-  //       console.error('Error al enviar los filtros:', error);
-  //     }
-  //   );
-  // }
 }

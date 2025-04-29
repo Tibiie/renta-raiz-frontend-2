@@ -9,14 +9,16 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   let requestCount = 0;
 
   // Excluimos ciertas peticiones si es necesario
-  const excludedUrls = ['/api/status', '/assets/'];
-  if (excludedUrls.some((url) => req.url.includes(url))) {
-    return next(req);
-  }
+  // const excludedUrls = ['/api/status', '/assets/'];
+  // if (excludedUrls.some((url) => req.url.includes(url))) {
+  //   return next(req);
+  // }
 
   // Incrementamos el contador y mostramos el loader
   requestCount++;
   if (requestCount === 1) {
+    console.log('INTERCEPTOR: iniciando petición');
+
     loaderService.start();
   }
 

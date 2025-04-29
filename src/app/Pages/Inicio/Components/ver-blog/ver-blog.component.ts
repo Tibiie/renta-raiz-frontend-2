@@ -1,16 +1,14 @@
-declare var fbq: Function;
-
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
+import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import { ActivatedRoute, Router } from '@angular/router';
+import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
-import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { Router } from '@angular/router';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 
 @Component({
-  selector: 'app-vista-inicial',
+  selector: 'app-ver-blog',
   standalone: true,
   imports: [
     CommonModule,
@@ -20,28 +18,23 @@ import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/
     FooterComponent,
     BotonesFlotantesComponent,
   ],
-  templateUrl: './vista-inicial.component.html',
-  styleUrls: ['./vista-inicial.component.scss'],
+  templateUrl: './ver-blog.component.html',
+  styleUrl: './ver-blog.component.scss'
 })
-export class VistaInicialComponent implements OnInit {
+export class VerBlogComponent implements OnInit {
 
-  intervalId: any;
-  currentSlide = 0;
+  blogId: number = 0;
+
   elementsPerPage = 12;
+  ubicacion: string = '';
   searchTerm: string = '';
-  elementsPerPageInicial = 3;
   filtrosSeleccionados: Map<string, any> = new Map();
-  filtrosInmueblesVenta: Map<string, any> = new Map();
-  filtrosInmueblesArriendo: Map<string, any> = new Map();
 
   filtros: any = {};
   ciudades: any[] = [];
   filteredBarrios: any[] = [];
   categoriasInmuebles: any[] = [];
-  aliadosPorGrupo: string[][] = [];
-  inmueblesVentasArray: any[] = [];
   inmueblesDestacadosArray: any = {};
-  inmueblesArriendosArray: any[] = [];
   barrios: { data: any[] } = { data: [] };
 
   estrato: number[] = [1, 2, 3, 4];
@@ -57,7 +50,7 @@ export class VistaInicialComponent implements OnInit {
   };
 
   isPreciosOpen = false;
-  isMasFiltrosOpen = false;
+  isMasFiltrosOpen = false
 
   // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
@@ -97,20 +90,8 @@ export class VistaInicialComponent implements OnInit {
     } as Record<string, string>,
   };
 
-  aliados: string[] = [
-    'assets/images/sura.png',
-    'assets/images/experian.png',
-    'assets/images/fianzacredito.png',
-    'assets/images/libertador.png',
-    'assets/images/lonja.png',
-    'assets/images/sura.png',
-    'assets/images/experian.png',
-    'assets/images/fianzacredito.png',
-  ];
-  isLoading = true;
-
-  // Injectaciones
   router = inject(Router);
+  route = inject(ActivatedRoute);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
 
@@ -119,23 +100,20 @@ export class VistaInicialComponent implements OnInit {
     AreaMaxima: [''],
     precioMinimo: [''],
     precioMaximo: [''],
-    ubicacion: [''],
+    ubicacion: ['']
   });
 
   ngOnInit(): void {
     this.getDatos();
-    this.getAliadosPorGrupo();
+    this.route.params.subscribe(params => {
+      this.blogId = +params['id'];
+    });
   }
 
   getDatos() {
-    this.getBarrios();
-    this.getFiltros();
+    this.getCategoriasInmuebles();
     this.getCiudades();
     this.getTipoPropiedad();
-    this.getAliadosPorGrupo();
-    this.getInmueblesVentas();
-    this.getInmueblesArriendos();
-    this.getCategoriasInmuebles();
     this.getInmueblesDestacados();
   }
 
@@ -194,50 +172,20 @@ export class VistaInicialComponent implements OnInit {
       this.filtrosSeleccionados.set('type', this.selectedEstate.code);
     }
 
-    if (
-      this.formRangos.value.AreaMinima != '' ||
-      this.formRangos.value.AreaMaxima != ''
-    ) {
-      this.filtrosSeleccionados.set(
-        'minarea',
-        this.formRangos.value.AreaMinima
-      );
-      this.filtrosSeleccionados.set(
-        'maxarea',
-        this.formRangos.value.AreaMaxima
-      );
+    if (this.formRangos.value.AreaMinima != '' || this.formRangos.value.AreaMaxima != '') {
+      this.filtrosSeleccionados.set('minarea', this.formRangos.value.AreaMinima);
+      this.filtrosSeleccionados.set('maxarea', this.formRangos.value.AreaMaxima);
     }
 
-    if (
-      this.formRangos.value.precioMinimo != '' ||
-      this.formRangos.value.precioMaximo != ''
-    ) {
-      if (
-        this.selectedProperty?.code == '1' ||
-        this.selectedEstate?.code == '3'
-      ) {
-        this.filtrosSeleccionados.set(
-          'pcmin',
-          this.formRangos.value.precioMinimo
-        );
-        this.filtrosSeleccionados.set(
-          'pcmax',
-          this.formRangos.value.precioMaximo
-        );
+    if (this.formRangos.value.precioMinimo != '' || this.formRangos.value.precioMaximo != '') {
+      if (this.selectedProperty?.code == '1' || this.selectedEstate?.code == '3') {
+        this.filtrosSeleccionados.set('pcmin', this.formRangos.value.precioMinimo);
+        this.filtrosSeleccionados.set('pcmax', this.formRangos.value.precioMaximo);
       }
 
-      if (
-        this.selectedEstate?.code == '2' ||
-        this.selectedProperty?.code == '3'
-      ) {
-        this.filtrosSeleccionados.set(
-          'pvmin',
-          this.formRangos.value.precioMinimo
-        );
-        this.filtrosSeleccionados.set(
-          'pvmax',
-          this.formRangos.value.precioMaximo
-        );
+      if (this.selectedEstate?.code == '2' || this.selectedProperty?.code == '3') {
+        this.filtrosSeleccionados.set('pvmin', this.formRangos.value.precioMinimo);
+        this.filtrosSeleccionados.set('pvmax', this.formRangos.value.precioMaximo);
       }
     }
 
@@ -279,6 +227,7 @@ export class VistaInicialComponent implements OnInit {
       }
     }
   }
+
 
   filterLocations() {
     const search = this.searchTerm.toLowerCase();
@@ -333,7 +282,6 @@ export class VistaInicialComponent implements OnInit {
     this.inmueblesService.getCiudades().subscribe(
       (response: any) => {
         this.ciudades = response.data;
-        console.log('ciudades:', this.ciudades);
       },
       (error: any) => {
         console.error('Error al obtener las ciudades:', error);
@@ -389,53 +337,12 @@ export class VistaInicialComponent implements OnInit {
     );
   }
 
-  getInmueblesVentas() {
-    this.filtrosInmueblesVenta.clear();
-    this.filtrosInmueblesVenta.set('biz', 2);
-
-    const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    };
-    this.inmueblesService
-      .getFiltrosEnviar(obj, this.elementsPerPageInicial)
-      .subscribe(
-        (response: any) => {
-          this.inmueblesVentasArray = response.data;
-        },
-        (error: any) => {
-          console.error('Error al enviar los filtros:', error);
-        }
-      );
-  }
-
-  getInmueblesArriendos() {
-    this.filtrosInmueblesArriendo.clear();
-    this.filtrosInmueblesArriendo.set('biz', 1);
-
-    const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    };
-    this.inmueblesService
-      .getFiltrosEnviar(obj, this.elementsPerPageInicial)
-      .subscribe(
-        (response: any) => {
-          this.inmueblesArriendosArray = response.data;
-        },
-        (error: any) => {
-          console.error('Error al enviar los filtros:', error);
-        }
-      );
-  }
-
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
         this.inmueblesDestacadosArray = data;
         console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
+
       },
       (error: any) => {
         console.log(error);
@@ -468,6 +375,8 @@ export class VistaInicialComponent implements OnInit {
       return 'fas fa-list-ul';
     }
 
+    console.log(option);
+
     if (option) {
       const code = typeof option === 'object' ? option.code : '';
       const iconMap = this.icons[type];
@@ -494,11 +403,13 @@ export class VistaInicialComponent implements OnInit {
       this.isEstateDropdownOpen = false;
       this.isMasFiltrosOpen = false;
       this.isPreciosOpen = false;
+
     } else if (type === 'masFiltros') {
       this.isMasFiltrosOpen = !this.isMasFiltrosOpen;
       this.isPropertyDropdownOpen = false;
       this.isEstateDropdownOpen = false;
       this.isPreciosOpen = false;
+
     } else if (type === 'precios') {
       this.isPreciosOpen = !this.isPreciosOpen;
       this.isPropertyDropdownOpen = false;
@@ -522,35 +433,10 @@ export class VistaInicialComponent implements OnInit {
   redirigirFiltros() {
     this.prepararFiltros();
     this.getEnviarFiltros();
-    fbq('trackCustom', 'FiltrosInmueble', {
-      custom_param: `${this.ubicacion}`,
-    });
-  }
-
-  getAliadosPorGrupo(): string[][] {
-    const grupos: string[][] = [];
-    for (let i = 0; i < this.aliados.length; i += 4) {
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
-    }
-    console.log(this.aliadosPorGrupo);
-  }
-
-  abrirPestana(url: string) {
-    window.open(url, '_blank');
   }
 
   verPropiedad(codPro: number) {
-    console.log("codPro", codPro);
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro }
-    });
+    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    window.open(url, '_blank');
   }
-
-  enviarWhatsapp() {
-    fbq('track', 'Contact');
-    window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU');
-  }
-
-  
 }
