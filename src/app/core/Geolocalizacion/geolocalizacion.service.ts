@@ -55,12 +55,7 @@ export class GeolocalizacionService {
   getAddress(lat: number, lng: number) {
 
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${this.apiKey}`;
-    return this.http.get(url, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      })
-    });
+    return this.http.get(url);
   }
 
 }

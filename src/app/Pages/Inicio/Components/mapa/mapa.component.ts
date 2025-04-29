@@ -3,6 +3,7 @@ import { AfterViewInit, Component, inject, Input, ViewChild } from '@angular/cor
 import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
 import { Router } from '@angular/router';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
+import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class MapaComponent implements AfterViewInit {
   @Input() activarStreetView: boolean = false;
 
   inmueblesService = inject(InmueblesService);
+  geolocalizacionService = inject(GeolocalizacionService);
 
 
   constructor(private router: Router) {
@@ -35,6 +37,11 @@ export class MapaComponent implements AfterViewInit {
         (response: any) => {
 
           this.propiedades = response;
+
+
+          this.geoDecoder();
+
+
           this.center = { lat: this.propiedades[0].latitude, lng: this.propiedades[0].longitude };
 
           this.markers = this.propiedades.map(p => ({
@@ -53,6 +60,10 @@ export class MapaComponent implements AfterViewInit {
       this.zoom = 16;
       var latitude = Number(this.propiedades[0].latitude);
       var longitude = Number(this.propiedades[0].longitude);
+
+      this.geoDecoder();
+
+
       this.center = { lat: latitude, lng: longitude };
       this.markers = this.propiedades.map(p => ({
         position: { lat: latitude, lng: longitude },
@@ -125,5 +136,19 @@ export class MapaComponent implements AfterViewInit {
       streetView.setZoom(0); // Nivel de zoom inicial
       streetView.setVisible(true); // Asegúrate de que el panorama sea visible
     }
+  }
+
+
+  geoDecoder() {
+    const geocoder = new google.maps.Geocoder();
+    const latlng = { lat: 6.167377687303, lng: -75.574062281344 };
+
+    geocoder.geocode({ location: latlng }, (results, status) => {
+      if (status === 'OK' && results) {
+        console.log(results[0].formatted_address);
+      } else {
+        console.error('Geocoder failed due to: ' + status);
+      }
+    });
   }
 }
