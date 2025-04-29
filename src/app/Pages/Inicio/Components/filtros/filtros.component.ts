@@ -42,6 +42,7 @@ export class FiltrosComponent implements OnInit {
     habitaciones: [] as (number | string)[],
   };
 
+  searchTerm: string = '';
   ubicacion: string = '';
   isDrawerOpen: boolean = true;
   drawerMapAbierto: boolean = false;
@@ -311,7 +312,7 @@ export class FiltrosComponent implements OnInit {
   }
 
   filterLocations() {
-    const search = this.ubicacion.toLowerCase();
+    const search = this.searchTerm.toLowerCase();
     this.filteredBarrios = this.barrios.data.filter(
       (barrio: any) =>
         barrio.name.toLowerCase().includes(search) ||
@@ -561,7 +562,7 @@ export class FiltrosComponent implements OnInit {
   }
 
   selectLocation(barrio: any) {
-    this.ubicacion = `${barrio.city_name}, ${barrio.name}`;
+    this.searchTerm = `${barrio.city_name}, ${barrio.name}`;
     this.filteredBarrios = [];
 
     this.filtrosSeleccionados.set('city', barrio.city_code);
@@ -783,5 +784,10 @@ export class FiltrosComponent implements OnInit {
     this.cdRef.detectChanges();
 
     this.enviarFiltros();
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.filteredBarrios = [];
   }
 }
