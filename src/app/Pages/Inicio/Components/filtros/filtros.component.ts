@@ -714,10 +714,6 @@ export class FiltrosComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  borrarFiltros() {
-    this.filtrosSeleccionados.clear();
-  }
-
   async cargarDesdeState(state: any) {
     if (state?.resultados) {
       this.resultados = [...state.resultados];
@@ -763,5 +759,30 @@ export class FiltrosComponent implements OnInit {
         this.filtrosSeleccionados.delete('pcmax');
       }
     }
+  }
+
+  borrarFiltros() {
+    this.filtrosSeleccionados.clear();
+    this.selectedPriceRange = null;
+
+    this.seleccion = {
+      habitaciones: [],
+      banos: [],
+      parqueadero: [],
+      estrato: [],
+    };
+
+    this.formRangos.patchValue({
+      AreaMinima: null,
+      AreaMaxima: null,
+      precioMinimo: null,
+      precioMaximo: null,
+      precioVentaMinimo: null,
+      precioVentaMaximo: null,
+    });
+
+    this.cdRef.detectChanges();
+
+    this.enviarFiltros();
   }
 }

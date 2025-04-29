@@ -340,9 +340,8 @@ export class VerBlogComponent implements OnInit {
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
-        this.inmueblesDestacadosArray = data;
+        this.inmueblesDestacadosArray = data.data.slice(2, 5);
         console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
-
       },
       (error: any) => {
         console.log(error);
@@ -438,5 +437,10 @@ export class VerBlogComponent implements OnInit {
   verPropiedad(codPro: number) {
     const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
     window.open(url, '_blank');
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.filteredBarrios = [];
   }
 }

@@ -24,16 +24,23 @@
     <div [formGroup]="formRangos" class="relative w-full flex justify-center mt-4 md:-mt-14 px-4 z-30">
       <div class="bg-white rounded-lg p-6 w-full max-w-8xl shadow-2xl shadow-gray-600/40">
         <div class="flex flex-col md:flex-row gap-4 items-end">
-          <!-- Template actualizado -->
           <div class="relative w-full md:w-1/3">
+            <!-- Input de búsqueda -->
             <div class="relative">
               <input type="text" formControlName="ubicacion" [(ngModel)]="searchTerm" (input)="filterLocations()"
                 placeholder="Buscar ubicación..."
                 class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-[#CDAD60] focus:border-[#CDAD60]" />
 
+              <!-- Icono de búsqueda -->
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-search text-1xl text-gray-400"></i>
               </div>
+
+              <!-- Botón X para limpiar -->
+              <button *ngIf="searchTerm" type="button" (click)="clearSearch()"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+              </button>
             </div>
 
             <!-- Lista de sugerencias -->
@@ -42,7 +49,6 @@
               <div *ngFor="let barrio of filteredBarrios" (click)="selectLocation(barrio)"
                 class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
                 <i class="fas fa-location-dot text-1xl text-gray-500 mt-1 mr-2"></i>
-
                 <div>
                   <p class="text-medium text-gray-900">{{ barrio.city_name }}</p>
                   <p class="font-sm text-gray-500">{{ barrio.name }}</p>
@@ -269,7 +275,7 @@
       </h2>
 
       <div *ngIf="inmueblesDestacadosArray" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
-        <div *ngFor="let inmueble of inmueblesDestacadosArray.data"
+        <div *ngFor="let inmueble of inmueblesDestacadosArray"
           class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
           <div class="relative group">
             <div class="bg-black w-full h-[280px] flex items-center justify-center overflow-hidden rounded-t-lg">
@@ -559,11 +565,12 @@
 
     <div class="flex flex-wrap justify-center gap-3 relative z-10">
       <button type="button"
+        (click)="abrirPestana('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU')"
         class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
         <i class="fas fa-envelope mr-2"></i> Contactanos
       </button>
 
-      <button type="button"
+      <button type="button" routerLink="/venta"
         class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
         <i class="fas fa-search mr-2"></i> Buscar Inmueble
       </button>
@@ -726,7 +733,6 @@
 
   <!-- IMAGEN DE CASA FINCA CON FRASE -->
   <div class="relative w-full flex flex-col justify-center items-center py-16 md:py-24 bg-[#060F29]">
-    <!-- Fondo con imagen difuminada -->
     <div class="absolute top-0 left-0 w-full h-full z-0" style="
         background-image: url('assets/images/casa-finca.jpg');
         background-size: cover;
@@ -742,7 +748,7 @@
       class="w-[80%] sm:w-[60%] md:w-[50%] h-auto relative z-10 mb-6" />
 
     <div class="flex gap-3 justify-center relative z-10 space-x-4">
-      <button type="button"
+      <button type="button" routerLink="/venta"
         class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-lg px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
         <i class="fas fa-search mr-2"></i> Buscar Inmueble
       </button>
