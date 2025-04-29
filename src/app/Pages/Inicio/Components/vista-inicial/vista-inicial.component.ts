@@ -1,6 +1,4 @@
-declare var fbq: Function;
-
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
@@ -522,13 +520,15 @@ export class VistaInicialComponent implements OnInit {
   redirigirFiltros() {
     this.prepararFiltros();
     this.getEnviarFiltros();
-    fbq('trackCustom', 'FiltrosInmueble', {
-      custom_param: `${this.ubicacion}`,
-    });
   }
 
-  getAliadosPorGrupo(): string[][] {
-    const grupos: string[][] = [];
+  redirigirVerBlog(id: number) {
+    const url = this.router.createUrlTree(['/ver-blog', id]).toString();
+    window.open(url, '_blank');
+  }
+
+  getAliadosPorGrupo(): void {
+    this.aliadosPorGrupo = [];
     for (let i = 0; i < this.aliados.length; i += 4) {
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
@@ -541,16 +541,7 @@ export class VistaInicialComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    console.log("codPro", codPro);
-    this.router.navigate(['/ver-propiedad', codPro], {
-      state: { codPro: codPro }
-    });
+    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    window.open(url, '_blank');
   }
-
-  enviarWhatsapp() {
-    fbq('track', 'Contact');
-    window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU');
-  }
-
-  
 }
