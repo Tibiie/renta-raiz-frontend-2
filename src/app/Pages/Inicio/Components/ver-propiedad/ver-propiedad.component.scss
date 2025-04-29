@@ -1,0 +1,19 @@
+.sticky-sidebar-advanced {
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    z-index: 20;
+  }
+
+  
+  .info-container {
+    position: relative;
+    z-index: 5;
+    padding-top: 20px;
+    margin-top: 0;
+  }
+  
+
+  /* Asegurar que el contenedor padre no corte el contenido */
+  .md\:flex-row {
+    overflow: visible !important;
+  }

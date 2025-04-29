@@ -74,5 +74,4 @@ export class ContactanosComponent {
   abrirPestana(url: string) {
     window.open(url, '_blank');
   }
-
 }

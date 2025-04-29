@@ -101,9 +101,6 @@ export class VistaInicialComponent implements OnInit {
     'assets/images/fianzacredito.png',
     'assets/images/libertador.png',
     'assets/images/lonja.png',
-    'assets/images/sura.png',
-    'assets/images/experian.png',
-    'assets/images/fianzacredito.png',
   ];
   isLoading = true;
 
@@ -394,13 +391,16 @@ export class VistaInicialComponent implements OnInit {
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
     const obj = {
       ...filtrosObj,
-      page: 1,
+      page: 2,
     };
     this.inmueblesService
       .getFiltrosEnviar(obj, this.elementsPerPageInicial)
       .subscribe(
         (response: any) => {
-          this.inmueblesVentasArray = response.data;
+          this.inmueblesVentasArray = response.data.filter(
+            (inmueble: any) => inmueble.image1 != ""
+          );
+          console.log('Inmuebles ventas:', this.inmueblesVentasArray);
         },
         (error: any) => {
           console.error('Error al enviar los filtros:', error);
@@ -432,7 +432,7 @@ export class VistaInicialComponent implements OnInit {
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
-        this.inmueblesDestacadosArray = data;
+        this.inmueblesDestacadosArray = data.data.slice(2, 5);
         console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
       },
       (error: any) => {

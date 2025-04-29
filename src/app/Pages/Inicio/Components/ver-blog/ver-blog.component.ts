@@ -340,9 +340,8 @@ export class VerBlogComponent implements OnInit {
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
-        this.inmueblesDestacadosArray = data;
+        this.inmueblesDestacadosArray = data.data.slice(2, 5);
         console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
-
       },
       (error: any) => {
         console.log(error);
