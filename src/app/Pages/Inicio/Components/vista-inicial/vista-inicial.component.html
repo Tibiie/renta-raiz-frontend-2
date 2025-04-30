@@ -310,9 +310,10 @@
           </div>
 
           <div class="p-5">
-            <a href="#">
+            <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
               <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
                 {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
               </h5>
               <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
                 {{ inmueble.description }}
@@ -408,9 +409,10 @@
         </div>
 
         <div class="p-5">
-          <a href="#">
+          <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
             <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
               {{ inmueble.neighborhood || "Sin barrio especificado" }}
+              <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
             </h5>
             <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
               {{ inmueble.description }}
@@ -508,6 +510,7 @@
             <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
               <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
                 {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
               </h5>
               <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
                 {{ inmueble.description }}
@@ -574,10 +577,10 @@
         <i class="fas fa-envelope mr-2"></i> Contactanos
       </button>
 
-      <button type="button" routerLink="/venta"
+      <a href="#" type="button"
         class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
         <i class="fas fa-search mr-2"></i> Buscar Inmueble
-      </button>
+      </a>
     </div>
   </div>
 
@@ -764,10 +767,10 @@
       class="w-[80%] sm:w-[60%] md:w-[50%] h-auto relative z-10 mb-6" />
 
     <div class="flex gap-3 justify-center relative z-10 space-x-4">
-      <button type="button" routerLink="/venta"
+      <a href="#" type="button"
         class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-lg px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
         <i class="fas fa-search mr-2"></i> Buscar Inmueble
-      </button>
+      </a>
     </div>
   </div>
 
