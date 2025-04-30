@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 
 <div class="flex flex-col">
-  <div class="banner-contacto w-full max-h-[50vh] overflow-hidden">
+  <div class="banner-contacto w-full max-h-[60vh] overflow-hidden">
     <div class="relative w-full pb-[56.25%] h-0">
       <img id="video-placeholder" src="assets/images/casa-finca.jpg"
         class="absolute top-0 left-0 w-full h-full object-cover z-0 transition-opacity duration-700"
@@ -50,7 +50,9 @@
                 class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
                 <i class="fas fa-location-dot text-1xl text-gray-500 mt-1 mr-2"></i>
                 <div>
-                  <p class="text-medium text-gray-900">{{ barrio.city_name }}</p>
+                  <p class="text-medium text-gray-900">
+                    {{ barrio.city_name }}
+                  </p>
                   <p class="font-sm text-gray-500">{{ barrio.name }}</p>
                 </div>
               </div>
@@ -565,8 +567,11 @@
       class="w-[80%] sm:w-[60%] md:w-[50%] h-auto relative z-10 mb-6" />
 
     <div class="flex flex-wrap justify-center gap-3 relative z-10">
-      <button type="button"
-        (click)="abrirPestana('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU')"
+      <button type="button" (click)="
+          abrirPestana(
+            'https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU'
+          )
+        "
         class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
         <i class="fas fa-envelope mr-2"></i> Contactanos
       </button>
