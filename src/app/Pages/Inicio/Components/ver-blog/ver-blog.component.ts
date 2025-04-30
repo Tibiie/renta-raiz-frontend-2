@@ -341,7 +341,6 @@ export class VerBlogComponent implements OnInit {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
         this.inmueblesDestacadosArray = data.data.slice(2, 5);
-        console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
       },
       (error: any) => {
         console.log(error);
@@ -355,7 +354,6 @@ export class VerBlogComponent implements OnInit {
     this.inmueblesService.getBarrios().subscribe(
       (data: any) => {
         this.barrios = data;
-        console.log('Barrios:', this.barrios);
       },
       (error: any) => {
         console.log(error);
