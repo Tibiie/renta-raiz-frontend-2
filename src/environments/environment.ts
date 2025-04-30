@@ -3,7 +3,7 @@ export const token =
 
 export const environment = {
   production: false,
-  baseUrl: 'https:/rentaraiz.co/api/v1',
+  baseUrl: 'https://rentaraiz.co/api/v1',
 };
 
 export const conexionVault = {
