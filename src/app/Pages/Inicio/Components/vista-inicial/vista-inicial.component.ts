@@ -127,7 +127,6 @@ export class VistaInicialComponent implements OnInit {
 
   getDatos() {
     this.getBarrios();
-    this.getFiltros();
     this.getCiudades();
     this.getTipoPropiedad();
     this.getAliadosPorGrupo();
@@ -384,19 +383,6 @@ export class VistaInicialComponent implements OnInit {
       },
       (error: any) => {
         console.error('Error al obtener los tipos de propiedad:', error);
-      }
-    );
-  }
-
-  getFiltros() {
-    this.inmueblesService.getFiltros().subscribe(
-      (data: any) => {
-        this.filtros = data;
-      },
-      (error: any) => {
-        console.log(error);
-
-        console.error('Error al obtener los filtros:', error);
       }
     );
   }
