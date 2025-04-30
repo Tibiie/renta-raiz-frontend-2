@@ -75,7 +75,6 @@ export class NavbarComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    // Si el menú móvil está abierto, no aplicar esta lógica (permite dropdowns en móvil)
     if (this.isMobileMenuOpen) return;
 
     const target = event.target as HTMLElement;
@@ -92,7 +91,6 @@ export class NavbarComponent implements OnInit {
       this.clientesDropdownRef?.nativeElement.contains(target) ||
       target.closest('a')?.textContent?.includes('Clientes');
 
-    // Cierra dropdowns si el clic fue fuera de los menús correspondientes
     if (!clickedInsideArriendos) this.showArriendosDropdown = false;
     if (!clickedInsideNosotros) this.showNosotrosDropdown = false;
     if (!clickedInsideClientes) this.showClientesDropdown = false;
