@@ -374,8 +374,6 @@ export class VerBlogComponent implements OnInit {
       return 'fas fa-list-ul';
     }
 
-    console.log(option);
-
     if (option) {
       const code = typeof option === 'object' ? option.code : '';
       const iconMap = this.icons[type];
