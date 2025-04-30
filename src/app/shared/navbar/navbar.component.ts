@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 
@@ -11,6 +11,10 @@ import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
+  @ViewChild('nosotrosDropdown') nosotrosDropdownRef: ElementRef | undefined;
+  @ViewChild('arriendosDropdown') arriendosDropdownRef: ElementRef | undefined;
+  @ViewChild('clientesDropdown') clientesDropdownRef: ElementRef | undefined;
+
   isScrolled = false;
   elementsPerPage = 12;
   showNosotrosDropdown = false;
@@ -69,6 +73,29 @@ export class NavbarComponent implements OnInit {
     this.showDestacadosDropdown = !this.showDestacadosDropdown;
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.isMobileMenuOpen) return;
+
+    const target = event.target as HTMLElement;
+
+    const clickedInsideArriendos =
+      this.arriendosDropdownRef?.nativeElement.contains(target) ||
+      target.closest('a')?.textContent?.includes('Arriendo');
+
+    const clickedInsideNosotros =
+      this.nosotrosDropdownRef?.nativeElement.contains(target) ||
+      target.closest('a')?.textContent?.includes('Nosotros');
+
+    const clickedInsideClientes =
+      this.clientesDropdownRef?.nativeElement.contains(target) ||
+      target.closest('a')?.textContent?.includes('Clientes');
+
+    if (!clickedInsideArriendos) this.showArriendosDropdown = false;
+    if (!clickedInsideNosotros) this.showNosotrosDropdown = false;
+    if (!clickedInsideClientes) this.showClientesDropdown = false;
+  }
+
   closeDropdown() {
     this.showNosotrosDropdown = false;
   }
@@ -116,11 +143,7 @@ export class NavbarComponent implements OnInit {
     } else if (tipo === 'plata') {
       this.filtrosInmueblesArriendo.set('pcmin', 2000000);
       this.filtrosInmueblesArriendo.set('pcmax', 8000000);
-    } else if (tipo === 'otros') {
-      this.filtrosInmueblesArriendo.set('pcmin', 0);
-      this.filtrosInmueblesArriendo.set('pcmax', 2000000);
     }
-
     this.filtrosInmueblesArriendo.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
@@ -130,7 +153,6 @@ export class NavbarComponent implements OnInit {
     }
 
     console.log('filtros enviados:', obj);
-
 
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {

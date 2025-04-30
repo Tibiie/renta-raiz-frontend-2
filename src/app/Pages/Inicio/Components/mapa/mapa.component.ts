@@ -28,20 +28,14 @@ export class MapaComponent implements AfterViewInit {
   geolocalizacionService = inject(GeolocalizacionService);
 
 
-  constructor(private router: Router) {
+  router = inject(Router);
 
-  }
   ngOnInit(): void {
     if (this.propiedades.length == 0) {
       this.inmueblesService.getTodosInmuebles().subscribe(
         (response: any) => {
-
           this.propiedades = response;
-
-
           this.geoDecoder();
-
-
           this.center = { lat: this.propiedades[0].latitude, lng: this.propiedades[0].longitude };
 
           this.markers = this.propiedades.map(p => ({
