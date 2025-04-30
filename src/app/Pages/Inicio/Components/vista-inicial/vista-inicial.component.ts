@@ -125,6 +125,13 @@ export class VistaInicialComponent implements OnInit {
     this.getAliadosPorGrupo();
   }
 
+  scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
   getDatos() {
     this.getBarrios();
     this.getCiudades();
