@@ -23,6 +23,8 @@ import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/
 })
 export class VistaInicialComponent implements OnInit {
 
+
+
   intervalId: any;
   currentSlide = 0;
   elementsPerPage = 12;
