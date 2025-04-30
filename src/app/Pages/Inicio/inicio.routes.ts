@@ -12,10 +12,10 @@ import { VerBlogComponent } from './Components/ver-blog/ver-blog.component';
 
 export const routes: Routes = [
 
-  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+  { path: '', redirectTo: '', pathMatch: 'full' },
 
   {
-    path: 'inicio',
+    path: '',
     component: VistaInicialComponent
   },
 
