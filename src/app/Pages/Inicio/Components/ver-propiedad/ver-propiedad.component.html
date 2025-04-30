@@ -220,7 +220,7 @@
           } @if (tabActivo === 'mapa') {
           <ng-container>
             <div class="flex flex-col">
-              <div class="w-full max-w-4xl relative">
+              <div class="w-full relative">
                 <div class="relative h-[700px] overflow-hidden rounded-xl">
                   <app-mapa [propiedades]="[propiedad]"></app-mapa>
                 </div>
@@ -359,7 +359,7 @@
               </p>
               }
               @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-              <p class="text-gray-500 text-sm mb-1">Valor de arrienda en:</p>
+              <p class="text-gray-500 text-sm mb-1">Valor de arriendo en:</p>
               }
               @if (propiedad.biz_code === 3) {
               <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
@@ -436,8 +436,8 @@
             </div>
 
             <div class="rounded-lg p-10 text-center">
-              <p class="text-[20px] text-[#080E36] font-bold">¿Conectaste con este espacio? Nuestro equipo te acompaña.
-              </p>
+              <p class="text-[21px] text-[#080E36] font-bold">¿Conectaste con este espacio?</p>
+              <p class="text-[20px] text-gray-500 italic">Nuestro equipo te acompaña.</p>
             </div>
 
             <!-- Botones -->
@@ -464,94 +464,96 @@
   </div>
 
   <!-- Titulo inmuebles similares -->
-  <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4 mb-24">
-    <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center w-full max-w-6xl">
-      Inmuebles similares
-    </h1>
-    <h2 class="text-2xl font-normal text-[#9a9b9c] text-center w-full max-w-6xl mt-4">
-      Busca inmuebles similares a tus propios
-    </h2>
+  <div class="bg-gray-200">
+    <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4 mb-24">
+      <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center w-full max-w-6xl">
+        Inmuebles similares
+      </h1>
+      <h2 class="text-2xl font-normal text-[#9a9b9c] text-center w-full max-w-6xl mt-4">
+        Busca inmuebles similares a tus propios
+      </h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl mt-6">
-      <div *ngFor="let inmueble of resultadosFiltros"
-        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
-        <div class="relative group">
-          <div class="bg-black w-full h-[280px] flex items-center justify-center overflow-hidden rounded-t-lg">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl mt-6">
+        <div *ngFor="let inmueble of resultadosFiltros"
+          class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
+          <div class="relative group">
+            <div class="bg-black w-full h-[280px] flex items-center justify-center overflow-hidden rounded-t-lg">
+              <a href="#">
+                <img class="max-w-full max-h-full object-contain" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+                  [alt]="inmueble.address" />
+              </a>
+            </div>
+
+            <div
+              class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+              <a class="cursor-pointer bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+                (click)="verPropiedad(inmueble.codpro)">
+                Ver propiedad
+              </a>
+            </div>
+
+            <div
+              class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]">
+              {{ inmueble.biz | titlecase }}
+            </div>
+
+            <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+              <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
+                {{ inmueble.type | titlecase }}
+              </span>
+              <button class="text-white text-base hover:text-[#ea6666] transition-colors">
+                <i class="fas fa-heart text-xl"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-5">
             <a href="#">
-              <img class="max-w-full max-h-full object-contain" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-                [alt]="inmueble.address" />
+              <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36]">
+                {{ inmueble.neighborhood || "Sin barrio especificado" }}
+              </h5>
+              <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
+                {{ inmueble.description }}
+              </p>
             </a>
-          </div>
 
-          <div
-            class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
-            <a class="cursor-pointer bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
-              (click)="verPropiedad(inmueble.codpro)">
-              Ver propiedad
-            </a>
-          </div>
-
-          <div
-            class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]">
-            {{ inmueble.biz | titlecase }}
-          </div>
-
-          <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
-            <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
-              {{ inmueble.type | titlecase }}
-            </span>
-            <button class="text-white text-base hover:text-[#ea6666] transition-colors">
-              <i class="fas fa-heart text-xl"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="p-5">
-          <a href="#">
-            <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36]">
-              {{ inmueble.neighborhood || "Sin barrio especificado" }}
-            </h5>
-            <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
-              {{ inmueble.description }}
-            </p>
-          </a>
-
-          <div class="flex justify-between text-[#080E36] mt-2">
-            <div class="flex flex-col items-center">
-              <span class="text-xs font-medium">Habit</span>
-              <div class="flex items-center text-xs">
-                <i class="fas fa-bed text-sm"></i>
-                <span class="ml-1">{{ inmueble.bedrooms || "N/A" }}</span>
+            <div class="flex justify-between text-[#080E36] mt-2">
+              <div class="flex flex-col items-center">
+                <span class="text-xs font-medium">Habit</span>
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-bed text-sm"></i>
+                  <span class="ml-1">{{ inmueble.bedrooms || "N/A" }}</span>
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <span class="text-xs font-medium">Baños</span>
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-bath text-sm"></i>
+                  <span class="ml-1">{{ inmueble.bathrooms || "N/A" }}</span>
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <span class="text-xs font-medium">Área</span>
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-ruler-combined text-sm"></i>
+                  <span class="ml-1">
+                    {{ inmueble.area_cons || inmueble.area_lot || "N/A" }} m²
+                  </span>
+                </div>
               </div>
             </div>
-            <div class="flex flex-col items-center">
-              <span class="text-xs font-medium">Baños</span>
-              <div class="flex items-center text-xs">
-                <i class="fas fa-bath text-sm"></i>
-                <span class="ml-1">{{ inmueble.bathrooms || "N/A" }}</span>
-              </div>
-            </div>
-            <div class="flex flex-col items-center">
-              <span class="text-xs font-medium">Área</span>
-              <div class="flex items-center text-xs">
-                <i class="fas fa-ruler-combined text-sm"></i>
-                <span class="ml-1">
-                  {{ inmueble.area_cons || inmueble.area_lot || "N/A" }} m²
-                </span>
-              </div>
-            </div>
-          </div>
 
-          <div class="flex flex-col mt-3 text-[#080E36] text-sm font-medium">
-            <span>Precio:</span>
-            <span class="text-[#000000] mt-1 text-base font-semibold">
-              {{
-              inmueble.price_format ||
-              (inmueble.price
-              | currency : "COP" : "symbol-narrow" : "1.0-0") ||
-              "Consultar"
-              }}
-            </span>
+            <div class="flex flex-col mt-3 text-[#080E36] text-sm font-medium">
+              <span>Precio:</span>
+              <span class="text-[#000000] mt-1 text-base font-semibold">
+                {{
+                inmueble.price_format ||
+                (inmueble.price
+                | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                "Consultar"
+                }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
