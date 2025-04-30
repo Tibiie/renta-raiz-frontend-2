@@ -111,7 +111,7 @@
             </button>
 
             <div *ngIf="isEstateDropdownOpen"
-              class="absolute z-10 mt-2 w-[350px] bg-white rounded-lg shadow-lg border border-gray-200">
+              class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
               <div class="p-4">
                 <p class="text-gray-500 text-sm font-medium mb-2">
                   Tipo de inmueble
@@ -312,7 +312,7 @@
           <div class="p-5">
             <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
               <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
-                {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                {{ (inmueble.neighborhood || "Sin barrio especificado") | titlecase }}
                 <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
               </h5>
               <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
@@ -411,7 +411,7 @@
         <div class="p-5">
           <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
             <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
-              {{ inmueble.neighborhood || "Sin barrio especificado" }}
+              {{ (inmueble.neighborhood || "Sin barrio especificado") | titlecase }}
               <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
             </h5>
             <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
@@ -509,7 +509,7 @@
           <div class="p-5">
             <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
               <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
-                {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                {{ (inmueble.neighborhood || "Sin barrio especificado") | titlecase }}
                 <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
               </h5>
               <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
