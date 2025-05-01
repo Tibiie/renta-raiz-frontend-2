@@ -73,29 +73,6 @@ export class NavbarComponent implements OnInit {
     this.showDestacadosDropdown = !this.showDestacadosDropdown;
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    if (this.isMobileMenuOpen) return;
-
-    const target = event.target as HTMLElement;
-
-    const clickedInsideArriendos =
-      this.arriendosDropdownRef?.nativeElement.contains(target) ||
-      target.closest('a')?.textContent?.includes('Arriendo');
-
-    const clickedInsideNosotros =
-      this.nosotrosDropdownRef?.nativeElement.contains(target) ||
-      target.closest('a')?.textContent?.includes('Nosotros');
-
-    const clickedInsideClientes =
-      this.clientesDropdownRef?.nativeElement.contains(target) ||
-      target.closest('a')?.textContent?.includes('Clientes');
-
-    if (!clickedInsideArriendos) this.showArriendosDropdown = false;
-    if (!clickedInsideNosotros) this.showNosotrosDropdown = false;
-    if (!clickedInsideClientes) this.showClientesDropdown = false;
-  }
-
   closeDropdown() {
     this.showNosotrosDropdown = false;
   }
@@ -144,6 +121,7 @@ export class NavbarComponent implements OnInit {
       this.filtrosInmueblesArriendo.set('pcmin', 2000000);
       this.filtrosInmueblesArriendo.set('pcmax', 8000000);
     }
+
     this.filtrosInmueblesArriendo.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
