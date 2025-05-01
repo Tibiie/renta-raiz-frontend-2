@@ -412,7 +412,7 @@
         </div>
 
         <div class="p-3">
-          <a href="#">
+          <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
             <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug">
               {{ inmueble.neighborhood || "Sin barrio especificado" | titlecase }}
               <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
