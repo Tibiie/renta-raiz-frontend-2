@@ -414,7 +414,8 @@
         <div class="p-3">
           <a href="#">
             <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug">
-              {{ inmueble.neighborhood || "Sin barrio especificado" }}
+              {{ inmueble.neighborhood || "Sin barrio especificado" | titlecase }}
+              <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
             </h5>
             <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
               {{ inmueble.description }}

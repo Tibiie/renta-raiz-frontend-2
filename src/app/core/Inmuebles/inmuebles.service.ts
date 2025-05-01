@@ -7,10 +7,11 @@ import { environment } from '../../../environments/environment';
 })
 export class InmueblesService {
 
+  
+
   Propiedades: any[] = [];
 
   http = inject(HttpClient);
-
 
   getTodosInmuebles() {
     return this.http.get(`${environment.baseUrl}/properties/inmuebles`);
@@ -59,4 +60,7 @@ export class InmueblesService {
   getPropiedades() {
     return this.Propiedades;
   }
+
+
+ 
 }

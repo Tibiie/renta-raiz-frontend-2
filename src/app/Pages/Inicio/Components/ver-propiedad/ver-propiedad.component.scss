@@ -12,8 +12,26 @@
     margin-top: 0;
   }
   
-
   /* Asegurar que el contenedor padre no corte el contenido */
   .md\:flex-row {
     overflow: visible !important;
   }
+
+  #modern-drawer::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  #modern-drawer::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  #modern-drawer::-webkit-scrollbar-thumb {
+    background-color: #c7b999;
+    border-radius: 6px;
+    border: 1px solid white;
+  }
+  
+  #modern-drawer::-webkit-scrollbar-thumb:hover {
+    background-color: #c7b999;
+  }
+  

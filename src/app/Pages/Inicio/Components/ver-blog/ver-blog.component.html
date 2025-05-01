@@ -364,7 +364,7 @@
             </h2>
             <p class="text-lg text-gray-700 leading-relaxed mb-4">
                 En Renta Raíz te ayudamos a encontrar propiedades excepcionales para un estilo de vida incomparable.
-                <a href="https://www.rentaraiz.co"
+                <a href="https://www.rentaraiz.co/"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#CDAD60] to-[#080E36] text-white rounded-lg hover:shadow-md transition-all">
                     👉 Agenda tu asesoría
                 </a> y descubre por qué Medellín es tu
@@ -382,50 +382,6 @@
             </div>
 
             <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
-
-            <div class="mt-4 p-4 rounded-lg text-sm text-gray-700">
-                <div class="flex items-center gap-2 mb-3">
-                    <i class="text-lg fas fa-tools text-[#CDAD60] mt-4"></i>
-                    <h3 class="text-lg font-bold text-[#080E36] mt-8 mb-4">SEO Técnico sugerido</h3>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <p class="font-semibold mb-1">Palabras clave:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>Principal: <span class="text-[#080E36]">Medellín destino turístico</span></li>
-                            <li>Secundarias: Stella Awards, vivir en Medellín, inversión inmobiliaria en Medellín,
-                                turismo en Medellín</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <p class="font-semibold mb-1">Meta descripción:</p>
-                        <p class="bg-white p-2 rounded border border-gray-200 italic">"Medellín sigue brillando en el
-                            mapa internacional. Descubre por qué su crecimiento turístico, premios y calidad de vida
-                            están impulsando el auge inmobiliario en la ciudad."</p>
-                    </div>
-
-                    <div>
-                        <p class="font-semibold mb-1">Slug URL:</p>
-                        <code
-                            class="bg-white p-2 rounded border border-gray-200 block break-all">/blog/medellin-destino-turistico-inmobiliario-2025</code>
-                    </div>
-
-                    <div>
-                        <p class="font-semibold mb-1">Alt text imágenes:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>"Vista panorámica de Medellín"</li>
-                            <li>"Premios Stella Awards"</li>
-                            <li>"Zonas residenciales de alta valorización"</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- <p class="mt-3 text-xs text-gray-500 flex items-center gap-1">
-                    <i class="fas fa-info-circle"></i> Esta sección es solo de referencia para el equipo editorial.
-                </p> -->
-            </div>
             }
 
             @if (blogId === 2) {
@@ -530,7 +486,7 @@
 
             <p class="text-lg text-gray-700 leading-relaxed mb-4">
                 Visítanos
-                <a href="https://www.rentaraiz.co" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.rentaraiz.co/" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#CDAD60] to-[#080E36] text-white rounded-md hover:shadow-md transition-all text-center">
                     <span class="font-medium">👉 Aquí</span>
                 </a>
@@ -598,7 +554,7 @@
 
             <p class="text-lg text-gray-700 leading-relaxed mb-4">
                 Visítanos
-                <a href="https://www.rentaraiz.co" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.rentaraiz.co/" target="_blank" rel="noopener noreferrer"
                     class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#CDAD60] to-[#080E36] text-white rounded-md hover:shadow-md transition-all text-center">
                     <span class="font-medium">👉 Aquí</span>
                 </a>
@@ -644,8 +600,6 @@
 
     </article>
 
-    @if (blogId === 2) {
-    <!-- Sección de inmuebles destacados -->
     <div class="bg-gray-200">
         <div class="w-full flex flex-col items-center pt-20 md:pt-16 px-4">
             <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center w-full max-w-6xl">
@@ -658,7 +612,7 @@
 
             <div *ngIf="inmueblesDestacadosArray"
                 class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10">
-                <div *ngFor="let inmueble of inmueblesDestacadosArray.data"
+                <div *ngFor="let inmueble of inmueblesDestacadosArray"
                     class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
                     <div class="relative group">
                         <div
@@ -695,7 +649,7 @@
                     <div class="p-5">
                         <a href="#">
                             <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
-                                {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                                {{ inmueble.neighborhood || "Sin barrio especificado" | titlecase }}
                             </h5>
                             <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
                                 {{ inmueble.description }}
@@ -745,7 +699,6 @@
             </div>
         </div>
     </div>
-    }
 </div>
 
 <app-botones-flotantes></app-botones-flotantes>

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
@@ -22,6 +22,8 @@ import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/
   styleUrls: ['./vista-inicial.component.scss'],
 })
 export class VistaInicialComponent implements OnInit {
+
+  @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
 
   intervalId: any;
   currentSlide = 0;
@@ -106,6 +108,7 @@ export class VistaInicialComponent implements OnInit {
 
   // Injectaciones
   router = inject(Router);
+  elementRef = inject(ElementRef);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
 
@@ -122,9 +125,15 @@ export class VistaInicialComponent implements OnInit {
     this.getAliadosPorGrupo();
   }
 
+  scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
   getDatos() {
     this.getBarrios();
-    this.getFiltros();
     this.getCiudades();
     this.getTipoPropiedad();
     this.getAliadosPorGrupo();
@@ -132,6 +141,20 @@ export class VistaInicialComponent implements OnInit {
     this.getInmueblesArriendos();
     this.getCategoriasInmuebles();
     this.getInmueblesDestacados();
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: MouseEvent) {
+    if (this.dropdownContainer && !this.dropdownContainer.nativeElement.contains(event.target)) {
+      this.cerrarTodosLosDropdowns();
+    }
+  }
+
+  cerrarTodosLosDropdowns() {
+    this.isPropertyDropdownOpen = false;
+    this.isEstateDropdownOpen = false;
+    this.isPreciosOpen = false;
+    this.isMasFiltrosOpen = false;
   }
 
   seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
@@ -367,19 +390,6 @@ export class VistaInicialComponent implements OnInit {
       },
       (error: any) => {
         console.error('Error al obtener los tipos de propiedad:', error);
-      }
-    );
-  }
-
-  getFiltros() {
-    this.inmueblesService.getFiltros().subscribe(
-      (data: any) => {
-        this.filtros = data;
-      },
-      (error: any) => {
-        console.log(error);
-
-        console.error('Error al obtener los filtros:', error);
       }
     );
   }

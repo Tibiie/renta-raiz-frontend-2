@@ -1,3 +1,4 @@
+declare var fbq: Function;
 import {
   ChangeDetectorRef,
   Component,
@@ -52,6 +53,7 @@ export class FiltrosComponent implements OnInit {
   resultados: any[] = [];
   filteredBarrios: any[] = [];
   filtrosVistaInicial: any = {};
+  filtrosDesdeNavbar: any = {};
   categoriasInmuebles: any[] = [];
   estrato: number[] = [1, 2, 3, 4];
   paginas: (number | string)[] = [];
@@ -64,7 +66,6 @@ export class FiltrosComponent implements OnInit {
   // Para los Rangos de Precios
   selectedPriceRange: { min: number, max: number | null } | null = null;
   priceRanges = [
-    { min: 0, max: 2000000, displayName: '100.000 - 2.000.000' },
     { min: 2000000, max: 8000000, displayName: '2.000.000 - 8.000.000' },
     { min: 8000000, max: 15000000, displayName: '8.000.000 - 15.000.000' },
     { min: 15000000, max: null, displayName: '15.000.000 +' }
@@ -311,15 +312,6 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  filterLocations() {
-    const search = this.searchTerm.toLowerCase();
-    this.filteredBarrios = this.barrios.data.filter(
-      (barrio: any) =>
-        barrio.name.toLowerCase().includes(search) ||
-        barrio.city_name.toLowerCase().includes(search)
-    );
-  }
-
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
 
@@ -419,6 +411,72 @@ export class FiltrosComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
+  async cargarDesdeState(state: any) {
+    if (state?.resultados) {
+      this.resultados = [...state.resultados];
+      this.filtrosVistaInicial = {
+        ...state.filtros,
+      };
+      this.paginacion = state.paginacion;
+      this.totalDatos = this.paginacion.total;
+
+      this.totalPaginas = this.paginacion.last_page || 1;
+      this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
+      this.paginaActual = this.filtrosVistaInicial.page || 1;
+
+      this.inmueblesService.setPropiedades(this.resultados);
+
+      await this.getCiudades();
+
+      if (this.filtrosVistaInicial) {
+        this.inicializarFiltrosDesdeVistaInicial();
+        console.log('Filtros inicializados:', this.filtrosVistaInicial);
+        console.log('Filtros inicializados:', {
+          selectedProperty: this.selectedProperty,
+          selectedEstates: this.selectedEstates,
+          seleccion: this.seleccion,
+        });
+      }
+
+      this.generarPaginas();
+      this.cdRef.detectChanges();
+    }
+  }
+
+  enviarFiltros(pagina: number = 1) {
+    this.paginaActual = pagina;
+    this.prepararFiltros();
+
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      page: pagina,
+    };
+
+    console.log('filtrosObj', filtrosObj);
+
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        console.log('response', response);
+
+        this.resultados = response.data;
+        this.totalDatos = response.total;
+
+        this.paginacion = response;
+        this.totalPaginas = response.last_page || 1;
+        this.paginas = Array.from(
+          { length: this.totalPaginas },
+          (_, i) => i + 1
+        );
+
+        this.generarPaginas();
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
   prepararFiltros() {
     const limpiarTexto = (texto: string) => {
       return texto
@@ -433,9 +491,9 @@ export class FiltrosComponent implements OnInit {
     );
     var codigo = ciudad?.code;
 
-    // if (this.ubicacion) {
-    //   this.filtrosSeleccionados.set('city', codigo);
-    // }
+    if (this.ubicacion) {
+      this.filtrosSeleccionados.set('city', codigo);
+    }
 
     if (this.selectedProperty) {
       this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
@@ -527,37 +585,12 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  enviarFiltros(pagina: number = 1) {
-    this.paginaActual = pagina;
-    this.prepararFiltros();
-
-    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-    const obj = {
-      ...filtrosObj,
-      page: pagina,
-    };
-
-    console.log('filtrosObj', filtrosObj);
-
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
-      (response: any) => {
-        console.log('response', response);
-
-        this.resultados = response.data;
-        this.totalDatos = response.total;
-
-        this.paginacion = response;
-        this.totalPaginas = response.last_page || 1;
-        this.paginas = Array.from(
-          { length: this.totalPaginas },
-          (_, i) => i + 1
-        );
-
-        this.generarPaginas();
-      },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
+  filterLocations() {
+    const search = this.searchTerm.toLowerCase();
+    this.filteredBarrios = this.barrios.data.filter(
+      (barrio: any) =>
+        barrio.name.toLowerCase().includes(search) ||
+        barrio.city_name.toLowerCase().includes(search)
     );
   }
 
@@ -712,36 +745,6 @@ export class FiltrosComponent implements OnInit {
   verPropiedad(codPro: number) {
     const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
     window.open(url, '_blank');
-  }
-
-  async cargarDesdeState(state: any) {
-    if (state?.resultados) {
-      this.resultados = [...state.resultados];
-      this.filtrosVistaInicial = state.filtros;
-      this.paginacion = state.paginacion;
-      this.totalDatos = this.paginacion.total;
-
-      this.totalPaginas = this.paginacion.last_page || 1;
-      this.paginas = Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
-      this.paginaActual = this.filtrosVistaInicial.page || 1;
-
-      this.inmueblesService.setPropiedades(this.resultados);
-
-      await this.getCiudades();
-
-      if (this.filtrosVistaInicial) {
-        this.inicializarFiltrosDesdeVistaInicial();
-        console.log('Filtros inicializados:', this.filtrosVistaInicial);
-        console.log('Filtros inicializados:', {
-          selectedProperty: this.selectedProperty,
-          selectedEstates: this.selectedEstates,
-          seleccion: this.seleccion,
-        });
-      }
-
-      this.generarPaginas();
-      this.cdRef.detectChanges();
-    }
   }
 
   selectPriceRange(range: { min: number, max: number | null }): void {

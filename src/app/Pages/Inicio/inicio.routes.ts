@@ -9,13 +9,15 @@ import { QuienesSomosComponent } from './Components/quienes-somos/quienes-somos.
 import { MapaComponent } from './Components/mapa/mapa.component';
 import { BlogsComponent } from './Components/blogs/blogs.component';
 import { VerBlogComponent } from './Components/ver-blog/ver-blog.component';
+import { PublicarInmuebleComponent } from './Components/publicar-inmueble/publicar-inmueble.component';
+import { PoliticarPrivacidadComponent } from './Components/politicar-privacidad/politicar-privacidad.component';
 
 export const routes: Routes = [
 
-  { path: '', redirectTo: 'venta', pathMatch: 'full' },
+  { path: '', redirectTo: '', pathMatch: 'full' },
 
   {
-    path: 'venta',
+    path: '',
     component: VistaInicialComponent
   },
 
@@ -54,6 +56,14 @@ export const routes: Routes = [
   {
     path: 'ver-blog/:id',
     component: VerBlogComponent
+  },
+  {
+    path: 'publicar-inmueble',
+    component: PublicarInmuebleComponent
+  },
+  {
+    path: 'politicas-de-privacidad',
+    component: PoliticarPrivacidadComponent
   },
 ];
 
