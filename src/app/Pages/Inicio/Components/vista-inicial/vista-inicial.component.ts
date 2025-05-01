@@ -351,7 +351,6 @@ export class VistaInicialComponent implements OnInit {
     this.inmueblesService.getCiudades().subscribe(
       (response: any) => {
         this.ciudades = response.data;
-        console.log('ciudades:', this.ciudades);
       },
       (error: any) => {
         console.error('Error al obtener las ciudades:', error);
@@ -410,7 +409,6 @@ export class VistaInicialComponent implements OnInit {
           this.inmueblesVentasArray = response.data.filter(
             (inmueble: any) => inmueble.image1 != ""
           );
-          console.log('Inmuebles ventas:', this.inmueblesVentasArray);
         },
         (error: any) => {
           console.error('Error al enviar los filtros:', error);
@@ -443,7 +441,6 @@ export class VistaInicialComponent implements OnInit {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
         this.inmueblesDestacadosArray = data.data.slice(2, 5);
-        console.log('Inmuebles destacados:', this.inmueblesDestacadosArray);
       },
       (error: any) => {
         console.log(error);
@@ -457,7 +454,6 @@ export class VistaInicialComponent implements OnInit {
     this.inmueblesService.getBarrios().subscribe(
       (data: any) => {
         this.barrios = data;
-        console.log('Barrios:', this.barrios);
       },
       (error: any) => {
         console.log(error);
@@ -539,11 +535,11 @@ export class VistaInicialComponent implements OnInit {
 
   getAliadosPorGrupo(): void {
     this.aliadosPorGrupo = [];
-    for (let i = 0; i < this.aliados.length; i += 4) {
+    for (let i = 0; i < this.aliados.length; i += 3) {
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
     }
-    console.log(this.aliadosPorGrupo);
+    // console.log(this.aliadosPorGrupo);
   }
 
   abrirPestana(url: string) {

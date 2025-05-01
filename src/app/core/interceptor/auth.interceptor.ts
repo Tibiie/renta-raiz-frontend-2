@@ -13,17 +13,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       padding: CryptoJS.pad.Pkcs7
     }
   ).toString();
-
-  console.log(encryptedToken);
-
   req = req.clone({
     setHeaders: {
       Authorization: `Bearer ${encryptedToken}`
     }
   });
-
-  console.log(req);
-
   return next(req);
 };
 

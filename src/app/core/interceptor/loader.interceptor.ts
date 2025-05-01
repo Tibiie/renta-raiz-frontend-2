@@ -17,8 +17,6 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   // Incrementamos el contador y mostramos el loader
   requestCount++;
   if (requestCount === 1) {
-    console.log('INTERCEPTOR: iniciando petición');
-
     loaderService.start();
   }
 
