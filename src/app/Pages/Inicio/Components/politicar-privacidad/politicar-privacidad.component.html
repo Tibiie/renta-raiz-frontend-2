@@ -1,7 +1,26 @@
 <app-navbar [alwaysScrolled]="true"></app-navbar>
 
 <div class="flex flex-col">
+    <div class="banner-contacto w-full h-[50vh] overflow-hidden">
+        <div class="relative w-full h-full">
+            <!-- Imagen de fondo -->
+            <div class="absolute inset-0 bg-cover bg-center z-10"
+                style="background-image: url('assets/images/SliderAVALUOS.png');">
+            </div>
 
+            <!-- Imagen del texto centrada y subida -->
+            <div class="absolute inset-0 z-30 flex items-center justify-center">
+                <img src="assets/images/TEXTOAVALUOS.png"
+                    class="w-[90%] sm:w-[100%] max-w-[1200px] h-auto object-contain -translate-y-12 sm:-translate-y-16"
+                    alt="Texto" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de filtros -->
+    <div class="bg-gray-200" #dropdownContainer>
+        <app-barra-filtros></app-barra-filtros>
+    </div>
 </div>
 
 <app-botones-flotantes></app-botones-flotantes>
