@@ -232,7 +232,7 @@ export class VistaInicialComponent implements OnInit {
     ) {
       if (
         this.selectedProperty?.code == '1' ||
-        this.selectedEstate?.code == '3'
+        this.selectedProperty?.code == '3'
       ) {
         this.filtrosSeleccionados.set(
           'pcmin',
@@ -245,7 +245,7 @@ export class VistaInicialComponent implements OnInit {
       }
 
       if (
-        this.selectedEstate?.code == '2' ||
+        this.selectedProperty?.code == '2' ||
         this.selectedProperty?.code == '3'
       ) {
         this.filtrosSeleccionados.set(

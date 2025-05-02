@@ -414,9 +414,8 @@ export class FiltrosComponent implements OnInit {
   async cargarDesdeState(state: any) {
     if (state?.resultados) {
       this.resultados = [...state.resultados];
-      this.filtrosVistaInicial = {
-        ...state.filtros,
-      };
+      this.filtrosVistaInicial = { ...state.filtros };
+  
       this.paginacion = state.paginacion;
       this.totalDatos = this.paginacion.total;
 
@@ -431,11 +430,6 @@ export class FiltrosComponent implements OnInit {
       if (this.filtrosVistaInicial) {
         this.inicializarFiltrosDesdeVistaInicial();
         console.log('Filtros inicializados:', this.filtrosVistaInicial);
-        console.log('Filtros inicializados:', {
-          selectedProperty: this.selectedProperty,
-          selectedEstates: this.selectedEstates,
-          seleccion: this.seleccion,
-        });
       }
 
       this.generarPaginas();
@@ -448,13 +442,14 @@ export class FiltrosComponent implements OnInit {
     this.prepararFiltros();
 
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    console.log('filtrosObj', filtrosObj);
     const obj = {
       ...filtrosObj,
       page: pagina,
     };
 
-    console.log('filtrosObj', filtrosObj);
-
+    console.log('Obj', obj);
+    
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log('response', response);
@@ -477,7 +472,7 @@ export class FiltrosComponent implements OnInit {
     );
   }
 
-  prepararFiltros() {
+  prepararFiltros() {    
     const limpiarTexto = (texto: string) => {
       return texto
         .normalize('NFD')
@@ -748,6 +743,7 @@ export class FiltrosComponent implements OnInit {
   }
 
   selectPriceRange(range: { min: number, max: number | null }): void {
+    console.log('rango', range);
     if (this.selectedPriceRange?.min === range.min) {
       this.selectedPriceRange = null;
       this.filtrosSeleccionados.delete('pcmin');
