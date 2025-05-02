@@ -1,0 +1,608 @@
+<app-navbar [alwaysScrolled]="true"></app-navbar>
+
+<div class="flex flex-col">
+    <div class="banner-contacto w-full h-[50vh] overflow-hidden">
+        <div class="relative w-full h-full">
+            <!-- Imagen de fondo -->
+            <div class="absolute inset-0 bg-cover bg-center z-10"
+                style="background-image: url('assets/images/SliderAVALUOS.png');">
+            </div>
+
+            <!-- Imagen del texto centrada y subida -->
+            <div class="absolute inset-0 z-30 flex items-center justify-center">
+                <img src="assets/images/TEXTOAVALUOS.png"
+                    class="w-[90%] sm:w-[100%] max-w-[1200px] h-auto object-contain -translate-y-12 sm:-translate-y-16"
+                    alt="Texto" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de filtros -->
+    <div class="bg-gray-200" #dropdownContainer>
+        <div [formGroup]="formRangos" class="relative w-full flex justify-center mt-4 md:-mt-14 px-4 z-30">
+            <div class="bg-white rounded-lg p-6 w-full max-w-8xl shadow-2xl shadow-gray-600/40">
+                <div class="flex flex-col md:flex-row gap-4 items-end">
+                    <div class="relative w-full md:w-1/3">
+                        <!-- Input de búsqueda -->
+                        <div class="relative">
+                            <input type="text" formControlName="ubicacion" [(ngModel)]="searchTerm"
+                                (input)="filterLocations()" placeholder="Buscar ubicación..."
+                                class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-[#CDAD60] focus:border-[#CDAD60]" />
+
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-1xl text-gray-400"></i>
+                            </div>
+
+                            <button *ngIf="searchTerm" type="button" (click)="clearSearch()"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <!-- Lista de sugerencias -->
+                        <div *ngIf="filteredBarrios.length > 0" id="modern-drawer"
+                            class="absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
+                            <div *ngFor="let barrio of filteredBarrios" (click)="selectLocation(barrio)"
+                                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <i class="fas fa-location-dot text-1xl text-gray-500 mt-1 mr-2"></i>
+                                <div>
+                                    <p class="text-medium text-gray-900">
+                                        {{ barrio.city_name }}
+                                    </p>
+                                    <p class="font-sm text-gray-500">{{ barrio.name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TIPO DE PROPIEDAD -->
+                    <div class="relative w-full md:w-1/3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de propiedad</label>
+                        <button (click)="toggleDropdown('property')"
+                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                            <span>
+                                <i [class]="getIcon('property', selectedProperty)" class="mr-2"></i>
+                                {{
+                                selectedProperty?.displayName || selectedProperty?.name
+                                | titlecase
+                                }}
+                            </span>
+                            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+
+                        <div *ngIf="isPropertyDropdownOpen"
+                            class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
+                            <div class="p-4">
+                                <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button *ngFor="let option of propertyOptions"
+                                        (click)="selectOption('property', option)" [class]="
+                      getButtonClass(selectedProperty?.code === option.code)
+                    ">
+                                        <i [class]="getIcon('property', option)" class="mr-2"></i>
+                                        {{ option.displayName || option.name | titlecase }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INMUEBLE -->
+                    <div class="relative w-full md:w-1/3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de inmueble</label>
+                        <button (click)="toggleDropdown('estate')"
+                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                            <span>
+                                <i [class]="getIcon('estate', selectedEstate)" class="mr-2"></i>
+                                {{
+                                selectedEstate
+                                ? (selectedEstate.name | titlecase)
+                                : "Seleccionar"
+                                }}
+                            </span>
+                            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+
+                        <div *ngIf="isEstateDropdownOpen"
+                            class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
+                            <div class="p-4">
+                                <p class="text-gray-500 text-sm font-medium mb-2">
+                                    Tipo de inmueble
+                                </p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button *ngFor="let option of estateOptions"
+                                        (click)="selectOption('estate', option)" [class]="
+                      getButtonClass(selectedEstate?.code === option.code)
+                    ">
+                                        <i [class]="getIcon('estate', option)" class="mr-2"></i>
+                                        {{ option.name | titlecase }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtro por Precios -->
+                    <div class="relative w-full md:w-1/4 mb-4 md:mb-0">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Precios</label>
+                        <button (click)="toggleDropdown('precios')"
+                            class="flex items-center justify-between w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                            <span>Precios</span>
+                            <svg class="w-4 h-4 ml-2 text-gray-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown de Precios -->
+                        <div *ngIf="isPreciosOpen"
+                            class="absolute z-10 mt-2 w-[350px] bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+                            <p class="text-gray-500 text-sm font-medium mb-2">
+                                Rangos de precios
+                            </p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Mínimo</label>
+                                    <input formControlName="precioMinimo" type="number" min="100000"
+                                        placeholder="Desde $"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Máximo</label>
+                                    <input formControlName="precioMaximo" type="number" min="100000"
+                                        placeholder="Hasta $"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Más filtros -->
+                    <div class="relative w-full md:w-1/3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Más filtros</label>
+                        <button (click)="toggleDropdown('masFiltros')"
+                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                            <span> Filtros adicionales </span>
+                            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+
+                        <div *ngIf="isMasFiltrosOpen" id="modern-drawer"
+                            class="absolute z-10 mt-2 w-[350px] max-h-[300px] overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200">
+                            <div class="p-4">
+                                <!-- Habitaciones -->
+                                <p class="text-gray-500 text-sm font-medium mb-2">
+                                    Habitaciones
+                                </p>
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <button *ngFor="let hab of habitaciones" (click)="seleccionar('habitaciones', hab)"
+                                        [ngClass]="{
+                      'bg-gray-700 text-white font-semibold':
+                        seleccion.habitaciones.includes(hab),
+                      'bg-blue-100 text-blue-700':
+                        !seleccion.habitaciones.includes(hab)
+                    }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                                        {{ hab }}
+                                    </button>
+                                </div>
+
+                                <!-- Baños -->
+                                <p class="text-gray-500 text-sm font-medium mb-2">Baños</p>
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <button *ngFor="let bano of banos" (click)="seleccionar('banos', bano)" [ngClass]="{
+                      'bg-gray-700 text-white font-semibold':
+                        seleccion.banos.includes(bano),
+                      'bg-blue-100 text-blue-700':
+                        !seleccion.banos.includes(bano)
+                    }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                                        {{ bano }}
+                                    </button>
+                                </div>
+
+                                <!-- Parqueadores -->
+                                <p class="text-gray-500 text-sm font-medium mb-2">
+                                    Parqueadores
+                                </p>
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <button *ngFor="let parqueador of parqueadero"
+                                        (click)="seleccionar('parqueadero', parqueador)" [ngClass]="{
+                      'bg-gray-700 text-white font-semibold':
+                        seleccion.parqueadero.includes(parqueador),
+                      'bg-blue-100 text-blue-700':
+                        !seleccion.parqueadero.includes(parqueador)
+                    }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                                        {{ parqueador }}
+                                    </button>
+                                </div>
+
+                                <!-- Estratos-->
+                                <p class="text-gray-500 text-sm font-medium mb-2">Estratos</p>
+                                <div class="flex flex-wrap gap-4 mb-4">
+                                    <button *ngFor="let estrato of estrato" (click)="seleccionar('estrato', estrato)"
+                                        [ngClass]="{
+                      'bg-gray-700 text-white font-semibold':
+                        seleccion.estrato.includes(estrato),
+                      'bg-blue-100 text-blue-700':
+                        !seleccion.estrato.includes(estrato)
+                    }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                                        {{ estrato }}
+                                    </button>
+                                </div>
+
+                                <!-- Rangos de area -->
+                                <p class="text-gray-500 text-sm font-medium mb-2">
+                                    Rangos de áreas
+                                </p>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Mínimo</label>
+                                        <input id="pcmin" formControlName="AreaMinima" min="10" type="number"
+                                            placeholder="Ej. 60 m2"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Máximo</label>
+                                        <input id="pcmax" formControlName="AreaMaxima" min="10" type="number"
+                                            placeholder="Ej. 200 m2"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" (click)="redirigirFiltros()"
+                        class="flex items-center justify-center mx-auto md:ml-auto text-white bg-[#080E36] hover:bg-[#CDAD60] font-bold rounded-full text-lg px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-8 lg:gap-12 max-w-7xl mx-auto p-4">
+        <article class="w-full md:w-3/4">
+            <header class="mb-2 mt-16">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
+                    ¿Por qué necesitas un avalúo comercial
+                    antes de vender tu propiedad?
+                </h1>
+
+                <div class="flex items-center text-sm text-gray-500 space-x-4 mb-4">
+                    <span class="flex items-center">
+                        <i class="fas fa-user-edit mr-2 text-[#CDAD60]"></i>
+                        Por Renta Raíz
+                    </span>
+                </div>
+
+                <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
+            </header>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 text-gray-800">
+                <article class="space-y-10">
+
+                    <section>
+                        <h2 class="text-2xl font-extrabold text-[#080E36] mb-4">Introducción</h2>
+                        <p class="text-lg leading-relaxed">
+                            Vender una propiedad sin saber su valor real es uno de los errores más comunes —y costosos—
+                            en
+                            el mercado inmobiliario. <br />
+                            El <strong class="text-[#080E36]">avalúo comercial</strong> es mucho más que un número: es
+                            una
+                            herramienta estratégica que te permite tomar decisiones con claridad, respaldo y visión.
+                        </p>
+                        <p class="text-lg leading-relaxed mt-4">
+                            En <strong class="text-[#080E36]">Renta Raíz</strong>, no solo te decimos cuánto vale tu
+                            inmueble:
+                            <strong class="text-[#080E36]">te ayudamos a entender por qué, cómo y cuándo vender con
+                                inteligencia.</strong>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-extrabold text-[#080E36] mb-4">¿Qué es un avalúo comercial y para qué
+                            sirve?</h2>
+                        <p class="text-lg leading-relaxed mb-4">
+                            Un avalúo comercial es un informe técnico y profesional que determina el <strong
+                                class="text-[#080E36]">valor real de tu inmueble en el mercado actual.</strong> Tiene en
+                            cuenta:
+                        </p>
+                        <ul class="list-disc pl-12 space-y-1 text-lg leading-relaxed">
+                            <li>Ubicación</li>
+                            <li>Condiciones físicas</li>
+                            <li>Entorno y proyección</li>
+                            <li>Comparables reales en la zona</li>
+                            <li>Factores económicos y de demanda</li>
+                        </ul>
+                        <p class="text-lg leading-relaxed mt-4">
+                            Es el punto de partida para <strong class="text-[#080E36]">vender bien, evitar pérdidas y
+                                generar confianza con los compradores.</strong>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-extrabold text-[#080E36] mb-4">Beneficios de un avalúo profesional</h2>
+                        <ul class="list-disc pl-12 space-y-1 text-lg leading-relaxed">
+                            <li>Te permite definir un <strong class="text-[#080E36]">precio justo y competitivo</strong>
+                            </li>
+                            <li>Aumenta la <strong class="text-[#080E36]">credibilidad frente a compradores</strong> y
+                                entidades financieras</li>
+                            <li>Evita <strong class="text-[#080E36]">sobrevaloraciones por apego emocional</strong></li>
+                            <li>Es útil para trámites <strong class="text-[#080E36]">de inmuebles</strong> y <strong
+                                    class="text-[#080E36]">propiedades</strong></li>
+                            <li>Sirve como base para decisiones <strong class="text-[#080E36]">legales o
+                                    bancarias</strong>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-extrabold text-[#080E36] mb-4">¿Cuándo deberías solicitar un avalúo
+                            comercial?</h2>
+                        <ul class="list-disc pl-12 space-y-1 text-lg leading-relaxed">
+                            <li>Si vas a <strong class="text-[#080E36]">vender o arrendar</strong> tu inmueble</li>
+                            <li>Si quieres conocer la <strong class="text-[#080E36]">valorización real</strong> de tu
+                                propiedad</li>
+                            <li>Para respaldar <strong class="text-[#080E36]">procesos de sucesión, separación de bienes
+                                    o
+                                    préstamos</strong></li>
+                            <li>Si buscas una estrategia de venta basada en datos, no en suposiciones</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-extrabold text-[#080E36] mb-4">Avalúo comercial para propiedades de
+                            lujo
+                        </h2>
+                        <p class="text-lg leading-relaxed mb-4">
+                            En el segmento de inmuebles de alto nivel, <strong class="text-[#080E36]">cada detalle
+                                importa.</strong><br />
+                            Un avalúo bien hecho considera:
+                        </p>
+                        <ul class="list-disc pl-12 space-y-1 text-lg leading-relaxed">
+                            <li>Vistas privilegiadas</li>
+                            <li>Diseño arquitectónico</li>
+                            <li>Acabados de alta gama</li>
+                            <li>Entorno exclusivo</li>
+                            <li>Privacidad y proyección del sector</li>
+                        </ul>
+                        <p class="text-lg text-[#080E36] leading-relaxed mt-4">
+                            No se trata solo de metros cuadrados, sino del estilo de vida que representa tu propiedad.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-2xl font-extrabold text-[#080E36] mb-4">¿Necesitas un avalúo comercial
+                            profesional?
+                        </h2>
+                        <p class="text-lg leading-relaxed mb-4">
+                            En <strong class="text-[#080E36]">Renta Raíz</strong> te ofrecemos un servicio de avalúo
+                            comercial
+                            <strong class="text-[#080E36]">profesional, certificado y especializado</strong> en
+                            propiedades
+                            residenciales y de lujo.
+                        </p>
+
+                        <h3 class="text-xl font-bold text-[#080E36] mb-2">¿Qué incluye nuestro avalúo?</h3>
+                        <ul class="list-disc pl-12 space-y-1 text-lg leading-relaxed">
+                            <li>Inspección técnica detallada</li>
+                            <li>Análisis de mercado y comparables en tu zona</li>
+                            <li>Estimación precisa del valor actual</li>
+                            <li>Informe con <strong class="text-[#080E36]">recomendaciones estratégicas</strong></li>
+                        </ul>
+
+                        <h3 class="text-xl font-bold text-[#080E36] mt-6 mb-2">¿Por qué hacerlo con nosotros?</h3>
+                        <ul class="list-disc pl-12 space-y-1 text-lg leading-relaxed">
+                            <li>Experiencia real en <strong class="text-[#080E36]">zonas premium de Medellín</strong>
+                            </li>
+                            <li>Peritos certificados y equipo técnico</li>
+                            <li>Resultados rápidos, confiables y con enfoque comercial</li>
+                        </ul>
+                    </section>
+
+                    <section class="bg-gray-50 p-6 rounded-lg border-l-4 border-[#CDAD60]">
+                        <p class="text-lg leading-relaxed">
+                            <strong class="text-[#080E36]">Conclusión: Hacer un avalúo comercial no es un gasto, es una
+                                inversión.</strong><br />
+                            Es el primer paso para tomar decisiones inteligentes con tu patrimonio.
+                            Y en un mercado competitivo como el inmobiliario, <strong class="text-[#080E36]">tener
+                                información clara es tener poder.</strong>
+                        </p>
+                    </section>
+
+                    <p class="text-lg leading-relaxed">
+                        Solicita hoy mismo tu avalúo comercial o escríbenos a <strong class="underline">{{ correo
+                            }}</strong>
+                    </p>
+
+                    <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100 mt-8"></div>
+                </article>
+            </div>
+
+            <footer class="pt-6 border-t border-gray-200 mb-20">
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Inmueble en el mercado
+                        actual</span>
+                    <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Procesos de
+                        sucesión</span>
+                    <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Evitar pérdidas</span>
+                    <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Precio justo</span>
+                </div>
+            </footer>
+        </article>
+
+        <div class="w-full md:w-1/3 flex flex-col gap-6">
+            <div
+                class="mt-16 bg-white border border-gray-200 transform hover:scale-[1.02] transition-all duration-300 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-pink-500 p-0.5 mr-3">
+                        <img src="assets/images/rentaraiz.webp" alt="Perfil"
+                            class="w-full h-full object-cover rounded-full" />
+                    </div>
+
+                    <div class="flex-grow">
+                        <h3 class="font-semibold text-gray-800">rentaraiz</h3>
+                        <p class="text-xs text-gray-500">𝐈𝐧𝐦𝐨𝐛𝐢𝐥𝐢𝐚𝐫𝐢𝐚 𝐑𝐞𝐧𝐭𝐚 𝐑𝐚𝐢𝐳 𝐒𝐀𝐒</p>
+                    </div>
+
+                    <a href="https://www.instagram.com/rentaraiz/" target="_blank"
+                        class="text-xs font-semibold text-pink-600 hover:text-pink-700 transition-colors cursor-pointer inline-block px-2 py-1">
+                        Seguir
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-2 gap-1 mb-3">
+                    <a href="https://www.instagram.com/reel/DIRwmbJvb3W/" target="_blank" rel="noopener noreferrer"
+                        class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+                        <img src="assets/images/post1.webp" alt="Post Instagram"
+                            class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+                    </a>
+
+                    <a href="https://www.instagram.com/reel/DIPw2pQvNKI/" target="_blank" rel="noopener noreferrer"
+                        class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+                        <img src="assets/images/post2.webp" alt="Post Instagram"
+                            class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+                    </a>
+
+                    <a href="https://www.instagram.com/reel/DIKFc0bvLxQ/" target="_blank" rel="noopener noreferrer"
+                        class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+                        <img src="assets/images/post3.webp" alt="Post Instagram"
+                            class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+                    </a>
+
+                    <a href="https://www.instagram.com/p/DIHCJeeR10q/?img_index=1" target="_blank"
+                        rel="noopener noreferrer"
+                        class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+                        <img src="assets/images/post4.webp" alt="Post Instagram"
+                            class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+                    </a>
+                </div>
+
+                <a href="https://www.instagram.com/rentaraiz/" target="_blank" rel="noopener noreferrer"
+                    class="w-full py-2 text-sm font-medium text-pink-600 hover:text-pink-700 transition-colors flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
+                    Ver más en Instagram
+                </a>
+            </div>
+
+            <div class="mt-6 mb-10">
+                <div class="mb-4 pl-2">
+                    <h1 class="text-2xl font-bold text-[#080E36] text-center">
+                        Inmuebles destacados
+                    </h1>
+                    <p class="text-1xl text-[#9a9b9c] text-center">
+                        Encuentra tu lugar ideal
+                    </p>
+                </div>
+
+                <div *ngIf="inmueblesDestacadosArray" class="space-y-4">
+                    <div *ngFor="let inmueble of inmueblesDestacadosArray"
+                        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6 mt-6">
+                        <div class="relative group">
+                            <a href="#">
+                                <img class="w-full h-48 object-cover"
+                                    [src]="inmueble.image1 || 'assets/images/renta-1.jpg'" [alt]="inmueble.address" />
+                            </a>
+
+                            <div
+                                class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                                <a class="cursor-pointer bg-white text-[#080E36] px-4 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+                                    (click)="verPropiedad(inmueble.codpro)">
+                                    Ver propiedad
+                                </a>
+                            </div>
+
+                            <div
+                                class="absolute -top-3 -left-1 bg-[#080E36] text-white text-sm font-semibold px-4 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-12px] before:border-y-[14px] before:border-y-transparent before:border-l-[12px] before:border-l-[#080E36]">
+                                Destacado
+                            </div>
+
+                            <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+                                <span class="bg-[#CDAD60] text-white text-xs font-semibold px-2 py-1 rounded shadow">
+                                    {{ inmueble.type | titlecase }}
+                                </span>
+
+                                <button class="text-white hover:text-[#ea6666] transition-colors">
+                                    <i class="fas fa-heart text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <a href="#">
+                                <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
+                                    {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                                </h5>
+                                <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
+                                    {{ inmueble.description }}
+                                </p>
+                            </a>
+
+                            <div class="flex justify-between text-[#080E36] mt-5">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-sm font-semibold">Habitaciones</span>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-bed text-lg"></i>
+                                        <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <span class="text-sm font-semibold">Baños</span>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-bath text-lg"></i>
+                                        <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <span class="text-sm font-semibold">Área</span>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-ruler-combined text-lg"></i>
+                                        <span class="ml-2">{{
+                                            inmueble.area_cons || inmueble.area_lot || "N/A"
+                                            }}
+                                            m²</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold">
+                                <span>Precio:</span>
+                                <span class="text-[#000000]">
+                                    {{
+                                    inmueble.price_format ||
+                                    (inmueble.price
+                                    | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                                    "Consultar"
+                                    }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-botones-flotantes></app-botones-flotantes>
+<app-footer></app-footer>

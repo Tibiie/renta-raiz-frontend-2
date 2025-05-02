@@ -1,20 +1,18 @@
 <app-navbar></app-navbar>
 
 <div class="flex flex-col">
-  <div class="banner-contacto w-full max-h-[60vh] overflow-hidden">
-    <div class="relative w-full pb-[56.25%] h-0">
-      <img id="video-placeholder" src="assets/images/casa-finca.jpg"
-        class="absolute top-0 left-0 w-full h-full object-cover z-0 transition-opacity duration-700"
-        alt="Placeholder" />
+  <div class="banner-contacto w-full max-h-[60vh] overflow-hidden" data-carousel="slide" data-carousel-interval="5000">
+    <div class="relative w-full h-[60vh]">
 
-      <iframe id="vimeo-video"
-        src="https://player.vimeo.com/video/420041930?loop=1&autoplay=1&title=0&byline=0&portrait=0&background=1"
-        class="absolute top-0 left-0 w-full h-full object-cover z-10" frameborder="0" allow="autoplay; fullscreen">
-      </iframe>
+      <div *ngFor="let imagen of sliderFotos; let i = index"
+        class="absolute top-0 left-0 w-full h-full transition-opacity duration-700"
+        [attr.data-carousel-item]="i === 0 ? 'active' : ''">
+        <img [src]="imagen" class="w-full h-full object-cover" alt="Slide {{ i + 1 }}">
+      </div>
 
-      <div class="absolute inset-0 bg-black/50 flex items-end sm:items-start justify-start z-20">
-        <img src="assets/images/encuentra.png"
-          class="w-[100%] sm:w-full h-auto object-contain max-h-[70%] sm:max-h-[60%] mt-4 sm:mt-0" alt="Imagen" />
+      <div class="absolute inset-0 z-30 bg-black/50 flex items-center justify-center">
+        <img src="assets/images/TextoSlider-vistaInicial.png" class="w-full max-w-[1000px] h-auto object-contain"
+          alt="Texto" />
       </div>
     </div>
   </div>
@@ -601,8 +599,9 @@
           class="flex flex-col md:flex-row md:flex-wrap gap-4 md:gap-6 overflow-visible justify-center md:justify-start">
           <div
             class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0">
-            <div class="flex h-full">
-              <img src="assets/images/MiniaturaAVALUOSCOMERCIALES.png" alt="Crédito de vivienda" class="w-24 h-full object-cover" />
+            <div class="flex h-full" (click)="redirigirAvaluosComerciales()">
+              <img src="assets/images/MiniaturaAVALUOSCOMERCIALES.png" alt="avaluos comerciales"
+                class="w-24 h-full object-cover" />
               <div class="cursor-pointer flex items-center px-4 py-2 text-sm font-semibold text-gray-800">
                 Avalúos Comerciales
               </div>
@@ -621,8 +620,9 @@
 
           <div
             class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0">
-            <div class="flex h-full">
-              <img src="assets/images/MiniaturadeADMINISTRACION.png" alt="Desvara tu trámite" class="w-24 h-full object-cover" />
+            <div class="flex h-full" (click)="abrirBrochure()">
+              <img src="assets/images/MiniaturadeADMINISTRACION.png" alt="Desvara tu trámite"
+                class="w-24 h-full object-cover" />
               <div class="cursor-pointer flex items-center px-4 py-2 text-sm font-semibold text-gray-800">
                 Administración de propiedades
               </div>
@@ -632,7 +632,8 @@
           <div
             class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0">
             <div class="flex h-full">
-              <img src="assets/images/MiniaturaPUBLICATUPROPIEDAD.png" alt="Remodelación y acabados" class="w-24 h-full object-cover" />
+              <img src="assets/images/MiniaturaPUBLICATUPROPIEDAD.png" alt="Remodelación y acabados"
+                class="w-24 h-full object-cover" />
               <div class="cursor-pointer flex items-center px-4 py-2 text-sm font-semibold text-gray-800">
                 Publica tu propiedad
               </div>

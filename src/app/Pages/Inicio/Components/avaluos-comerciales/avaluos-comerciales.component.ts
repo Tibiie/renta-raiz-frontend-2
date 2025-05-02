@@ -1,15 +1,14 @@
-import { AfterViewInit, Component, ElementRef, HostListener, inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 
-declare const Carousel: any;
 @Component({
-  selector: 'app-vista-inicial',
+  selector: 'app-avaluos-comerciales',
   standalone: true,
   imports: [
     CommonModule,
@@ -19,30 +18,22 @@ declare const Carousel: any;
     FooterComponent,
     BotonesFlotantesComponent,
   ],
-  templateUrl: './vista-inicial.component.html',
-  styleUrls: ['./vista-inicial.component.scss'],
+  templateUrl: './avaluos-comerciales.component.html',
+  styleUrl: './avaluos-comerciales.component.scss'
 })
-export class VistaInicialComponent implements OnInit, AfterViewInit {
+export class AvaluosComercialesComponent {
 
-  @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
-
-  intervalId: any;
-  currentSlide = 0;
+  correo: string = 'info@rentaraiz.com';
   elementsPerPage = 12;
+  ubicacion: string = '';
   searchTerm: string = '';
-  elementsPerPageInicial = 3;
   filtrosSeleccionados: Map<string, any> = new Map();
-  filtrosInmueblesVenta: Map<string, any> = new Map();
-  filtrosInmueblesArriendo: Map<string, any> = new Map();
 
   filtros: any = {};
   ciudades: any[] = [];
   filteredBarrios: any[] = [];
   categoriasInmuebles: any[] = [];
-  aliadosPorGrupo: string[][] = [];
-  inmueblesVentasArray: any[] = [];
   inmueblesDestacadosArray: any = {};
-  inmueblesArriendosArray: any[] = [];
   barrios: { data: any[] } = { data: [] };
 
   estrato: number[] = [1, 2, 3, 4];
@@ -58,7 +49,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   };
 
   isPreciosOpen = false;
-  isMasFiltrosOpen = false;
+  isMasFiltrosOpen = false
 
   // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
@@ -98,28 +89,8 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     } as Record<string, string>,
   };
 
-  aliados: string[] = [
-    'assets/images/sura.png',
-    'assets/images/experian.png',
-    'assets/images/fianzacredito.png',
-    'assets/images/libertador.png',
-    'assets/images/lonja.png',
-  ];
-
-  sliderFotos: string[] = [
-    'assets/images/vistaInicial-slider-1.jpg',
-    'assets/images/vistaInicial-slider-2.jpg',
-    'assets/images/vistaInicial-slider-3.jpg',
-    'assets/images/vistaInicial-slider-4.jpg',
-    'assets/images/vistaInicial-slider-5.jpg',
-    'assets/images/vistaInicial-slider-6.jpg',
-  ];
-
-  isLoading = true;
-
-  // Injectaciones
   router = inject(Router);
-  elementRef = inject(ElementRef);
+  route = inject(ActivatedRoute);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
 
@@ -128,54 +99,18 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     AreaMaxima: [''],
     precioMinimo: [''],
     precioMaximo: [''],
-    ubicacion: [''],
+    ubicacion: ['']
   });
-
-  ngAfterViewInit(): void {
-    const targetEl = document.getElementById('slider');
-    if (targetEl) {
-      new Carousel(targetEl, {
-        interval: 1000,
-        ride: 'carousel'
-      });
-    }
-  }
 
   ngOnInit(): void {
     this.getDatos();
-    this.getAliadosPorGrupo();
-  }
-
-  scrollToTop(): void {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
   }
 
   getDatos() {
-    this.getBarrios();
+    this.getCategoriasInmuebles();
     this.getCiudades();
     this.getTipoPropiedad();
-    this.getAliadosPorGrupo();
-    this.getInmueblesVentas();
-    this.getInmueblesArriendos();
-    this.getCategoriasInmuebles();
     this.getInmueblesDestacados();
-  }
-
-  @HostListener('document:click', ['$event'])
-  handleClickOutside(event: MouseEvent) {
-    if (this.dropdownContainer && !this.dropdownContainer.nativeElement.contains(event.target)) {
-      this.cerrarTodosLosDropdowns();
-    }
-  }
-
-  cerrarTodosLosDropdowns() {
-    this.isPropertyDropdownOpen = false;
-    this.isEstateDropdownOpen = false;
-    this.isPreciosOpen = false;
-    this.isMasFiltrosOpen = false;
   }
 
   seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
@@ -233,50 +168,20 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
       this.filtrosSeleccionados.set('type', this.selectedEstate.code);
     }
 
-    if (
-      this.formRangos.value.AreaMinima != '' ||
-      this.formRangos.value.AreaMaxima != ''
-    ) {
-      this.filtrosSeleccionados.set(
-        'minarea',
-        this.formRangos.value.AreaMinima
-      );
-      this.filtrosSeleccionados.set(
-        'maxarea',
-        this.formRangos.value.AreaMaxima
-      );
+    if (this.formRangos.value.AreaMinima != '' || this.formRangos.value.AreaMaxima != '') {
+      this.filtrosSeleccionados.set('minarea', this.formRangos.value.AreaMinima);
+      this.filtrosSeleccionados.set('maxarea', this.formRangos.value.AreaMaxima);
     }
 
-    if (
-      this.formRangos.value.precioMinimo != '' ||
-      this.formRangos.value.precioMaximo != ''
-    ) {
-      if (
-        this.selectedProperty?.code == '1' ||
-        this.selectedProperty?.code == '3'
-      ) {
-        this.filtrosSeleccionados.set(
-          'pcmin',
-          this.formRangos.value.precioMinimo
-        );
-        this.filtrosSeleccionados.set(
-          'pcmax',
-          this.formRangos.value.precioMaximo
-        );
+    if (this.formRangos.value.precioMinimo != '' || this.formRangos.value.precioMaximo != '') {
+      if (this.selectedProperty?.code == '1' || this.selectedEstate?.code == '3') {
+        this.filtrosSeleccionados.set('pcmin', this.formRangos.value.precioMinimo);
+        this.filtrosSeleccionados.set('pcmax', this.formRangos.value.precioMaximo);
       }
 
-      if (
-        this.selectedProperty?.code == '2' ||
-        this.selectedProperty?.code == '3'
-      ) {
-        this.filtrosSeleccionados.set(
-          'pvmin',
-          this.formRangos.value.precioMinimo
-        );
-        this.filtrosSeleccionados.set(
-          'pvmax',
-          this.formRangos.value.precioMaximo
-        );
+      if (this.selectedEstate?.code == '2' || this.selectedProperty?.code == '3') {
+        this.filtrosSeleccionados.set('pvmin', this.formRangos.value.precioMinimo);
+        this.filtrosSeleccionados.set('pvmax', this.formRangos.value.precioMaximo);
       }
     }
 
@@ -414,54 +319,28 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     );
   }
 
-  getInmueblesVentas() {
-    this.filtrosInmueblesVenta.clear();
-    this.filtrosInmueblesVenta.set('biz', 2);
+  getFiltros() {
+    this.inmueblesService.getFiltros().subscribe(
+      (data: any) => {
+        this.filtros = data;
+      },
+      (error: any) => {
+        console.log(error);
 
-    const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
-    const obj = {
-      ...filtrosObj,
-      page: 2,
-    };
-    this.inmueblesService
-      .getFiltrosEnviar(obj, this.elementsPerPageInicial)
-      .subscribe(
-        (response: any) => {
-          this.inmueblesVentasArray = response.data.filter(
-            (inmueble: any) => inmueble.image1 != ""
-          );
-        },
-        (error: any) => {
-          console.error('Error al enviar los filtros:', error);
-        }
-      );
-  }
-
-  getInmueblesArriendos() {
-    this.filtrosInmueblesArriendo.clear();
-    this.filtrosInmueblesArriendo.set('biz', 1);
-
-    const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
-    const obj = {
-      ...filtrosObj,
-      page: 1,
-    };
-    this.inmueblesService
-      .getFiltrosEnviar(obj, this.elementsPerPageInicial)
-      .subscribe(
-        (response: any) => {
-          this.inmueblesArriendosArray = response.data;
-        },
-        (error: any) => {
-          console.error('Error al enviar los filtros:', error);
-        }
-      );
+        console.error('Error al obtener los filtros:', error);
+      }
+    );
   }
 
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
-        this.inmueblesDestacadosArray = data.data.slice(2, 5);
+        this.inmueblesDestacadosArray = [
+          data.data[0],
+          data.data[2],
+          data.data[3],
+          data.data[4],
+        ]
       },
       (error: any) => {
         console.log(error);
@@ -519,11 +398,13 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
       this.isEstateDropdownOpen = false;
       this.isMasFiltrosOpen = false;
       this.isPreciosOpen = false;
+
     } else if (type === 'masFiltros') {
       this.isMasFiltrosOpen = !this.isMasFiltrosOpen;
       this.isPropertyDropdownOpen = false;
       this.isEstateDropdownOpen = false;
       this.isPreciosOpen = false;
+
     } else if (type === 'precios') {
       this.isPreciosOpen = !this.isPreciosOpen;
       this.isPropertyDropdownOpen = false;
@@ -549,42 +430,9 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     this.getEnviarFiltros();
   }
 
-  redirigirVerBlog(id: number) {
-    const url = this.router.createUrlTree(['/ver-blog', id]).toString();
-    window.open(url, '_blank');
-  }
-
-  redirigirAvaluosComerciales() {
-    const url = this.router.createUrlTree(['/avaluos-comerciales']).toString();
-    window.open(url, '_blank');
-  }
-
-  getAliadosPorGrupo(): void {
-    this.aliadosPorGrupo = [];
-    for (let i = 0; i < this.aliados.length; i += 3) {
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
-    }
-    // console.log(this.aliadosPorGrupo);
-  }
-
-  abrirPestana(url: string) {
-    window.open(url, '_blank');
-  }
-
   verPropiedad(codPro: number) {
     const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
     window.open(url, '_blank');
-  }
-
-  abrirBrochure() {
-    const link = document.createElement('a');
-    link.href = '/assets/images/Brochure Renta Raiz ajuste 26m.pdf';
-    link.download = 'Brochure_Renta_Raiz.pdf';
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   }
 
   clearSearch() {
@@ -592,3 +440,4 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     this.filteredBarrios = [];
   }
 }
+

@@ -11,6 +11,7 @@ import { BlogsComponent } from './Components/blogs/blogs.component';
 import { VerBlogComponent } from './Components/ver-blog/ver-blog.component';
 import { PublicarInmuebleComponent } from './Components/publicar-inmueble/publicar-inmueble.component';
 import { PoliticarPrivacidadComponent } from './Components/politicar-privacidad/politicar-privacidad.component';
+import { AvaluosComercialesComponent } from './Components/avaluos-comerciales/avaluos-comerciales.component';
 
 export const routes: Routes = [
 
@@ -65,6 +66,10 @@ export const routes: Routes = [
     path: 'politicas-de-privacidad',
     component: PoliticarPrivacidadComponent
   },
+  {
+    path: 'avaluos-comerciales',
+    component: AvaluosComercialesComponent
+  }
 ];
 
 @NgModule({

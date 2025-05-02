@@ -111,7 +111,7 @@ export class NavbarComponent implements OnInit {
 
   enviarFiltroArriendo(tipo: string) {
     this.filtrosInmueblesArriendo.clear();
-  
+
     if (tipo === 'diamante') {
       this.filtrosInmueblesArriendo.set('pcmin', 15000000);
     } else if (tipo === 'oro') {
@@ -121,17 +121,17 @@ export class NavbarComponent implements OnInit {
       this.filtrosInmueblesArriendo.set('pcmin', 2000000);
       this.filtrosInmueblesArriendo.set('pcmax', 8000000);
     }
-  
+
     this.filtrosInmueblesArriendo.set('biz', '1');
-  
+
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
     const obj = {
       ...filtrosObj,
       page: 1,
     }
-  
+
     console.log('filtros enviados:', obj);
-  
+
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         this._router.navigate(['/filtros'], {
@@ -140,7 +140,7 @@ export class NavbarComponent implements OnInit {
             paginacion: response,
             filtros: obj,
           },
-          queryParams: { tipo: tipo } 
+          queryParams: { tipo: tipo }
         });
       },
       (error: any) => {
@@ -149,8 +149,17 @@ export class NavbarComponent implements OnInit {
     );
   }
 
+  // abrirBrochure() {
+  //   window.open('/assets/images/Brochure Renta Raiz ajuste 26m.pdf', '_blank');
+  // }
+
   abrirBrochure() {
-    window.open('/assets/images/Brochure Renta Raiz ajuste 26m.pdf', '_blank');
+    const link = document.createElement('a');
+    link.href = '/assets/images/Brochure Renta Raiz ajuste 26m.pdf';
+    link.download = 'Brochure_Renta_Raiz.pdf';
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
-  
 }

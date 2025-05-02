@@ -1,38 +1,58 @@
-<app-navbar [alwaysScrolled]="true"></app-navbar>
+<app-navbar></app-navbar>
 
 <div class="flex flex-col">
-    <!-- Sección del video hero -->
-    <div class="banner-contacto w-full max-h-[50vh] overflow-hidden">
-        <div class="relative w-full pb-[56.25%] h-0">
-            <!-- Overlay con imagen adicional -->
-            <div class="absolute inset-0 bg-[#080E36] flex items-end sm:items-start justify-start z-20">
-                <img src="assets/images/noticias.png"
-                    class="w-[100%] sm:w-full h-auto object-contain max-h-[50%] sm:max-h-[60%]" alt="Imagen" />
+    <div class="banner-contacto w-full h-[50vh] overflow-hidden">
+        <div class="relative w-full h-full">
+            <!-- Imagen de fondo -->
+            <div class="absolute inset-0 bg-cover bg-center z-10"
+                style="background-image: url('assets/images/Noticias-fondo.png');">
+            </div>
+
+            <!-- Imagen del texto centrada y subida -->
+            <div class="absolute inset-0 z-30 flex items-center justify-center">
+                <img src="assets/images/TextoSliderNOTICIAS.png"
+                    class="w-[90%] sm:w-[100%] max-w-[1200px] h-auto object-contain -translate-y-12 sm:-translate-y-16"
+                    alt="Texto" />
             </div>
         </div>
     </div>
 
     <!-- Sección de filtros -->
-    <div class="bg-gray-200">
+    <div class="bg-gray-200" #dropdownContainer>
         <div [formGroup]="formRangos" class="relative w-full flex justify-center mt-4 md:-mt-14 px-4 z-30">
-            <div class="bg-white rounded-lg p-6 w-full max-w-7xl shadow-2xl shadow-gray-600/40">
+            <div class="bg-white rounded-lg p-6 w-full max-w-8xl shadow-2xl shadow-gray-600/40">
                 <div class="flex flex-col md:flex-row gap-4 items-end">
-                    <!-- Input de búsqueda -->
-                    <div class="relative">
-                        <input type="text" formControlName="ubicacion" [(ngModel)]="searchTerm"
-                            (input)="filterLocations()" placeholder="Buscar ubicación..."
-                            class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-[#CDAD60] focus:border-[#CDAD60]" />
+                    <div class="relative w-full md:w-1/3">
+                        <!-- Input de búsqueda -->
+                        <div class="relative">
+                            <input type="text" formControlName="ubicacion" [(ngModel)]="searchTerm"
+                                (input)="filterLocations()" placeholder="Buscar ubicación..."
+                                class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-[#CDAD60] focus:border-[#CDAD60]" />
 
-                        <!-- Icono de búsqueda -->
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-1xl text-gray-400"></i>
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-1xl text-gray-400"></i>
+                            </div>
+
+                            <button *ngIf="searchTerm" type="button" (click)="clearSearch()"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
 
-                        <!-- Botón X para limpiar -->
-                        <button *ngIf="searchTerm" type="button" (click)="clearSearch()"
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <!-- Lista de sugerencias -->
+                        <div *ngIf="filteredBarrios.length > 0" id="modern-drawer"
+                            class="absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
+                            <div *ngFor="let barrio of filteredBarrios" (click)="selectLocation(barrio)"
+                                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <i class="fas fa-location-dot text-1xl text-gray-500 mt-1 mr-2"></i>
+                                <div>
+                                    <p class="text-medium text-gray-900">
+                                        {{ barrio.city_name }}
+                                    </p>
+                                    <p class="font-sm text-gray-500">{{ barrio.name }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- TIPO DE PROPIEDAD -->
@@ -92,8 +112,7 @@
                         </button>
 
                         <div *ngIf="isEstateDropdownOpen"
-                            class="absolute z-10 mt-2 w-[350px] bg-white rounded-lg shadow-lg border border-gray-200">
-
+                            class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
                             <div class="p-4">
                                 <p class="text-gray-500 text-sm font-medium mb-2">
                                     Tipo de inmueble
@@ -126,17 +145,21 @@
 
                         <!-- Dropdown de Precios -->
                         <div *ngIf="isPreciosOpen"
-                            class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200 p-4">
-                            <p class="text-gray-500 text-sm font-medium mb-2">Rangos de precios</p>
+                            class="absolute z-10 mt-2 w-[350px] bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+                            <p class="text-gray-500 text-sm font-medium mb-2">
+                                Rangos de precios
+                            </p>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Mínimo</label>
-                                    <input formControlName="precioMinimo" type="number" placeholder="Desde $"
+                                    <input formControlName="precioMinimo" type="number" min="100000"
+                                        placeholder="Desde $"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Máximo</label>
-                                    <input formControlName="precioMaximo" type="number" placeholder="Hasta $"
+                                    <input formControlName="precioMaximo" type="number" min="100000"
+                                        placeholder="Hasta $"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                                 </div>
                             </div>
@@ -148,9 +171,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Más filtros</label>
                         <button (click)="toggleDropdown('masFiltros')"
                             class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
-                            <span>
-                                Filtros adicionales
-                            </span>
+                            <span> Filtros adicionales </span>
                             <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -162,13 +183,17 @@
                             class="absolute z-10 mt-2 w-[350px] max-h-[300px] overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200">
                             <div class="p-4">
                                 <!-- Habitaciones -->
-                                <p class="text-gray-500 text-sm font-medium mb-2">Habitaciones</p>
+                                <p class="text-gray-500 text-sm font-medium mb-2">
+                                    Habitaciones
+                                </p>
                                 <div class="flex flex-wrap gap-4 mb-4">
                                     <button *ngFor="let hab of habitaciones" (click)="seleccionar('habitaciones', hab)"
                                         [ngClass]="{
-            'bg-gray-700 text-white font-semibold': seleccion.habitaciones.includes(hab),
-            'bg-blue-100 text-blue-700': !seleccion.habitaciones.includes(hab)
-          }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                      'bg-gray-700 text-white font-semibold':
+                        seleccion.habitaciones.includes(hab),
+                      'bg-blue-100 text-blue-700':
+                        !seleccion.habitaciones.includes(hab)
+                    }" class="w-7 h-7 rounded-md flex items-center justify-center">
                                         {{ hab }}
                                     </button>
                                 </div>
@@ -177,21 +202,27 @@
                                 <p class="text-gray-500 text-sm font-medium mb-2">Baños</p>
                                 <div class="flex flex-wrap gap-4 mb-4">
                                     <button *ngFor="let bano of banos" (click)="seleccionar('banos', bano)" [ngClass]="{
-            'bg-gray-700 text-white font-semibold': seleccion.banos.includes(bano),
-            'bg-blue-100 text-blue-700': !seleccion.banos.includes(bano)
-          }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                      'bg-gray-700 text-white font-semibold':
+                        seleccion.banos.includes(bano),
+                      'bg-blue-100 text-blue-700':
+                        !seleccion.banos.includes(bano)
+                    }" class="w-7 h-7 rounded-md flex items-center justify-center">
                                         {{ bano }}
                                     </button>
                                 </div>
 
                                 <!-- Parqueadores -->
-                                <p class="text-gray-500 text-sm font-medium mb-2">Parqueadores</p>
+                                <p class="text-gray-500 text-sm font-medium mb-2">
+                                    Parqueadores
+                                </p>
                                 <div class="flex flex-wrap gap-4 mb-4">
                                     <button *ngFor="let parqueador of parqueadero"
                                         (click)="seleccionar('parqueadero', parqueador)" [ngClass]="{
-            'bg-gray-700 text-white font-semibold': seleccion.parqueadero.includes(parqueador),
-            'bg-blue-100 text-blue-700': !seleccion.parqueadero.includes(parqueador)
-          }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                      'bg-gray-700 text-white font-semibold':
+                        seleccion.parqueadero.includes(parqueador),
+                      'bg-blue-100 text-blue-700':
+                        !seleccion.parqueadero.includes(parqueador)
+                    }" class="w-7 h-7 rounded-md flex items-center justify-center">
                                         {{ parqueador }}
                                     </button>
                                 </div>
@@ -201,25 +232,29 @@
                                 <div class="flex flex-wrap gap-4 mb-4">
                                     <button *ngFor="let estrato of estrato" (click)="seleccionar('estrato', estrato)"
                                         [ngClass]="{
-            'bg-gray-700 text-white font-semibold': seleccion.estrato.includes(estrato),
-            'bg-blue-100 text-blue-700': !seleccion.estrato.includes(estrato)
-          }" class="w-7 h-7 rounded-md flex items-center justify-center">
+                      'bg-gray-700 text-white font-semibold':
+                        seleccion.estrato.includes(estrato),
+                      'bg-blue-100 text-blue-700':
+                        !seleccion.estrato.includes(estrato)
+                    }" class="w-7 h-7 rounded-md flex items-center justify-center">
                                         {{ estrato }}
                                     </button>
                                 </div>
 
                                 <!-- Rangos de area -->
-                                <p class="text-gray-500 text-sm font-medium mb-2">Rangos de áreas</p>
+                                <p class="text-gray-500 text-sm font-medium mb-2">
+                                    Rangos de áreas
+                                </p>
                                 <div class="grid grid-cols-2 gap-4 mb-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Mínimo</label>
-                                        <input id="pcmin" formControlName="AreaMinima" type="number"
+                                        <input id="pcmin" formControlName="AreaMinima" min="10" type="number"
                                             placeholder="Ej. 60 m2"
                                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Máximo</label>
-                                        <input id="pcmax" formControlName="AreaMaxima" type="number"
+                                        <input id="pcmax" formControlName="AreaMaxima" min="10" type="number"
                                             placeholder="Ej. 200 m2"
                                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                                     </div>
@@ -243,7 +278,6 @@
     </div>
 
     <article class="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-xl shadow-md">
-        <!-- Encabezado -->
         <header class="mb-6 mt-10">
             @if (blogId === 1) {
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
@@ -289,7 +323,6 @@
             <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
         </header>
 
-        <!-- Imagen destacada -->
         <div class="w-full h-64 md:h-96">
             @if (blogId === 1) {
             <img src="/assets/images/blog-1.jpg" alt="Medellín de noche con edificios iluminados"
