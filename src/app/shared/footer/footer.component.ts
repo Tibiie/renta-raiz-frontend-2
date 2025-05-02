@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -8,6 +9,13 @@ import { Component } from '@angular/core';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
+
+  router = inject(Router);
+
+  abrirPoliticas() {
+    const url = this.router.createUrlTree(['/politicas-de-privacidad']).toString();
+    window.open(url, '_blank');
+  }
 
   abrirPestana(url: string) {
     window.open(url, '_blank');
