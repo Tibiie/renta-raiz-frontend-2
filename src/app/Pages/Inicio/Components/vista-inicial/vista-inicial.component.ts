@@ -163,6 +163,11 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     window.open(url, '_blank');
   }
 
+  redirigirPublicarPropiedad() {
+    const url = this.router.createUrlTree(['/publicar-inmueble']).toString();
+    window.open(url, '_blank');
+  }
+
   getAliadosPorGrupo(): void {
     this.aliadosPorGrupo = [];
     for (let i = 0; i < this.aliados.length; i += 3) {
@@ -181,13 +186,18 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     window.open(url, '_blank');
   }
 
+  // abrirBrochure() {
+  //   const link = document.createElement('a');
+  //   link.href = '/assets/images/Brochure Renta Raiz ajuste 26m.pdf';
+  //   link.download = 'Brochure_Renta_Raiz.pdf';
+  //   link.target = '_blank';
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // }
+
   abrirBrochure() {
-    const link = document.createElement('a');
-    link.href = '/assets/images/Brochure Renta Raiz ajuste 26m.pdf';
-    link.download = 'Brochure_Renta_Raiz.pdf';
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const url = 'assets/images/Brochure Renta Raiz ajuste 26m.pdf';
+    window.open(url, '_blank');
   }
 }

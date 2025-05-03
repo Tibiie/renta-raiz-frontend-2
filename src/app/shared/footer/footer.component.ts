@@ -17,6 +17,11 @@ export class FooterComponent {
     window.open(url, '_blank');
   }
 
+  redirigirPublicarPropiedad() {
+    const url = this.router.createUrlTree(['/publicar-inmueble']).toString();
+    window.open(url, '_blank');
+  }
+
   abrirPestana(url: string) {
     window.open(url, '_blank');
   }
