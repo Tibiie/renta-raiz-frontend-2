@@ -314,8 +314,41 @@ export class FiltrosComponent implements OnInit {
 
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
+    const bizType = f?.biz || this.selectedProperty?.code;
 
-    if (f?.pcmin !== undefined) {
+    // Limpiar todos los campos de precio primero
+    this.formRangos.patchValue({
+      precioMinimo: null,
+      precioMaximo: null,
+      precioVentaMinimo: null,
+      precioVentaMaximo: null
+    });
+
+    // Manejo de precios según tipo de propiedad (biz)
+    if (f?.pcmin !== undefined && f.pcmin !== null) {
+      if (bizType === '1') {
+        // Solo para alquiler (biz 1)
+        this.formRangos.patchValue({
+          precioMinimo: f.pcmin.toString(),
+          precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null
+        });
+      } else if (bizType === '2') {
+        // Solo para venta (biz 2)
+        this.formRangos.patchValue({
+          precioVentaMinimo: f.pvmin?.toString() || f.pcmin.toString(),
+          precioVentaMaximo: f.pvmax?.toString() || (f.pcmax !== undefined ? f.pcmax.toString() : null)
+        });
+      } else if (bizType === '3') {
+        // Para ambos (biz 3)
+        this.formRangos.patchValue({
+          precioMinimo: f.pcmin.toString(),
+          precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null,
+          precioVentaMinimo: f.pvmin?.toString() || f.pcmin.toString(),
+          precioVentaMaximo: f.pvmax?.toString() || (f.pcmax !== undefined ? f.pcmax.toString() : null)
+        });
+      }
+
+      // Configuración de selectedPriceRange (igual para todos los tipos)
       const pcmin = Number(f.pcmin);
       const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
 
@@ -329,6 +362,21 @@ export class FiltrosComponent implements OnInit {
           return pcmin >= range.min &&
             (range.max === null || (pcmax !== null && pcmax <= range.max));
         }) || null;
+      }
+
+      // Configurar filtros según tipo
+      if (bizType === '1' || bizType === '3') {
+        this.filtrosSeleccionados.set('pcmin', f.pcmin.toString());
+        if (f.pcmax !== undefined) {
+          this.filtrosSeleccionados.set('pcmax', f.pcmax.toString());
+        }
+      }
+
+      if (bizType === '2' || bizType === '3') {
+        this.filtrosSeleccionados.set('pvmin', f.pvmin?.toString() || f.pcmin.toString());
+        if (f.pvmax !== undefined || f.pcmax !== undefined) {
+          this.filtrosSeleccionados.set('pvmax', f.pvmax?.toString() || f.pcmax?.toString());
+        }
       }
     }
 
@@ -407,7 +455,6 @@ export class FiltrosComponent implements OnInit {
         f?.type === '2' ? f?.pvmax : f?.pcmax;
     }
 
-
     this.cdRef.detectChanges();
   }
 
@@ -415,7 +462,7 @@ export class FiltrosComponent implements OnInit {
     if (state?.resultados) {
       this.resultados = [...state.resultados];
       this.filtrosVistaInicial = { ...state.filtros };
-  
+
       this.paginacion = state.paginacion;
       this.totalDatos = this.paginacion.total;
 
@@ -449,7 +496,7 @@ export class FiltrosComponent implements OnInit {
     };
 
     console.log('Obj', obj);
-    
+
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         console.log('response', response);
@@ -472,7 +519,7 @@ export class FiltrosComponent implements OnInit {
     );
   }
 
-  prepararFiltros() {    
+  prepararFiltros() {
     const limpiarTexto = (texto: string) => {
       return texto
         .normalize('NFD')
@@ -551,51 +598,42 @@ export class FiltrosComponent implements OnInit {
       );
     }
 
-    if (this.formRangos.value.precioMinimo) {
-      this.filtrosSeleccionados.set(
-        'pcmin',
-        this.formRangos.value.precioMinimo
-      );
+    const bizType = this.selectedProperty?.code || this.filtrosVistaInicial?.biz;
+
+    // Manejo de precios según tipo de propiedad
+    if (bizType === '1' || bizType === '3') {
+      const precioMinimo = this.formRangos.value.precioMinimo;
+      const precioMaximo = this.formRangos.value.precioMaximo;
+
+      if (precioMinimo && precioMinimo !== '') {
+        this.filtrosSeleccionados.set('pcmin', precioMinimo);
+      } else {
+        this.filtrosSeleccionados.delete('pcmin');
+      }
+
+      if (precioMaximo && precioMaximo !== '') {
+        this.filtrosSeleccionados.set('pcmax', precioMaximo);
+      } else {
+        this.filtrosSeleccionados.delete('pcmax');
+      }
     }
 
-    if (this.formRangos.value.precioMaximo) {
-      this.filtrosSeleccionados.set(
-        'pcmax',
-        this.formRangos.value.precioMaximo
-      );
+    if (bizType === '2' || bizType === '3') {
+      const precioVentaMinimo = this.formRangos.value.precioVentaMinimo;
+      const precioVentaMaximo = this.formRangos.value.precioVentaMaximo;
+
+      if (precioVentaMinimo && precioVentaMinimo !== '') {
+        this.filtrosSeleccionados.set('pvmin', precioVentaMinimo);
+      } else {
+        this.filtrosSeleccionados.delete('pvmin');
+      }
+
+      if (precioVentaMaximo && precioVentaMaximo !== '') {
+        this.filtrosSeleccionados.set('pvmax', precioVentaMaximo);
+      } else {
+        this.filtrosSeleccionados.delete('pvmax');
+      }
     }
-
-    if (this.formRangos.value.precioVentaMaximo) {
-      this.filtrosSeleccionados.set(
-        'pvmax',
-        this.formRangos.value.precioVentaMaximo
-      );
-    }
-
-    if (this.formRangos.value.precioVentaMinimo) {
-      this.filtrosSeleccionados.set(
-        'pvmin',
-        this.formRangos.value.precioVentaMinimo
-      );
-    }
-  }
-
-  filterLocations() {
-    const search = this.searchTerm.toLowerCase();
-    this.filteredBarrios = this.barrios.data.filter(
-      (barrio: any) =>
-        barrio.name.toLowerCase().includes(search) ||
-        barrio.city_name.toLowerCase().includes(search)
-    );
-  }
-
-  selectLocation(barrio: any) {
-    this.searchTerm = `${barrio.city_name}, ${barrio.name}`;
-    this.filteredBarrios = [];
-
-    this.filtrosSeleccionados.set('city', barrio.city_code);
-    this.filtrosSeleccionados.set('neighborhood', barrio.code);
-    this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
 
   enviarFiltrosSelect() {
@@ -617,6 +655,62 @@ export class FiltrosComponent implements OnInit {
     this.enviarFiltros(1);
   }
 
+  selectPriceRange(range: { min: number, max: number | null }): void {
+    console.log('rango', range);
+    const bizType = this.selectedProperty?.code || this.filtrosVistaInicial?.biz;
+
+    if (this.selectedPriceRange?.min === range.min) {
+      this.selectedPriceRange = null;
+
+      if (bizType === '1' || bizType === '3') {
+        this.formRangos.patchValue({
+          precioMinimo: null,
+          precioMaximo: null
+        });
+        this.filtrosSeleccionados.delete('pcmin');
+        this.filtrosSeleccionados.delete('pcmax');
+      }
+
+      if (bizType === '2' || bizType === '3') {
+        this.formRangos.patchValue({
+          precioVentaMinimo: null,
+          precioVentaMaximo: null
+        });
+        this.filtrosSeleccionados.delete('pvmin');
+        this.filtrosSeleccionados.delete('pvmax');
+      }
+    } else {
+      this.selectedPriceRange = range;
+
+      if (bizType === '1' || bizType === '3') {
+        this.formRangos.patchValue({
+          precioMinimo: range.min.toString(),
+          precioMaximo: range.max ? range.max.toString() : null
+        });
+        this.filtrosSeleccionados.set('pcmin', range.min.toString());
+        if (range.max !== null) {
+          this.filtrosSeleccionados.set('pcmax', range.max.toString());
+        } else {
+          this.filtrosSeleccionados.delete('pcmax');
+        }
+      }
+
+      if (bizType === '2' || bizType === '3') {
+        this.formRangos.patchValue({
+          precioVentaMinimo: range.min.toString(),
+          precioVentaMaximo: range.max ? range.max.toString() : null
+        });
+        this.filtrosSeleccionados.set('pvmin', range.min.toString());
+        if (range.max !== null) {
+          this.filtrosSeleccionados.set('pvmax', range.max.toString());
+        } else {
+          this.filtrosSeleccionados.delete('pvmax');
+        }
+      }
+    }
+    this.cdRef.detectChanges();
+  }
+
   seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
     const arr = this.seleccion[categoria] as (number | string)[];
     const index = arr.indexOf(valor);
@@ -626,6 +720,25 @@ export class FiltrosComponent implements OnInit {
   isEstateSelected(option: any): boolean {
     return this.selectedEstates.some((o) => o.code === option.code);
   }
+
+  filterLocations() {
+    const search = this.searchTerm.toLowerCase();
+    this.filteredBarrios = this.barrios.data.filter(
+      (barrio: any) =>
+        barrio.name.toLowerCase().includes(search) ||
+        barrio.city_name.toLowerCase().includes(search)
+    );
+  }
+
+  selectLocation(barrio: any) {
+    this.searchTerm = `${barrio.city_name}, ${barrio.name}`;
+    this.filteredBarrios = [];
+
+    this.filtrosSeleccionados.set('city', barrio.city_code);
+    this.filtrosSeleccionados.set('neighborhood', barrio.code);
+    this.filtrosSeleccionados.set('isManualSelection', 'true');
+  }
+
 
   selectOption(type: 'property' | 'estate', option: any): void {
     if (type === 'property') {
@@ -644,6 +757,36 @@ export class FiltrosComponent implements OnInit {
         this.selectedEstates.push(option);
       }
     }
+  }
+
+  borrarFiltros() {
+    this.filtrosSeleccionados.clear();
+    this.selectedPriceRange = null;
+
+    this.seleccion = {
+      habitaciones: [],
+      banos: [],
+      parqueadero: [],
+      estrato: [],
+    };
+
+    this.formRangos.patchValue({
+      AreaMinima: null,
+      AreaMaxima: null,
+      precioMinimo: null,
+      precioMaximo: null,
+      precioVentaMinimo: null,
+      precioVentaMaximo: null,
+    });
+
+    this.cdRef.detectChanges();
+
+    this.enviarFiltros();
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.filteredBarrios = [];
   }
 
   toggleDropdown(type: 'property' | 'estate'): void {
@@ -740,53 +883,5 @@ export class FiltrosComponent implements OnInit {
   verPropiedad(codPro: number) {
     const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
     window.open(url, '_blank');
-  }
-
-  selectPriceRange(range: { min: number, max: number | null }): void {
-    console.log('rango', range);
-    if (this.selectedPriceRange?.min === range.min) {
-      this.selectedPriceRange = null;
-      this.filtrosSeleccionados.delete('pcmin');
-      this.filtrosSeleccionados.delete('pcmax');
-    } else {
-      this.selectedPriceRange = range;
-      this.filtrosSeleccionados.set('pcmin', range.min);
-
-      if (range.max !== null) {
-        this.filtrosSeleccionados.set('pcmax', range.max);
-      } else {
-        this.filtrosSeleccionados.delete('pcmax');
-      }
-    }
-  }
-
-  borrarFiltros() {
-    this.filtrosSeleccionados.clear();
-    this.selectedPriceRange = null;
-
-    this.seleccion = {
-      habitaciones: [],
-      banos: [],
-      parqueadero: [],
-      estrato: [],
-    };
-
-    this.formRangos.patchValue({
-      AreaMinima: null,
-      AreaMaxima: null,
-      precioMinimo: null,
-      precioMaximo: null,
-      precioVentaMinimo: null,
-      precioVentaMaximo: null,
-    });
-
-    this.cdRef.detectChanges();
-
-    this.enviarFiltros();
-  }
-
-  clearSearch() {
-    this.searchTerm = '';
-    this.filteredBarrios = [];
   }
 }

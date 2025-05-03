@@ -1,894 +1,802 @@
 <app-navbar [alwaysScrolled]="true"></app-navbar>
 
 <div class="flex flex-col">
-  <div class="banner-contacto w-full h-[50vh] overflow-hidden">
-    <div class="relative w-full h-full">
-      <!-- Imagen de fondo -->
-      <div
-        class="absolute inset-0 bg-cover bg-center z-10"
-        style="background-image: url('assets/images/SliderAVALUOS.png')"
-      ></div>
+    <div class="banner-contacto w-full h-[50vh] overflow-hidden">
+        <div class="relative w-full h-full">
+            <!-- Imagen de fondo -->
+            <div class="absolute inset-0 bg-cover bg-center z-10"
+                style="background-image: url('assets/images/SliderAVALUOS.png')"></div>
 
-      <!-- Imagen del texto centrada y subida -->
-      <div class="absolute inset-0 z-30 flex items-center justify-center">
-        <img
-          src="assets/images/TEXTOPOLITICAS.png"
-          class="w-[90%] sm:w-[100%] max-w-[1200px] h-auto object-contain"
-          alt="Texto"
-        />
-        />
-      </div>
-    </div>
-  </div>
-
-  <!-- Sección de filtros -->
-  <div class="bg-gray-200" #dropdownContainer>
-    <app-barra-filtros></app-barra-filtros>
-  </div>
-
-  <div class="flex flex-col md:flex-row gap-8 lg:gap-12 max-w-7xl mx-auto p-4">
-    <article class="w-full md:w-3/4">
-      <header class="mb-2 mt-16">
-        <h1
-          class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3"
-        >
-          Políticas
-        </h1>
-      </header>
-
-      <div class="p-6 bg-white text-[#060f29] space-y-6">
-        <h2 class="text-2xl font-bold">Sitio Web</h2>
-        <p class="text-justify">
-          RENTA RAÍZ SOLUCIONES INMOBILIARIAS ofrecerá a través de su sitio web
-          <a href="https://www.rentaraiz.com" class="text-blue-600 underline"
-            >www.rentaraiz.com</a
-          >
-          y de forma pública, el catálogo de los inmuebles y propiedades que
-          administre bajo el cumplimiento de su objeto social y el ordenamiento
-          jurídico aplicable.
-        </p>
-
-        <h2 class="text-2xl font-bold">Acceso</h2>
-        <p class="text-justify">
-          El acceso al sitio web es de carácter público con excepción de los
-          módulos y secciones que requieren inicio de sesión o acceso con
-          usuario y contraseña. Todo acceso no autorizado por diferentes medios
-          tecnológicos o sociales al sitio web en sus secciones restringidas, se
-          entiende como violación directa a nuestras políticas de privacidad. En
-          el mismo sentido, se estaría infringiendo la ley penal 599 de 2000
-          modificada especialmente por la ley 1273 de 2009, por medio de la cual
-          se modifica el Código Penal y se crea un nuevo bien jurídico tutelado
-          denominado “de la protección de la información y de los datos” y se
-          preservan integralmente los sistemas que utilicen las tecnologías de
-          la información y las comunicaciones, entre otras disposiciones, que en
-          su título VII, contenido en los capítulos I y II se relacionan todos y
-          cada uno de los accesos no autorizados a sistemas informáticos.
-        </p>
-
-        <h2 class="text-2xl font-bold">Uso de Cookies</h2>
-        <p class="text-justify">
-          Las cookies son solo para uso estadístico, sesión de acceso y
-          funcionamiento del sitio. El bloqueo de nuestras cookies representa
-          que muchos de nuestros servicios que se encuentran inmersos en el
-          sitio, no operen correctamente.
-        </p>
-        <ul class="list-disc list-inside text-justify space-y-2">
-          <li>
-            <strong>Conservación de la sesión por navegador:</strong> mientras
-            se esté navegando en el sitio y desde que el navegador no cierre las
-            sesiones activas, mediante el cierre del mismo u otras acciones
-            relacionadas con el navegador.
-          </li>
-          <li>
-            <strong>Recordación de la sesión por navegador:</strong> al aceptar
-            la opción “recordarme” de la pantalla de inicio de sesión, se
-            grabará una cookie que contiene la información necesaria para que la
-            plataforma garantice el acceso del usuario sin necesidad de que
-            introduzca sus credenciales cada vez que se accede a la plataforma.
-          </li>
-          <li>
-            <strong>Cookies dinámicas:</strong> para el funcionamiento básico
-            del sitio, en cuanto a la navegación a través de los botones y
-            enlaces del sitio, ‘display’ de mensajes de alerta, error,
-            información u otros y validaciones de seguridad.
-          </li>
-        </ul>
-        <p class="text-justify">
-          Ninguno de los anteriores usos de cookies contiene información
-          personal o compromete el acceso a la cuenta; pero son necesarias para
-          la interacción entre usuario y sitio web.
-        </p>
-      </div>
-
-      <div class="p-6 bg-white text-[#060f29] space-y-6">
-        <h2 class="text-2xl font-bold">
-          Almacenamiento de Información Personal
-        </h2>
-        <p class="text-justify">
-          <a href="https://www.rentaraiz.com" class="text-blue-600 underline"
-            >www.rentaraiz.com</a
-          >
-          y sus servicios asociados están construidos como una solución en la
-          nube. Dichos datos personales reposan en los centros de datos de
-          Amazon Web Services, Inc. (AWS). AWS solo presta al sitio web
-          servicios de hosting virtual y garantiza el acceso a través de
-          internet a dichos servicios publicados y asociados; sin embargo,
-          ningún componente que conforma el sitio web es propiedad ni
-          responsabiliza a AWS o sus asociados.
-        </p>
-        <p class="text-justify">
-          El acceso y comunicación con los servicios en mención están protegidos
-          por certificados que permiten la conexión segura sobre la capa de
-          transporte (SSL/TLS). Dichos certificados han sido emitidos por
-          entidades certificadoras de confianza y/o servicios asociados.
-          Cualquier acceso no autorizado, ataque o vulneración del sitio web
-          será sancionado según la normatividad vigente y se pondrá en
-          disposición de las autoridades competentes en territorio colombiano.
-        </p>
-        <p class="text-justify">
-          Por otro lado, cualquier acceso no autorizado, ataque o vulneración de
-          los servicios prestados por AWS o sus asociados, y que tengan relación
-          directa o indirecta con el funcionamiento del sitio y en el que RENTA
-          RAÍZ SOLUCIONES INMOBILIARIAS o sus proveedores tengan conocimiento y
-          pruebas, serán puestas a disposición y pleno conocimiento de AWS y sus
-          asociados para que, según la normatividad vigente de los Estados
-          Unidos, específicamente las que conciernen al estado de Washington, se
-          ejerzan las acciones o sanciones correspondientes. Para mayor
-          información sobre los términos de uso y políticas entorno a AWS, por
-          favor diríjase al sitio
-          <a
-            href="https://aws.amazon.com/es/terms/"
-            class="text-blue-600 underline"
-            >https://aws.amazon.com/es/terms/</a
-          >.
-        </p>
-
-        <h2 class="text-2xl font-bold">
-          Políticas de Privacidad y Manejo de Datos Personales
-        </h2>
-
-        <h3 class="text-xl font-semibold">Procedimiento</h3>
-        <p class="text-justify">
-          RENTA RAÍZ SOLUCIONES INMOBILIARIAS establecerá procedimientos y
-          controles en cumplimiento del Régimen General de Protección de Datos
-          Personales.
-        </p>
-
-        <h3 class="text-xl font-semibold">Normatividad</h3>
-        <p class="text-justify">
-          El tratamiento que RENTA RAÍZ SOLUCIONES INMOBILIARIAS da a los datos
-          personales de nuestros usuarios, clientes y asociados será realizado
-          conforme a las estipulaciones conferidas en la Constitución Nacional
-          de 1991, la Ley 1581 de 2012, el Decreto Reglamentario 1377 de 2013 y
-          demás disposiciones que la complementan.
-        </p>
-      </div>
-
-      <section class="p-6 text-[#060f29] space-y-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">APLICACIÓN</h2>
-        <p class="text-gray-700">
-          RENTA RAÍZ SOLUCIONES INMOBILIARIAS aplicará estas políticas, frente a
-          la información a la cual accede, recopila, almacena, utiliza, comparte
-          y actualiza y en general de aquella información que supone tratamiento
-          de datos personales, en el desarrollo de su actividad profesional.
-        </p>
-      </section>
-
-      <section class="p-6 text-[#060f29] space-y-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">
-          PRINCIPIOS RECTORES PARA EL TRATAMIENTO DE DATOS PERSONALES
-        </h2>
-        <p class="text-gray-700 mb-4">
-          Se aplicarán, de manera armónica e integral, los siguientes
-          principios:
-        </p>
-        <ul class="list-disc pl-6 space-y-2 text-gray-700">
-          <li>
-            <strong
-              >Principio de legalidad en materia de Tratamiento de
-              datos:</strong
-            >
-            El Tratamiento de datos personales debe sujetarse a lo establecido
-            en la legislación aplicable sobre la materia.
-          </li>
-          <li>
-            <strong>Principio de finalidad:</strong> El Tratamiento debe
-            obedecer a una finalidad legítima de acuerdo con la Constitución y
-            la Ley, la cual debe ser informada al Titular.
-          </li>
-          <li>
-            <strong>Principio de libertad:</strong> El Tratamiento sólo puede
-            ejercerse con el consentimiento, previo, expreso e informado del
-            Titular. Los datos personales no podrán ser obtenidos o divulgados
-            sin previa autorización, o en ausencia de mandato legal o judicial
-            que releve el consentimiento.
-          </li>
-          <li>
-            <strong>Principio de veracidad o calidad:</strong> La información
-            sujeta a Tratamiento debe ser veraz, completa, exacta, actualizada,
-            comprobable y comprensible. Se prohíbe el Tratamiento de datos
-            parciales, incompletos, fraccionados o que induzcan a error.
-          </li>
-          <li>
-            <strong>Principio de transparencia:</strong> En el Tratamiento debe
-            garantizarse el derecho del Titular a obtener del Responsable del
-            Tratamiento o del Encargado del Tratamiento, en cualquier momento y
-            sin restricciones, información acerca de la existencia de datos que
-            le conciernan.
-          </li>
-          <li>
-            <strong>Principio de acceso y circulación restringida:</strong> El
-            Tratamiento se sujeta a los límites que se derivan de la naturaleza
-            de los datos personales, de las disposiciones de las leyes
-            aplicables y la Constitución. Los datos personales, salvo la
-            información pública, no se publicarán en Internet u otros medios de
-            divulgación o comunicación masiva, salvo que el acceso sea
-            técnicamente controlable para brindar un conocimiento restringido
-            sólo a los Titulares o terceros autorizados conforme a la
-            normatividad aplicable.
-          </li>
-          <li>
-            <strong>Principio de seguridad:</strong> La información sujeta a
-            Tratamiento por el Responsable o Encargado, se deberá manejar con
-            las medidas técnicas, humanas y administrativas que sean necesarias
-            para otorgar seguridad a los registros evitando su adulteración,
-            pérdida, consulta, uso o acceso no autorizado o fraudulento.
-          </li>
-          <li>
-            <strong>Principio de confidencialidad:</strong> Todas las personas
-            que intervengan en el Tratamiento de datos personales que no tengan
-            la naturaleza de públicos están obligadas a garantizar la reserva de
-            la información, inclusive después de finalizada su relación con
-            alguna de las labores que comprende el Tratamiento, pudiendo sólo
-            realizar suministro o comunicación de datos personales cuando ello
-            corresponda al desarrollo de las actividades autorizadas en la
-            legislación aplicable y en los términos de la misma.
-          </li>
-        </ul>
-      </section>
-
-      <section class="mb-8">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">
-          FINALIDAD CON LA QUE SE EFECTÚA LA RECOLECCIÓN DE DATOS PERSONALES Y
-          TRATAMIENTO DE LOS MISMOS
-        </h2>
-        <p class="text-gray-700 mb-4">
-          RENTA RAÍZ SOLUCIONES INMOBILIARIAS podrá hacer uso de los datos
-          personales para:
-        </p>
-        <ul class="list-disc pl-6 space-y-2 text-gray-700">
-          <li>
-            La correcta prestación de sus servicios, en el desarrollo de su
-            objeto social, lo anterior implica la administración de las
-            relaciones contractuales y extracontractuales directas, así como
-            aquellas donde actúa como socio, contratista o Fideicomitente.
-          </li>
-          <li>
-            La administración de la relación con sus proveedores y empleados.
-          </li>
-          <li>
-            La realización de labores de comercialización, promoción y mercadeo,
-            para el ofrecimiento de sus bienes y servicios y la mejora en la
-            prestación de estos últimos.
-          </li>
-          <li>
-            Mantener una comunicación constante con los titulares de datos
-            personales; e Informar sobre nuevos productos o servicios y/o
-            modificaciones en los mismos.
-          </li>
-          <li>
-            Realizar procesos de conocimiento de los potenciales clientes o
-            actualización de información de sus clientes o usuarios.
-          </li>
-          <li>
-            Consultar centrales de bases de datos u Operadores de Información y
-            Riesgo, o cualquier otra entidad que maneje o administre bases de
-            datos e informes de la capacidad y el comportamiento crediticio.
-          </li>
-          <li>
-            Reportar a las Centrales de información mencionadas en el literal
-            anterior el comportamiento (presente, pasado y futuro) de los
-            clientes, endeudamiento, y en especial el nacimiento, modificación,
-            extinción de las obligaciones contraídas con la Empresa.
-          </li>
-          <li>
-            Enviar al correo físico, electrónico, a las redes sociales o
-            dispositivo móvil, vía mensajes de texto (SMS y/o MMS) o a través de
-            cualquier otro medio de comunicación existente o que llegare a
-            existir, información institucional, publicitaria o comercial sobre
-            los productos y/o servicios de la Compañía, sus socios comerciales o
-            proyectos en los cuales participa.
-          </li>
-          <li>
-            Efectuar estudios, investigaciones e informes de mercado,
-            financieros, estadísticos y de riesgo, entre otros.
-          </li>
-          <li>
-            Desarrollar el proceso de selección, evaluación, y vinculación
-            laboral.
-          </li>
-          <li>
-            Evaluar la calidad de los servicios o productos suministrados.
-          </li>
-          <li>
-            Suministrar, compartir, enviar o entregar sus datos personales a
-            Compañías de seguros, asesores jurídicos, proveedores de software,
-            autoridades fiscales, subcontratistas que procesen, administren o
-            utilicen la información, en el evento en que dichas compañías
-            requieran la información para los fines aquí indicados, caso en el
-            cual se advierte sobre la necesidad de proteger dicha información
-            personal y conservar la obligación de confidencialidad sobre la
-            misma.
-          </li>
-          <li>
-            Divulgar y entregar la información de clientes en caso de venta de
-            cartera o cesión de obligaciones, caso en el cual las obligaciones
-            cedidas conservan las acciones legales y pueden ser ejercidas por el
-            cesionario de la obligación.
-          </li>
-          <li>
-            Los indicados en la autorización otorgada por el titular del dato o
-            descritos en el aviso de privacidad respectivo, según sea el caso.
-          </li>
-          <li>
-            El cumplimiento general de las obligaciones legales y contractuales
-            que le asisten a la empresa.
-          </li>
-        </ul>
-      </section>
-
-      <div class="p-6 text-[#060f29] space-y-6">
-        <h2 class="text-2xl font-bold">
-          DERECHOS DEL TITULAR DE LOS DATOS PERSONALES:
-        </h2>
-        <ul class="list-disc pl-5 space-y-2">
-          <li>
-            Conocer, actualizar y rectificar sus datos personales frente a RENTA
-            RAÍZ SOLUCIONES INMOBILIARIAS. Este derecho se podrá ejercer, entre
-            otros frente a datos parciales, inexactos, incompletos,
-            fraccionados, que induzcan a error, o aquellos cuyo tratamiento esté
-            expresamente prohibido o no haya sido autorizado;
-          </li>
-          <li>
-            Solicitar prueba de la autorización, salvo cuando expresamente se
-            exceptúe por la ley
-          </li>
-          <li>
-            Ser informado respecto del uso que se le ha dado a los datos
-            personales, previa solicitud expresa por parte del titular
-          </li>
-          <li>
-            Presentar ante la Superintendencia de Industria y Comercio quejas
-            por infracciones a lo dispuesto en la legislación aplicable sobre el
-            tratamiento de datos personales
-          </li>
-          <li>
-            Derecho a requerir el cumplimiento de las órdenes emitidas por la
-            Superintendencia de Industria y Comercio.
-          </li>
-          <li>
-            Acceder en forma gratuita a los datos personales que hayan sido
-            objeto de Tratamiento.
-          </li>
-        </ul>
-
-        <p class="text-justify">
-          <span class="font-semibold">PARÁGRAFO:</span> Para poder hacer
-          efectivo los derechos de titular, RENTA RAÍZ SOLUCIONES INMOBILIARIAS.
-          solicitará su identidad o aquella de quien represente sus derechos y
-          el soporte jurídico de dicha representación.
-        </p>
-
-        <p class="text-justify">
-          RENTA RAÍZ SOLUCIONES INMOBILIARIAS. se abstendrá de comercializar,
-          divulgar, publicar, los datos personales, salvo que exista
-          autorización expresa para hacerlo, sea necesario para cumplir las
-          funciones y obligaciones que estén en cabeza de RENTA RAÍZ SOLUCIONES
-          INMOBILIARIAS. en virtud de relación contractual o comercial alguna, o
-          que dichas funciones y obligaciones hayan sido encomendadas a un
-          contratista, cuando se efectúe una fusión, escisión, adquisición, o
-          algún proceso de restructuración de la sociedad o esta participe como
-          socia en algún proyecto, y le corresponda dar tratamiento a datos
-          personales.
-        </p>
-
-        <p class="text-justify">
-          RENTA RAÍZ SOLUCIONES INMOBILIARIAS. recolectará, almacenará, usará
-          y/o circulará los datos personales durante el tiempo que sea razonable
-          y necesario, de acuerdo con las disposiciones aplicables a la materia,
-          con las finalidades que justifican el Tratamiento y teniendo en cuenta
-          los deberes, obligaciones y relaciones legales o contractuales que
-          tengan los titulares, para efectos de que estos deban permanecer o no
-          en las bases de datos de la empresa.
-        </p>
-
-        <h2 class="text-2xl font-bold">DEBERES:</h2>
-        <p class="text-justify">
-          RENTA RAÍZ SOLUCIONES INMOBILIARIAS. está obligada a cumplir los
-          deberes que impone la normatividad aplicable respecto al tratamiento
-          de datos personales, cuando actúe:
-        </p>
-      </div>
-
-      <div class="p-6 text-[#060f29] space-y-6">
-        <h2 class="text-2xl font-bold">Como Responsables del tratamiento:</h2>
-        <ul class="list-disc pl-5 space-y-2">
-          <li>Garantizar al Titular el ejercicio del derecho de hábeas data</li>
-          <li>
-            Solicitar y conservar, en las condiciones aquí previstas, copia de
-            la respectiva autorización otorgada por el titular
-          </li>
-          <li>
-            Informar claramente al titular sobre la finalidad de la recolección
-            y los derechos que le asisten en virtud de la autorización otorgada
-            y el uso que se le dará a sus datos personales
-          </li>
-          <li>
-            Conservar la información bajo condiciones de seguridad que impidan
-            su adulteración, pérdida, consulta, uso o acceso no autorizado o
-            fraudulento
-          </li>
-          <li>
-            Actualizar la información de los titulares y rectificarla cuando sea
-            incorrecta
-          </li>
-          <li>
-            Tramitar las consultas y reclamos formulados por los titulares de la
-            información
-          </li>
-          <li>
-            Procurar que los principios de veracidad, calidad, seguridad y
-            confidencialidad en los términos establecidos en la siguiente
-            política
-          </li>
-          <li>
-            Exigir el respeto a las condiciones de seguridad y privacidad de la
-            información del Titular e Informar a la autoridad de protección de
-            datos cuando se presenten violación a la seguridad de la misma y
-            cuando existan riesgos en la administración de la información
-          </li>
-          <li>
-            Cumplir las instrucciones y requerimientos que imparta la
-            Superintendencia de Industria y Comercio.
-          </li>
-        </ul>
-
-        <h2 class="text-2xl font-bold">
-          Como Encargados del tratamiento de datos personales:
-        </h2>
-        <p class="text-justify">
-          Cuando llegare a efectuar el tratamiento en nombre de otra entidad u
-          organización (Responsable del tratamiento) deberá:
-        </p>
-        <ul class="list-disc pl-5 space-y-2">
-          <li>
-            Garantizar al Titular, el ejercicio del derecho de hábeas data
-          </li>
-          <li>
-            Conservar la información bajo las condiciones de seguridad
-            necesarias para impedir su adulteración, pérdida, consulta, uso o
-            acceso no autorizado o fraudulento
-          </li>
-          <li>
-            Realizar oportunamente la actualización, rectificación o supresión
-            de los datos en los términos de la presente ley; la actualización de
-            la información reportada por los Responsables del Tratamiento, se
-            deberá efectuar dentro de los cinco (5) días hábiles contados a
-            partir de su recibo
-          </li>
-          <li>
-            Tramitar las consultas y los reclamos formulados por los Titulares
-            en los términos señalados en la legislación aplicable
-          </li>
-          <li>
-            Registrar en la base de datos la leyenda “reclamo en trámite” en la
-            forma en que se regula en la normatividad aplicable
-          </li>
-          <li>
-            Insertar en la base de datos la leyenda “información en discusión
-            judicial” una vez notificado por parte de la autoridad competente
-            sobre procesos judiciales relacionados con la calidad del dato
-            personal
-          </li>
-          <li>
-            Abstenerse de circular información que esté siendo controvertida por
-            el Titular y cuyo bloqueo haya sido ordenado por la Superintendencia
-            de Industria y Comercio
-          </li>
-          <li>
-            Permitir el acceso a la información únicamente a las personas que
-            pueden tener acceso a ella
-          </li>
-          <li>
-            Informar a la Superintendencia de Industria y Comercio cuando se
-            presenten violaciones a los códigos de seguridad y existan riesgos
-            en la administración de la información de los Titulares
-          </li>
-          <li>
-            Cumplir las instrucciones y requerimientos que imparta la
-            Superintendencia de Industria y Comercio.
-          </li>
-        </ul>
-      </div>
-
-      <div class="p-6 bg-white text-[#060f29] space-y-6">
-        <h2 class="text-2xl font-bold">
-          Solicitud de Autorización al Titular del Dato Personal
-        </h2>
-
-        <p class="text-justify">
-          Previamente y/o al momento de efectuar la recolección de datos
-          personales,
-          <strong>RENTA RAÍZ SOLUCIONES INMOBILIARIAS</strong> solicitará
-          autorización al titular del dato, para su recolección y tratamiento,
-          comunicando la finalidad de su obtención, a través de medios técnicos
-          automatizados, orales o escritos, que permitan conservar prueba de la
-          autorización y/o de la conducta inequívoca descrita en el artículo 7
-          del Decreto 1377 de 2013.
-        </p>
-      </div>
-
-      <div class="p-6 bg-white text-[#060f29] space-y-6">
-        <h2 class="text-2xl font-bold">
-          ÁREA RESPONSABLE Y PROCEDIMIENTO PARA EL EJERCICIO DE LOS DERECHOS DE
-          LOS TITULARES DEL DATO PERSONAL
-        </h2>
-
-        <p class="text-justify">
-          El Área Administrativa será la responsable de atender las peticiones,
-          quejas y reclamos de los titulares de los datos, de acuerdo a los
-          derechos que le corresponden según el numeral 10 de la presente
-          política y la legislación aplicable.
-        </p>
-
-        <p class="text-justify">
-          El titular del dato personal o quien lo represente podrá allegar su
-          petición, queja o reclamo de lunes a viernes de 8:00 a.m a 5:00 p.m al
-          correo electrónico
-          <a href="mailto:info@rentaraiz.com" class="text-blue-600 underline">{{
-            "info@rentaraiz.com"
-          }}</a>
-          o comunicarse a la línea telefónica de RENTA RAÍZ SOLUCIONES
-          INMOBILIARIAS, Medellín teléfono
-          <a href="tel:+573502239393" class="text-blue-600 underline"
-            >3502239393</a
-          >, o radicarla en nuestra oficina en la dirección: Diagonal 29 # 34 F
-          sur 81.
-        </p>
-
-        <p class="text-justify">
-          Esta queja será resuelta por el responsable del área, encargado de
-          manejar los datos del titular, según la calidad en la que éste actúa
-          frente a la empresa, de acuerdo a sus diferentes líneas de negocio
-          (cliente, arrendatario, propietario, etc).
-        </p>
-      </div>
-
-      <div class="p-6 bg-white text-[#060f29] space-y-6">
-        <h2 class="text-2xl font-bold">
-          Procedimiento para la Petición, Queja o Reclamación
-        </h2>
-
-        <p class="text-justify">
-          La petición, queja o reclamación deberá contener los siguientes
-          detalles:
-        </p>
-
-        <ul class="list-disc list-inside text-justify space-y-2">
-          <li>
-            <strong>Identificación del Titular:</strong> Nombre completo y
-            documento de identificación.
-          </li>
-          <li>
-            <strong>Hechos Detallados:</strong> Explicación clara y precisa
-            sobre los hechos en los cuales se fundamenta la solicitud.
-          </li>
-          <li>
-            <strong>Datos de Contacto:</strong> Dirección, teléfono y correo
-            electrónico del titular.
-          </li>
-          <li>
-            <strong>Documentos Anexos:</strong> Cualquier documento relevante o
-            que considere importante para la reclamación.
-          </li>
-        </ul>
-
-        <p class="text-justify">
-          Si se presenta la información incompleta o inexacta, se requerirá al
-          interesado dentro de los cinco (5) días hábiles siguientes a la
-          recepción de la petición, queja o reclamo para que corrija o complete
-          la misma.
-        </p>
-
-        <p class="text-justify">
-          Si pasados dos (2) meses desde la fecha del requerimiento, el
-          solicitante no subsana o presenta la información requerida, se
-          entenderá que ha desistido de la petición.
-        </p>
-
-        <p class="text-justify">
-          Una vez recibido el requerimiento completo, se incluirá en la base de
-          datos la leyenda <strong>“reclamo en trámite”</strong> y el motivo del
-          mismo, en un término que no excederá los tres (3) días hábiles. Dicha
-          leyenda se deberá mantener hasta que el reclamo sea resuelto.
-        </p>
-
-        <p class="text-justify">
-          El plazo máximo para atender el requerimiento será de quince (15) días
-          hábiles contados a partir del día siguiente de la fecha en que se
-          recibió con la información completa y correcta.
-        </p>
-
-        <p class="text-justify">
-          Cuando no fuere posible atender el reclamo dentro de dicho plazo, se
-          informará al interesado los motivos de la demora y la fecha en que se
-          atenderá su solicitud, la cual en ningún caso podrá superar los ocho
-          (8) días hábiles siguientes al vencimiento del primer término antes
-          mencionado.
-        </p>
-      </div>
-
-      <div class="p-6 bg-white text-[#060f29] space-y-6">
-        <h2 class="text-2xl font-bold">Medidas de Seguridad</h2>
-
-        <p class="text-justify">
-          En desarrollo del principio de seguridad establecido en la Ley 1581 de
-          2012, RENTA RAÍZ SOLUCIONES INMOBILIARIAS adoptará las medidas
-          técnicas, humanas y administrativas que sean necesarias para otorgar
-          seguridad a los registros evitando su adulteración, pérdida, consulta,
-          uso o acceso no autorizado o fraudulento.
-        </p>
-
-        <p class="text-justify">
-          El personal que realice el tratamiento de los datos personales
-          ejecutará los protocolos establecidos con el fin de garantizar la
-          seguridad de la información. Adicionalmente, se establecerán
-          auditorías para efectos de hacer seguimiento del cumplimiento de la
-          política y los procedimientos derivados de la implementación de la
-          misma.
-        </p>
-
-        <h2 class="text-2xl font-bold">Fecha de Entrada en Vigencia</h2>
-
-        <p class="text-justify">
-          La Política de Datos Personales entra en vigencia a partir del día 15
-          de noviembre de 2017. Cualquier cambio que se presente respecto de la
-          presente política, se informará a través de la dirección electrónica:
-          <a href="https://www.rentaraiz.com" class="text-blue-600 underline"
-            >www.rentaraiz.com</a
-          >.
-        </p>
-      </div>
-
-      <div
-        class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 text-gray-800"
-      ></div>
-    </article>
-
-    <div class="w-full md:w-1/3 flex flex-col gap-6">
-      <div
-        class="mt-16 bg-white border border-gray-200 transform hover:scale-[1.02] transition-all duration-300 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]"
-      >
-        <div class="flex items-center mb-4">
-          <div
-            class="w-12 h-12 rounded-full overflow-hidden border-2 border-pink-500 p-0.5 mr-3"
-          >
-            <img
-              src="assets/images/rentaraiz.webp"
-              alt="Perfil"
-              class="w-full h-full object-cover rounded-full"
-            />
-          </div>
-
-          <div class="flex-grow">
-            <h3 class="font-semibold text-gray-800">rentaraiz</h3>
-            <p class="text-xs text-gray-500">𝐈𝐧𝐦𝐨𝐛𝐢𝐥𝐢𝐚𝐫𝐢𝐚 𝐑𝐞𝐧𝐭𝐚 𝐑𝐚𝐢𝐳 𝐒𝐀𝐒</p>
-          </div>
-
-          <a
-            href="https://www.instagram.com/rentaraiz/"
-            target="_blank"
-            class="text-xs font-semibold text-pink-600 hover:text-pink-700 transition-colors cursor-pointer inline-block px-2 py-1"
-          >
-            Seguir
-          </a>
-        </div>
-
-        <div class="grid grid-cols-2 gap-1 mb-3">
-          <a
-            href="https://www.instagram.com/reel/DIRwmbJvb3W/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
-          >
-            <img
-              src="assets/images/post1.webp"
-              alt="Post Instagram"
-              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
-            />
-          </a>
-
-          <a
-            href="https://www.instagram.com/reel/DIPw2pQvNKI/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
-          >
-            <img
-              src="assets/images/post2.webp"
-              alt="Post Instagram"
-              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
-            />
-          </a>
-
-          <a
-            href="https://www.instagram.com/reel/DIKFc0bvLxQ/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
-          >
-            <img
-              src="assets/images/post3.webp"
-              alt="Post Instagram"
-              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
-            />
-          </a>
-
-          <a
-            href="https://www.instagram.com/p/DIHCJeeR10q/?img_index=1"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
-          >
-            <img
-              src="assets/images/post4.webp"
-              alt="Post Instagram"
-              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
-            />
-          </a>
-        </div>
-
-        <a
-          href="https://www.instagram.com/rentaraiz/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="w-full py-2 text-sm font-medium text-pink-600 hover:text-pink-700 transition-colors flex items-center justify-center"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-            />
-          </svg>
-          Ver más en Instagram
-        </a>
-      </div>
-
-      <div class="mt-6 mb-10">
-        <div class="mb-4 pl-2">
-          <h1 class="text-2xl font-bold text-[#080E36] text-center">
-            Inmuebles destacados
-          </h1>
-          <p class="text-1xl text-[#9a9b9c] text-center">
-            Encuentra tu lugar ideal
-          </p>
-        </div>
-
-        <div *ngIf="inmueblesDestacadosArray" class="space-y-4">
-          <div
-            *ngFor="let inmueble of inmueblesDestacadosArray"
-            class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6 mt-6"
-          >
-            <div class="relative group">
-              <a href="#">
-                <img
-                  class="w-full h-48 object-cover"
-                  [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-                  [alt]="inmueble.address"
-                />
-              </a>
-
-              <div
-                class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10"
-              >
-                <a
-                  class="cursor-pointer bg-white text-[#080E36] px-4 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
-                  (click)="verPropiedad(inmueble.codpro)"
-                >
-                  Ver propiedad
-                </a>
-              </div>
-
-              <div
-                class="absolute -top-3 -left-1 bg-[#080E36] text-white text-sm font-semibold px-4 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-12px] before:border-y-[14px] before:border-y-transparent before:border-l-[12px] before:border-l-[#080E36]"
-              >
-                Destacado
-              </div>
-
-              <div
-                class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20"
-              >
-                <span
-                  class="bg-[#CDAD60] text-white text-xs font-semibold px-2 py-1 rounded shadow"
-                >
-                  {{ inmueble.type | titlecase }}
-                </span>
-
-                <button
-                  class="text-white hover:text-[#ea6666] transition-colors"
-                >
-                  <i class="fas fa-heart text-xl"></i>
-                </button>
-              </div>
+            <!-- Imagen del texto centrada y subida -->
+            <div class="absolute inset-0 z-30 flex items-center justify-center">
+                <img src="assets/images/TEXTOPOLITICAS.png"
+                    class="w-[90%] sm:w-[100%] max-w-[1200px] h-auto object-contain" alt="Texto" />
             </div>
-            <div class="p-5">
-              <a href="#">
-                <h5
-                  class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]"
-                >
-                  {{ inmueble.neighborhood || "Sin barrio especificado" }}
-                </h5>
-                <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
-                  {{ inmueble.description }}
+        </div>
+    </div>
+
+    <!-- Sección de filtros -->
+    <div class="bg-gray-200" #dropdownContainer>
+        <app-barra-filtros></app-barra-filtros>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-8 lg:gap-12 max-w-7xl mx-auto p-4">
+        <article class="w-full md:w-3/4">
+            <header class="mb-2 mt-16">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
+                    Políticas
+                </h1>
+            </header>
+
+            <div class="p-6 bg-white text-[#060f29] space-y-6">
+                <h2 class="text-2xl font-bold">Sitio Web</h2>
+                <p class="text-justify">
+                    RENTA RAÍZ SOLUCIONES INMOBILIARIAS ofrecerá a través de su sitio web
+                    <a href="https://www.rentaraiz.com" class="text-blue-600 underline">www.rentaraiz.com</a>
+                    y de forma pública, el catálogo de los inmuebles y propiedades que
+                    administre bajo el cumplimiento de su objeto social y el ordenamiento
+                    jurídico aplicable.
                 </p>
-              </a>
 
-              <div class="flex justify-between text-[#080E36] mt-5">
-                <div class="flex flex-col items-center">
-                  <span class="text-sm font-semibold">Habitaciones</span>
-                  <div class="flex items-center">
-                    <i class="fas fa-bed text-lg"></i>
-                    <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
-                  </div>
-                </div>
-                <div class="flex flex-col items-center">
-                  <span class="text-sm font-semibold">Baños</span>
-                  <div class="flex items-center">
-                    <i class="fas fa-bath text-lg"></i>
-                    <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
-                  </div>
-                </div>
-                <div class="flex flex-col items-center">
-                  <span class="text-sm font-semibold">Área</span>
-                  <div class="flex items-center">
-                    <i class="fas fa-ruler-combined text-lg"></i>
-                    <span class="ml-2"
-                      >{{
-                        inmueble.area_cons || inmueble.area_lot || "N/A"
-                      }}
-                      m²</span
-                    >
-                  </div>
-                </div>
-              </div>
+                <h2 class="text-2xl font-bold">Acceso</h2>
+                <p class="text-justify">
+                    El acceso al sitio web es de carácter público con excepción de los
+                    módulos y secciones que requieren inicio de sesión o acceso con
+                    usuario y contraseña. Todo acceso no autorizado por diferentes medios
+                    tecnológicos o sociales al sitio web en sus secciones restringidas, se
+                    entiende como violación directa a nuestras políticas de privacidad. En
+                    el mismo sentido, se estaría infringiendo la ley penal 599 de 2000
+                    modificada especialmente por la ley 1273 de 2009, por medio de la cual
+                    se modifica el Código Penal y se crea un nuevo bien jurídico tutelado
+                    denominado “de la protección de la información y de los datos” y se
+                    preservan integralmente los sistemas que utilicen las tecnologías de
+                    la información y las comunicaciones, entre otras disposiciones, que en
+                    su título VII, contenido en los capítulos I y II se relacionan todos y
+                    cada uno de los accesos no autorizados a sistemas informáticos.
+                </p>
 
-              <div
-                class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold"
-              >
-                <span>Precio:</span>
-                <span class="text-[#000000]">
-                  {{
-                    inmueble.price_format ||
-                      (inmueble.price
-                        | currency : "COP" : "symbol-narrow" : "1.0-0") ||
-                      "Consultar"
-                  }}
-                </span>
-              </div>
+                <h2 class="text-2xl font-bold">Uso de Cookies</h2>
+                <p class="text-justify">
+                    Las cookies son solo para uso estadístico, sesión de acceso y
+                    funcionamiento del sitio. El bloqueo de nuestras cookies representa
+                    que muchos de nuestros servicios que se encuentran inmersos en el
+                    sitio, no operen correctamente.
+                </p>
+                <ul class="list-disc list-inside text-justify space-y-2">
+                    <li>
+                        <strong>Conservación de la sesión por navegador:</strong> mientras
+                        se esté navegando en el sitio y desde que el navegador no cierre las
+                        sesiones activas, mediante el cierre del mismo u otras acciones
+                        relacionadas con el navegador.
+                    </li>
+                    <li>
+                        <strong>Recordación de la sesión por navegador:</strong> al aceptar
+                        la opción “recordarme” de la pantalla de inicio de sesión, se
+                        grabará una cookie que contiene la información necesaria para que la
+                        plataforma garantice el acceso del usuario sin necesidad de que
+                        introduzca sus credenciales cada vez que se accede a la plataforma.
+                    </li>
+                    <li>
+                        <strong>Cookies dinámicas:</strong> para el funcionamiento básico
+                        del sitio, en cuanto a la navegación a través de los botones y
+                        enlaces del sitio, ‘display’ de mensajes de alerta, error,
+                        información u otros y validaciones de seguridad.
+                    </li>
+                </ul>
+                <p class="text-justify">
+                    Ninguno de los anteriores usos de cookies contiene información
+                    personal o compromete el acceso a la cuenta; pero son necesarias para
+                    la interacción entre usuario y sitio web.
+                </p>
             </div>
-          </div>
+
+            <div class="p-6 bg-white text-[#060f29] space-y-6">
+                <h2 class="text-2xl font-bold">
+                    Almacenamiento de Información Personal
+                </h2>
+                <p class="text-justify">
+                    <a href="https://www.rentaraiz.com" class="text-blue-600 underline">www.rentaraiz.com</a>
+                    y sus servicios asociados están construidos como una solución en la
+                    nube. Dichos datos personales reposan en los centros de datos de
+                    Amazon Web Services, Inc. (AWS). AWS solo presta al sitio web
+                    servicios de hosting virtual y garantiza el acceso a través de
+                    internet a dichos servicios publicados y asociados; sin embargo,
+                    ningún componente que conforma el sitio web es propiedad ni
+                    responsabiliza a AWS o sus asociados.
+                </p>
+                <p class="text-justify">
+                    El acceso y comunicación con los servicios en mención están protegidos
+                    por certificados que permiten la conexión segura sobre la capa de
+                    transporte (SSL/TLS). Dichos certificados han sido emitidos por
+                    entidades certificadoras de confianza y/o servicios asociados.
+                    Cualquier acceso no autorizado, ataque o vulneración del sitio web
+                    será sancionado según la normatividad vigente y se pondrá en
+                    disposición de las autoridades competentes en territorio colombiano.
+                </p>
+                <p class="text-justify">
+                    Por otro lado, cualquier acceso no autorizado, ataque o vulneración de
+                    los servicios prestados por AWS o sus asociados, y que tengan relación
+                    directa o indirecta con el funcionamiento del sitio y en el que RENTA
+                    RAÍZ SOLUCIONES INMOBILIARIAS o sus proveedores tengan conocimiento y
+                    pruebas, serán puestas a disposición y pleno conocimiento de AWS y sus
+                    asociados para que, según la normatividad vigente de los Estados
+                    Unidos, específicamente las que conciernen al estado de Washington, se
+                    ejerzan las acciones o sanciones correspondientes. Para mayor
+                    información sobre los términos de uso y políticas entorno a AWS, por
+                    favor diríjase al sitio
+                    <a href="https://aws.amazon.com/es/terms/"
+                        class="text-blue-600 underline">https://aws.amazon.com/es/terms/</a>.
+                </p>
+
+                <h2 class="text-2xl font-bold">
+                    Políticas de Privacidad y Manejo de Datos Personales
+                </h2>
+
+                <h3 class="text-xl font-semibold">Procedimiento</h3>
+                <p class="text-justify">
+                    RENTA RAÍZ SOLUCIONES INMOBILIARIAS establecerá procedimientos y
+                    controles en cumplimiento del Régimen General de Protección de Datos
+                    Personales.
+                </p>
+
+                <h3 class="text-xl font-semibold">Normatividad</h3>
+                <p class="text-justify">
+                    El tratamiento que RENTA RAÍZ SOLUCIONES INMOBILIARIAS da a los datos
+                    personales de nuestros usuarios, clientes y asociados será realizado
+                    conforme a las estipulaciones conferidas en la Constitución Nacional
+                    de 1991, la Ley 1581 de 2012, el Decreto Reglamentario 1377 de 2013 y
+                    demás disposiciones que la complementan.
+                </p>
+            </div>
+
+            <section class="p-6 text-[#060f29] space-y-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">APLICACIÓN</h2>
+                <p class="text-gray-700">
+                    RENTA RAÍZ SOLUCIONES INMOBILIARIAS aplicará estas políticas, frente a
+                    la información a la cual accede, recopila, almacena, utiliza, comparte
+                    y actualiza y en general de aquella información que supone tratamiento
+                    de datos personales, en el desarrollo de su actividad profesional.
+                </p>
+            </section>
+
+            <section class="p-6 text-[#060f29] space-y-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                    PRINCIPIOS RECTORES PARA EL TRATAMIENTO DE DATOS PERSONALES
+                </h2>
+                <p class="text-gray-700 mb-4">
+                    Se aplicarán, de manera armónica e integral, los siguientes
+                    principios:
+                </p>
+                <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                    <li>
+                        <strong>Principio de legalidad en materia de Tratamiento de
+                            datos:</strong>
+                        El Tratamiento de datos personales debe sujetarse a lo establecido
+                        en la legislación aplicable sobre la materia.
+                    </li>
+                    <li>
+                        <strong>Principio de finalidad:</strong> El Tratamiento debe
+                        obedecer a una finalidad legítima de acuerdo con la Constitución y
+                        la Ley, la cual debe ser informada al Titular.
+                    </li>
+                    <li>
+                        <strong>Principio de libertad:</strong> El Tratamiento sólo puede
+                        ejercerse con el consentimiento, previo, expreso e informado del
+                        Titular. Los datos personales no podrán ser obtenidos o divulgados
+                        sin previa autorización, o en ausencia de mandato legal o judicial
+                        que releve el consentimiento.
+                    </li>
+                    <li>
+                        <strong>Principio de veracidad o calidad:</strong> La información
+                        sujeta a Tratamiento debe ser veraz, completa, exacta, actualizada,
+                        comprobable y comprensible. Se prohíbe el Tratamiento de datos
+                        parciales, incompletos, fraccionados o que induzcan a error.
+                    </li>
+                    <li>
+                        <strong>Principio de transparencia:</strong> En el Tratamiento debe
+                        garantizarse el derecho del Titular a obtener del Responsable del
+                        Tratamiento o del Encargado del Tratamiento, en cualquier momento y
+                        sin restricciones, información acerca de la existencia de datos que
+                        le conciernan.
+                    </li>
+                    <li>
+                        <strong>Principio de acceso y circulación restringida:</strong> El
+                        Tratamiento se sujeta a los límites que se derivan de la naturaleza
+                        de los datos personales, de las disposiciones de las leyes
+                        aplicables y la Constitución. Los datos personales, salvo la
+                        información pública, no se publicarán en Internet u otros medios de
+                        divulgación o comunicación masiva, salvo que el acceso sea
+                        técnicamente controlable para brindar un conocimiento restringido
+                        sólo a los Titulares o terceros autorizados conforme a la
+                        normatividad aplicable.
+                    </li>
+                    <li>
+                        <strong>Principio de seguridad:</strong> La información sujeta a
+                        Tratamiento por el Responsable o Encargado, se deberá manejar con
+                        las medidas técnicas, humanas y administrativas que sean necesarias
+                        para otorgar seguridad a los registros evitando su adulteración,
+                        pérdida, consulta, uso o acceso no autorizado o fraudulento.
+                    </li>
+                    <li>
+                        <strong>Principio de confidencialidad:</strong> Todas las personas
+                        que intervengan en el Tratamiento de datos personales que no tengan
+                        la naturaleza de públicos están obligadas a garantizar la reserva de
+                        la información, inclusive después de finalizada su relación con
+                        alguna de las labores que comprende el Tratamiento, pudiendo sólo
+                        realizar suministro o comunicación de datos personales cuando ello
+                        corresponda al desarrollo de las actividades autorizadas en la
+                        legislación aplicable y en los términos de la misma.
+                    </li>
+                </ul>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                    FINALIDAD CON LA QUE SE EFECTÚA LA RECOLECCIÓN DE DATOS PERSONALES Y
+                    TRATAMIENTO DE LOS MISMOS
+                </h2>
+                <p class="text-gray-700 mb-4">
+                    RENTA RAÍZ SOLUCIONES INMOBILIARIAS podrá hacer uso de los datos
+                    personales para:
+                </p>
+                <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                    <li>
+                        La correcta prestación de sus servicios, en el desarrollo de su
+                        objeto social, lo anterior implica la administración de las
+                        relaciones contractuales y extracontractuales directas, así como
+                        aquellas donde actúa como socio, contratista o Fideicomitente.
+                    </li>
+                    <li>
+                        La administración de la relación con sus proveedores y empleados.
+                    </li>
+                    <li>
+                        La realización de labores de comercialización, promoción y mercadeo,
+                        para el ofrecimiento de sus bienes y servicios y la mejora en la
+                        prestación de estos últimos.
+                    </li>
+                    <li>
+                        Mantener una comunicación constante con los titulares de datos
+                        personales; e Informar sobre nuevos productos o servicios y/o
+                        modificaciones en los mismos.
+                    </li>
+                    <li>
+                        Realizar procesos de conocimiento de los potenciales clientes o
+                        actualización de información de sus clientes o usuarios.
+                    </li>
+                    <li>
+                        Consultar centrales de bases de datos u Operadores de Información y
+                        Riesgo, o cualquier otra entidad que maneje o administre bases de
+                        datos e informes de la capacidad y el comportamiento crediticio.
+                    </li>
+                    <li>
+                        Reportar a las Centrales de información mencionadas en el literal
+                        anterior el comportamiento (presente, pasado y futuro) de los
+                        clientes, endeudamiento, y en especial el nacimiento, modificación,
+                        extinción de las obligaciones contraídas con la Empresa.
+                    </li>
+                    <li>
+                        Enviar al correo físico, electrónico, a las redes sociales o
+                        dispositivo móvil, vía mensajes de texto (SMS y/o MMS) o a través de
+                        cualquier otro medio de comunicación existente o que llegare a
+                        existir, información institucional, publicitaria o comercial sobre
+                        los productos y/o servicios de la Compañía, sus socios comerciales o
+                        proyectos en los cuales participa.
+                    </li>
+                    <li>
+                        Efectuar estudios, investigaciones e informes de mercado,
+                        financieros, estadísticos y de riesgo, entre otros.
+                    </li>
+                    <li>
+                        Desarrollar el proceso de selección, evaluación, y vinculación
+                        laboral.
+                    </li>
+                    <li>
+                        Evaluar la calidad de los servicios o productos suministrados.
+                    </li>
+                    <li>
+                        Suministrar, compartir, enviar o entregar sus datos personales a
+                        Compañías de seguros, asesores jurídicos, proveedores de software,
+                        autoridades fiscales, subcontratistas que procesen, administren o
+                        utilicen la información, en el evento en que dichas compañías
+                        requieran la información para los fines aquí indicados, caso en el
+                        cual se advierte sobre la necesidad de proteger dicha información
+                        personal y conservar la obligación de confidencialidad sobre la
+                        misma.
+                    </li>
+                    <li>
+                        Divulgar y entregar la información de clientes en caso de venta de
+                        cartera o cesión de obligaciones, caso en el cual las obligaciones
+                        cedidas conservan las acciones legales y pueden ser ejercidas por el
+                        cesionario de la obligación.
+                    </li>
+                    <li>
+                        Los indicados en la autorización otorgada por el titular del dato o
+                        descritos en el aviso de privacidad respectivo, según sea el caso.
+                    </li>
+                    <li>
+                        El cumplimiento general de las obligaciones legales y contractuales
+                        que le asisten a la empresa.
+                    </li>
+                </ul>
+            </section>
+
+            <div class="p-6 text-[#060f29] space-y-6">
+                <h2 class="text-2xl font-bold">
+                    DERECHOS DEL TITULAR DE LOS DATOS PERSONALES:
+                </h2>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>
+                        Conocer, actualizar y rectificar sus datos personales frente a RENTA
+                        RAÍZ SOLUCIONES INMOBILIARIAS. Este derecho se podrá ejercer, entre
+                        otros frente a datos parciales, inexactos, incompletos,
+                        fraccionados, que induzcan a error, o aquellos cuyo tratamiento esté
+                        expresamente prohibido o no haya sido autorizado;
+                    </li>
+                    <li>
+                        Solicitar prueba de la autorización, salvo cuando expresamente se
+                        exceptúe por la ley
+                    </li>
+                    <li>
+                        Ser informado respecto del uso que se le ha dado a los datos
+                        personales, previa solicitud expresa por parte del titular
+                    </li>
+                    <li>
+                        Presentar ante la Superintendencia de Industria y Comercio quejas
+                        por infracciones a lo dispuesto en la legislación aplicable sobre el
+                        tratamiento de datos personales
+                    </li>
+                    <li>
+                        Derecho a requerir el cumplimiento de las órdenes emitidas por la
+                        Superintendencia de Industria y Comercio.
+                    </li>
+                    <li>
+                        Acceder en forma gratuita a los datos personales que hayan sido
+                        objeto de Tratamiento.
+                    </li>
+                </ul>
+
+                <p class="text-justify">
+                    <span class="font-semibold">PARÁGRAFO:</span> Para poder hacer
+                    efectivo los derechos de titular, RENTA RAÍZ SOLUCIONES INMOBILIARIAS.
+                    solicitará su identidad o aquella de quien represente sus derechos y
+                    el soporte jurídico de dicha representación.
+                </p>
+
+                <p class="text-justify">
+                    RENTA RAÍZ SOLUCIONES INMOBILIARIAS. se abstendrá de comercializar,
+                    divulgar, publicar, los datos personales, salvo que exista
+                    autorización expresa para hacerlo, sea necesario para cumplir las
+                    funciones y obligaciones que estén en cabeza de RENTA RAÍZ SOLUCIONES
+                    INMOBILIARIAS. en virtud de relación contractual o comercial alguna, o
+                    que dichas funciones y obligaciones hayan sido encomendadas a un
+                    contratista, cuando se efectúe una fusión, escisión, adquisición, o
+                    algún proceso de restructuración de la sociedad o esta participe como
+                    socia en algún proyecto, y le corresponda dar tratamiento a datos
+                    personales.
+                </p>
+
+                <p class="text-justify">
+                    RENTA RAÍZ SOLUCIONES INMOBILIARIAS. recolectará, almacenará, usará
+                    y/o circulará los datos personales durante el tiempo que sea razonable
+                    y necesario, de acuerdo con las disposiciones aplicables a la materia,
+                    con las finalidades que justifican el Tratamiento y teniendo en cuenta
+                    los deberes, obligaciones y relaciones legales o contractuales que
+                    tengan los titulares, para efectos de que estos deban permanecer o no
+                    en las bases de datos de la empresa.
+                </p>
+
+                <h2 class="text-2xl font-bold">DEBERES:</h2>
+                <p class="text-justify">
+                    RENTA RAÍZ SOLUCIONES INMOBILIARIAS. está obligada a cumplir los
+                    deberes que impone la normatividad aplicable respecto al tratamiento
+                    de datos personales, cuando actúe:
+                </p>
+            </div>
+
+            <div class="p-6 text-[#060f29] space-y-6">
+                <h2 class="text-2xl font-bold">Como Responsables del tratamiento:</h2>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Garantizar al Titular el ejercicio del derecho de hábeas data</li>
+                    <li>
+                        Solicitar y conservar, en las condiciones aquí previstas, copia de
+                        la respectiva autorización otorgada por el titular
+                    </li>
+                    <li>
+                        Informar claramente al titular sobre la finalidad de la recolección
+                        y los derechos que le asisten en virtud de la autorización otorgada
+                        y el uso que se le dará a sus datos personales
+                    </li>
+                    <li>
+                        Conservar la información bajo condiciones de seguridad que impidan
+                        su adulteración, pérdida, consulta, uso o acceso no autorizado o
+                        fraudulento
+                    </li>
+                    <li>
+                        Actualizar la información de los titulares y rectificarla cuando sea
+                        incorrecta
+                    </li>
+                    <li>
+                        Tramitar las consultas y reclamos formulados por los titulares de la
+                        información
+                    </li>
+                    <li>
+                        Procurar que los principios de veracidad, calidad, seguridad y
+                        confidencialidad en los términos establecidos en la siguiente
+                        política
+                    </li>
+                    <li>
+                        Exigir el respeto a las condiciones de seguridad y privacidad de la
+                        información del Titular e Informar a la autoridad de protección de
+                        datos cuando se presenten violación a la seguridad de la misma y
+                        cuando existan riesgos en la administración de la información
+                    </li>
+                    <li>
+                        Cumplir las instrucciones y requerimientos que imparta la
+                        Superintendencia de Industria y Comercio.
+                    </li>
+                </ul>
+
+                <h2 class="text-2xl font-bold">
+                    Como Encargados del tratamiento de datos personales:
+                </h2>
+                <p class="text-justify">
+                    Cuando llegare a efectuar el tratamiento en nombre de otra entidad u
+                    organización (Responsable del tratamiento) deberá:
+                </p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>
+                        Garantizar al Titular, el ejercicio del derecho de hábeas data
+                    </li>
+                    <li>
+                        Conservar la información bajo las condiciones de seguridad
+                        necesarias para impedir su adulteración, pérdida, consulta, uso o
+                        acceso no autorizado o fraudulento
+                    </li>
+                    <li>
+                        Realizar oportunamente la actualización, rectificación o supresión
+                        de los datos en los términos de la presente ley; la actualización de
+                        la información reportada por los Responsables del Tratamiento, se
+                        deberá efectuar dentro de los cinco (5) días hábiles contados a
+                        partir de su recibo
+                    </li>
+                    <li>
+                        Tramitar las consultas y los reclamos formulados por los Titulares
+                        en los términos señalados en la legislación aplicable
+                    </li>
+                    <li>
+                        Registrar en la base de datos la leyenda “reclamo en trámite” en la
+                        forma en que se regula en la normatividad aplicable
+                    </li>
+                    <li>
+                        Insertar en la base de datos la leyenda “información en discusión
+                        judicial” una vez notificado por parte de la autoridad competente
+                        sobre procesos judiciales relacionados con la calidad del dato
+                        personal
+                    </li>
+                    <li>
+                        Abstenerse de circular información que esté siendo controvertida por
+                        el Titular y cuyo bloqueo haya sido ordenado por la Superintendencia
+                        de Industria y Comercio
+                    </li>
+                    <li>
+                        Permitir el acceso a la información únicamente a las personas que
+                        pueden tener acceso a ella
+                    </li>
+                    <li>
+                        Informar a la Superintendencia de Industria y Comercio cuando se
+                        presenten violaciones a los códigos de seguridad y existan riesgos
+                        en la administración de la información de los Titulares
+                    </li>
+                    <li>
+                        Cumplir las instrucciones y requerimientos que imparta la
+                        Superintendencia de Industria y Comercio.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="p-6 bg-white text-[#060f29] space-y-6">
+                <h2 class="text-2xl font-bold">
+                    Solicitud de Autorización al Titular del Dato Personal
+                </h2>
+
+                <p class="text-justify">
+                    Previamente y/o al momento de efectuar la recolección de datos
+                    personales,
+                    <strong>RENTA RAÍZ SOLUCIONES INMOBILIARIAS</strong> solicitará
+                    autorización al titular del dato, para su recolección y tratamiento,
+                    comunicando la finalidad de su obtención, a través de medios técnicos
+                    automatizados, orales o escritos, que permitan conservar prueba de la
+                    autorización y/o de la conducta inequívoca descrita en el artículo 7
+                    del Decreto 1377 de 2013.
+                </p>
+            </div>
+
+            <div class="p-6 bg-white text-[#060f29] space-y-6">
+                <h2 class="text-2xl font-bold">
+                    ÁREA RESPONSABLE Y PROCEDIMIENTO PARA EL EJERCICIO DE LOS DERECHOS DE
+                    LOS TITULARES DEL DATO PERSONAL
+                </h2>
+
+                <p class="text-justify">
+                    El Área Administrativa será la responsable de atender las peticiones,
+                    quejas y reclamos de los titulares de los datos, de acuerdo a los
+                    derechos que le corresponden según el numeral 10 de la presente
+                    política y la legislación aplicable.
+                </p>
+
+                <p class="text-justify">
+                    El titular del dato personal o quien lo represente podrá allegar su
+                    petición, queja o reclamo de lunes a viernes de 8:00 a.m a 5:00 p.m al
+                    correo electrónico
+                    <a href="mailto:info@rentaraiz.com" class="text-blue-600 underline">{{
+                        "info@rentaraiz.com"
+                        }}</a>
+                    o comunicarse a la línea telefónica de RENTA RAÍZ SOLUCIONES
+                    INMOBILIARIAS, Medellín teléfono
+                    <a href="tel:+573502239393" class="text-blue-600 underline">3502239393</a>, o radicarla en nuestra
+                    oficina en la dirección: Diagonal 29 # 34 F
+                    sur 81.
+                </p>
+
+                <p class="text-justify">
+                    Esta queja será resuelta por el responsable del área, encargado de
+                    manejar los datos del titular, según la calidad en la que éste actúa
+                    frente a la empresa, de acuerdo a sus diferentes líneas de negocio
+                    (cliente, arrendatario, propietario, etc).
+                </p>
+            </div>
+
+            <div class="p-6 bg-white text-[#060f29] space-y-6">
+                <h2 class="text-2xl font-bold">
+                    Procedimiento para la Petición, Queja o Reclamación
+                </h2>
+
+                <p class="text-justify">
+                    La petición, queja o reclamación deberá contener los siguientes
+                    detalles:
+                </p>
+
+                <ul class="list-disc list-inside text-justify space-y-2">
+                    <li>
+                        <strong>Identificación del Titular:</strong> Nombre completo y
+                        documento de identificación.
+                    </li>
+                    <li>
+                        <strong>Hechos Detallados:</strong> Explicación clara y precisa
+                        sobre los hechos en los cuales se fundamenta la solicitud.
+                    </li>
+                    <li>
+                        <strong>Datos de Contacto:</strong> Dirección, teléfono y correo
+                        electrónico del titular.
+                    </li>
+                    <li>
+                        <strong>Documentos Anexos:</strong> Cualquier documento relevante o
+                        que considere importante para la reclamación.
+                    </li>
+                </ul>
+
+                <p class="text-justify">
+                    Si se presenta la información incompleta o inexacta, se requerirá al
+                    interesado dentro de los cinco (5) días hábiles siguientes a la
+                    recepción de la petición, queja o reclamo para que corrija o complete
+                    la misma.
+                </p>
+
+                <p class="text-justify">
+                    Si pasados dos (2) meses desde la fecha del requerimiento, el
+                    solicitante no subsana o presenta la información requerida, se
+                    entenderá que ha desistido de la petición.
+                </p>
+
+                <p class="text-justify">
+                    Una vez recibido el requerimiento completo, se incluirá en la base de
+                    datos la leyenda <strong>“reclamo en trámite”</strong> y el motivo del
+                    mismo, en un término que no excederá los tres (3) días hábiles. Dicha
+                    leyenda se deberá mantener hasta que el reclamo sea resuelto.
+                </p>
+
+                <p class="text-justify">
+                    El plazo máximo para atender el requerimiento será de quince (15) días
+                    hábiles contados a partir del día siguiente de la fecha en que se
+                    recibió con la información completa y correcta.
+                </p>
+
+                <p class="text-justify">
+                    Cuando no fuere posible atender el reclamo dentro de dicho plazo, se
+                    informará al interesado los motivos de la demora y la fecha en que se
+                    atenderá su solicitud, la cual en ningún caso podrá superar los ocho
+                    (8) días hábiles siguientes al vencimiento del primer término antes
+                    mencionado.
+                </p>
+            </div>
+
+            <div class="p-6 bg-white text-[#060f29] space-y-6">
+                <h2 class="text-2xl font-bold">Medidas de Seguridad</h2>
+
+                <p class="text-justify">
+                    En desarrollo del principio de seguridad establecido en la Ley 1581 de
+                    2012, RENTA RAÍZ SOLUCIONES INMOBILIARIAS adoptará las medidas
+                    técnicas, humanas y administrativas que sean necesarias para otorgar
+                    seguridad a los registros evitando su adulteración, pérdida, consulta,
+                    uso o acceso no autorizado o fraudulento.
+                </p>
+
+                <p class="text-justify">
+                    El personal que realice el tratamiento de los datos personales
+                    ejecutará los protocolos establecidos con el fin de garantizar la
+                    seguridad de la información. Adicionalmente, se establecerán
+                    auditorías para efectos de hacer seguimiento del cumplimiento de la
+                    política y los procedimientos derivados de la implementación de la
+                    misma.
+                </p>
+
+                <h2 class="text-2xl font-bold">Fecha de Entrada en Vigencia</h2>
+
+                <p class="text-justify">
+                    La Política de Datos Personales entra en vigencia a partir del día 15
+                    de noviembre de 2017. Cualquier cambio que se presente respecto de la
+                    presente política, se informará a través de la dirección electrónica:
+                    <a href="https://www.rentaraiz.com" class="text-blue-600 underline">www.rentaraiz.com</a>.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 text-gray-800"></div>
+        </article>
+
+        <div class="w-full md:w-1/3 flex flex-col gap-6">
+            <div
+                class="mt-16 bg-white border border-gray-200 transform hover:scale-[1.02] transition-all duration-300 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-pink-500 p-0.5 mr-3">
+                        <img src="assets/images/rentaraiz.webp" alt="Perfil"
+                            class="w-full h-full object-cover rounded-full" />
+                    </div>
+
+                    <div class="flex-grow">
+                        <h3 class="font-semibold text-gray-800">rentaraiz</h3>
+                        <p class="text-xs text-gray-500">𝐈𝐧𝐦𝐨𝐛𝐢𝐥𝐢𝐚𝐫𝐢𝐚 𝐑𝐞𝐧𝐭𝐚 𝐑𝐚𝐢𝐳 𝐒𝐀𝐒</p>
+                    </div>
+
+                    <a href="https://www.instagram.com/rentaraiz/" target="_blank"
+                        class="text-xs font-semibold text-pink-600 hover:text-pink-700 transition-colors cursor-pointer inline-block px-2 py-1">
+                        Seguir
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-2 gap-1 mb-3">
+                    <a href="https://www.instagram.com/reel/DIRwmbJvb3W/" target="_blank" rel="noopener noreferrer"
+                        class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+                        <img src="assets/images/post1.webp" alt="Post Instagram"
+                            class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+                    </a>
+
+                    <a href="https://www.instagram.com/reel/DIPw2pQvNKI/" target="_blank" rel="noopener noreferrer"
+                        class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+                        <img src="assets/images/post2.webp" alt="Post Instagram"
+                            class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+                    </a>
+
+                    <a href="https://www.instagram.com/reel/DIKFc0bvLxQ/" target="_blank" rel="noopener noreferrer"
+                        class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+                        <img src="assets/images/post3.webp" alt="Post Instagram"
+                            class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+                    </a>
+
+                    <a href="https://www.instagram.com/p/DIHCJeeR10q/?img_index=1" target="_blank"
+                        rel="noopener noreferrer"
+                        class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+                        <img src="assets/images/post4.webp" alt="Post Instagram"
+                            class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+                    </a>
+                </div>
+
+                <a href="https://www.instagram.com/rentaraiz/" target="_blank" rel="noopener noreferrer"
+                    class="w-full py-2 text-sm font-medium text-pink-600 hover:text-pink-700 transition-colors flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
+                    Ver más en Instagram
+                </a>
+            </div>
+
+            <div class="mt-6 mb-10">
+                <div class="mb-4 pl-2">
+                    <h1 class="text-2xl font-bold text-[#080E36] text-center">
+                        Inmuebles destacados
+                    </h1>
+                    <p class="text-1xl text-[#9a9b9c] text-center">
+                        Encuentra tu lugar ideal
+                    </p>
+                </div>
+
+                <div *ngIf="inmueblesDestacadosArray" class="space-y-4">
+                    <div *ngFor="let inmueble of inmueblesDestacadosArray"
+                        class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6 mt-6">
+                        <div class="relative group">
+                            <a href="#">
+                                <img class="w-full h-48 object-cover"
+                                    [src]="inmueble.image1 || 'assets/images/renta-1.jpg'" [alt]="inmueble.address" />
+                            </a>
+
+                            <div
+                                class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                                <a class="cursor-pointer bg-white text-[#080E36] px-4 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+                                    (click)="verPropiedad(inmueble.codpro)">
+                                    Ver propiedad
+                                </a>
+                            </div>
+
+                            <div
+                                class="absolute -top-3 -left-1 bg-[#080E36] text-white text-sm font-semibold px-4 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-12px] before:border-y-[14px] before:border-y-transparent before:border-l-[12px] before:border-l-[#080E36]">
+                                Destacado
+                            </div>
+
+                            <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+                                <span class="bg-[#CDAD60] text-white text-xs font-semibold px-2 py-1 rounded shadow">
+                                    {{ inmueble.type | titlecase }}
+                                </span>
+
+                                <button class="text-white hover:text-[#ea6666] transition-colors">
+                                    <i class="fas fa-heart text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <a href="#">
+                                <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
+                                    {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                                </h5>
+                                <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
+                                    {{ inmueble.description }}
+                                </p>
+                            </a>
+
+                            <div class="flex justify-between text-[#080E36] mt-5">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-sm font-semibold">Habitaciones</span>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-bed text-lg"></i>
+                                        <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <span class="text-sm font-semibold">Baños</span>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-bath text-lg"></i>
+                                        <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <span class="text-sm font-semibold">Área</span>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-ruler-combined text-lg"></i>
+                                        <span class="ml-2">{{
+                                            inmueble.area_cons || inmueble.area_lot || "N/A"
+                                            }}
+                                            m²</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold">
+                                <span>Precio:</span>
+                                <span class="text-[#000000]">
+                                    {{
+                                    inmueble.price_format ||
+                                    (inmueble.price
+                                    | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                                    "Consultar"
+                                    }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <app-botones-flotantes></app-botones-flotantes>
