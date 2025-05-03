@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 })
 export class InmueblesService {
 
-  
+
 
   Propiedades: any[] = [];
 
@@ -53,6 +53,10 @@ export class InmueblesService {
     return this.http.get(`${environment.baseUrl}/properties/barrios`);
   }
 
+  publicarInmueble(inmueble: any) {
+    return this.http.post(`${environment.baseUrl}/properties/publicar`, inmueble);
+  }
+
   setPropiedades(propiedades: any[]) {
     this.Propiedades = propiedades;
   }
@@ -60,7 +64,4 @@ export class InmueblesService {
   getPropiedades() {
     return this.Propiedades;
   }
-
-
- 
 }

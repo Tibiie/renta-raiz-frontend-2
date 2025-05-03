@@ -149,17 +149,8 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  // abrirBrochure() {
-  //   window.open('/assets/images/Brochure Renta Raiz ajuste 26m.pdf', '_blank');
-  // }
-
   abrirBrochure() {
-    const link = document.createElement('a');
-    link.href = '/assets/images/Brochure Renta Raiz ajuste 26m.pdf';
-    link.download = 'Brochure_Renta_Raiz.pdf';
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open('/assets/images/Brochure Renta Raiz ajuste 26m.pdf', '_blank');
   }
+
 }

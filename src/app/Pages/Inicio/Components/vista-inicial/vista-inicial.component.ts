@@ -85,7 +85,6 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getDatos();
     this.getAliadosPorGrupo();
-    this.startAutoSlide();
   }
 
   scrollToTop(): void {
@@ -178,19 +177,11 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
 
   getAliadosPorGrupo(): void {
     this.aliadosPorGrupo = [];
-    for (let i = 0; i <= this.aliados.length - 4; i++) {
+    for (let i = 0; i < this.aliados.length; i += 3) {
+      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
     }
-  }
-
-  startAutoSlide(): void {
-    setInterval(() => {
-      this.nextSlide();
-    }, 3000);
-  }
-
-  nextSlide(): void {
-    this.currentSlide = (this.currentSlide + 1) % this.aliadosPorGrupo.length;
+    // console.log(this.aliadosPorGrupo);
   }
 
   abrirPestana(url: string) {
