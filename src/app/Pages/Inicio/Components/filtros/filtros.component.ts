@@ -314,41 +314,14 @@ export class FiltrosComponent implements OnInit {
 
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
-    const bizType = f?.biz || this.selectedProperty?.code;
-
-    // Limpiar todos los campos de precio primero
-    this.formRangos.patchValue({
-      precioMinimo: null,
-      precioMaximo: null,
-      precioVentaMinimo: null,
-      precioVentaMaximo: null
-    });
-
-    // Manejo de precios según tipo de propiedad (biz)
     if (f?.pcmin !== undefined && f.pcmin !== null) {
-      if (bizType === '1') {
-        // Solo para alquiler (biz 1)
-        this.formRangos.patchValue({
-          precioMinimo: f.pcmin.toString(),
-          precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null
-        });
-      } else if (bizType === '2') {
-        // Solo para venta (biz 2)
-        this.formRangos.patchValue({
-          precioVentaMinimo: f.pvmin?.toString() || f.pcmin.toString(),
-          precioVentaMaximo: f.pvmax?.toString() || (f.pcmax !== undefined ? f.pcmax.toString() : null)
-        });
-      } else if (bizType === '3') {
-        // Para ambos (biz 3)
-        this.formRangos.patchValue({
-          precioMinimo: f.pcmin.toString(),
-          precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null,
-          precioVentaMinimo: f.pvmin?.toString() || f.pcmin.toString(),
-          precioVentaMaximo: f.pvmax?.toString() || (f.pcmax !== undefined ? f.pcmax.toString() : null)
-        });
-      }
+      // Convertir a string para el formulario
+      this.formRangos.patchValue({
+        precioMinimo: f.pcmin.toString(),
+        precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null
+      });
 
-      // Configuración de selectedPriceRange (igual para todos los tipos)
+      // Convertir a number para la comparación con priceRanges
       const pcmin = Number(f.pcmin);
       const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
 
@@ -364,19 +337,10 @@ export class FiltrosComponent implements OnInit {
         }) || null;
       }
 
-      // Configurar filtros según tipo
-      if (bizType === '1' || bizType === '3') {
-        this.filtrosSeleccionados.set('pcmin', f.pcmin.toString());
-        if (f.pcmax !== undefined) {
-          this.filtrosSeleccionados.set('pcmax', f.pcmax.toString());
-        }
-      }
-
-      if (bizType === '2' || bizType === '3') {
-        this.filtrosSeleccionados.set('pvmin', f.pvmin?.toString() || f.pcmin.toString());
-        if (f.pvmax !== undefined || f.pcmax !== undefined) {
-          this.filtrosSeleccionados.set('pvmax', f.pvmax?.toString() || f.pcmax?.toString());
-        }
+      // Asegurar que los filtros tienen los valores iniciales como strings
+      this.filtrosSeleccionados.set('pcmin', f.pcmin.toString());
+      if (f.pcmax !== undefined) {
+        this.filtrosSeleccionados.set('pcmax', f.pcmax.toString());
       }
     }
 
@@ -598,41 +562,34 @@ export class FiltrosComponent implements OnInit {
       );
     }
 
-    const bizType = this.selectedProperty?.code || this.filtrosVistaInicial?.biz;
+    const precioMinimo = this.formRangos.value.precioMinimo;
+    const precioMaximo = this.formRangos.value.precioMaximo;
 
-    // Manejo de precios según tipo de propiedad
-    if (bizType === '1' || bizType === '3') {
-      const precioMinimo = this.formRangos.value.precioMinimo;
-      const precioMaximo = this.formRangos.value.precioMaximo;
-
-      if (precioMinimo && precioMinimo !== '') {
-        this.filtrosSeleccionados.set('pcmin', precioMinimo);
-      } else {
-        this.filtrosSeleccionados.delete('pcmin');
-      }
-
-      if (precioMaximo && precioMaximo !== '') {
-        this.filtrosSeleccionados.set('pcmax', precioMaximo);
-      } else {
-        this.filtrosSeleccionados.delete('pcmax');
-      }
+    if (precioMinimo && precioMinimo !== '') {
+      this.filtrosSeleccionados.set('pcmin', precioMinimo);
+    } else {
+      this.filtrosSeleccionados.delete('pcmin');
     }
 
-    if (bizType === '2' || bizType === '3') {
-      const precioVentaMinimo = this.formRangos.value.precioVentaMinimo;
-      const precioVentaMaximo = this.formRangos.value.precioVentaMaximo;
+    if (precioMaximo && precioMaximo !== '') {
+      this.filtrosSeleccionados.set('pcmax', precioMaximo);
+    } else {
+      this.filtrosSeleccionados.delete('pcmax');
+    }
 
-      if (precioVentaMinimo && precioVentaMinimo !== '') {
-        this.filtrosSeleccionados.set('pvmin', precioVentaMinimo);
-      } else {
-        this.filtrosSeleccionados.delete('pvmin');
-      }
+    const precioVentaMinimo = this.formRangos.value.precioVentaMinimo;
+    const precioVentaMaximo = this.formRangos.value.precioVentaMaximo;
 
-      if (precioVentaMaximo && precioVentaMaximo !== '') {
-        this.filtrosSeleccionados.set('pvmax', precioVentaMaximo);
-      } else {
-        this.filtrosSeleccionados.delete('pvmax');
-      }
+    if (precioVentaMinimo && precioVentaMinimo !== '') {
+      this.filtrosSeleccionados.set('pvmin', precioVentaMinimo);
+    } else {
+      this.filtrosSeleccionados.delete('pvmin');
+    }
+
+    if (precioVentaMaximo && precioVentaMaximo !== '') {
+      this.filtrosSeleccionados.set('pvmax', precioVentaMaximo);
+    } else {
+      this.filtrosSeleccionados.delete('pvmax');
     }
   }
 
@@ -657,55 +614,26 @@ export class FiltrosComponent implements OnInit {
 
   selectPriceRange(range: { min: number, max: number | null }): void {
     console.log('rango', range);
-    const bizType = this.selectedProperty?.code || this.filtrosVistaInicial?.biz;
-
     if (this.selectedPriceRange?.min === range.min) {
       this.selectedPriceRange = null;
-
-      if (bizType === '1' || bizType === '3') {
-        this.formRangos.patchValue({
-          precioMinimo: null,
-          precioMaximo: null
-        });
-        this.filtrosSeleccionados.delete('pcmin');
-        this.filtrosSeleccionados.delete('pcmax');
-      }
-
-      if (bizType === '2' || bizType === '3') {
-        this.formRangos.patchValue({
-          precioVentaMinimo: null,
-          precioVentaMaximo: null
-        });
-        this.filtrosSeleccionados.delete('pvmin');
-        this.filtrosSeleccionados.delete('pvmax');
-      }
+      this.formRangos.patchValue({
+        precioMinimo: null,
+        precioMaximo: null
+      });
+      this.filtrosSeleccionados.delete('pcmin');
+      this.filtrosSeleccionados.delete('pcmax');
     } else {
       this.selectedPriceRange = range;
+      this.formRangos.patchValue({
+        precioMinimo: range.min.toString(),
+        precioMaximo: range.max ? range.max.toString() : null
+      });
+      this.filtrosSeleccionados.set('pcmin', range.min.toString());
 
-      if (bizType === '1' || bizType === '3') {
-        this.formRangos.patchValue({
-          precioMinimo: range.min.toString(),
-          precioMaximo: range.max ? range.max.toString() : null
-        });
-        this.filtrosSeleccionados.set('pcmin', range.min.toString());
-        if (range.max !== null) {
-          this.filtrosSeleccionados.set('pcmax', range.max.toString());
-        } else {
-          this.filtrosSeleccionados.delete('pcmax');
-        }
-      }
-
-      if (bizType === '2' || bizType === '3') {
-        this.formRangos.patchValue({
-          precioVentaMinimo: range.min.toString(),
-          precioVentaMaximo: range.max ? range.max.toString() : null
-        });
-        this.filtrosSeleccionados.set('pvmin', range.min.toString());
-        if (range.max !== null) {
-          this.filtrosSeleccionados.set('pvmax', range.max.toString());
-        } else {
-          this.filtrosSeleccionados.delete('pvmax');
-        }
+      if (range.max !== null) {
+        this.filtrosSeleccionados.set('pcmax', range.max.toString());
+      } else {
+        this.filtrosSeleccionados.delete('pcmax');
       }
     }
     this.cdRef.detectChanges();
@@ -738,6 +666,7 @@ export class FiltrosComponent implements OnInit {
     this.filtrosSeleccionados.set('neighborhood', barrio.code);
     this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
+
 
   selectOption(type: 'property' | 'estate', option: any): void {
     if (type === 'property') {
