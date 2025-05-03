@@ -48,7 +48,12 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     'assets/images/fianzacredito.png',
     'assets/images/libertador.png',
     'assets/images/lonja.png',
+    'assets/images/finca-raiz.png',
+    'assets/images/metro-cuadrado.png',
+    'assets/images/signio.png',
+    'assets/images/Unifianza.png',
   ];
+
 
   sliderFotos: string[] = [
     'assets/images/vistaInicial-slider-1.jpg',
@@ -71,7 +76,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     const targetEl = document.getElementById('slider');
     if (targetEl) {
       new Carousel(targetEl, {
-        interval: 1000,
+        interval: 3000,
         ride: 'carousel'
       });
     }
@@ -80,6 +85,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getDatos();
     this.getAliadosPorGrupo();
+    this.startAutoSlide();
   }
 
   scrollToTop(): void {
@@ -106,12 +112,14 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
       page: 2,
     };
     this.inmueblesService
-      .getFiltrosEnviar(obj, this.elementsPerPageInicial)
+      .getFiltrosEnviar(obj, 4)
       .subscribe(
         (response: any) => {
-          this.inmueblesVentasArray = response.data.filter(
-            (inmueble: any) => inmueble.image1 != ""
-          );
+          this.inmueblesVentasArray = [
+            response.data[0],
+            response.data[2],
+            response.data[3],
+          ];
         },
         (error: any) => {
           console.error('Error al enviar los filtros:', error);
@@ -170,11 +178,19 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
 
   getAliadosPorGrupo(): void {
     this.aliadosPorGrupo = [];
-    for (let i = 0; i < this.aliados.length; i += 3) {
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
+    for (let i = 0; i <= this.aliados.length - 4; i++) {
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
     }
-    // console.log(this.aliadosPorGrupo);
+  }
+
+  startAutoSlide(): void {
+    setInterval(() => {
+      this.nextSlide();
+    }, 3000);
+  }
+
+  nextSlide(): void {
+    this.currentSlide = (this.currentSlide + 1) % this.aliadosPorGrupo.length;
   }
 
   abrirPestana(url: string) {

@@ -14,11 +14,7 @@
               Envíanos tus inquietudes, sugerencias o comentarios
             </p>
           </div>
-          <button (click)="
-              abrirPestana(
-                'https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU'
-              )
-            "
+          <button (click)="redirigirContactanos()"
             class="px-6 py-3 bg-[#4b4b4b] text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg w-fit self-start">
             Contactanos
           </button>
@@ -77,17 +73,23 @@
 
       <!-- Redes sociales -->
       <div class="flex space-x-6 text-2xl">
-        <a (click)="abrirPestana('https://www.facebook.com/rentaraizsas')" class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
+        <a (click)="abrirPestana('https://www.facebook.com/rentaraizsas')"
+          class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
             class="fa-brands fa-facebook-f"></i></a>
-        <a (click)="abrirPestana('https://x.com/renta_raiz')" class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
+        <a (click)="abrirPestana('https://x.com/renta_raiz')"
+          class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
             class="fa-brands fa-twitter"></i></a>
-        <a (click)="abrirPestana('https://www.instagram.com/rentaraiz/')" class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
+        <a (click)="abrirPestana('https://www.instagram.com/rentaraiz/')"
+          class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
             class="fa-brands fa-instagram"></i></a>
-        <a (click)="abrirPestana('https://co.pinterest.com/rentaraiz/')" class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
+        <a (click)="abrirPestana('https://co.pinterest.com/rentaraiz/')"
+          class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
             class="fa-brands fa-pinterest"></i></a>
-        <a (click)="abrirPestana('https://www.youtube.com/@rentaraiz')" class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
+        <a (click)="abrirPestana('https://www.youtube.com/@rentaraiz')"
+          class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
             class="fa-brands fa-youtube"></i></a>
-        <a (click)="abrirPestana('https://api.whatsapp.com/send/?phone=573502239393&text&type=phone_number&app_absent=0')" class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
+        <a (click)="abrirPestana('https://api.whatsapp.com/send/?phone=573502239393&text&type=phone_number&app_absent=0')"
+          class="cursor-pointer text-gray-300 hover:text-[#CDAD60] transition-colors"><i
             class="fa-brands fa-whatsapp"></i></a>
       </div>
     </div>

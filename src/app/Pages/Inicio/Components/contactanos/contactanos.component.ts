@@ -6,12 +6,13 @@ import { CommonModule } from '@angular/common';
 import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
 import { FooterComponent } from "../../../../shared/footer/footer.component";
 import Swal from 'sweetalert2';
+import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
 
 
 @Component({
   selector: 'app-contactanos',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, BotonesFlotantesComponent, FooterComponent],
+  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, BotonesFlotantesComponent, FooterComponent, BarraFiltrosComponent],
   templateUrl: './contactanos.component.html',
   styleUrl: './contactanos.component.scss'
 })

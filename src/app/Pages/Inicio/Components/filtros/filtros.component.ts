@@ -739,7 +739,6 @@ export class FiltrosComponent implements OnInit {
     this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
 
-
   selectOption(type: 'property' | 'estate', option: any): void {
     if (type === 'property') {
       this.selectedProperty =

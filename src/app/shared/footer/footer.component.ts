@@ -22,6 +22,10 @@ export class FooterComponent {
     window.open(url, '_blank');
   }
 
+  redirigirContactanos() {
+    this.router.navigate(['/contacto']);
+  }
+
   abrirPestana(url: string) {
     window.open(url, '_blank');
   }
