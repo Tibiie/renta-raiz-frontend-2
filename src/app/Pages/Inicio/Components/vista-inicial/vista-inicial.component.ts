@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ElementRef, HostListener, inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
@@ -6,7 +16,7 @@ import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
-import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
+import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
 
 declare const Carousel: any;
 @Component({
@@ -19,13 +29,12 @@ declare const Carousel: any;
     NavbarComponent,
     FooterComponent,
     BotonesFlotantesComponent,
-    BarraFiltrosComponent
+    BarraFiltrosComponent,
   ],
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss'],
 })
 export class VistaInicialComponent implements OnInit, AfterViewInit {
-
   @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
 
   intervalId: any;
@@ -33,6 +42,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   elementsPerPage = 12;
   searchTerm: string = '';
   elementsPerPageInicial = 3;
+  filtrosSeleccionados: Map<string, any> = new Map();
   filtrosInmueblesVenta: Map<string, any> = new Map();
   filtrosInmueblesArriendo: Map<string, any> = new Map();
 
@@ -53,7 +63,6 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     'assets/images/signio.png',
     'assets/images/Unifianza.png',
   ];
-
 
   sliderFotos: string[] = [
     'assets/images/vistaInicial-slider-1.jpg',
@@ -77,22 +86,21 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     if (targetEl) {
       new Carousel(targetEl, {
         interval: 3000,
-        ride: 'carousel'
+        ride: 'carousel',
       });
     }
   }
 
   ngOnInit(): void {
     this.getDatos();
-    this.getAliadosPorGrupo();
   }
 
-  scrollToTop(): void {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  }
+  // scrollToTop(): void {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: 'smooth',
+  //   });
+  // }
 
   getDatos() {
     this.getAliadosPorGrupo();
@@ -110,20 +118,18 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
       ...filtrosObj,
       page: 2,
     };
-    this.inmueblesService
-      .getFiltrosEnviar(obj, 4)
-      .subscribe(
-        (response: any) => {
-          this.inmueblesVentasArray = [
-            response.data[0],
-            response.data[2],
-            response.data[3],
-          ];
-        },
-        (error: any) => {
-          console.error('Error al enviar los filtros:', error);
-        }
-      );
+    this.inmueblesService.getFiltrosEnviar(obj, 4).subscribe(
+      (response: any) => {
+        this.inmueblesVentasArray = [
+          response.data[0],
+          response.data[2],
+          response.data[3],
+        ];
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
   }
 
   getInmueblesArriendos() {
@@ -170,18 +176,46 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     window.open(url, '_blank');
   }
 
+  redirigirFiltros() {
+    this.filtrosSeleccionados.clear();
+    this.filtrosSeleccionados.set('biz', '3');
+
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    };
+
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        this.router.navigate(['/filtros'], {
+          state: {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+        });
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+  }
+
   redirigirPublicarPropiedad() {
     const url = this.router.createUrlTree(['/publicar-inmueble']).toString();
     window.open(url, '_blank');
   }
 
   getAliadosPorGrupo(): void {
+    const grupoSize = 4;
     this.aliadosPorGrupo = [];
-    for (let i = 0; i < this.aliados.length; i += 3) {
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
-      this.aliadosPorGrupo.push(this.aliados.slice(i, i + 4));
+
+    for (let i = 0; i <= this.aliados.length - grupoSize; i++) {
+      this.aliadosPorGrupo.push(this.aliados.slice(i, i + grupoSize));
     }
-    // console.log(this.aliadosPorGrupo);
+
+    console.log(this.aliadosPorGrupo);
   }
 
   abrirPestana(url: string) {
@@ -189,22 +223,14 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   verPropiedad(codPro: number) {
-    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    const url = this.router
+      .createUrlTree(['/ver-propiedad', codPro])
+      .toString();
     window.open(url, '_blank');
   }
 
-  // abrirBrochure() {
-  //   const link = document.createElement('a');
-  //   link.href = '/assets/images/Brochure Renta Raiz ajuste 26m.pdf';
-  //   link.download = 'Brochure_Renta_Raiz.pdf';
-  //   link.target = '_blank';
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  // }
-
   abrirBrochure() {
-    const url = 'assets/images/Brochure Renta Raiz ajuste 26m.pdf';
+    const url = 'assets/images/Brochure Renta Raiz.pdf';
     window.open(url, '_blank');
   }
 }

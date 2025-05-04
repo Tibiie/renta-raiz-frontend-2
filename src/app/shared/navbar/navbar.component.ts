@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, inject, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 
@@ -8,7 +16,7 @@ import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit {
   @ViewChild('nosotrosDropdown') nosotrosDropdownRef: ElementRef | undefined;
@@ -90,18 +98,20 @@ export class NavbarComponent implements OnInit {
     const obj = {
       ...filtrosObj,
       page: 1,
-    }
+    };
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this._router.navigate(['/filtros'], {
-            state: {
-              resultados: response.data,
-              paginacion: response,
-              filtros: obj,
-            },
+        this._router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this._router.navigate(['/filtros'], {
+              state: {
+                resultados: response.data,
+                paginacion: response,
+                filtros: obj,
+              },
+            });
           });
-        });
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -128,7 +138,7 @@ export class NavbarComponent implements OnInit {
     const obj = {
       ...filtrosObj,
       page: 1,
-    }
+    };
 
     console.log('filtros enviados:', obj);
 
@@ -140,7 +150,7 @@ export class NavbarComponent implements OnInit {
             paginacion: response,
             filtros: obj,
           },
-          queryParams: { tipo: tipo }
+          queryParams: { tipo: tipo },
         });
       },
       (error: any) => {
@@ -150,7 +160,6 @@ export class NavbarComponent implements OnInit {
   }
 
   abrirBrochure() {
-    window.open('/assets/images/Brochure Renta Raiz ajuste 26m.pdf', '_blank');
+    window.open('/assets/images/Brochure Renta Raiz.pdf', '_blank');
   }
-
 }
