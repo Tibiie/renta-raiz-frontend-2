@@ -236,4 +236,9 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     const url = 'https://oferta.rentaraiz.co/flipbook/brochure-renta-raiz/';
     window.open(url, '_blank');
   }
+
+  redirigirRentasCortas() {
+    const url = 'https://nomalux.com.co';
+    window.open(url, '_blank');
+  }
 }
