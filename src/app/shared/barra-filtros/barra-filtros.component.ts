@@ -125,9 +125,16 @@ export class BarraFiltrosComponent {
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: MouseEvent) {
-    if (this.dropdownContainer && !this.dropdownContainer.nativeElement.contains(event.target)) {
+    const target = event.target as HTMLElement;
+
+    const isClickInTrigger = target.closest('.dropdown-trigger');
+    const isClickInDropdown = target.closest('.dropdown-container');
+
+    if (!isClickInTrigger && !isClickInDropdown) {
       this.cerrarTodosLosDropdowns();
+      this.filteredBarrios = [];
     }
+
   }
 
   cerrarTodosLosDropdowns() {
@@ -279,26 +286,52 @@ export class BarraFiltrosComponent {
   }
 
   filterLocations() {
-    const search = this.searchTerm.toLowerCase();
-    this.filteredBarrios = this.barrios.data.filter(
-      (barrio: any) =>
-        barrio.name.toLowerCase().includes(search) ||
-        barrio.city_name.toLowerCase().includes(search)
-    );
-    console.log(this.filteredBarrios);
+    const search = this.searchTerm.toLowerCase().trim();
 
+    // Filtrar ciudades que coinciden
+    const ciudadesFiltradas = this.ciudades.filter(ciudad =>
+      ciudad.name.toLowerCase().includes(search)
+    );
+
+    // Filtrar barrios que coinciden con la ciudad o nombre
+    const barriosFiltrados = this.barrios.data.filter((barrio: any) =>
+      barrio.city_name.toLowerCase().includes(search) ||
+      barrio.name.toLowerCase().includes(search)
+    );
+
+    // Combinar resultados y eliminar duplicados
+    this.filteredBarrios = [
+      ...ciudadesFiltradas.map(c => ({ ...c, isCity: true })),
+      ...barriosFiltrados
+    ].filter((item, index, self) =>
+      index === self.findIndex(i =>
+        i.isCity ? i.code === item.code : i.code === item.code
+      )
+    );
+
+    // Ordenar: ciudades primero, luego barrios de las ciudades encontradas
+    this.filteredBarrios.sort((a: any, b: any) => {
+      if (a.isCity && !b.isCity) return -1;
+      if (!a.isCity && b.isCity) return 1;
+      return 0;
+    });
   }
 
-  selectLocation(barrio: any) {
-    this.searchTerm = `${barrio.city_name}, ${barrio.name}`;
+  selectLocation(item: any) {
+    if (item.isCity) {
+      // Selección de ciudad
+      this.searchTerm = item.name;
+      this.filtrosSeleccionados.set('city', item.code);
+      this.filtrosSeleccionados.delete('neighborhood');
+    } else {
+      // Selección de barrio
+      this.searchTerm = `${item.city_name}, ${item.name}`;
+      this.filtrosSeleccionados.set('city', item.city_code);
+      this.filtrosSeleccionados.set('neighborhood', item.code);
+    }
+
     this.filteredBarrios = [];
-
-    this.formRangos
-      .get('ubicacion')
-      ?.setValue(`${barrio.city_name},${barrio.name}`);
-
-    this.filtrosSeleccionados.set('city', barrio.city_code);
-    this.filtrosSeleccionados.set('neighborhood', barrio.code);
+    this.formRangos.get('ubicacion')?.setValue(this.searchTerm);
     this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
 
@@ -375,7 +408,6 @@ export class BarraFiltrosComponent {
       }
     );
   }
-
 
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(

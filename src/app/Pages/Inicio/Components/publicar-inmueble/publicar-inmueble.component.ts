@@ -52,7 +52,7 @@ export class PublicarInmuebleComponent {
       email: this.formPublicarInmueble.get('email')?.value,
       telefono: this.formPublicarInmueble.get('telefono')?.value,
       barrio: this.formPublicarInmueble.get('barrio')?.value,
-      fotosInmueble: this.fotosBase64
+      fotosInmuebles: this.fotosBase64
     };
 
     console.log(obj);

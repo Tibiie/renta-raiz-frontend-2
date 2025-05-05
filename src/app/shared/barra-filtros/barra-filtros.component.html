@@ -2,8 +2,8 @@
     <div class="bg-white rounded-lg p-6 w-full max-w-8xl shadow-2xl shadow-gray-600/40">
         <div class="flex flex-col md:flex-row gap-4 items-end">
             <div class="relative w-full md:w-1/3">
-                <!-- Input de búsqueda -->
-                <div class="relative">
+                <!-- Contenedor principal como trigger -->
+                <div class="relative dropdown-trigger">
                     <input type="text" formControlName="ubicacion" [(ngModel)]="searchTerm" (input)="filterLocations()"
                         placeholder="Buscar ubicación..."
                         class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-[#CDAD60] focus:border-[#CDAD60]" />
@@ -20,15 +20,29 @@
 
                 <!-- Lista de sugerencias -->
                 <div *ngIf="filteredBarrios.length > 0" id="modern-drawer"
-                    class="absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
-                    <div *ngFor="let barrio of filteredBarrios" (click)="selectLocation(barrio)"
-                        class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        <i class="fas fa-location-dot text-1xl text-gray-500 mt-1 mr-2"></i>
-                        <div>
-                            <p class="text-medium text-gray-900">
-                                {{ barrio.city_name }}
-                            </p>
-                            <p class="font-sm text-gray-500">{{ barrio.name }}</p>
+                    class="dropdown-container absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
+                    <!-- Ciudades -->
+                    <div *ngFor="let item of filteredBarrios">
+                        <div *ngIf="item.isCity" (click)="selectLocation(item)"
+                            class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer border-b">
+                            <i class="fas fa-city text-gray-500 mt-1 mr-2"></i>
+                            <div>
+                                <p class="font-medium">{{item.name}} <strong
+                                        class="text-xs text-gray-500">(Antioquia)</strong></p>
+                                <p class="text-xs text-gray-500">Ciudad</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Barrios -->
+                    <div *ngFor="let item of filteredBarrios">
+                        <div *ngIf="!item.isCity" (click)="selectLocation(item)"
+                            class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <i class="fas fa-map-marker-alt text-gray-500 mt-1 mr-2"></i>
+                            <div>
+                                <p class="font-medium">{{item.city_name}}</p>
+                                <p class="text-xs text-gray-500">{{item.name}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -38,7 +52,7 @@
             <div class="relative w-full md:w-1/3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de propiedad</label>
                 <button (click)="toggleDropdown('property')"
-                    class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                    class="dropdown-trigger w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
                     <span>
                         <i [class]="getIcon('property', selectedProperty)" class="mr-2"></i>
                         {{
@@ -53,7 +67,7 @@
                 </button>
 
                 <div *ngIf="isPropertyDropdownOpen"
-                    class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
+                    class="dropdown-container absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
                     <div class="p-4">
                         <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
                         <div class="grid grid-cols-2 gap-2">
@@ -73,7 +87,7 @@
             <div class="relative w-full md:w-1/3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de inmueble</label>
                 <button (click)="toggleDropdown('estate')"
-                    class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                    class="dropdown-trigger w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
                     <span>
                         <i [class]="getIcon('estate', selectedEstate)" class="mr-2"></i>
                         {{
@@ -89,7 +103,7 @@
                 </button>
 
                 <div *ngIf="isEstateDropdownOpen"
-                    class="absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
+                    class="dropdown-container absolute z-10 mt-2 w-[300px] bg-white rounded-lg shadow-lg border border-gray-200">
                     <div class="p-4">
                         <p class="text-gray-500 text-sm font-medium mb-2">
                             Tipo de inmueble
@@ -111,7 +125,7 @@
             <div class="relative w-full md:w-1/4 mb-4 md:mb-0">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Precios</label>
                 <button (click)="toggleDropdown('precios')"
-                    class="flex items-center justify-between w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                    class="dropdown-trigger flex items-center justify-between w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:ring-[#CDAD60] focus:border-[#CDAD60]">
                     <span>Precios</span>
                     <svg class="w-4 h-4 ml-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -120,7 +134,7 @@
 
                 <!-- Dropdown de Precios -->
                 <div *ngIf="isPreciosOpen"
-                    class="absolute z-10 mt-2 w-[350px] bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+                    class="dropdown-container absolute z-10 mt-2 w-[350px] bg-white rounded-lg shadow-lg border border-gray-200 p-4">
                     <p class="text-gray-500 text-sm font-medium mb-2">
                         Rangos de precios
                     </p>
@@ -143,7 +157,7 @@
             <div class="relative w-full md:w-1/3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Más filtros</label>
                 <button (click)="toggleDropdown('masFiltros')"
-                    class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
+                    class="dropdown-trigger w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
                     <span> Filtros adicionales </span>
                     <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
@@ -152,7 +166,7 @@
                 </button>
 
                 <div *ngIf="isMasFiltrosOpen" id="modern-drawer"
-                    class="absolute z-10 mt-2 w-[350px] max-h-[300px] overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200">
+                    class="dropdown-container absolute z-10 mt-2 w-[350px] max-h-[300px] overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200">
                     <div class="p-4">
                         <!-- Habitaciones -->
                         <p class="text-gray-500 text-sm font-medium mb-2">
