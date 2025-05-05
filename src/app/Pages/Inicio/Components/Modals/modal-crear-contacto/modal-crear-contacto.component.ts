@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { InmueblesService } from '../../../../../core/Inmuebles/inmuebles.service';
-import { FormBuilder, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
+import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-modal-crear-contacto',
@@ -23,6 +23,7 @@ export class ModalCrearContactoComponent {
   fuente?: string;
   accion: 'telefonos' | 'whatsapp' | 'soloEnviar' = 'soloEnviar';
 
+  toastr = inject(ToastrService);
   fb = inject(NonNullableFormBuilder);
   inmuebleService = inject(InmueblesService);
 
@@ -82,11 +83,10 @@ export class ModalCrearContactoComponent {
     this.isLoading = true;
 
     if (!this.contacto.valid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Complete todos los campos',
-        text: 'Estas enviando campos vacios o invalidos en el formulario!',
-        draggable: false,
+      this.toastr.error('Complete todos los campos', 'Error', {
+        closeButton: true,
+        progressBar: true,
+        timeOut: 5000,
       });
       return;
     }
@@ -111,11 +111,10 @@ export class ModalCrearContactoComponent {
         }
 
         if (this.accion === 'soloEnviar') {
-          Swal.fire({
-            icon: 'success',
-            title: '¡Gracias!',
-            text: 'Tu mensaje ha sido enviado con éxito!',
-            draggable: true,
+          this.toastr.success('¡Gracias!', 'Tu mensaje ha sido enviado con éxito!', {
+            closeButton: true,
+            progressBar: true,
+            timeOut: 5000,
           });
           return;
         }

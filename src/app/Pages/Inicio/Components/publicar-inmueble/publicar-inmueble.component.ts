@@ -3,11 +3,10 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import Swal from 'sweetalert2';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { log } from 'node:console';
+import { ToastrService } from 'ngx-toastr';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-publicar-inmueble',
@@ -17,15 +16,16 @@ import { log } from 'node:console';
     BarraFiltrosComponent,
     BotonesFlotantesComponent,
     FooterComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule,
   ],
   templateUrl: './publicar-inmueble.component.html',
   styleUrl: './publicar-inmueble.component.scss',
 })
-export class PublicarInmuebleComponent implements OnInit {
-  ciudades: any[] = [];
+export class PublicarInmuebleComponent {
   fotosBase64: string[] = [];
 
+  toastr = inject(ToastrService);
   formBuilder = inject(FormBuilder);
   inmuebleService = inject(InmueblesService);
 
@@ -36,55 +36,13 @@ export class PublicarInmuebleComponent implements OnInit {
     barrio: ['', Validators.required],
   });
 
-  ngOnInit(): void {
-    this.getCiudadesBarrios();
-  }
-
-  getCiudadesBarrios() {
-    this.inmuebleService.getBarrios().subscribe(
-      (response: any) => {
-        this.ciudades = response.data;
-        console.log(this.ciudades);
-      },
-      (error: any) => {
-        console.error('Error al obtener las ciudades:', error);
-      }
-    );
-  }
-
-  handleFileInput(event: any) {
-    const files: FileList = event.target.files;
-
-    if (files.length > 5) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Máximo 5 imágenes',
-        text: 'Solo puedes adjuntar hasta 5 fotos.',
-      });
-      return;
-    }
-
-    this.fotosBase64 = [];
-
-    Array.from(files).forEach((file: File) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const base64 = reader.result as string;
-        this.fotosBase64.push(base64);
-      };
-
-      reader.readAsDataURL(file);
-    });
-  }
-
   crearPublicacionPropiedad() {
     if (!this.formPublicarInmueble.valid) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Complete todos los campos',
-        text: 'Estas enviando campos vacios o invalidos en el formulario!',
-        draggable: false,
+      this.toastr.error('Complete todos los campos', 'Error', {
+        closeButton: true,
+        positionClass: "toast-bottom-right",
+        progressBar: true,
+        timeOut: 5000,
       });
       return;
     }
@@ -102,16 +60,44 @@ export class PublicarInmuebleComponent implements OnInit {
     this.inmuebleService.publicarInmueble(obj).subscribe(
       (response: any) => {
         this.formPublicarInmueble.reset();
-        Swal.fire({
-          icon: 'success',
-          title: '¡Gracias!',
-          text: 'Tu solicitud ha sido enviada con éxito!',
-          draggable: true,
+        this.fotosBase64 = [];
+        this.toastr.success('¡Gracias!', 'Tu solicitud ha sido enviada con éxito!', {
+          closeButton: true,
+          positionClass: "toast-bottom-right",
+          progressBar: true,
+          timeOut: 5000,
         });
       },
       (error: any) => {
         console.error('Error al enviar el contacto:', error);
       }
     );
+  }
+
+  handleFileInput(event: any) {
+    const files: FileList = event.target.files;
+
+    if (files.length > 5) {
+      this.toastr.warning('Solo puedes adjuntar hasta 5 fotos.', 'Máximo 5 imágenes', {
+        closeButton: true,
+        positionClass: "toast-bottom-right",
+        progressBar: true,
+        timeOut: 5000,
+      });
+      return;
+    }
+
+    this.fotosBase64 = [];
+
+    Array.from(files).forEach((file: File) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        this.fotosBase64.push(base64);
+      };
+
+      reader.readAsDataURL(file);
+    });
   }
 }

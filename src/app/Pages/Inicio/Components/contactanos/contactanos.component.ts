@@ -1,12 +1,12 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
 import { FooterComponent } from "../../../../shared/footer/footer.component";
-import Swal from 'sweetalert2';
 import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -23,8 +23,9 @@ export class ContactanosComponent {
   email = "info@rentaraiz.com";
 
   // Injeccciones
-  inmueblesService = inject(InmueblesService);
+  toastr = inject(ToastrService);
   formBuilder = inject(FormBuilder);
+  inmueblesService = inject(InmueblesService);
 
   // Formularios
   formContacto = this.formBuilder.group({
@@ -36,11 +37,11 @@ export class ContactanosComponent {
 
   createContacto() {
     if (this.formContacto.invalid) {
-      Swal.fire({
-        icon: "error",
-        title: "Complete todos los campos",
-        text: "Estas enviando campos vacios o invalidos en el formulario!",
-        draggable: false,
+      this.toastr.error('Complete todos los campos', 'Error', {
+        closeButton: true,
+        positionClass: "toast-bottom-right",
+        progressBar: true,
+        timeOut: 5000,
       });
       return;
     }
@@ -55,11 +56,11 @@ export class ContactanosComponent {
     this.inmueblesService.createContacto(obj).subscribe(
       (response: any) => {
         this.vaciarFormulario();
-        Swal.fire({
-          icon: "success",
-          title: "¡Gracias!",
-          text: "Tu mensaje ha sido enviado con éxito!",
-          draggable: true,
+        this.toastr.success('¡Gracias!', 'Tu mensaje ha sido enviado con éxito!', {
+          closeButton: true,
+          positionClass: "toast-bottom-right",
+          progressBar: true,
+          timeOut: 5000,
         });
       },
       (error: any) => {
