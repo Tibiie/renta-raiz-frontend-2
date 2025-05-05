@@ -7,6 +7,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-publicar-inmueble',
@@ -22,17 +23,60 @@ import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
   styleUrl: './publicar-inmueble.component.scss',
 })
 export class PublicarInmuebleComponent implements OnInit {
+  ciudades: any[] = [];
+  fotosBase64: string[] = [];
+
   formBuilder = inject(FormBuilder);
   inmuebleService = inject(InmueblesService);
-  
+
   formPublicarInmueble = this.formBuilder.group({
-    name: ['', Validators.required],
-    phone: ['', Validators.required],
+    nombre: ['', Validators.required],
+    telefono: ['', Validators.required],
     email: ['', Validators.required],
-    neighborhood: ['', Validators.required],
+    barrio: ['', Validators.required],
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getCiudadesBarrios();
+  }
+
+  getCiudadesBarrios() {
+    this.inmuebleService.getBarrios().subscribe(
+      (response: any) => {
+        this.ciudades = response.data;
+        console.log(this.ciudades);
+      },
+      (error: any) => {
+        console.error('Error al obtener las ciudades:', error);
+      }
+    );
+  }
+
+  handleFileInput(event: any) {
+    const files: FileList = event.target.files;
+
+    if (files.length > 5) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Máximo 5 imágenes',
+        text: 'Solo puedes adjuntar hasta 5 fotos.',
+      });
+      return;
+    }
+
+    this.fotosBase64 = [];
+
+    Array.from(files).forEach((file: File) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        this.fotosBase64.push(base64);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
 
   crearPublicacionPropiedad() {
     if (!this.formPublicarInmueble.valid) {
@@ -46,24 +90,28 @@ export class PublicarInmuebleComponent implements OnInit {
     }
 
     const obj = {
-      nombre: this.formPublicarInmueble.value.name,
-      email: this.formPublicarInmueble.value.email,
-      telefono: this.formPublicarInmueble.value.phone,
-      mensaje: this.formPublicarInmueble.value.neighborhood,
+      nombre: this.formPublicarInmueble.get('nombre')?.value,
+      email: this.formPublicarInmueble.get('email')?.value,
+      telefono: this.formPublicarInmueble.get('telefono')?.value,
+      barrio: this.formPublicarInmueble.get('barrio')?.value,
+      fotosInmueble: this.fotosBase64
     };
 
-    // this.inmuebleService.createPublicacionPropiedad(obj).subscribe(
-    //   (response: any) => {
-    //     Swal.fire({
-    //       icon: 'success',
-    //       title: '¡Gracias!',
-    //       text: 'Tu mensaje ha sido enviado con éxito!',
-    //       draggable: true,
-    //     });
-    //   },
-    //   (error: any) => {
-    //     console.error('Error al enviar el contacto:', error);
-    //   }
-    // );
+    console.log(obj);
+
+    this.inmuebleService.publicarInmueble(obj).subscribe(
+      (response: any) => {
+        this.formPublicarInmueble.reset();
+        Swal.fire({
+          icon: 'success',
+          title: '¡Gracias!',
+          text: 'Tu solicitud ha sido enviada con éxito!',
+          draggable: true,
+        });
+      },
+      (error: any) => {
+        console.error('Error al enviar el contacto:', error);
+      }
+    );
   }
 }

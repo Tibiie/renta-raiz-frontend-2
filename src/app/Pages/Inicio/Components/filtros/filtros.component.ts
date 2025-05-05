@@ -45,6 +45,8 @@ export class FiltrosComponent implements OnInit {
 
   searchTerm: string = '';
   ubicacion: string = '';
+
+  cargando = false;
   isDrawerOpen: boolean = true;
   drawerMapAbierto: boolean = false;
 
@@ -449,6 +451,7 @@ export class FiltrosComponent implements OnInit {
   }
 
   enviarFiltros(pagina: number = 1) {
+    this.cargando = true;
     this.paginaActual = pagina;
     this.prepararFiltros();
 
@@ -476,6 +479,7 @@ export class FiltrosComponent implements OnInit {
         );
 
         this.generarPaginas();
+        this.cargando = false;
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -666,7 +670,6 @@ export class FiltrosComponent implements OnInit {
     this.filtrosSeleccionados.set('neighborhood', barrio.code);
     this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
-
 
   selectOption(type: 'property' | 'estate', option: any): void {
     if (type === 'property') {

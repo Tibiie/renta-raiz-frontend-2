@@ -160,6 +160,6 @@ export class NavbarComponent implements OnInit {
   }
 
   abrirBrochure() {
-    window.open('/assets/images/Brochure Renta Raiz.pdf', '_blank');
+    window.open('https://oferta.rentaraiz.co/flipbook/brochure-renta-raiz/', '_blank');
   }
 }

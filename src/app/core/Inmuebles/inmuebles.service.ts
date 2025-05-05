@@ -6,9 +6,6 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class InmueblesService {
-
-
-
   Propiedades: any[] = [];
 
   http = inject(HttpClient);
@@ -54,7 +51,7 @@ export class InmueblesService {
   }
 
   publicarInmueble(inmueble: any) {
-    return this.http.post(`${environment.baseUrl}/properties/publicar`, inmueble);
+    return this.http.post(`${environment.baseUrl}/properties/publicarInmueble`, inmueble);
   }
 
   setPropiedades(propiedades: any[]) {

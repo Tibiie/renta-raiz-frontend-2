@@ -45,6 +45,7 @@ export class BarraFiltrosComponent {
     habitaciones: [] as (number | string)[],
   };
 
+  cargando = false
   isPreciosOpen = false;
   isMasFiltrosOpen = false;
 
@@ -321,6 +322,7 @@ export class BarraFiltrosComponent {
             filtros: obj,
           },
         });
+        this.cargando = false;
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -462,6 +464,7 @@ export class BarraFiltrosComponent {
   }
 
   redirigirFiltros() {
+    this.cargando = true;
     this.prepararFiltros();
     this.getEnviarFiltros();
   }

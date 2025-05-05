@@ -73,6 +73,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     'assets/images/vistaInicial-slider-6.jpg',
   ];
 
+  cargando = false;
   isLoading = true;
 
   // Injectaciones
@@ -177,6 +178,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   redirigirFiltros() {
+    this.cargando = true;
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('biz', '3');
 
@@ -195,6 +197,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
             filtros: obj,
           },
         });
+        this.cargando = false;
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -230,7 +233,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   abrirBrochure() {
-    const url = 'assets/images/Brochure Renta Raiz.pdf';
+    const url = 'https://oferta.rentaraiz.co/flipbook/brochure-renta-raiz/';
     window.open(url, '_blank');
   }
 }
