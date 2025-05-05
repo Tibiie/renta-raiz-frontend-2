@@ -7,6 +7,7 @@ import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { VolverComponent } from "../../../../shared/volver/volver.component";
 
 @Component({
   selector: 'app-politicar-privacidad',
@@ -19,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BotonesFlotantesComponent,
     FooterComponent,
     BarraFiltrosComponent,
+    VolverComponent
   ],
   templateUrl: './politicar-privacidad.component.html',
   styleUrl: './politicar-privacidad.component.scss',

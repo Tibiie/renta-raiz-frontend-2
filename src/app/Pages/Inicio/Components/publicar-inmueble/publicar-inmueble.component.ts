@@ -7,6 +7,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { VolverComponent } from "../../../../shared/volver/volver.component";
 
 @Component({
   selector: 'app-publicar-inmueble',
@@ -18,6 +19,7 @@ import { CommonModule } from '@angular/common';
     FooterComponent,
     ReactiveFormsModule,
     CommonModule,
+    VolverComponent
   ],
   templateUrl: './publicar-inmueble.component.html',
   styleUrl: './publicar-inmueble.component.scss',

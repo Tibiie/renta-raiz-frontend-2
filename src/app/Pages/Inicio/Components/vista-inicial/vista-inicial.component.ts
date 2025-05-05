@@ -96,13 +96,6 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     this.getDatos();
   }
 
-  // scrollToTop(): void {
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: 'smooth',
-  //   });
-  // }
-
   getDatos() {
     this.getAliadosPorGrupo();
     this.getInmueblesVentas();

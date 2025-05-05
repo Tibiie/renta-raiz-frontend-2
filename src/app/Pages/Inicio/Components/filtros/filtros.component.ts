@@ -15,6 +15,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
+import { VolverComponent } from "../../../../shared/volver/volver.component";
 
 @Component({
   selector: 'app-filtros',
@@ -25,6 +26,7 @@ import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geoloca
     ReactiveFormsModule,
     CommonModule,
     MapaComponent,
+    VolverComponent
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',

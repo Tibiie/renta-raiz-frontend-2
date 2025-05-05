@@ -7,6 +7,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
+import { VolverComponent } from "../../../../shared/volver/volver.component";
 
 @Component({
   selector: 'app-ver-blog',
@@ -18,7 +19,8 @@ import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-fi
     NavbarComponent,
     FooterComponent,
     BotonesFlotantesComponent,
-    BarraFiltrosComponent
+    BarraFiltrosComponent,
+    VolverComponent
   ],
   templateUrl: './ver-blog.component.html',
   styleUrl: './ver-blog.component.scss'

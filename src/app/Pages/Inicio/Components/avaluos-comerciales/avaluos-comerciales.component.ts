@@ -8,6 +8,7 @@ import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { log } from 'console';
 import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
+import { VolverComponent } from "../../../../shared/volver/volver.component";
 
 @Component({
   selector: 'app-avaluos-comerciales',
@@ -19,7 +20,8 @@ import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-fi
     NavbarComponent,
     FooterComponent,
     BotonesFlotantesComponent,
-    BarraFiltrosComponent
+    BarraFiltrosComponent,
+    VolverComponent
   ],
   templateUrl: './avaluos-comerciales.component.html',
   styleUrl: './avaluos-comerciales.component.scss'

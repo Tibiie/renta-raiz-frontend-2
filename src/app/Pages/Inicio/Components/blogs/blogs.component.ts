@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
+import { VolverComponent } from "../../../../shared/volver/volver.component";
 
 @Component({
   selector: 'app-blogs',
@@ -16,6 +17,7 @@ import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/
     NavbarComponent,
     FooterComponent,
     BotonesFlotantesComponent,
+    VolverComponent
   ],
   templateUrl: './blogs.component.html',
   styleUrl: './blogs.component.scss',

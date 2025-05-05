@@ -9,4 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BotonesFlotantesComponent {
 
+  scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
+
+  vistaAnterior(): void {
+    window.history.back();
+  }
 }

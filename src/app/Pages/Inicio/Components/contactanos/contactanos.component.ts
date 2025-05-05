@@ -7,12 +7,13 @@ import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/
 import { FooterComponent } from "../../../../shared/footer/footer.component";
 import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
 import { ToastrService } from 'ngx-toastr';
+import { VolverComponent } from "../../../../shared/volver/volver.component";
 
 
 @Component({
   selector: 'app-contactanos',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, BotonesFlotantesComponent, FooterComponent, BarraFiltrosComponent],
+  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, BotonesFlotantesComponent, FooterComponent, BarraFiltrosComponent, VolverComponent],
   templateUrl: './contactanos.component.html',
   styleUrl: './contactanos.component.scss'
 })

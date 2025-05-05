@@ -5,93 +5,53 @@
   <div class="banner-contacto w-full max-h-[77vh] overflow-hidden">
     <div class="relative w-full pb-[56.25%] h-0">
       <!-- Overlay con imagen adicional -->
-      <div
-        class="absolute inset-0 bg-[#080E36] flex items-start justify-center pt-10 sm:pt-14 z-20"
-      >
-        <img
-          src="assets/images/noticias.png"
-          class="w-[100%] sm:w-full h-auto object-contain max-h-[70%] sm:max-h-[60%]"
-          alt="Imagen"
-        />
+      <div class="absolute inset-0 bg-[#080E36] flex items-start justify-center pt-10 sm:pt-14 z-20">
+        <img src="assets/images/noticias.png"
+          class="w-[100%] sm:w-full h-auto object-contain max-h-[70%] sm:max-h-[60%]" alt="Imagen" />
       </div>
     </div>
   </div>
 
   <!-- Sección de filtros -->
-  <div
-    class="relative w-full flex justify-center mt-4 mb-12 md:-mt-14 px-4 z-30"
-  >
-    <div
-      class="bg-white rounded-lg p-6 w-full max-w-6xl shadow-2xl shadow-gray-600/40"
-    >
+  <div class="relative w-full flex justify-center mt-4 mb-12 md:-mt-14 px-4 z-30">
+    <div class="bg-white rounded-lg p-6 w-full max-w-6xl shadow-2xl shadow-gray-600/40">
       <div class="flex flex-col md:flex-row gap-4 items-end">
         <!-- UBICACIÓN -->
         <div class="w-full md:w-1/3">
-          <label
-            for="ubicacion"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Ubicación</label
-          >
+          <label for="ubicacion" class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
           <div class="relative">
-            <input
-              type="text"
-              id="ubicacion"
-              [(ngModel)]="ubicacion"
+            <input type="text" id="ubicacion" [(ngModel)]="ubicacion"
               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#CDAD60] focus:border-[#CDAD60] pr-12"
-              placeholder="Ej. Medellin, Colombia"
-            />
+              placeholder="Ej. Medellin, Colombia" />
           </div>
         </div>
 
         <!-- TIPO DE PROPIEDAD -->
         <div class="relative w-full md:w-1/3">
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Tipo de propiedad</label
-          >
-          <button
-            (click)="toggleDropdown('property')"
-            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]"
-          >
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de propiedad</label>
+          <button (click)="toggleDropdown('property')"
+            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
             <span>
-              <i
-                [class]="getIcon('property', selectedProperty)"
-                class="mr-2"
-              ></i>
+              <i [class]="getIcon('property', selectedProperty)" class="mr-2"></i>
               {{
-                selectedProperty?.displayName || selectedProperty?.name
-                  | titlecase
+              selectedProperty?.displayName || selectedProperty?.name
+              | titlecase
               }}
             </span>
-            <svg
-              class="w-4 h-4 ml-2 text-gray-600"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              ></path>
+            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
 
-          <div
-            *ngIf="isPropertyDropdownOpen"
-            class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200"
-          >
+          <div *ngIf="isPropertyDropdownOpen"
+            class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200">
             <div class="p-4">
               <p class="text-gray-500 text-sm font-medium mb-2">Categoría</p>
               <div class="grid grid-cols-2 gap-2">
-                <button
-                  *ngFor="let option of propertyOptions"
-                  (click)="selectOption('property', option)"
-                  [class]="
+                <button *ngFor="let option of propertyOptions" (click)="selectOption('property', option)" [class]="
                     getButtonClass(selectedProperty?.code === option.code)
-                  "
-                >
+                  ">
                   <i [class]="getIcon('property', option)" class="mr-2"></i>
                   {{ option.displayName || option.name | titlecase }}
                 </button>
@@ -102,51 +62,32 @@
 
         <!-- INMUEBLE -->
         <div class="relative w-full md:w-1/3">
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Inmueble</label
-          >
-          <button
-            (click)="toggleDropdown('estate')"
-            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]"
-          >
+          <label class="block text-sm font-medium text-gray-700 mb-1">Inmueble</label>
+          <button (click)="toggleDropdown('estate')"
+            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:ring-[#CDAD60] focus:border-[#CDAD60]">
             <span>
               <i [class]="getIcon('estate', selectedEstate)" class="mr-2"></i>
               {{
-                selectedEstate
-                  ? (selectedEstate.name | titlecase)
-                  : "Seleccionar"
+              selectedEstate
+              ? (selectedEstate.name | titlecase)
+              : "Seleccionar"
               }}
             </span>
-            <svg
-              class="w-4 h-4 ml-2 text-gray-600"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              ></path>
+            <svg class="w-4 h-4 ml-2 text-gray-600" aria-hidden="true" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
 
-          <div
-            *ngIf="isEstateDropdownOpen"
-            class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200"
-          >
+          <div *ngIf="isEstateDropdownOpen"
+            class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200">
             <div class="p-4">
               <p class="text-gray-500 text-sm font-medium mb-2">
                 Tipo de inmueble
               </p>
               <div class="grid grid-cols-2 gap-2">
-                <button
-                  *ngFor="let option of estateOptions"
-                  (click)="selectOption('estate', option)"
-                  [class]="getButtonClass(selectedEstate?.code === option.code)"
-                >
+                <button *ngFor="let option of estateOptions" (click)="selectOption('estate', option)"
+                  [class]="getButtonClass(selectedEstate?.code === option.code)">
                   <i [class]="getIcon('estate', option)" class="mr-2"></i>
                   {{ option.name | titlecase }}
                 </button>
@@ -156,24 +97,11 @@
         </div>
 
         <!-- Botón Buscar -->
-        <button
-          type="button"
-          (click)="redirigirFiltros()"
-          class="flex items-center justify-center mx-auto md:ml-auto text-white bg-[#080E36] hover:bg-[#CDAD60] font-bold rounded-full text-lg px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
+        <button type="button" (click)="redirigirFiltros()"
+          class="flex items-center justify-center mx-auto md:ml-auto text-white bg-[#080E36] hover:bg-[#CDAD60] font-bold rounded-full text-lg px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           Buscar
         </button>
@@ -185,11 +113,8 @@
     <!-- Columna izquierda - Artículo principal -->
     <div class="w-full md:w-2/3">
       <div class="bg-white rounded-lg overflow-hidden shadow-md border">
-        <img
-          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png"
-          alt="Estudio de títulos"
-          class="w-full h-96 object-cover"
-        />
+        <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png" alt="Estudio de títulos"
+          class="w-full h-96 object-cover" />
 
         <div class="bg-[#080E36] text-white px-6 py-4">
           <h2 class="text-lg font-semibold leading-tight">
@@ -210,20 +135,15 @@
             los negocios inherentes a la compra y venta de inmuebles continúan
             aumentando cada año. A pesar de la situación...
           </p>
-          <a
-            href="#"
-            class="inline-block px-4 py-2 text-sm font-medium text-white bg-[#080E36] hover:bg-[#CDAD60]/90 rounded transition-colors"
-          >
+          <a href="#"
+            class="inline-block px-4 py-2 text-sm font-medium text-white bg-[#080E36] hover:bg-[#CDAD60]/90 rounded transition-colors">
             Read More
           </a>
         </div>
       </div>
       <div class="bg-white mt-8 rounded-lg overflow-hidden shadow-md border">
-        <img
-          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png"
-          alt="Estudio de títulos"
-          class="w-full h-96 object-cover"
-        />
+        <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png" alt="Estudio de títulos"
+          class="w-full h-96 object-cover" />
 
         <div class="bg-[#080E36] text-white px-6 py-4">
           <h2 class="text-lg font-semibold leading-tight">
@@ -244,10 +164,8 @@
             los negocios inherentes a la compra y venta de inmuebles continúan
             aumentando cada año. A pesar de la situación...
           </p>
-          <a
-            href="#"
-            class="inline-block px-4 py-2 text-sm font-medium text-white bg-[#080E36] hover:bg-[#CDAD60]/90 rounded transition-colors"
-          >
+          <a href="#"
+            class="inline-block px-4 py-2 text-sm font-medium text-white bg-[#080E36] hover:bg-[#CDAD60]/90 rounded transition-colors">
             Read More
           </a>
         </div>
@@ -258,17 +176,10 @@
     <div class="w-full md:w-1/3 flex flex-col gap-6">
       <!-- Widget de Instagram -->
       <div
-        class="bg-white border border-gray-200 transform hover:scale-[1.02] transition-all duration-300 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]"
-      >
+        class="bg-white border border-gray-200 transform hover:scale-[1.02] transition-all duration-300 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]">
         <div class="flex items-center mb-4">
-          <div
-            class="w-12 h-12 rounded-full overflow-hidden border-2 border-pink-500 p-0.5 mr-3"
-          >
-            <img
-              src="assets/images/rentaraiz.webp"
-              alt="Perfil"
-              class="w-full h-full object-cover rounded-full"
-            />
+          <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-pink-500 p-0.5 mr-3">
+            <img src="assets/images/rentaraiz.webp" alt="Perfil" class="w-full h-full object-cover rounded-full" />
           </div>
 
           <div class="flex-grow">
@@ -276,88 +187,44 @@
             <p class="text-xs text-gray-500">𝐈𝐧𝐦𝐨𝐛𝐢𝐥𝐢𝐚𝐫𝐢𝐚 𝐑𝐞𝐧𝐭𝐚 𝐑𝐚𝐢𝐳 𝐒𝐀𝐒</p>
           </div>
 
-          <a
-            href="https://www.instagram.com/rentaraiz/"
-            target="_blank"
-            class="text-xs font-semibold text-pink-600 hover:text-pink-700 transition-colors cursor-pointer inline-block px-2 py-1"
-          >
+          <a href="https://www.instagram.com/rentaraiz/" target="_blank"
+            class="text-xs font-semibold text-pink-600 hover:text-pink-700 transition-colors cursor-pointer inline-block px-2 py-1">
             Seguir
           </a>
         </div>
 
         <div class="grid grid-cols-2 gap-1 mb-3">
-          <a
-            href="https://www.instagram.com/reel/DIRwmbJvb3W/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
-          >
-            <img
-              src="assets/images/post1.webp"
-              alt="Post Instagram"
-              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
-            />
+          <a href="https://www.instagram.com/reel/DIRwmbJvb3W/" target="_blank" rel="noopener noreferrer"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+            <img src="assets/images/post1.webp" alt="Post Instagram"
+              class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
           </a>
 
-          <a
-            href="https://www.instagram.com/reel/DIPw2pQvNKI/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
-          >
-            <img
-              src="assets/images/post2.webp"
-              alt="Post Instagram"
-              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
-            />
+          <a href="https://www.instagram.com/reel/DIPw2pQvNKI/" target="_blank" rel="noopener noreferrer"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+            <img src="assets/images/post2.webp" alt="Post Instagram"
+              class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
           </a>
 
-          <a
-            href="https://www.instagram.com/reel/DIKFc0bvLxQ/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
-          >
-            <img
-              src="assets/images/post3.webp"
-              alt="Post Instagram"
-              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
-            />
+          <a href="https://www.instagram.com/reel/DIKFc0bvLxQ/" target="_blank" rel="noopener noreferrer"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+            <img src="assets/images/post3.webp" alt="Post Instagram"
+              class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
           </a>
 
-          <a
-            href="https://www.instagram.com/p/DIHCJeeR10q/?img_index=1"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block"
-          >
-            <img
-              src="assets/images/post4.webp"
-              alt="Post Instagram"
-              class="w-full h-full object-cover hover:opacity-90 transition-opacity"
-            />
+          <a href="https://www.instagram.com/p/DIHCJeeR10q/?img_index=1" target="_blank" rel="noopener noreferrer"
+            class="aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer block">
+            <img src="assets/images/post4.webp" alt="Post Instagram"
+              class="w-full h-full object-cover hover:opacity-90 transition-opacity" />
           </a>
         </div>
 
-        <a
-          href="https://www.instagram.com/rentaraiz/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="w-full py-2 text-sm font-medium text-pink-600 hover:text-pink-700 transition-colors flex items-center justify-center"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-            />
+        <a href="https://www.instagram.com/rentaraiz/" target="_blank" rel="noopener noreferrer"
+          class="w-full py-2 text-sm font-medium text-pink-600 hover:text-pink-700 transition-colors flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
           </svg>
           Ver más en Instagram
         </a>
@@ -375,57 +242,40 @@
         </div>
 
         <div *ngIf="inmueblesDestacadosArray" class="space-y-4">
-          <div
-            *ngFor="let inmueble of inmueblesDestacadosArray.data"
-            class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6 mt-6"
-          >
+          <div *ngFor="let inmueble of inmueblesDestacadosArray.data"
+            class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6 mt-6">
             <div class="relative group">
               <a href="#">
-                <img
-                  class="w-full h-48 object-cover"
-                  [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-                  [alt]="inmueble.address"
-                />
+                <img class="w-full h-48 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+                  [alt]="inmueble.address" />
               </a>
 
               <div
-                class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10"
-              >
-                <a
-                  class="cursor-pointer bg-white text-[#080E36] px-4 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
-                  (click)="verPropiedad(inmueble.codpro)"
-                >
+                class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                <a class="cursor-pointer bg-white text-[#080E36] px-4 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+                  (click)="verPropiedad(inmueble.codpro)">
                   Ver propiedad
                 </a>
               </div>
 
               <div
-                class="absolute -top-3 -left-1 bg-[#080E36] text-white text-sm font-semibold px-4 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-12px] before:border-y-[14px] before:border-y-transparent before:border-l-[12px] before:border-l-[#080E36]"
-              >
+                class="absolute -top-3 -left-1 bg-[#080E36] text-white text-sm font-semibold px-4 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-12px] before:border-y-[14px] before:border-y-transparent before:border-l-[12px] before:border-l-[#080E36]">
                 Destacado
               </div>
 
-              <div
-                class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20"
-              >
-                <span
-                  class="bg-[#CDAD60] text-white text-xs font-semibold px-2 py-1 rounded shadow"
-                >
+              <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+                <span class="bg-[#CDAD60] text-white text-xs font-semibold px-2 py-1 rounded shadow">
                   {{ inmueble.type | titlecase }}
                 </span>
 
-                <button
-                  class="text-white hover:text-[#ea6666] transition-colors"
-                >
+                <button class="text-white hover:text-[#ea6666] transition-colors">
                   <i class="fas fa-heart text-xl"></i>
                 </button>
               </div>
             </div>
             <div class="p-5">
               <a href="#">
-                <h5
-                  class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]"
-                >
+                <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
                   {{ inmueble.neighborhood || "Sin barrio especificado" }}
                 </h5>
                 <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
@@ -452,26 +302,22 @@
                   <span class="text-sm font-semibold">Área</span>
                   <div class="flex items-center">
                     <i class="fas fa-ruler-combined text-lg"></i>
-                    <span class="ml-2"
-                      >{{
-                        inmueble.area_cons || inmueble.area_lot || "N/A"
+                    <span class="ml-2">{{
+                      inmueble.area_cons || inmueble.area_lot || "N/A"
                       }}
-                      m²</span
-                    >
+                      m²</span>
                   </div>
                 </div>
               </div>
 
-              <div
-                class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold"
-              >
+              <div class="flex justify-between items-center mt-8 text-[#080E36] text-lg font-semibold">
                 <span>Precio:</span>
                 <span class="text-[#000000]">
                   {{
-                    inmueble.price_format ||
-                      (inmueble.price
-                        | currency : "COP" : "symbol-narrow" : "1.0-0") ||
-                      "Consultar"
+                  inmueble.price_format ||
+                  (inmueble.price
+                  | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                  "Consultar"
                   }}
                 </span>
               </div>
@@ -483,5 +329,6 @@
   </div>
 </div>
 
+<app-volver></app-volver>
 <app-botones-flotantes></app-botones-flotantes>
 <app-footer></app-footer>

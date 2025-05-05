@@ -2,10 +2,11 @@
 
 <div class="flex flex-col md:flex-row">
   <div class="flex-1">
-    <div class="text-center top-20 z-50 transition-all duration-300 md:top-32 md:fixed" [ngClass]="{
-        'left-6': !isDrawerOpen,
-        'left-36': isDrawerOpen
-      }">
+    <div class="relative md:fixed text-center top-20 md:top-32 z-50 transition-all duration-300" [ngClass]="{
+      'left-0 md:left-6': !isDrawerOpen,
+      'left-0 md:left-36': isDrawerOpen
+    }">
+
       <button type="button" (click)="toggleDrawer()" [attr.data-drawer-target]="'modern-drawer'"
         [attr.data-drawer-show]="!isDrawerOpen ? 'modern-drawer' : null"
         [attr.data-drawer-hide]="isDrawerOpen ? 'modern-drawer' : null"
@@ -525,3 +526,5 @@
     </div>
   </div>
 </div>
+
+<app-volver></app-volver>

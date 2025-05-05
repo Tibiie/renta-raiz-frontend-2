@@ -16,6 +16,7 @@ import { MapaComponent } from '../mapa/mapa.component';
 import mediumZoom from 'medium-zoom';
 import { log } from 'console';
 import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
+import { VolverComponent } from "../../../../shared/volver/volver.component";
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -29,7 +30,8 @@ import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/
     ModalCrearContactoComponent,
     FooterComponent,
     MapaComponent,
-    BotonesFlotantesComponent
+    BotonesFlotantesComponent,
+    VolverComponent
   ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
