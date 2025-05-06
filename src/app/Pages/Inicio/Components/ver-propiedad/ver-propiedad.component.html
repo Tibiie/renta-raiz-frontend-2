@@ -48,7 +48,7 @@
     </ol>
   </nav>
 
-  <div class="px-4 md:px-10 lg:px-20 xl:px-[350px] mb-4">
+  <!-- <div class="px-4 md:px-10 lg:px-20 xl:px-[350px] mb-4">
     <div class="flex flex-wrap gap-2 justify-start">
       <button (click)="seleccionarTab('fotos')" [ngClass]="{
           'bg-[#080E36] text-white hover:bg-[#080E36]': tabActivo === 'fotos',
@@ -64,13 +64,13 @@
         <i class="fas fa-map-marker-alt mr-2"></i> Mapa
       </button>
     </div>
-  </div>
+  </div> -->
 
   <div class="flex flex-col">
     <div class="flex flex-col md:flex-row px-4 md:px-20 gap-6">
       <div class="w-full md:w-2/3">
         <div>
-          @if (tabActivo === 'fotos') {
+          <!-- @if (tabActivo === 'fotos') { -->
           <ng-container>
             <div *ngIf="propiedad?.images?.length > 0" class="flex flex-col">
               <div id="carousel" class="w-full relative" data-carousel="static">
@@ -217,7 +217,7 @@
               </div>
             </div>
           </ng-container>
-          } @if (tabActivo === 'mapa') {
+          <!-- } @if (tabActivo === 'mapa') {
           <ng-container>
             <div class="flex flex-col">
               <div class="w-full relative">
@@ -227,7 +227,7 @@
               </div>
             </div>
           </ng-container>
-          }
+          } -->
         </div>
 
         <div class="mt-6">
