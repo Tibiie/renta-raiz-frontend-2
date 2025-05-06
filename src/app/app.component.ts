@@ -21,7 +21,9 @@ export class AppComponent implements OnInit {
 
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
-          initFlowbite();
+          setTimeout(() => {
+            initFlowbite();
+          }, 100);
         }
       });
     }
