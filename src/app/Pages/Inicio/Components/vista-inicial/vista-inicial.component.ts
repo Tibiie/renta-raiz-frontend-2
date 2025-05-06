@@ -65,12 +65,9 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   ];
 
   sliderFotos: string[] = [
-    'assets/images/vistaInicial-slider-1.jpg',
-    'assets/images/vistaInicial-slider-2.jpg',
-    'assets/images/vistaInicial-slider-3.jpg',
-    'assets/images/vistaInicial-slider-4.jpg',
-    'assets/images/vistaInicial-slider-5.jpg',
-    'assets/images/vistaInicial-slider-6.jpg',
+    'assets/images/vistaInicial-slider-1.png',
+    'assets/images/vistaInicial-slider-2.png',
+    'assets/images/vistaInicial-slider-3.png',
   ];
 
   cargando = false;

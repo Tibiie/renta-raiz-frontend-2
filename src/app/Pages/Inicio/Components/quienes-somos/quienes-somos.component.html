@@ -1,15 +1,27 @@
 <app-navbar></app-navbar>
 
 <div class="flex flex-col">
-  <section class="banner-contacto relative flex items-center justify-center">
-    <div class="overlay relative flex flex-col items-center justify-center w-full px-4">
-      <img src="assets/images/1.TEXTslider.png" alt="Contáctanos"
-        class="w-full max-w-4xl md:max-w-6xl lg:max-w-8xl animate-fade-in scale-110 md:scale-100" />
+  <div class="banner-contacto w-full h-[60vh] overflow-hidden">
+    <div class="relative w-full h-full">
+      <div class="absolute inset-0 bg-cover bg-center z-10"
+        style="background-image: url('assets/images/SliderQUIENESOMOS.png')"></div>
+      <div class="absolute inset-0 z-30 flex items-center justify-center">
+        <img src="assets/images/TEXTOQUIENESOMOS.png"
+          class="w-[90%] sm:w-[100%] max-w-[1200px] h-auto object-contain -translate-y-12 sm:-translate-y-1"
+          alt="Texto" />
+      </div>
     </div>
-  </section>
+  </div>
+
+  <div #dropdownContainer>
+    <div class="bg-gray-200">
+
+      <app-barra-filtros></app-barra-filtros>
+    </div>
+  </div>
 
   <div class="bg-gray-200">
-    <div class="max-w-6xl mx-auto px-6 py-12">
+    <div class="max-w-6xl mx-auto px-6 py-12 mt-12">
       <h1 class="text-4xl text-center font-bold text-gray-800 mb-14">
         ¿Quiénes somos?
       </h1>
