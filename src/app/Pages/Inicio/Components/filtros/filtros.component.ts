@@ -817,4 +817,11 @@ export class FiltrosComponent implements OnInit {
     const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
     window.open(url, '_blank');
   }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
 }

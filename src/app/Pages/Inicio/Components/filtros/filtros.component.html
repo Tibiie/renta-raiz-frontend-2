@@ -525,6 +525,17 @@
       </nav>
     </div>
   </div>
+
+  <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+    <button (click)="scrollToTop()"
+      class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:bg-[#CDAD60] transition-all duration-300 bg-[#080E36] flex items-center justify-center"
+      aria-label="Volver arriba">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+      </svg>
+    </button>
+  </div>
 </div>
 
 <app-volver></app-volver>
