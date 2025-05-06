@@ -170,7 +170,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   redirigirFiltros() {
     this.cargando = true;
     this.filtrosSeleccionados.clear();
-    this.filtrosSeleccionados.set('biz', '3');
+    this.filtrosSeleccionados.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = {
@@ -211,8 +211,8 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     console.log(this.aliadosPorGrupo);
   }
 
-  abrirPestana(url: string) {
-    window.open(url, '_blank');
+  redirigirContactanos() {
+    this.router.navigate(['/contacto']);
   }
 
   verPropiedad(codPro: number) {
