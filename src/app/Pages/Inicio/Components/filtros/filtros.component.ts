@@ -16,6 +16,7 @@ import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 import { VolverComponent } from "../../../../shared/volver/volver.component";
+import { FooterComponent } from "../../../../shared/footer/footer.component";
 
 @Component({
   selector: 'app-filtros',
@@ -26,7 +27,8 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
     ReactiveFormsModule,
     CommonModule,
     MapaComponent,
-    VolverComponent
+    VolverComponent,
+    FooterComponent
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
