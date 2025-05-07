@@ -6,11 +6,12 @@
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4 transition-all duration-300">
     <!-- Logo -->
     <a href="#" class="flex items-center">
-      <img src="assets/images/RR DORADO.png" [ngClass]="{ 'h-12': isScrolled, 'h-16': !isScrolled }"
-        class="transition-all duration-300" alt="Logo" />
+      <img src="assets/images/RR DORADO.png" [ngClass]="{
+        'h-8 sm:h-10 md:h-12': isScrolled,
+        'h-12 sm:h-14 md:h-16': !isScrolled
+      }" class="transition-all duration-300" alt="Logo" />
     </a>
 
-    <!-- Botón menú móvil -->
     <button (click)="toggleMobileMenu()" class="md:hidden text-white focus:outline-none">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path *ngIf="!isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
