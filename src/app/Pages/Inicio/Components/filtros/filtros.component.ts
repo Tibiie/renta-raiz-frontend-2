@@ -145,6 +145,7 @@ export class FiltrosComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
+    window.scrollTo(0, 0);
     const state = window.history.state;
     await this.getDatos();
     this.cargarDesdeState(state);
