@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
-
+var document:any;
 declare const Carousel: any;
 @Component({
   selector: 'app-vista-inicial',
@@ -159,7 +159,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     );
   }
 
-  redirigirVerBlog(id: number) {
+  redirigirVerBlog(id: string) {
     const url = this.router.createUrlTree(['/ver-blog', id]).toString();
     window.open(url, '_blank');
   }
