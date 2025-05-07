@@ -19,8 +19,7 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
 })
 export class ContactanosComponent {
 
-  mostrarAlerta: boolean = false;
-
+  cargando = false;
   email = "info@rentaraiz.com";
 
   // Injeccciones
@@ -47,6 +46,8 @@ export class ContactanosComponent {
       return;
     }
 
+    this.cargando = true;
+
     const obj = {
       nombre: this.formContacto.get('nombre')?.value,
       email: this.formContacto.get('email')?.value,
@@ -63,6 +64,8 @@ export class ContactanosComponent {
           progressBar: true,
           timeOut: 5000,
         });
+
+        this.cargando = false;
       },
       (error: any) => {
         console.error('Error al enviar el contacto:', error);

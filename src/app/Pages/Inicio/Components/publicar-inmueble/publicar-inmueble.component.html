@@ -177,9 +177,23 @@
                   </div>
                 </div>
 
-                <button type="submit" (click)="crearPublicacionPropiedad()"
-                  class="mt-6 w-full px-6 py-3 text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm text-center me-2 mb-2 dark:border-[#CDAD60] dark:text-[#CDAD60] dark:hover:text-white dark:hover:bg-[#CDAD60] dark:focus:ring-[#CDAD60]">
-                  Publicar
+                <button type="submit" [disabled]="cargando" (click)="crearPublicacionPropiedad()"
+                  class="mt-6 w-full px-6 py-3 border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm text-center me-2 mb-2 transition-all duration-300"
+                  [ngClass]="{
+                  'text-[#CDAD60] hover:text-white border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-[#CDAD60] dark:border-[#CDAD60] dark:text-[#CDAD60] dark:hover:text-white dark:hover:bg-[#CDAD60] dark:focus:ring-[#CDAD60]': !cargando,
+                  'bg-gray-400 text-white border-gray-400 cursor-not-allowed': cargando
+                }">
+                  <ng-container *ngIf="!cargando; else loadingPublicacion">
+                    Publicar
+                  </ng-container>
+                  <ng-template #loadingPublicacion>
+                    <svg class="animate-spin h-5 w-5 text-white mr-2 inline" xmlns="http://www.w3.org/2000/svg"
+                      fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    Publicando...
+                  </ng-template>
                 </button>
               </form>
               <div class="mt-8 pt-6 border-t border-gray-200 text-center">
