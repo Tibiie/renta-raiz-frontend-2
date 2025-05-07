@@ -434,7 +434,7 @@
       <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
         <div
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-          <div (click)="redirigirVerBlog(1)" class="cursor-pointer">
+          <div (click)="redirigirVerBlog(1); $event.preventDefault()" class="cursor-pointer">
             <div class="h-40 overflow-hidden">
               <img src="assets/images/blog-1.jpg" alt="Experiencia del cliente" class="w-full h-full object-cover" />
             </div>
@@ -464,7 +464,7 @@
 
         <div
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-          <div (click)="redirigirVerBlog(2)" class="cursor-pointer">
+          <div (click)="redirigirVerBlog(2); $event.preventDefault()" class="cursor-pointer">
             <div class="h-40 overflow-hidden">
               <img src="assets/images/blog-2.jpg" alt="Plataformas digitales" class="w-full h-full object-cover" />
             </div>
@@ -494,7 +494,7 @@
 
         <div
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
-          <div (click)="redirigirVerBlog(3)" class="cursor-pointer">
+          <div (click)="redirigirVerBlog(3); $event.preventDefault()" class="cursor-pointer">
             <div class="h-40 overflow-hidden">
               <img src="assets/images/blog-3.jpg" alt="Diseño de interiores" class="w-full h-full object-cover" />
             </div>
