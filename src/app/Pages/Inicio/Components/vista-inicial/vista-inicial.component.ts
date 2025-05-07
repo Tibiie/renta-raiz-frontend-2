@@ -116,7 +116,9 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
           response.data[2],
           response.data[3],
         ];
+
       },
+
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
       }

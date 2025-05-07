@@ -139,8 +139,8 @@
         <div class="relative group">
           <div class="bg-black w-full h-[280px] flex items-center justify-center overflow-hidden rounded-t-lg">
             <a href="#">
-              <img class="max-w-full max-h-full object-contain" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-                [alt]="inmueble.address" />
+              <img class="max-w-full max-h-full object-contain" [src]="inmueble?.image1 || 'assets/images/renta-1.jpg'"
+                [alt]="inmueble?.address" />
             </a>
           </div>
           <div
@@ -153,12 +153,12 @@
 
           <div
             class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]">
-            {{ inmueble.biz | titlecase }}
+            {{ inmueble?.biz | titlecase }}
           </div>
 
           <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
             <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
-              {{ inmueble.type | titlecase }}
+              {{ inmueble?.type | titlecase }}
             </span>
 
             <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
@@ -171,12 +171,12 @@
           <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
             <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
               {{
-              inmueble.neighborhood || "Sin barrio especificado" | titlecase
+              inmueble?.neighborhood || "Sin barrio especificado" | titlecase
               }}
               <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
             </h5>
             <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
-              {{ inmueble.description }}
+              {{ inmueble?.description }}
             </p>
           </a>
 
@@ -185,14 +185,14 @@
               <span class="text-sm font-semibold">Habitaciones</span>
               <div class="flex items-center">
                 <i class="fas fa-bed text-lg"></i>
-                <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+                <span class="ml-2">{{ inmueble?.bedrooms || "N/A" }}</span>
               </div>
             </div>
             <div class="flex flex-col items-center">
               <span class="text-sm font-semibold">Baños</span>
               <div class="flex items-center">
                 <i class="fas fa-bath text-lg"></i>
-                <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+                <span class="ml-2">{{ inmueble?.bathrooms || "N/A" }}</span>
               </div>
             </div>
             <div class="flex flex-col items-center">
@@ -200,7 +200,7 @@
               <div class="flex items-center">
                 <i class="fas fa-ruler-combined text-lg"></i>
                 <span class="ml-2">{{
-                  inmueble.area_cons || inmueble.area_lot || "N/A"
+                  inmueble?.area_cons || inmueble?.area_lot || "N/A"
                   }}
                   m²</span>
               </div>
@@ -211,8 +211,8 @@
             <span>Precio:</span>
             <span class="text-[#000000]">
               {{
-              inmueble.price_format ||
-              (inmueble.price
+              inmueble?.price_format ||
+              (inmueble?.price
               | currency : "COP" : "symbol-narrow" : "1.0-0") ||
               "Consultar"
               }}
@@ -370,10 +370,9 @@
       </div>
 
       <div class="relative">
-        <div
-          class="flex flex-col md:flex-row md:flex-wrap gap-4 md:gap-6 overflow-visible justify-center md:justify-start">
+        <div class="flex flex-wrap gap-4 md:gap-6 justify-center">
           <div
-            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0">
+            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg">
             <div class="flex h-full" (click)="redirigirAvaluosComerciales()">
               <img src="assets/images/MiniaturaAVALUOSCOMERCIALES.png" alt="avaluos comerciales"
                 class="w-24 h-full object-cover" />
@@ -384,7 +383,7 @@
           </div>
 
           <div
-            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0">
+            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg">
             <div class="flex h-full" (click)="redirigirRentasCortas()">
               <img src="assets/images/servicio-2.jpg" alt="Avalúos en línea" class="w-24 h-full object-cover" />
               <div class="cursor-pointer flex items-center px-4 py-2 text-sm font-semibold text-gray-800">
@@ -394,7 +393,7 @@
           </div>
 
           <div
-            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0">
+            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg">
             <div class="flex h-full" (click)="abrirBrochure()">
               <img src="assets/images/MiniaturadeADMINISTRACION.png" alt="Desvara tu trámite"
                 class="w-24 h-full object-cover" />
@@ -405,7 +404,7 @@
           </div>
 
           <div
-            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0">
+            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg">
             <div class="flex h-full" (click)="redirigirPublicarPropiedad()">
               <img src="assets/images/MiniaturaPUBLICATUPROPIEDAD.png" alt="Remodelación y acabados"
                 class="w-24 h-full object-cover" />
