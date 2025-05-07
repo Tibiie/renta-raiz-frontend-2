@@ -203,120 +203,119 @@
 
         <div class="block md:hidden w-full mb-6 order-2">
           <!-- Copia todo el contenido de tu formulario aquí -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]">
-            <div
-              class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300">
-              <div class="mb-2">
-                @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
-                <p class="text-gray-500 text-sm mb-1">Valor de venta en:</p>
-                }
-                @if (propiedad.biz_code === 3) {
-                <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
-                  <span class="text-black">{{ propiedad.saleprice | currency }}</span>
-                </p>
-                }
-                @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-                <p class="text-gray-500 text-sm mb-1">Valor de arriendo en:</p>
-                }
-                @if (propiedad.biz_code === 3) {
-                <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
-                  <span class="text-black">{{ propiedad.rent | currency }}</span>
-                </p>
-                }
-                @if (propiedad.biz_code === 1 || propiedad.biz_code === 2) {
-                <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
-                  <span class="text-black">$ {{ propiedad.price_format }}</span>
-                </p>
-                }
+          <div
+            class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300">
+            <div class="mb-2">
+              @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
+              <p class="text-gray-500 text-sm mb-1">Valor de venta en:</p>
+              }
+              @if (propiedad.biz_code === 3) {
+              <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
+                <span class="text-black">{{ propiedad.saleprice | currency }}</span>
+              </p>
+              }
+              @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
+              <p class="text-gray-500 text-sm mb-1">Valor de arriendo en:</p>
+              }
+              @if (propiedad.biz_code === 3) {
+              <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
+                <span class="text-black">{{ propiedad.rent | currency }}</span>
+              </p>
+              }
+              @if (propiedad.biz_code === 1 || propiedad.biz_code === 2) {
+              <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
+                <span class="text-black">$ {{ propiedad.price_format }}</span>
+              </p>
+              }
+            </div>
+
+            <!-- Separador -->
+            <div class="relative my-6">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-400"></div>
               </div>
-
-              <!-- Separador -->
-              <div class="relative my-6">
-                <div class="absolute inset-0 flex items-center">
-                  <div class="w-full border-t border-gray-400"></div>
-                </div>
-                <div class="relative flex justify-center">
-                  <span class="px-2 bg-white text-xs text-gray-500">Detalles claves</span>
-                </div>
+              <div class="relative flex justify-center">
+                <span class="px-2 bg-white text-xs text-gray-500">Detalles claves</span>
               </div>
+            </div>
 
-              <!-- Características -->
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 text-[#080E36] max-w-md mx-auto">
-                <!-- Cards individuales -->
-                <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
-                  <i class="fas fa-bath text-lg text-gray-500"></i>
-                  <div class="text-center">
-                    <p class="text-xs text-gray-500">Baños</p>
-                    <p class="text-sm font-semibold">{{ propiedad.bathrooms }}</p>
-                  </div>
-                </div>
-
-                <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
-                  <i class="fas fa-bed text-lg text-gray-500"></i>
-                  <div class="text-center">
-                    <p class="text-xs text-gray-500">Habitaciones</p>
-                    <p class="text-sm font-semibold">{{ propiedad.bedrooms }}</p>
-                  </div>
-                </div>
-
-                <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
-                  <i class="fas fa-parking text-lg text-gray-500"></i>
-                  <div class="text-center">
-                    <p class="text-xs text-gray-500">Parqueaderos</p>
-                    <p class="text-sm font-semibold">{{ propiedad.parking }}</p>
-                  </div>
-                </div>
-
-                <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
-                  <i class="fas fa-ruler-combined text-lg text-gray-500"></i>
-                  <div class="text-center">
-                    <p class="text-xs text-gray-500">Área</p>
-                    <p class="text-sm font-semibold">{{ propiedad.area_cons || propiedad.area_lot || "N/A" }} m²</p>
-                  </div>
-                </div>
-
-                <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
-                  <i class="fas fa-calendar-check text-lg text-gray-500"></i>
-                  <div class="text-center">
-                    <p class="text-xs text-gray-500">Estrato</p>
-                    <p class="text-sm font-semibold">{{ propiedad.status || "N/A" }}</p>
-                  </div>
-                </div>
-
-                <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
-                  <i class="fa-regular fa-calendar-days text-lg text-gray-500"></i>
-                  <div class="text-center">
-                    <p class="text-xs text-gray-500">Año construcción</p>
-                    <p class="text-sm font-semibold">{{ propiedad.build_year || "N/A" }}</p>
-                  </div>
+            <!-- Características -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 text-[#080E36] max-w-md mx-auto">
+              <!-- Cards individuales -->
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-bath text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Baños</p>
+                  <p class="text-sm font-semibold">{{ propiedad.bathrooms }}</p>
                 </div>
               </div>
 
-              <div class="rounded-lg p-10 text-center">
-                <p class="text-[21px] text-[#080E36] font-bold">¿Conectaste con este espacio?</p>
-                <p class="text-[20px] text-gray-500 italic">Nuestro equipo te acompaña.</p>
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-bed text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Habitaciones</p>
+                  <p class="text-sm font-semibold">{{ propiedad.bedrooms }}</p>
+                </div>
               </div>
 
-              <!-- Botones -->
-              <div class="space-y-3">
-                <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'telefonos')"
-                  class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-white border border-[#080E36] hover:bg-[#080E36] focus:ring-4 focus:outline-none focus:ring-[#080E36] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
-                  <i class="fas fa-phone-alt fa-sm"></i> Ver teléfonos
-                </button>
-
-                <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'whatsapp')"
-                  class="w-full flex items-center justify-center gap-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
-                  <i class="fab fa-whatsapp fa-sm"></i> Contactar por WhatsApp 😊
-                </button>
-
-                <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'soloEnviar')"
-                  class="w-full text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
-                  Quiero que me contacten
-                </button>
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-parking text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Parqueaderos</p>
+                  <p class="text-sm font-semibold">{{ propiedad.parking }}</p>
+                </div>
               </div>
+
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-ruler-combined text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Área</p>
+                  <p class="text-sm font-semibold">{{ propiedad.area_cons || propiedad.area_lot || "N/A" }} m²</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-calendar-check text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Estrato</p>
+                  <p class="text-sm font-semibold">{{ propiedad.status || "N/A" }}</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fa-regular fa-calendar-days text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Año construcción</p>
+                  <p class="text-sm font-semibold">{{ propiedad.build_year || "N/A" }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg p-10 text-center">
+              <p class="text-[21px] text-[#080E36] font-bold">¿Conectaste con este espacio?</p>
+              <p class="text-[20px] text-gray-500 italic">Nuestro equipo te acompaña.</p>
+            </div>
+
+            <!-- Botones -->
+            <div class="space-y-3">
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'telefonos')"
+                class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-white border border-[#080E36] hover:bg-[#080E36] focus:ring-4 focus:outline-none focus:ring-[#080E36] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
+                <i class="fas fa-phone-alt fa-sm"></i> Ver teléfonos
+              </button>
+
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'whatsapp')"
+                class="w-full flex items-center justify-center gap-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
+                <i class="fab fa-whatsapp fa-sm"></i> Contactar por WhatsApp 😊
+              </button>
+
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'soloEnviar')"
+                class="w-full text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
+                Quiero que me contacten
+              </button>
             </div>
           </div>
         </div>
+
 
         <!-- Tarjetas de detalles-->
         <div class="mt-6 order-3 md:order-3">
