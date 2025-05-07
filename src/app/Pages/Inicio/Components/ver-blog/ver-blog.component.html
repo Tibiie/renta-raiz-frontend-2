@@ -24,14 +24,14 @@
 
     <article class="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-xl shadow-md">
         <header class="mb-6 mt-10">
-            @if (blogId === 1) {
+            @if (blogId === blog1) {
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
                 Medellín brilla en los Stella Awards 2025: la ciudad que enamora al mundo y se vuelve epicentro de
                 inversión inmobiliaria
             </h1>
             }
 
-            @if (blogId === 2) {
+            @if (blogId === blog2) {
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
                 Medellín: El nuevo epicentro del lujo en
                 América Latina para invertir, rentar o
@@ -39,7 +39,7 @@
             </h1>
             }
 
-            @if (blogId === 3) {
+            @if (blogId === blog3) {
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
                 ¿Por qué Medellín se ha convertido en el
                 lugar ideal para vivir e invertir en tiempos
@@ -52,7 +52,7 @@
                     <i class="fas fa-user-edit mr-2 text-[#CDAD60]"></i>
                     Por Renta Raíz
                 </span>
-                @if (blogId === 1) {
+                @if (blogId === blog1) {
                 <span class="flex items-center">
                     <i class="far fa-calendar-alt mr-2 text-[#CDAD60]"></i>
                     24 de abril 2024
@@ -69,17 +69,17 @@
         </header>
 
         <div class="w-full h-64 md:h-96">
-            @if (blogId === 1) {
+            @if (blogId === blog1) {
             <img src="/assets/images/blog-1.jpg" alt="Medellín de noche con edificios iluminados"
                 class="w-full h-full object-cover">
             }
 
-            @if (blogId === 2) {
+            @if (blogId === blog2) {
             <img src="/assets/images/blog-2.jpg" alt="Medellín de noche con edificios iluminados"
                 class="w-full h-full object-cover">
             }
 
-            @if (blogId === 3) {
+            @if (blogId === blog3) {
             <img src="/assets/images/blog-3.jpg" alt="Medellín de noche con edificios iluminados"
                 class="w-full h-full object-cover">
             }
@@ -87,7 +87,7 @@
 
         <!-- Contenido principal -->
         <div class="prose max-w-none mt-10">
-            @if (blogId === 1) {
+            @if (blogId === blog1) {
             <p class="text-lg text-gray-700 leading-relaxed mb-6 ">
                 <strong class="text-[#080E36]">Medellín</strong> ha sido nominada a los <strong>Stella Awards
                     2025</strong>, conocidos como los “Óscar del turismo de reuniones”, por su liderazgo en la industria
@@ -162,7 +162,7 @@
             <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
             }
 
-            @if (blogId === 2) {
+            @if (blogId === blog2) {
             <p class="text-lg text-gray-700 leading-relaxed mb-6 ">
                 <strong class="text-[#080E36]">El fenómeno inmobiliario de lujo que está transformando Medellín</strong>
                 En los últimos años, Medellín ha dejado de ser solo la “Ciudad de la Eterna Primavera” para
@@ -274,7 +274,7 @@
             <div class="h-px bg-gradient-to-r from-[#CDAD60] via-[#080E36] to-[#CDAD60] opacity-100"></div>
             }
 
-            @if (blogId === 3) {
+            @if (blogId === blog3) {
             <p class="text-lg text-gray-700 leading-relaxed mb-6">
                 En un mundo donde la incertidumbre política, económica y social ha llevado a millones de
                 personas a repensar su lugar en el mundo, Medellín se posiciona como un refugio para
@@ -352,14 +352,14 @@
         <!-- Pie de artículo -->
         <footer class="pt-6 border-t border-gray-200 mb-20">
             <div class="flex flex-wrap gap-2">
-                @if (blogId === 1) {
+                @if (blogId === blog1) {
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Stella Awards</span>
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Corazón del progreso</span>
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Turismo</span>
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Inversión</span>
                 }
 
-                @if (blogId === 2) {
+                @if (blogId === blog2) {
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Propiedades
                     exclusivas</span>
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Turismo premium</span>
@@ -367,7 +367,7 @@
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Inversión</span>
                 }
 
-                @if (blogId === 3) {
+                @if (blogId === blog3) {
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Lugar ideal</span>
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Inversión consciente</span>
                 <span class="px-3 py-1 bg-[#080E36]/10 text-[#080E36] rounded-full text-sm">Seguridad</span>
