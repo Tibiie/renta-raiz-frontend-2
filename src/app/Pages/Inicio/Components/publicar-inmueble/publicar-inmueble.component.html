@@ -7,7 +7,7 @@
         style="background-image: url('assets/images/SLIDERPUBLICATUPROPIEDAD.png')"></div>
       <div class="absolute inset-0 z-30 flex items-center justify-center">
         <img src="assets/images/TEXTOSLIDERPUBLICATUPROPIEDAD.png"
-          class="w-[90%] sm:w-[100%] max-w-[1200px] h-auto object-contain -translate-y-12 sm:-translate-y-1"
+          class="w-[70%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-6 md:-translate-y-4 xl:-translate-y-2"
           alt="Texto" />
       </div>
     </div>
@@ -123,7 +123,17 @@
           <div
             class="bg-white rounded-[40px] shadow-[0_12px_40px_rgba(0,0,0,0.35)] overflow-hidden h-full transform transition-all">
             <div class="p-6">
-              <form [formGroup]="formPublicarInmueble">
+              <h1 style="text-align: center;font-weight: bold;font-size: 1.5rem;">Publica tu propiedad</h1>
+              <iframe src="https://api.leadconnectorhq.com/widget/form/1tX0YU5sZDx0rLjf5RJs"  loading="lazy"
+                style="width:100%;height:100%;border:none;border-radius:3px" id="inline-1tX0YU5sZDx0rLjf5RJs"
+                data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-trigger-value=""
+                data-activation-type="alwaysActivated" data-activation-value="" data-deactivation-type="neverDeactivate"
+                data-deactivation-value="" data-form-name="Publica tu propiedad" data-height="597"
+                data-layout-iframe-id="inline-1tX0YU5sZDx0rLjf5RJs" data-form-id="1tX0YU5sZDx0rLjf5RJs"
+                title="Publica tu propiedad">
+              </iframe>
+              <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+              <!-- <form [formGroup]="formPublicarInmueble">
                 <div class="space-y-4">
                   <div>
                     <input type="text" formControlName="nombre" placeholder="Nombre"
@@ -177,11 +187,25 @@
                   </div>
                 </div>
 
-                <button type="submit" (click)="crearPublicacionPropiedad()"
-                  class="mt-6 w-full px-6 py-3 text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm text-center me-2 mb-2 dark:border-[#CDAD60] dark:text-[#CDAD60] dark:hover:text-white dark:hover:bg-[#CDAD60] dark:focus:ring-[#CDAD60]">
-                  Publicar
+                <button type="submit" [disabled]="cargando" (click)="crearPublicacionPropiedad()"
+                  class="mt-6 w-full px-6 py-3 border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm text-center me-2 mb-2 transition-all duration-300"
+                  [ngClass]="{
+                  'text-[#CDAD60] hover:text-white border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-[#CDAD60] dark:border-[#CDAD60] dark:text-[#CDAD60] dark:hover:text-white dark:hover:bg-[#CDAD60] dark:focus:ring-[#CDAD60]': !cargando,
+                  'bg-gray-400 text-white border-gray-400 cursor-not-allowed': cargando
+                }">
+                  <ng-container *ngIf="!cargando; else loadingPublicacion">
+                    Publicar
+                  </ng-container>
+                  <ng-template #loadingPublicacion>
+                    <svg class="animate-spin h-5 w-5 text-white mr-2 inline" xmlns="http://www.w3.org/2000/svg"
+                      fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    Publicando...
+                  </ng-template>
                 </button>
-              </form>
+              </form> -->
               <div class="mt-8 pt-6 border-t border-gray-200 text-center">
                 <p class="text-[26px] text-[#080E36] font-bold mb-4">
                   ¡Si no cuentas con tiempo hablemos directamente aquí!

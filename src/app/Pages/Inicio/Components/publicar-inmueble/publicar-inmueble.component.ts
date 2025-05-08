@@ -25,6 +25,7 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
   styleUrl: './publicar-inmueble.component.scss',
 })
 export class PublicarInmuebleComponent {
+  cargando = false;
   fotosBase64: string[] = [];
 
   toastr = inject(ToastrService);
@@ -49,11 +50,14 @@ export class PublicarInmuebleComponent {
       return;
     }
 
+    this.cargando = true;
+
     const obj = {
       nombre: this.formPublicarInmueble.get('nombre')?.value,
       email: this.formPublicarInmueble.get('email')?.value,
       telefono: this.formPublicarInmueble.get('telefono')?.value,
       barrio: this.formPublicarInmueble.get('barrio')?.value,
+      fechaSolicitud: Date.now(),
       fotosInmuebles: this.fotosBase64
     };
 
@@ -69,6 +73,8 @@ export class PublicarInmuebleComponent {
           progressBar: true,
           timeOut: 5000,
         });
+
+        this.cargando = false;
       },
       (error: any) => {
         console.error('Error al enviar el contacto:', error);

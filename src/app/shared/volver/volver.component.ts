@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-volver',
@@ -9,7 +11,14 @@ import { Component } from '@angular/core';
 })
 export class VolverComponent {
 
+  location = inject(Location);
+  router = inject(Router);
+
   vistaAnterior(): void {
-    window.history.back();
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['']);
+    }
   }
 }

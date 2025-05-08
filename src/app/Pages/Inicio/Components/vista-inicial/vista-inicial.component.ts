@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
-
+var document:any;
 declare const Carousel: any;
 @Component({
   selector: 'app-vista-inicial',
@@ -120,7 +120,9 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
           response.data[2],
           response.data[3],
         ];
+
       },
+
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
       }
@@ -161,7 +163,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     );
   }
 
-  redirigirVerBlog(id: number) {
+  redirigirVerBlog(id: string) {
     const url = this.router.createUrlTree(['/ver-blog', id]).toString();
     window.open(url, '_blank');
   }
@@ -174,7 +176,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   redirigirFiltros() {
     this.cargando = true;
     this.filtrosSeleccionados.clear();
-    this.filtrosSeleccionados.set('biz', '3');
+    this.filtrosSeleccionados.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = {
@@ -222,15 +224,15 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     console.log(this.aliadosPorGrupo);
   }
 
-  abrirPestana(url: string) {
-    window.open(url, '_blank');
+  redirigirContactanos() {
+    this.router.navigate(['/contacto']);
   }
 
   verPropiedad(codPro: number) {
     const url = this.router
       .createUrlTree(['/ver-propiedad', codPro])
       .toString();
-    window.open(url, '_blank');
+    window.open(url);
   }
 
   abrirBrochure() {

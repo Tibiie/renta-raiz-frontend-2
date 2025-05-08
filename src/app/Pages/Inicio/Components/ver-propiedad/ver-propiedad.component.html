@@ -48,29 +48,11 @@
     </ol>
   </nav>
 
-  <!-- <div class="px-4 md:px-10 lg:px-20 xl:px-[350px] mb-4">
-    <div class="flex flex-wrap gap-2 justify-start">
-      <button (click)="seleccionarTab('fotos')" [ngClass]="{
-          'bg-[#080E36] text-white hover:bg-[#080E36]': tabActivo === 'fotos',
-          'bg-gray-200 text-gray-900 hover:bg-gray-300': tabActivo !== 'fotos'
-        }" class="inline-flex items-center px-4 py-2 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300">
-        <i class="fas fa-image mr-2"></i> Fotos
-      </button>
-
-      <button (click)="seleccionarTab('mapa')" [ngClass]="{
-          'bg-[#080E36] text-white hover:bg-[#080E36]': tabActivo === 'mapa',
-          'bg-gray-200 text-gray-900 hover:bg-gray-300': tabActivo !== 'mapa'
-        }" class="inline-flex items-center px-4 py-2 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300">
-        <i class="fas fa-map-marker-alt mr-2"></i> Mapa
-      </button>
-    </div>
-  </div> -->
-
   <div class="flex flex-col">
     <div class="flex flex-col md:flex-row px-4 md:px-20 gap-6">
-      <div class="w-full md:w-2/3">
+      <!-- Imágenes -->
+      <div class="w-full md:w-2/3 order-1">
         <div>
-          <!-- @if (tabActivo === 'fotos') { -->
           <ng-container>
             <div *ngIf="propiedad?.images?.length > 0" class="flex flex-col">
               <div id="carousel" class="w-full relative" data-carousel="static">
@@ -217,20 +199,126 @@
               </div>
             </div>
           </ng-container>
-          <!-- } @if (tabActivo === 'mapa') {
-          <ng-container>
-            <div class="flex flex-col">
-              <div class="w-full relative">
-                <div class="relative h-[700px] overflow-hidden rounded-xl">
-                  <app-mapa [propiedades]="[propiedad]"></app-mapa>
+        </div>
+
+        <div class="block md:hidden w-full mb-6 order-2">
+          <!-- Copia todo el contenido de tu formulario aquí -->
+          <div
+            class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300">
+            <div class="mb-2">
+              @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
+              <p class="text-gray-500 text-sm mb-1">Valor de venta en:</p>
+              }
+              @if (propiedad.biz_code === 3) {
+              <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
+                <span class="text-black">{{ propiedad.saleprice | currency }}</span>
+              </p>
+              }
+              @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
+              <p class="text-gray-500 text-sm mb-1">Valor de arriendo en:</p>
+              }
+              @if (propiedad.biz_code === 3) {
+              <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
+                <span class="text-black">{{ propiedad.rent | currency }}</span>
+              </p>
+              }
+              @if (propiedad.biz_code === 1 || propiedad.biz_code === 2) {
+              <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
+                <span class="text-black">$ {{ propiedad.price_format }}</span>
+              </p>
+              }
+            </div>
+
+            <!-- Separador -->
+            <div class="relative my-6">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-400"></div>
+              </div>
+              <div class="relative flex justify-center">
+                <span class="px-2 bg-white text-xs text-gray-500">Detalles claves</span>
+              </div>
+            </div>
+
+            <!-- Características -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 text-[#080E36] max-w-md mx-auto">
+              <!-- Cards individuales -->
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-bath text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Baños</p>
+                  <p class="text-sm font-semibold">{{ propiedad.bathrooms }}</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-bed text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Habitaciones</p>
+                  <p class="text-sm font-semibold">{{ propiedad.bedrooms }}</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-parking text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Parqueaderos</p>
+                  <p class="text-sm font-semibold">{{ propiedad.parking }}</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-ruler-combined text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Área</p>
+                  <p class="text-sm font-semibold">{{ propiedad.area_cons || propiedad.area_lot || "N/A" }} m²</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fas fa-calendar-check text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Estrato</p>
+                  <p class="text-sm font-semibold">{{ propiedad.status || "N/A" }}</p>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fa-regular fa-calendar-days text-lg text-gray-500"></i>
+                <div class="text-center">
+                  <p class="text-xs text-gray-500">Año construcción</p>
+                  <p class="text-sm font-semibold">{{ propiedad.build_year || "N/A" }}</p>
                 </div>
               </div>
             </div>
-          </ng-container>
-          } -->
+
+            <div class="rounded-lg p-10 text-center">
+              <p class="text-[21px] text-[#080E36] font-bold">¿Conectaste con este espacio?</p>
+              <p class="text-[20px] text-gray-500 italic">Nuestro equipo te acompaña.</p>
+            </div>
+
+            <!-- Botones -->
+            <div class="space-y-3">
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'telefonos')"
+                class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-white border border-[#080E36] hover:bg-[#080E36] focus:ring-4 focus:outline-none focus:ring-[#080E36] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
+                <i class="fas fa-phone-alt fa-sm"></i> Ver teléfonos
+              </button>
+
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'whatsapp')"
+                class="w-full flex items-center justify-center gap-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
+                <i class="fab fa-whatsapp fa-sm"></i> Contactar por WhatsApp 😊
+              </button>
+
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'soloEnviar')"
+                class="w-full text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
+                Quiero que me contacten
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="mt-6">
+
+        <!-- Tarjetas de detalles-->
+        <div class="mt-6 order-3 md:order-3">
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 
             <!-- Administracion incluida -->
@@ -345,7 +433,7 @@
       </div>
 
       <!-- Contenedor que se mueve con el scroll -->
-      <div class="w-full md:w-1/3 md:sticky md:top-24 self-start">
+      <div class="hidden md:block w-full md:w-1/3 md:sticky md:top-24 self-start order-2 md:order-2">
         <div id="modern-drawer" class="h-[calc(100vh-6rem)] overflow-y-auto">
           <div
             class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300">
@@ -510,7 +598,9 @@
           <div class="p-5">
             <a href="#">
               <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36]">
-                {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                {{ inmueble.neighborhood || "Sin barrio especificado" | titlecase }}
+                <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
+
               </h5>
               <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
                 {{ inmueble.description }}

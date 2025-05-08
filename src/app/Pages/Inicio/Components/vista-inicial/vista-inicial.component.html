@@ -24,7 +24,7 @@
       >
         <img
           src="assets/images/TextoSlider-vistaInicial.png"
-          class="w-full max-w-[1000px] h-auto object-contain"
+          class="w-[70%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-6 md:-translate-y-4 xl:-translate-y-2"
           alt="Texto"
         />
       </div>
@@ -196,8 +196,8 @@
             <a href="#">
               <img
                 class="max-w-full max-h-full object-contain"
-                [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-                [alt]="inmueble.address"
+                [src]="inmueble?.image1 || 'assets/images/renta-1.jpg'"
+                [alt]="inmueble?.address"
               />
             </a>
           </div>
@@ -215,7 +215,7 @@
           <div
             class="absolute -top-3 -left-1 bg-[#080E36] text-white text-base font-semibold px-5 py-1.5 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-15px] before:border-y-[18px] before:border-y-transparent before:border-l-[15px] before:border-l-[#080E36]"
           >
-            {{ inmueble.biz | titlecase }}
+            {{ inmueble?.biz | titlecase }}
           </div>
 
           <div
@@ -224,7 +224,7 @@
             <span
               class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow"
             >
-              {{ inmueble.type | titlecase }}
+              {{ inmueble?.type | titlecase }}
             </span>
 
             <button
@@ -241,12 +241,12 @@
               class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]"
             >
               {{
-                inmueble.neighborhood || "Sin barrio especificado" | titlecase
+                inmueble?.neighborhood || "Sin barrio especificado" | titlecase
               }}
               <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
             </h5>
             <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
-              {{ inmueble.description }}
+              {{ inmueble?.description }}
             </p>
           </a>
 
@@ -255,14 +255,14 @@
               <span class="text-sm font-semibold">Habitaciones</span>
               <div class="flex items-center">
                 <i class="fas fa-bed text-lg"></i>
-                <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+                <span class="ml-2">{{ inmueble?.bedrooms || "N/A" }}</span>
               </div>
             </div>
             <div class="flex flex-col items-center">
               <span class="text-sm font-semibold">Baños</span>
               <div class="flex items-center">
                 <i class="fas fa-bath text-lg"></i>
-                <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+                <span class="ml-2">{{ inmueble?.bathrooms || "N/A" }}</span>
               </div>
             </div>
             <div class="flex flex-col items-center">
@@ -271,7 +271,7 @@
                 <i class="fas fa-ruler-combined text-lg"></i>
                 <span class="ml-2"
                   >{{
-                    inmueble.area_cons || inmueble.area_lot || "N/A"
+                    inmueble?.area_cons || inmueble?.area_lot || "N/A"
                   }}
                   m²</span
                 >
@@ -285,8 +285,8 @@
             <span>Precio:</span>
             <span class="text-[#000000]">
               {{
-                inmueble.price_format ||
-                  (inmueble.price
+                inmueble?.price_format ||
+                  (inmueble?.price
                     | currency : "COP" : "symbol-narrow" : "1.0-0") ||
                   "Consultar"
               }}
@@ -443,11 +443,7 @@
     <div class="flex flex-wrap justify-center gap-3 relative z-10">
       <button
         type="button"
-        (click)="
-          abrirPestana(
-            'https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU'
-          )
-        "
+        (click)="redirigirContactanos()"
         class="flex items-center justify-center text-[#CDAD60] border-2 border-[#CDAD60] hover:text-white hover:bg-[#CDAD60] focus:outline-none focus:ring-4 focus:ring-[#CDAD60]/50 font-bold rounded-full text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
       >
         <i class="fas fa-envelope mr-2"></i> Contactanos
@@ -507,11 +503,9 @@
       </div>
 
       <div class="relative">
-        <div
-          class="flex flex-col md:flex-row md:flex-wrap gap-4 md:gap-6 overflow-visible justify-center md:justify-start"
-        >
+        <div class="flex flex-wrap gap-4 md:gap-6 justify-center">
           <div
-            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0"
+            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg"
           >
             <div class="flex h-full" (click)="redirigirAvaluosComerciales()">
               <img
@@ -528,7 +522,7 @@
           </div>
 
           <div
-            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0"
+            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg"
           >
             <div class="flex h-full" (click)="redirigirRentasCortas()">
               <img
@@ -545,7 +539,7 @@
           </div>
 
           <div
-            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0"
+            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg"
           >
             <div class="flex h-full" (click)="abrirBrochure()">
               <img
@@ -562,7 +556,7 @@
           </div>
 
           <div
-            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg flex-shrink-0"
+            class="bg-white shadow-md rounded-xl overflow-hidden w-64 h-24 transition-all duration-300 ease-in-out transform hover:scale-105 hover:border-2 hover:border-[#CDAD60] hover:shadow-lg"
           >
             <div class="flex h-full" (click)="redirigirPublicarPropiedad()">
               <img
@@ -599,7 +593,14 @@
         <div
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
         >
-          <div (click)="redirigirVerBlog(1)" class="cursor-pointer">
+          <div
+            (click)="
+              redirigirVerBlog(
+                'medellin-brilla-en-los-stella-awards-2025-la-ciudad-que-enamora-al-mundo-y-se-vuelve-epicentro-de-inversion-inmobiliaria'
+              )
+            "
+            class="cursor-pointer"
+          >
             <div class="h-40 overflow-hidden">
               <img
                 src="assets/images/blog-1.jpg"
@@ -619,7 +620,11 @@
                 Exhibitions).
               </p>
               <a
-                (click)="redirigirVerBlog(1)"
+                (click)="
+                  redirigirVerBlog(
+                    'medellin-brilla-en-los-stella-awards-2025-la-ciudad-que-enamora-al-mundo-y-se-vuelve-epicentro-de-inversion-inmobiliaria'
+                  )
+                "
                 class="cursor-pointer text-xs text-[#CDAD60] font-semibold hover:underline inline-flex items-center"
               >
                 Ver más
@@ -645,7 +650,15 @@
         <div
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
         >
-          <div (click)="redirigirVerBlog(2)" class="cursor-pointer">
+          <div
+            (click)="
+              redirigirVerBlog(
+                'medellin-el-nuevo-epicentro-del-lujo-en-america-latina-para-invertir-rentar-o-comprar-propiedades-exclusivas'
+              );
+              $event.preventDefault()
+            "
+            class="cursor-pointer"
+          >
             <div class="h-40 overflow-hidden">
               <img
                 src="assets/images/blog-2.jpg"
@@ -665,7 +678,12 @@
                 rentar propiedades de lujo.
               </p>
               <a
-                (click)="redirigirVerBlog(2)"
+                (click)="
+                  redirigirVerBlog(
+                    'medellin-el-nuevo-epicentro-del-lujo-en-america-latina-para-invertir-rentar-o-comprar-propiedades-exclusivas'
+                  );
+                  $event.preventDefault()
+                "
                 class="cursor-pointer text-xs text-[#CDAD60] font-semibold hover:underline inline-flex items-center"
               >
                 Ver más
@@ -691,7 +709,15 @@
         <div
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
         >
-          <div (click)="redirigirVerBlog(3)" class="cursor-pointer">
+          <div
+            (click)="
+              redirigirVerBlog(
+                'por-que-medellin-se-ha-convertido-en-el-lugar-ideal-para-vivir-e-invertir-en-tiempos-de-cambio'
+              );
+              $event.preventDefault()
+            "
+            class="cursor-pointer"
+          >
             <div class="h-40 overflow-hidden">
               <img
                 src="assets/images/blog-3.jpg"
@@ -711,7 +737,11 @@
                 equilibrio, inversión estratégica y calidad de vida.
               </p>
               <a
-                (click)="redirigirVerBlog(3)"
+                (click)="
+                  redirigirVerBlog(
+                    'por-que-medellin-se-ha-convertido-en-el-lugar-ideal-para-vivir-e-invertir-en-tiempos-de-cambio'
+                  )
+                "
                 class="cursor-pointer text-xs text-[#CDAD60] font-semibold hover:underline inline-flex items-center"
               >
                 Ver más
@@ -752,7 +782,6 @@
       "
     ></div>
 
-    <!-- Overlay semitransparente -->
     <div class="absolute top-0 left-0 w-full h-full bg-[#060F29]/90 z-0"></div>
 
     <img
@@ -849,8 +878,6 @@
       </div>
     </div>
   </section>
-
-  <!-- FOOTER -->
 </div>
 
 <app-footer></app-footer>

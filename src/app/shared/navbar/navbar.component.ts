@@ -162,4 +162,8 @@ export class NavbarComponent implements OnInit {
   abrirBrochure() {
     window.open('https://oferta.rentaraiz.co/flipbook/brochure-renta-raiz/', '_blank');
   }
+
+  redirigirVistaInicial() {
+    this._router.navigate(['/']);
+  }
 }

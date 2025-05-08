@@ -16,6 +16,7 @@ import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 import { VolverComponent } from "../../../../shared/volver/volver.component";
+import { FooterComponent } from "../../../../shared/footer/footer.component";
 
 @Component({
   selector: 'app-filtros',
@@ -26,7 +27,8 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
     ReactiveFormsModule,
     CommonModule,
     MapaComponent,
-    VolverComponent
+    VolverComponent,
+    FooterComponent
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
@@ -143,6 +145,7 @@ export class FiltrosComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
+    window.scrollTo(0, 0);
     const state = window.history.state;
     await this.getDatos();
     this.cargarDesdeState(state);
@@ -816,5 +819,12 @@ export class FiltrosComponent implements OnInit {
   verPropiedad(codPro: number) {
     const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
     window.open(url, '_blank');
+  }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
 }

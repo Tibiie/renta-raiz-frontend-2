@@ -1,16 +1,14 @@
 <app-navbar [alwaysScrolled]="true"></app-navbar>
 
 <div class="flex flex-col">
-    <div class="banner-contacto w-full h-[50vh] overflow-hidden">
+    <div class="banner-contacto w-full h-[60vh] overflow-hidden">
         <div class="relative w-full h-full">
-            <!-- Imagen de fondo -->
             <div class="absolute inset-0 bg-cover bg-center z-10"
-                style="background-image: url('assets/images/SliderAVALUOS.png')"></div>
-
-            <!-- Imagen del texto centrada y subida -->
+                style="background-image: url('assets/images/SLIDERPOLITICAS.png')"></div>
             <div class="absolute inset-0 z-30 flex items-center justify-center">
                 <img src="assets/images/TEXTOPOLITICAS.png"
-                    class="w-[90%] sm:w-[100%] max-w-[1200px] h-auto object-contain" alt="Texto" />
+                    class="w-[70%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-6 md:-translate-y-4 xl:-translate-y-2"
+                    alt="Texto" />
             </div>
         </div>
     </div>
@@ -32,7 +30,7 @@
                 <h2 class="text-2xl font-bold">Sitio Web</h2>
                 <p class="text-justify">
                     RENTA RAÍZ SOLUCIONES INMOBILIARIAS ofrecerá a través de su sitio web
-                    <a href="https://www.rentaraiz.com" class="text-blue-600 underline">www.rentaraiz.com</a>
+                    <a href="https://www.rentaraiz.co" class="text-blue-600 underline">www.rentaraiz.co</a>
                     y de forma pública, el catálogo de los inmuebles y propiedades que
                     administre bajo el cumplimiento de su objeto social y el ordenamiento
                     jurídico aplicable.
@@ -95,7 +93,7 @@
                     Almacenamiento de Información Personal
                 </h2>
                 <p class="text-justify">
-                    <a href="https://www.rentaraiz.com" class="text-blue-600 underline">www.rentaraiz.com</a>
+                    <a href="https://www.rentaraiz.co" class="text-blue-600 underline">www.rentaraiz.co</a>
                     y sus servicios asociados están construidos como una solución en la
                     nube. Dichos datos personales reposan en los centros de datos de
                     Amazon Web Services, Inc. (AWS). AWS solo presta al sitio web
@@ -124,8 +122,8 @@
                     ejerzan las acciones o sanciones correspondientes. Para mayor
                     información sobre los términos de uso y políticas entorno a AWS, por
                     favor diríjase al sitio
-                    <a href="https://aws.amazon.com/es/terms/"
-                        class="text-blue-600 underline">https://aws.amazon.com/es/terms/</a>.
+                    <a href="https://www.hostinger.com/co"
+                        class="text-blue-600 underline">https://www.hostinger.com/co</a>.
                 </p>
 
                 <h2 class="text-2xl font-bold">
@@ -533,9 +531,8 @@
                         }}</a>
                     o comunicarse a la línea telefónica de RENTA RAÍZ SOLUCIONES
                     INMOBILIARIAS, Medellín teléfono
-                    <a href="tel:+573502239393" class="text-blue-600 underline">3502239393</a>, o radicarla en nuestra
-                    oficina en la dirección: Diagonal 29 # 34 F
-                    sur 81.
+                    <a href="tel:+573502239393" class="text-blue-600 underline">3145438665</a>, o radicarla en nuestra
+                    oficina en la dirección: Cra. 43A #9 a sur, El Poblado, Medellín, El Poblado, Medellín, Antioquia.
                 </p>
 
                 <p class="text-justify">
@@ -636,7 +633,7 @@
                     La Política de Datos Personales entra en vigencia a partir del día 15
                     de noviembre de 2017. Cualquier cambio que se presente respecto de la
                     presente política, se informará a través de la dirección electrónica:
-                    <a href="https://www.rentaraiz.com" class="text-blue-600 underline">www.rentaraiz.com</a>.
+                    <a href="https://www.rentaraiz.co" class="text-blue-600 underline">www.rentaraiz.co</a>.
                 </p>
             </div>
 
@@ -648,7 +645,7 @@
                 class="mt-16 bg-white border border-gray-200 transform hover:scale-[1.02] transition-all duration-300 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)]">
                 <div class="flex items-center mb-4">
                     <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-pink-500 p-0.5 mr-3">
-                        <img src="assets/images/rentaraiz.webp" alt="Perfil"
+                        <img src="assets/images/rentaraiz.png" alt="Perfil"
                             class="w-full h-full object-cover rounded-full" />
                     </div>
 
@@ -746,7 +743,9 @@
                         <div class="p-5">
                             <a href="#">
                                 <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
-                                    {{ inmueble.neighborhood || "Sin barrio especificado" }}
+                                    {{ inmueble.neighborhood || "Sin barrio especificado" | titlecase }}
+                                    <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
+
                                 </h5>
                                 <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
                                     {{ inmueble.description }}

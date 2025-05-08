@@ -27,10 +27,15 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
 })
 export class VerBlogComponent implements OnInit {
 
-  blogId: number = 0;
+  blogId: string = "";
 
   elementsPerPage = 12;
 
+  blog1:string =  "medellin-brilla-en-los-stella-awards-2025-la-ciudad-que-enamora-al-mundo-y-se-vuelve-epicentro-de-inversion-inmobiliaria"
+
+  blog2:string =  "medellin-el-nuevo-epicentro-del-lujo-en-america-latina-para-invertir-rentar-o-comprar-propiedades-exclusivas"
+
+  blog3:string = "por-que-medellin-se-ha-convertido-en-el-lugar-ideal-para-vivir-e-invertir-en-tiempos-de-cambio"
   inmueblesDestacadosArray: any = {};
 
   router = inject(Router);
@@ -41,7 +46,7 @@ export class VerBlogComponent implements OnInit {
   ngOnInit(): void {
     this.getDatos();
     this.route.params.subscribe(params => {
-      this.blogId = +params['id'];
+      this.blogId = params['id'];
     });
   }
 
