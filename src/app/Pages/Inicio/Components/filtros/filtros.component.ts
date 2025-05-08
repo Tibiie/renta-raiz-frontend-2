@@ -322,13 +322,12 @@ export class FiltrosComponent implements OnInit {
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
     if (f?.pcmin !== undefined && f.pcmin !== null) {
-      // Convertir a string para el formulario
       this.formRangos.patchValue({
         precioMinimo: f.pcmin.toString(),
         precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null
       });
 
-      // Convertir a number para la comparación con priceRanges
+      // Esto convierte a number para comparar
       const pcmin = Number(f.pcmin);
       const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
 
@@ -532,7 +531,7 @@ export class FiltrosComponent implements OnInit {
     if (this.seleccion.banos.length > 0) {
       const values = this.seleccion.banos;
       if (values.includes('+6')) {
-        this.filtrosSeleccionados.set('"maxbathroom', 100);
+        this.filtrosSeleccionados.set('maxbathroom', 100);
         this.filtrosSeleccionados.set('minbathroom', 6);
       } else {
         this.filtrosSeleccionados.set('bathrooms', values.join(','));
