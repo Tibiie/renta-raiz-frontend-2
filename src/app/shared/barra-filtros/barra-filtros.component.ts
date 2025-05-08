@@ -87,6 +87,7 @@ export class BarraFiltrosComponent {
     } as Record<string, string>,
   };
 
+
   isLoading = true;
 
   // Injectaciones
@@ -167,12 +168,12 @@ export class BarraFiltrosComponent {
         // Buscar en barrios primero
         if (this.barrios?.data) {
           const barrioEncontrado = this.barrios.data.find(
-            b => limpiarTexto(`${b.city_name}, ${b.name}`) === limpiarTexto(ubicacionValue)
+            b => limpiarTexto(`${b.city_name},${b.name}`) === limpiarTexto(ubicacionValue)
           );
 
           if (barrioEncontrado) {
+            this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
             this.filtrosSeleccionados.set('neighborhood_code', barrioEncontrado.code);
-            this.filtrosSeleccionados.delete('city');
           }
         }
 
