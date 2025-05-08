@@ -47,7 +47,6 @@ export class AvaluosComercialesComponent {
   inmueblesService = inject(InmueblesService);
 
   ngOnInit(): void {
-    window.scrollTo(0, 0);
     this.getDatos();
   }
 

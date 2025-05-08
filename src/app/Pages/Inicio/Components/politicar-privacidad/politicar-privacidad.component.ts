@@ -32,7 +32,7 @@ export class PoliticarPrivacidadComponent implements OnInit {
   router = inject(Router);
 
   ngOnInit(): void {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     this.getInmueblesDestacados();
   }
 
