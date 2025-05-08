@@ -1,17 +1,17 @@
 <app-navbar></app-navbar>
 
 <div class="flex flex-col">
-    <div class="banner-contacto w-full h-[60vh] overflow-hidden">
+    <div class="banner-contacto w-full h-[40vh] md:h-[60vh] overflow-hidden">
         <div class="relative w-full h-full">
             <!-- Imagen de fondo -->
-            <div class="absolute inset-0 bg-cover bg-center z-10"
-                style="background-image: url('assets/images/SliderAVALUOS.png');">
-            </div>
+            <img src="assets/images/SliderAVALUOS.png" loading="lazy"
+                class="absolute inset-0 w-full h-full object-fill md:object-cover lg:object-cover xl:object-cover 2xl:object-cover z-10"
+                alt="Fondo" />
 
             <!-- Imagen del texto posicionada a la derecha -->
-            <div class="absolute inset-0 z-30 flex items-center justify-center">
+            <div class="absolute inset-0 z-30 flex items-center">
                 <img src="assets/images/TEXTOAVALUOS.png"
-                    class="w-[70%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-6 md:-translate-y-4 xl:-translate-y-2"
+                    class="w-[100%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-[-40px] md:-translate-y-4 xl:-translate-y-2 translate-x-26 md:translate-x-60 lg:translate-x-2 xl:ml-[195px] 2xl:translate-x-64 custom-1024:translate-x-custom-1024"
                     alt="Texto" />
             </div>
         </div>
@@ -172,7 +172,11 @@
                     </section>
 
                     <p class="text-lg leading-relaxed">
-                        Solicita hoy mismo tu avalúo comercial o escríbenos a <strong class="underline">{{ correo
+                        Solicita hoy mismo tu avalúo comercial <a href="https://www.rentaraiz.co/contacto"
+                            target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#CDAD60] to-[#080E36] text-white rounded-md hover:shadow-md transition-all text-center">
+                            <span class="font-medium">👉 Aquí</span>
+                        </a> o escríbenos a <strong class="underline">{{ correo
                             }}</strong>
                     </p>
 
@@ -284,7 +288,7 @@
 
                             <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
                                 <span class="bg-[#CDAD60] text-white text-xs font-semibold px-2 py-1 rounded shadow">
-                                    {{ inmueble.type | titlecase }}
+                                    {{ inmueble?.type | titlecase }}
                                 </span>
 
                                 <button class="text-white hover:text-[#ea6666] transition-colors">
@@ -295,11 +299,11 @@
                         <div class="p-5">
                             <a href="#">
                                 <h5 class="mb-2 text-xl font-semibold tracking-tight text-[#080E36]">
-                                    {{ inmueble.neighborhood || "Sin barrio especificado" | titlecase }}
+                                    {{ inmueble?.neighborhood || "Sin barrio especificado" | titlecase }}
                                     <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
                                 </h5>
                                 <p class="text-[#707172] mb-3 line-clamp-3 overflow-hidden">
-                                    {{ inmueble.description }}
+                                    {{ inmueble?.description }}
                                 </p>
                             </a>
 
@@ -308,14 +312,14 @@
                                     <span class="text-sm font-semibold">Habitaciones</span>
                                     <div class="flex items-center">
                                         <i class="fas fa-bed text-lg"></i>
-                                        <span class="ml-2">{{ inmueble.bedrooms || "N/A" }}</span>
+                                        <span class="ml-2">{{ inmueble?.bedrooms || "N/A" }}</span>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-center">
                                     <span class="text-sm font-semibold">Baños</span>
                                     <div class="flex items-center">
                                         <i class="fas fa-bath text-lg"></i>
-                                        <span class="ml-2">{{ inmueble.bathrooms || "N/A" }}</span>
+                                        <span class="ml-2">{{ inmueble?.bathrooms || "N/A" }}</span>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-center">
@@ -323,7 +327,7 @@
                                     <div class="flex items-center">
                                         <i class="fas fa-ruler-combined text-lg"></i>
                                         <span class="ml-2">{{
-                                            inmueble.area_cons || inmueble.area_lot || "N/A"
+                                            inmueble?.area_cons || inmueble?.area_lot || "N/A"
                                             }}
                                             m²</span>
                                     </div>
@@ -334,8 +338,8 @@
                                 <span>Precio:</span>
                                 <span class="text-[#000000]">
                                     {{
-                                    inmueble.price_format ||
-                                    (inmueble.price
+                                    inmueble?.price_format ||
+                                    (inmueble?.price
                                     | currency : "COP" : "symbol-narrow" : "1.0-0") ||
                                     "Consultar"
                                     }}
