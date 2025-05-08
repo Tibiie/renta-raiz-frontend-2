@@ -153,7 +153,13 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
       .getFiltrosEnviar(obj, this.elementsPerPageInicial)
       .subscribe(
         (response: any) => {
-          this.inmueblesArriendosArray = response.data;
+          var respuesta  = response.data;
+
+          this.inmueblesArriendosArray = [
+            respuesta[0],
+            respuesta[1],
+            respuesta[2],
+          ]
         },
         (error: any) => {
           console.error('Error al enviar los filtros:', error);
@@ -164,7 +170,14 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
-        this.inmueblesDestacadosArray = data.data.slice(2, 5);
+        
+        var respuesta = data.data.filter((inm:any)=> inm.image1 != "");
+
+        this.inmueblesDestacadosArray = [
+          respuesta[0],
+          respuesta[1], 
+          respuesta[2],
+        ];
       },
       (error: any) => {
         console.log(error);
