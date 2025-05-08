@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   router = inject(Router);
   platformId = inject(PLATFORM_ID);
 
+  
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       initFlowbite();
