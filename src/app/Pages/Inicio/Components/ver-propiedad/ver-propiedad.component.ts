@@ -65,6 +65,7 @@ export class VerPropiedadComponent implements OnInit {
   inmueblesService = inject(InmueblesService);
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.initZoom();
     this.route.paramMap.subscribe((params) => {
       this.codPro = Number(params.get('codpro'));

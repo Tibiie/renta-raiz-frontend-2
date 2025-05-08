@@ -24,20 +24,24 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
   templateUrl: './publicar-inmueble.component.html',
   styleUrl: './publicar-inmueble.component.scss',
 })
-export class PublicarInmuebleComponent {
+export class PublicarInmuebleComponent implements OnInit {
   cargando = false;
   fotosBase64: string[] = [];
-
+  
   toastr = inject(ToastrService);
   formBuilder = inject(FormBuilder);
   inmuebleService = inject(InmueblesService);
-
+  
   formPublicarInmueble = this.formBuilder.group({
     nombre: ['', Validators.required],
     telefono: ['', Validators.required],
     email: ['', Validators.required],
     barrio: ['', Validators.required],
   });
+  
+  ngOnInit(): void {
+    window.scrollTo(0, 0);
+  }
 
   crearPublicacionPropiedad() {
     if (!this.formPublicarInmueble.valid) {

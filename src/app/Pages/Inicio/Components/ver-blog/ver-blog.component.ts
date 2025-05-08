@@ -44,6 +44,7 @@ export class VerBlogComponent implements OnInit {
   inmueblesService = inject(InmueblesService);
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.getDatos();
     this.route.params.subscribe(params => {
       this.blogId = params['id'];
