@@ -87,7 +87,6 @@ export class BarraFiltrosComponent {
     } as Record<string, string>,
   };
 
-
   isLoading = true;
 
   // Injectaciones
@@ -168,12 +167,12 @@ export class BarraFiltrosComponent {
         // Buscar en barrios primero
         if (this.barrios?.data) {
           const barrioEncontrado = this.barrios.data.find(
-            b => limpiarTexto(`${b.city_name},${b.name}`) === limpiarTexto(ubicacionValue)
+            b => limpiarTexto(`${b.city_name}, ${b.name}`) === limpiarTexto(ubicacionValue)
           );
 
           if (barrioEncontrado) {
-            this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
-            this.filtrosSeleccionados.set('neighborhood', barrioEncontrado.code);
+            this.filtrosSeleccionados.set('neighborhood_code', barrioEncontrado.code);
+            this.filtrosSeleccionados.delete('city');
           }
         }
 
@@ -183,11 +182,11 @@ export class BarraFiltrosComponent {
             c => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
           );
           this.filtrosSeleccionados.set('city', ciudad?.code);
-          this.filtrosSeleccionados.delete('neighborhood');
+          this.filtrosSeleccionados.delete('neighborhood_code');
         }
       } else {
         this.filtrosSeleccionados.delete('city');
-        this.filtrosSeleccionados.delete('neighborhood');
+        this.filtrosSeleccionados.delete('neighborhood_code');
       }
     }
 
@@ -322,12 +321,12 @@ export class BarraFiltrosComponent {
       // Selección de ciudad
       this.searchTerm = item.name;
       this.filtrosSeleccionados.set('city', item.code);
-      this.filtrosSeleccionados.delete('neighborhood');
+      this.filtrosSeleccionados.delete('neighborhood_code');
     } else {
       // Selección de barrio
       this.searchTerm = `${item.city_name}, ${item.name}`;
       this.filtrosSeleccionados.set('city', item.city_code);
-      this.filtrosSeleccionados.set('neighborhood', item.code);
+      this.filtrosSeleccionados.set('neighborhood_code', item.code);
     }
 
     this.filteredBarrios = [];

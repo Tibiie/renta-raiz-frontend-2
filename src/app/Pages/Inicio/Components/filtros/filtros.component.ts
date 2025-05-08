@@ -671,7 +671,7 @@ export class FiltrosComponent implements OnInit {
     this.filteredBarrios = [];
 
     this.filtrosSeleccionados.set('city', barrio.city_code);
-    this.filtrosSeleccionados.set('neighborhood', barrio.code);
+    this.filtrosSeleccionados.set('neighborhood_code', barrio.code);
     this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
 
