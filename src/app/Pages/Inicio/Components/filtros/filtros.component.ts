@@ -817,7 +817,7 @@ export class FiltrosComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
-    window.open(url, '_blank');
+    this.router.navigate(['/ver-propiedad', codPro]);
   }
 
   scrollToTop() {
