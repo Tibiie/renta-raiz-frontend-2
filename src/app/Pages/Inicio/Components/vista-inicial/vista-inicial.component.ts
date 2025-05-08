@@ -164,9 +164,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   redirigirVerBlog(id: string) {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/ver-blog', id])
-    );
+    const url = this.router.createUrlTree(['/ver-blog', id]).toString();
     window.open(url, '_blank');
   }
 
