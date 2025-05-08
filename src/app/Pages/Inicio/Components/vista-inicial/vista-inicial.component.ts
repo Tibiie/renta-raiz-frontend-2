@@ -115,12 +115,23 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     };
     this.inmueblesService.getFiltrosEnviar(obj, 4).subscribe(
       (response: any) => {
-        this.inmueblesVentasArray = [
-          response.data[0],
-          response.data[2],
-          response.data[3],
-        ];
+        console.log(response.data);
+        
+        this.inmueblesVentasArray = response.data.filter((inm:any)=> inm.image1 != "");
 
+    
+        
+      //   var repuesta = [
+      //     response.data[0],
+      //     response.data[2],
+      //     response.data[3],
+      //   ];
+
+      //   console.log(repuesta);
+        
+      //   this.inmueblesVentasArray = repuesta.filter((inm:any)=> inm.images1 != "");
+      //  console.log(this.inmueblesVentasArray);
+       
       },
 
       (error: any) => {
@@ -174,6 +185,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   redirigirFiltros() {
+    alert('filtros');
     this.cargando = true;
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('biz', '1');
@@ -231,7 +243,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     const url = this.router
       .createUrlTree(['/ver-propiedad', codPro])
       .toString();
-    window.open(url);
+      this.router.navigate(['/ver-propiedad', codPro]);
   }
 
   abrirBrochure() {
