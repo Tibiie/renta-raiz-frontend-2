@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
-var document:any;
+var document: any;
 declare const Carousel: any;
 @Component({
   selector: 'app-vista-inicial',
@@ -81,7 +81,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngAfterViewInit(): void {
     const targetEl = document.getElementById('slider');
@@ -164,7 +164,9 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   redirigirVerBlog(id: string) {
-    const url = this.router.createUrlTree(['/ver-blog', id]).toString();
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/ver-blog', id])
+    );
     window.open(url, '_blank');
   }
 
