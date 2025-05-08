@@ -1,28 +1,28 @@
 <app-navbar></app-navbar>
 
 <div class="flex flex-col">
-    <div class="banner-contacto w-full h-[50vh] overflow-hidden">
+    <div class="banner-contacto w-full h-[40vh] md:h-[60vh] overflow-hidden">
         <div class="relative w-full h-full">
-            <!-- Imagen de fondo -->
-            <div class="absolute inset-0 bg-cover bg-center z-10"
-                style="background-image: url('assets/images/Noticias-fondo.png');">
-            </div>
-
-            <!-- Imagen del texto centrada y subida -->
+            <!-- Imagen de fondo (No se corta en móvil) -->
+            <img src="assets/images/Noticias-fondo.png" loading="lazy"
+                class="absolute inset-0 w-full h-full object-fill md:object-cover lg:object-cover xl:object-cover 2xl:object-cover z-10"
+                alt="Fondo" />
+    
+            <!-- Imagen del texto (Más grande en móvil) -->
             <div class="absolute inset-0 z-30 flex items-center justify-center">
                 <img src="assets/images/TextoSliderNOTICIAS.png"
-                    class="w-[70%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-6 md:-translate-y-4 xl:-translate-y-2"
+                    class="w-[95%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-4 md:-translate-y-4 xl:-translate-y-2"
                     alt="Texto" />
             </div>
         </div>
     </div>
-
+    
     <!-- Sección de filtros -->
-    <div class="bg-gray-200" #dropdownContainer>
+    <div #dropdownContainer>
         <app-barra-filtros></app-barra-filtros>
     </div>
 
-    <article class="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-xl shadow-md">
+    <article class="max-w-4xl mx-auto p-4 md:p-6 bg-white rounded-xl shadow-md mt-10">
         <header class="mb-6 mt-10">
             @if (blogId === blog1) {
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
