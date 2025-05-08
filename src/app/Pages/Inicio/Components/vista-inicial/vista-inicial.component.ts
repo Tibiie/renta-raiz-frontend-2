@@ -221,7 +221,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     const url = this.router
       .createUrlTree(['/ver-propiedad', codPro])
       .toString();
-    window.open(url, '_blank');
+    window.open(url);
   }
 
   abrirBrochure() {
