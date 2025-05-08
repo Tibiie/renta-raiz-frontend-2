@@ -164,9 +164,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   redirigirVerBlog(id: string) {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/ver-blog', id])
-    );
+    const url = this.router.createUrlTree(['/ver-blog', id]).toString();
     window.open(url, '_blank');
   }
 
@@ -212,19 +210,18 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     // Verificamos si estamos en el navegador antes de acceder a window
     const isMobile =
       isPlatformBrowser(this.platformId) && window.innerWidth < 768;
+      const grupoSize = isMobile ? 3 : 4;
     console.log(isMobile);
-
-    const grupoSize = isMobile ? 3 : 4;
 
     this.aliadosPorGrupo = [];
 
     // Agrupamos los aliados
-    for (let i = 0; i < this.aliados.length; i += grupoSize) {
+    for (let i = 0; i <= this.aliados.length - grupoSize; i++) {
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + grupoSize));
     }
-
     console.log(this.aliadosPorGrupo);
   }
+
 
   redirigirContactanos() {
     this.router.navigate(['/contacto']);
