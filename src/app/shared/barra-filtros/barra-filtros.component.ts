@@ -167,13 +167,21 @@ export class BarraFiltrosComponent {
       if (ubicacionValue) {
         // Buscar en barrios primero
         if (this.barrios?.data) {
+
+          var ciudadBarrio = ubicacionValue.split(',');
+          console.log(ciudadBarrio);
+          
           const barrioEncontrado = this.barrios.data.find(
-            b => limpiarTexto(`${b.city_name},${b.name}`) === limpiarTexto(ubicacionValue)
+            b => (limpiarTexto(b.city_name) === limpiarTexto(ciudadBarrio[0]) && limpiarTexto(b.name) == limpiarTexto(ciudadBarrio[1]))
           );
+          console.log(barrioEncontrado);
+          
+          
+          
 
           if (barrioEncontrado) {
-            this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
-            this.filtrosSeleccionados.set('neighborhood', barrioEncontrado.code);
+            this.filtrosSeleccionados.set('city', Number(barrioEncontrado.city_code));
+            this.filtrosSeleccionados.set('neighborhood_code', Number(barrioEncontrado.code));
           }
         }
 
@@ -183,20 +191,20 @@ export class BarraFiltrosComponent {
             c => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
           );
           this.filtrosSeleccionados.set('city', ciudad?.code);
-          this.filtrosSeleccionados.delete('neighborhood');
+          this.filtrosSeleccionados.delete('neighborhood_code');
         }
       } else {
         this.filtrosSeleccionados.delete('city');
-        this.filtrosSeleccionados.delete('neighborhood');
+        this.filtrosSeleccionados.delete('neighborhood_code');
       }
     }
 
     if (this.selectedProperty) {
-      this.filtrosSeleccionados.set('biz', this.selectedProperty.code);
+      this.filtrosSeleccionados.set('biz', Number(this.selectedProperty.code));
     }
 
     if (this.selectedEstate) {
-      this.filtrosSeleccionados.set('type', this.selectedEstate.code);
+      this.filtrosSeleccionados.set('type', Number(this.selectedEstate.code));
     }
 
     if (
@@ -336,7 +344,7 @@ export class BarraFiltrosComponent {
   }
 
   getEnviarFiltros() {
-    this.prepararFiltros();
+    // this.prepararFiltros();
 
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = {
@@ -348,14 +356,16 @@ export class BarraFiltrosComponent {
 
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
-        this.router.navigate(['/filtros'], {
-          state: {
-            resultados: response.data,
-            paginacion: response,
-            filtros: obj,
-          },
-        });
-        this.cargando = false;
+        console.log(response);
+        
+        // this.router.navigate(['/filtros'], {
+        //   state: {
+        //     resultados: response.data,
+        //     paginacion: response,
+        //     filtros: obj,
+        //   },
+        // });
+        // this.cargando = false;
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -498,7 +508,9 @@ export class BarraFiltrosComponent {
   redirigirFiltros() {
     this.cargando = true;
     this.prepararFiltros();
-    this.getEnviarFiltros();
+    setTimeout(() => {
+      this.getEnviarFiltros();
+    }, 5000);
   }
 
   abrirPestana(url: string) {
