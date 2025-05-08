@@ -3,13 +3,15 @@ import {
   Component,
   ElementRef,
   HostListener,
+  Inject,
   inject,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
@@ -78,6 +80,8 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   elementRef = inject(ElementRef);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngAfterViewInit(): void {
     const targetEl = document.getElementById('slider');
@@ -203,10 +207,17 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   getAliadosPorGrupo(): void {
-    const grupoSize = 4;
+    // Verificamos si estamos en el navegador antes de acceder a window
+    const isMobile =
+      isPlatformBrowser(this.platformId) && window.innerWidth < 768;
+    console.log(isMobile);
+
+    const grupoSize = isMobile ? 3 : 4;
+
     this.aliadosPorGrupo = [];
 
-    for (let i = 0; i <= this.aliados.length - grupoSize; i++) {
+    // Agrupamos los aliados
+    for (let i = 0; i < this.aliados.length; i += grupoSize) {
       this.aliadosPorGrupo.push(this.aliados.slice(i, i + grupoSize));
     }
 

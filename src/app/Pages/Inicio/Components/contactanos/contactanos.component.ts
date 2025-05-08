@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -17,16 +17,16 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
   templateUrl: './contactanos.component.html',
   styleUrl: './contactanos.component.scss'
 })
-export class ContactanosComponent {
-
+export class ContactanosComponent implements OnInit {
+  
   cargando = false;
   email = "info@rentaraiz.com";
-
+  
   // Injeccciones
   toastr = inject(ToastrService);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
-
+  
   // Formularios
   formContacto = this.formBuilder.group({
     nombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -34,7 +34,11 @@ export class ContactanosComponent {
     telefono: ['', [Validators.required, Validators.minLength(10)]],
     mensaje: ['', [Validators.required, Validators.minLength(10)]],
   });
-
+  
+  ngOnInit(): void {
+    window.scrollTo(0, 0);
+  }
+  
   createContacto() {
     if (this.formContacto.invalid) {
       this.toastr.error('Complete todos los campos', 'Error', {

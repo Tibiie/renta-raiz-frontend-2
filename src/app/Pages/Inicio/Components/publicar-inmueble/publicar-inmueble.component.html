@@ -1,17 +1,24 @@
 <app-navbar></app-navbar>
 
 <div class="flex flex-col">
-  <div class="banner-contacto w-full h-[50vh] overflow-hidden">
+  <div class="banner-contacto w-full h-[40vh] md:h-[60vh] overflow-hidden">
     <div class="relative w-full h-full">
-      <div class="absolute inset-0 bg-cover bg-center z-10"
-        style="background-image: url('assets/images/SLIDERPUBLICATUPROPIEDAD.png')"></div>
-      <div class="absolute inset-0 z-30 flex items-center justify-center">
+      <!-- Imagen de Fondo (No se corta en móvil) -->
+      <img src="assets/images/SLIDERPUBLICATUPROPIEDAD.png" loading="lazy"
+        class="absolute inset-0 w-full h-full object-fill md:object-cover lg:object-cover xl:object-cover 2xl:object-cover z-10"
+        alt="Fondo" />
+  
+      <!-- Imagen de Texto (Más grande en móvil) -->
+      <div class="absolute inset-0 z-30 flex items-center">
         <img src="assets/images/TEXTOSLIDERPUBLICATUPROPIEDAD.png"
-          class="w-[70%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-6 md:-translate-y-4 xl:-translate-y-2"
+          class="w-[100%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-[-40px] md:-translate-y-4 xl:-translate-y-2 translate-x-26 md:translate-x-60 lg:translate-x-2 xl:ml-[195px] 2xl:translate-x-64 custom-1024:translate-x-custom-1024"
           alt="Texto" />
       </div>
     </div>
   </div>
+  
+  
+  
 
   <div #dropdownContainer>
     <app-barra-filtros></app-barra-filtros>
