@@ -3,11 +3,15 @@
 <div class="flex flex-col">
     <div class="banner-contacto w-full h-[40vh] md:h-[60vh] overflow-hidden">
         <div class="relative w-full h-full">
+
+            <!-- Imagen de fondo como background CSS -->
+            <div class="absolute inset-0 w-full h-full bg-cover bg-center z-10"
+                style="background-image: url('assets/images/Noticias-fondo.png')"></div>
             <!-- Imagen de fondo (No se corta en móvil) -->
-            <img src="assets/images/Noticias-fondo.png" 
+            <img src="assets/images/Noticias-fondo.png"
                 class="absolute inset-0 w-full h-full object-fill md:object-cover lg:object-cover xl:object-cover 2xl:object-cover z-10"
                 alt="Fondo" />
-    
+
             <!-- Imagen del texto (Más grande en móvil) -->
             <div class="absolute inset-0 z-30 flex items-center justify-center">
                 <img src="assets/images/TextoSliderNOTICIAS.png"
@@ -16,7 +20,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Sección de filtros -->
     <div #dropdownContainer>
         <app-barra-filtros></app-barra-filtros>
