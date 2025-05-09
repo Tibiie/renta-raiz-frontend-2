@@ -1,19 +1,22 @@
-import { Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-barra-filtros',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './barra-filtros.component.html',
-  styleUrl: './barra-filtros.component.scss'
+  styleUrl: './barra-filtros.component.scss',
 })
 export class BarraFiltrosComponent {
   @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
@@ -24,7 +27,6 @@ export class BarraFiltrosComponent {
   searchTerm: string = '';
   elementsPerPageInicial = 3;
   filtrosSeleccionados: Map<string, any> = new Map();
-
 
   filtros: any = {};
   ciudades: any[] = [];
@@ -45,9 +47,11 @@ export class BarraFiltrosComponent {
     habitaciones: [] as (number | string)[],
   };
 
-  cargando = false
+  cargando = false;
   isPreciosOpen = false;
   isMasFiltrosOpen = false;
+  tipoFiltro: string = 'ubicacion';
+  codPro: number | null = null;
 
   // Para Categorias de inmuebles
   isPropertyDropdownOpen = false;
@@ -87,7 +91,6 @@ export class BarraFiltrosComponent {
     } as Record<string, string>,
   };
 
-
   isLoading = true;
 
   // Injectaciones
@@ -95,6 +98,7 @@ export class BarraFiltrosComponent {
   elementRef = inject(ElementRef);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
+  toastr = inject(ToastrService);
 
   formRangos = this.formBuilder.group({
     AreaMinima: [''],
@@ -111,7 +115,7 @@ export class BarraFiltrosComponent {
   scrollToTop(): void {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 
@@ -134,7 +138,6 @@ export class BarraFiltrosComponent {
       this.cerrarTodosLosDropdowns();
       this.filteredBarrios = [];
     }
-
   }
 
   cerrarTodosLosDropdowns() {
@@ -151,15 +154,19 @@ export class BarraFiltrosComponent {
   }
 
   prepararFiltros() {
-    const skipUbicacion = this.filtrosSeleccionados.get('isManualSelection') === 'true';
+    const skipUbicacion =
+      this.filtrosSeleccionados.get('isManualSelection') === 'true';
     this.filtrosSeleccionados.delete('isManualSelection');
 
     if (!skipUbicacion) {
       const limpiarTexto = (texto: string) => {
-        return texto?.normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .trim()
-          .toLowerCase() || '';
+        return (
+          texto
+            ?.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim()
+            .toLowerCase() || ''
+        );
       };
 
       const ubicacionValue = this.formRangos.value.ubicacion;
@@ -168,19 +175,24 @@ export class BarraFiltrosComponent {
         // Buscar en barrios primero
         if (this.barrios?.data) {
           const barrioEncontrado = this.barrios.data.find(
-            b => limpiarTexto(`${b.city_name},${b.name}`) === limpiarTexto(ubicacionValue)
+            (b) =>
+              limpiarTexto(`${b.city_name},${b.name}`) ===
+              limpiarTexto(ubicacionValue)
           );
 
           if (barrioEncontrado) {
             this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
-            this.filtrosSeleccionados.set('neighborhood_code', barrioEncontrado.code);
+            this.filtrosSeleccionados.set(
+              'neighborhood_code',
+              barrioEncontrado.code
+            );
           }
         }
 
         // Buscar en ciudades si no se encontró en barrios
         if (!this.filtrosSeleccionados.has('city')) {
           const ciudad = this.ciudades.find(
-            c => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
+            (c) => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
           );
           this.filtrosSeleccionados.set('city', ciudad?.code);
           this.filtrosSeleccionados.delete('neighborhood_code');
@@ -285,28 +297,78 @@ export class BarraFiltrosComponent {
     }
   }
 
+  getDatosPropiedad() {
+    if (this.codPro && this.codPro > 0) {
+      this.cargando = true;
+      this.inmueblesService.getDatosPropiedad(this.codPro!).subscribe(
+        (response: any) => {
+          console.log(response);
+          if (response !== null) {
+            this.verPropiedad(this.codPro!);
+          } else {
+            this.toastr.error('No se encontró la propiedad', 'Error', {
+              closeButton: true,
+              positionClass: 'toast-bottom-right',
+              progressBar: true,
+              timeOut: 5000,
+            });
+          }
+          this.cargando = false;
+        },
+        (error: any) => {
+          this.cargando = false;
+          console.error('Error al obtener la propiedad:', error);
+          this.toastr.error('No se encontró la propiedad', 'Error', {
+            closeButton: true,
+            positionClass: 'toast-bottom-right',
+            progressBar: true,
+            timeOut: 5000,
+          });
+        }
+      );
+    } else {
+      this.toastr.error('Complete todos los campos', 'Error', {
+        closeButton: true,
+        positionClass: 'toast-bottom-right',
+        progressBar: true,
+        timeOut: 5000,
+      });
+      return;
+    }
+  }
+
+  verPropiedad(codPro: number) {
+    const url = this.router
+      .createUrlTree(['/ver-propiedad', codPro])
+      .toString();
+    window.open(url, '_blank');
+  }
+
   filterLocations() {
     const search = this.searchTerm.toLowerCase().trim();
 
     // Filtrar ciudades que coinciden
-    const ciudadesFiltradas = this.ciudades.filter(ciudad =>
+    const ciudadesFiltradas = this.ciudades.filter((ciudad) =>
       ciudad.name.toLowerCase().includes(search)
     );
 
     // Filtrar barrios que coinciden con la ciudad o nombre
-    const barriosFiltrados = this.barrios.data.filter((barrio: any) =>
-      barrio.city_name.toLowerCase().includes(search) ||
-      barrio.name.toLowerCase().includes(search)
+    const barriosFiltrados = this.barrios.data.filter(
+      (barrio: any) =>
+        barrio.city_name.toLowerCase().includes(search) ||
+        barrio.name.toLowerCase().includes(search)
     );
 
     // Combinar resultados y eliminar duplicados
     this.filteredBarrios = [
-      ...ciudadesFiltradas.map(c => ({ ...c, isCity: true })),
-      ...barriosFiltrados
-    ].filter((item, index, self) =>
-      index === self.findIndex(i =>
-        i.isCity ? i.code === item.code : i.code === item.code
-      )
+      ...ciudadesFiltradas.map((c) => ({ ...c, isCity: true })),
+      ...barriosFiltrados,
+    ].filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((i) =>
+          i.isCity ? i.code === item.code : i.code === item.code
+        )
     );
 
     // Ordenar: ciudades primero, luego barrios de las ciudades encontradas
