@@ -12,6 +12,7 @@ import { VerBlogComponent } from './Components/ver-blog/ver-blog.component';
 import { PublicarInmuebleComponent } from './Components/publicar-inmueble/publicar-inmueble.component';
 import { PoliticarPrivacidadComponent } from './Components/politicar-privacidad/politicar-privacidad.component';
 import { AvaluosComercialesComponent } from './Components/avaluos-comerciales/avaluos-comerciales.component';
+import { EnvioExitosoComponent } from '../../shared/envio-exitoso/envio-exitoso.component';
 
 export const routes: Routes = [
 
@@ -69,6 +70,10 @@ export const routes: Routes = [
   {
     path: 'avaluos-comerciales',
     component: AvaluosComercialesComponent
+  },
+  {
+    path: 'formulario-enviado-con-exito',
+    component: EnvioExitosoComponent
   }
 ];
 

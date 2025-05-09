@@ -1,0 +1,36 @@
+<div class="relative flex items-center justify-center min-h-screen">
+    <!-- Video de Vimeo -->
+    <iframe id="vimeo-video"
+        src="https://player.vimeo.com/video/420041930?loop=1&autoplay=1&title=0&byline=0&portrait=0&background=1"
+        class="absolute top-0 left-0 w-full h-full object-cover z-0" frameborder="0"
+        allow="autoplay; fullscreen"></iframe>
+
+    <!-- Capa azul encima del video -->
+    <div class="absolute top-0 left-0 w-full h-full bg-[#011335] bg-opacity-90 flex items-center justify-center z-10">
+        <!-- Contenido centrado en la capa -->
+        <div class="text-center text-white py-12 px-6 rounded-2xl w-full max-w-2xl">
+            <!-- Logo RENTARAZ como imagen -->
+            <img src="assets/images/RR DORADO.png" class="w-48 mx-auto mb-4" alt="logo-renta-raiz">
+
+            <!-- Texto principal -->
+            <h2 class="text-3xl font-bold mb-6 tracking-tight">TU INFORMACIÓN FUE ENVIADA CON ÉXITO</h2>
+
+            <!-- Destacado amarillo -->
+            <div
+                class="bg-[#CDAD60]  text-white text-2xl font-bold py-2 px-8 mb-6 rounded-full inline-block tracking-tight">
+                TE CONTACTAREMOS PRONTO
+            </div>
+
+            <!-- Texto descriptivo -->
+            <p class="text-xl mb-8 tracking-tight">SI DESEA COMUNICARSE CON NOSOTROS DIRECTAMENTE, HAGA CLIC EN EL BOTÓN
+                A CONTINUACIÓN</p>
+
+            <!-- Botón de WhatsApp -->
+            <button
+                class="bg-[#CDAD60]  text-white text-xl font-bold py-3 px-8 rounded-full hover:bg-[#CDAD60]  mx-auto tracking-tight"
+                (click)="enviarWthatsapp()">
+                HABLAR POR WHATSAPP
+            </button>
+        </div>
+    </div>
+</div>
