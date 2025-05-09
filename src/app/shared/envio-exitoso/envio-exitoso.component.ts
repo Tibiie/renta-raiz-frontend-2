@@ -10,6 +10,6 @@ import { Component } from '@angular/core';
 export class EnvioExitosoComponent {
 
   enviarWthatsapp() {
-    window.open('https://api.whatsapp.com/send?phone=+5692359210', '_blank');
+    window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU', '_blank');
   }
 }
