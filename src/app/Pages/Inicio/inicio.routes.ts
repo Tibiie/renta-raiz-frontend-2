@@ -72,7 +72,7 @@ export const routes: Routes = [
     component: AvaluosComercialesComponent
   },
   {
-    path: 'formulario-enviado-con-exito',
+    path: 'formulario-enviado-con-exito/',
     component: EnvioExitosoComponent
   }
 ];
