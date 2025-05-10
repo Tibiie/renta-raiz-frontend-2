@@ -81,7 +81,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngAfterViewInit(): void {
     const targetEl = document.getElementById('slider');
@@ -116,22 +116,17 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     this.inmueblesService.getFiltrosEnviar(obj, 4).subscribe(
       (response: any) => {
         console.log(response.data);
-        
-        this.inmueblesVentasArray = response.data.filter((inm:any)=> inm.image1 != "");
 
-    
-        
-      //   var repuesta = [
-      //     response.data[0],
-      //     response.data[2],
-      //     response.data[3],
-      //   ];
+        // this.inmueblesVentasArray = response.data.filter((inm:any)=> inm.image1 != "");
 
-      //   console.log(repuesta);
-        
-      //   this.inmueblesVentasArray = repuesta.filter((inm:any)=> inm.images1 != "");
-      //  console.log(this.inmueblesVentasArray);
-       
+        var repuesta = [response.data[0], response.data[2], response.data[3]];
+
+        console.log(repuesta);
+
+        this.inmueblesVentasArray = repuesta.filter(
+          (inm: any) => inm.images1 != ''
+        );
+        console.log(this.inmueblesVentasArray);
       },
 
       (error: any) => {
@@ -153,13 +148,13 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
       .getFiltrosEnviar(obj, this.elementsPerPageInicial)
       .subscribe(
         (response: any) => {
-          var respuesta  = response.data;
+          var respuesta = response.data;
 
           this.inmueblesArriendosArray = [
             respuesta[0],
             respuesta[1],
             respuesta[2],
-          ]
+          ];
         },
         (error: any) => {
           console.error('Error al enviar los filtros:', error);
@@ -170,12 +165,11 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   getInmueblesDestacados() {
     this.inmueblesService.getInmueblesDestacados().subscribe(
       (data: any) => {
-        
-        var respuesta = data.data.filter((inm:any)=> inm.image1 != "");
+        var respuesta = data.data.filter((inm: any) => inm.image1 != '');
 
         this.inmueblesDestacadosArray = [
           respuesta[0],
-          respuesta[1], 
+          respuesta[1],
           respuesta[2],
         ];
       },
@@ -235,7 +229,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     // Verificamos si estamos en el navegador antes de acceder a window
     const isMobile =
       isPlatformBrowser(this.platformId) && window.innerWidth < 768;
-      const grupoSize = isMobile ? 3 : 4;
+    const grupoSize = isMobile ? 3 : 4;
     console.log(isMobile);
 
     this.aliadosPorGrupo = [];
@@ -247,7 +241,6 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     console.log(this.aliadosPorGrupo);
   }
 
-
   redirigirContactanos() {
     this.router.navigate(['/contacto']);
   }
@@ -256,7 +249,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     const url = this.router
       .createUrlTree(['/ver-propiedad', codPro])
       .toString();
-      this.router.navigate(['/ver-propiedad', codPro]);
+    this.router.navigate(['/ver-propiedad', codPro]);
   }
 
   abrirBrochure() {

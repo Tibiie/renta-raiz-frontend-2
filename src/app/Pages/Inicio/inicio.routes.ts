@@ -15,70 +15,69 @@ import { AvaluosComercialesComponent } from './Components/avaluos-comerciales/av
 import { EnvioExitosoComponent } from '../../shared/envio-exitoso/envio-exitoso.component';
 
 export const routes: Routes = [
-
   { path: '', redirectTo: '', pathMatch: 'full' },
 
   {
     path: '',
-    component: VistaInicialComponent
+    component: VistaInicialComponent,
   },
 
   {
     path: 'filtros',
-    component: FiltrosComponent
+    component: FiltrosComponent,
   },
   {
     path: 'filtros/:tipo',
-    component: FiltrosComponent
+    component: FiltrosComponent,
   },
   {
     path: 'contacto',
-    component: ContactanosComponent
+    component: ContactanosComponent,
   },
   {
     path: 'ver-propiedad/:codpro',
-    component: VerPropiedadComponent
+    component: VerPropiedadComponent,
   },
   {
     path: 'nuestro-equipo',
-    component: NuestroEquipoComponent
+    component: NuestroEquipoComponent,
   },
   {
     path: 'quienes-somos',
-    component: QuienesSomosComponent
+    component: QuienesSomosComponent,
   },
   {
     path: 'mapa',
-    component: MapaComponent
+    component: MapaComponent,
   },
   {
     path: 'blogs',
-    component: BlogsComponent
+    component: BlogsComponent,
   },
   {
     path: 'ver-blog/:id',
-    component: VerBlogComponent
+    component: VerBlogComponent,
   },
   {
     path: 'publicar-inmueble',
-    component: PublicarInmuebleComponent
+    component: PublicarInmuebleComponent,
   },
   {
     path: 'politicas-de-privacidad',
-    component: PoliticarPrivacidadComponent
+    component: PoliticarPrivacidadComponent,
   },
   {
     path: 'avaluos-comerciales',
-    component: AvaluosComercialesComponent
+    component: AvaluosComercialesComponent,
   },
   {
-    path: 'formulario-enviado-con-exito/',
-    component: EnvioExitosoComponent
-  }
+    path: 'formulario-enviado-con-exito',
+    component: EnvioExitosoComponent,
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes),],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class InicioRoutingModule { }
+export class InicioRoutingModule {}
