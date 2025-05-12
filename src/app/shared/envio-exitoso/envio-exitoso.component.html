@@ -1,49 +1,35 @@
-<div class="relative flex items-center justify-center h-screen font-sans">
+<div class="relative flex items-center justify-center min-h-screen font-sans">
   <!-- Video de fondo -->
-  <iframe
-    id="vimeo-video"
+  <iframe id="vimeo-video"
     src="https://player.vimeo.com/video/420041930?loop=1&autoplay=1&title=0&byline=0&portrait=0&background=1"
-    class="fixed top-0 left-0 w-screen h-screen object-cover z-0"
-    frameborder="0"
-    allow="autoplay; fullscreen"
-  ></iframe>
+    class="fixed top-0 left-0 w-full h-full object-cover z-0" frameborder="0" allow="autoplay; fullscreen"></iframe>
 
   <!-- Capa oscura + contenido -->
   <div
-    class="absolute top-0 left-0 w-full h-full bg-[#011335] bg-opacity-90 flex items-start justify-center pt-20 z-10"
-  >
-    <div class="text-center text-white py-12 px-6 rounded-2xl w-full max-w-5xl">
-      <img
-        src="assets/images/RR DORADO.png"
-        class="w-60 mx-auto mb-6"
-        alt="logo-renta-raiz"
-      />
+    class="absolute top-0 left-0 w-full h-full bg-[#011335] bg-opacity-90 flex flex-col items-center justify-center p-4 sm:pt-20 z-10">
+    <div class="text-center text-white py-8 px-4 rounded-2xl w-full max-w-5xl">
+      <img src="assets/images/RR DORADO.png" class="w-40 sm:w-60 mx-auto mb-6" alt="logo-renta-raiz" />
 
       <h2
-        class="text-[45px] font-bold mb-10 tracking-tight uppercase font-[PlayfairDisplay] leading-snug"
-      >
+        class="text-[30px] sm:text-[45px] font-bold mb-8 sm:mb-10 tracking-tight uppercase font-[PlayfairDisplay] leading-snug">
         Tu Información Fue <br />
         Enviada Con Éxito
       </h2>
 
       <div
-        class="bg-[#CDAD60] text-white text-[27px] font-bold py-1 px-8 mb-6 inline-block uppercase tracking-wider shadow-lg"
-      >
+        class="bg-[#CDAD60] text-white text-[22px] sm:text-[27px] font-bold py-2 px-6 sm:py-1 sm:px-8 mb-6 inline-block uppercase tracking-wider shadow-lg">
         Te Contactaremos Pronto
       </div>
 
-      <p
-        class="text-[28px] mb-10 tracking-tight leading-relaxed max-w-xl mx-auto"
-      >
+      <p class="text-[20px] sm:text-[28px] mb-8 sm:mb-10 tracking-tight leading-relaxed max-w-xl mx-auto">
         Si Desea Comunicarse Con Nosotros Directamente, Haga Clic En El Botón A
         Continuación
       </p>
 
       <button
-        class="bg-[#CDAD60] text-white text-[20px] font-bold py-3 px-8 rounded-md hover:bg-[#b89c54] mx-auto tracking-wide flex items-center justify-center gap-2 transition-all duration-300 shadow-md"
-        (click)="enviarWthatsapp()"
-      >
-        <i class="fab fa-whatsapp text-[45px]"></i>
+        class="bg-[#CDAD60] text-white text-[18px] sm:text-[20px] font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-md hover:bg-[#b89c54] mx-auto tracking-wide flex items-center justify-center gap-2 transition-all duration-300 shadow-md"
+        (click)="enviarWthatsapp()">
+        <i class="fab fa-whatsapp text-[35px] sm:text-[45px]"></i>
         HABLAR POR WHATSAPP
       </button>
     </div>
