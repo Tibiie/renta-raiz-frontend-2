@@ -8,13 +8,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './envio-exitoso.component.html',
   styleUrl: './envio-exitoso.component.scss'
 })
-export class EnvioExitosoComponent implements OnInit {
-
+export class EnvioExitosoComponent {
 
   router = inject(ActivatedRoute);
-
-  ngOnInit(): void {
-  }
 
   enviarWthatsapp() {
     const param = this.router.snapshot.queryParamMap.get('urlInmueble');
