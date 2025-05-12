@@ -4,21 +4,29 @@
   <div class="banner-contacto w-full h-[40vh] md:h-[60vh] overflow-hidden">
     <div class="relative w-full h-full">
       <!-- Imagen de Fondo (No se corta en móvil) -->
-      <img src="assets/images/SLIDERPUBLICATUPROPIEDAD.png" loading="lazy"
+      <img
+        src="assets/images/SLIDERPUBLICATUPROPIEDAD.png"
+        loading="lazy"
         class="absolute inset-0 w-full h-full object-fill md:object-cover lg:object-cover xl:object-cover 2xl:object-cover z-10"
-        alt="Fondo" />
-  
+        alt="Fondo"
+      />
+
       <!-- Imagen de Texto (Más grande en móvil) -->
       <div class="absolute inset-0 z-30 flex items-center">
-        <img src="assets/images/TEXTOSLIDERPUBLICATUPROPIEDAD.png"
-          class="w-[100%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-[-40px] md:-translate-y-4 xl:-translate-y-2 translate-x-26 md:translate-x-60 lg:translate-x-2 xl:ml-[195px] 2xl:translate-x-64 custom-1024:translate-x-custom-1024"
-          alt="Texto" />
+        <img
+          src="assets/images/TEXTOSLIDERPUBLICATUPROPIEDAD.png"
+          class="hidden md:block w-[100%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-[-40px] md:-translate-y-4 xl:-translate-y-2 translate-x-26 md:translate-x-60 lg:translate-x-2 xl:ml-[195px] 2xl:translate-x-64 custom-1024:translate-x-custom-1024"
+          alt="Texto"
+        />
+
+        <img
+          src="assets/images/PUBLICA-TU-PROPIEDAD-MOVIL.png"
+          class="block md:hidden w-[100%] h-auto object-contain -translate-y-[-30px]"
+          alt="Texto"
+        />
       </div>
     </div>
   </div>
-  
-  
-  
 
   <div #dropdownContainer>
     <app-barra-filtros></app-barra-filtros>
@@ -39,8 +47,8 @@
         <!-- Card 1: Beneficios -->
         <div class="w-full lg:w-1/2">
           <div
-            class="bg-white rounded-[40px] shadow-[0_12px_40px_rgba(0,0,0,0.35)] overflow-hidden h-full transform transition-all">
-
+            class="bg-white rounded-[40px] shadow-[0_12px_40px_rgba(0,0,0,0.35)] overflow-hidden h-full transform transition-all"
+          >
             <div class="px-6 py-4 text-white mt-6">
               <h1 class="text-4xl font-extrabold text-[#CDAD60] mb-2">
                 Lo que solo nosotros le ofrecemos:
@@ -128,16 +136,37 @@
         <!-- Card 2: Formulario -->
         <div class="w-full lg:w-1/2">
           <div
-            class="bg-white rounded-[40px] shadow-[0_12px_40px_rgba(0,0,0,0.35)] overflow-hidden h-full transform transition-all">
+            class="bg-white rounded-[40px] shadow-[0_12px_40px_rgba(0,0,0,0.35)] overflow-hidden h-full transform transition-all"
+          >
             <div class="p-6">
-              <h1 style="text-align: center;font-weight: bold;font-size: 1.5rem;">Publica tu propiedad</h1>
-              <iframe src="https://api.leadconnectorhq.com/widget/form/1tX0YU5sZDx0rLjf5RJs"  loading="lazy"
-                style="width:100%;height:100%;border:none;border-radius:3px" id="inline-1tX0YU5sZDx0rLjf5RJs"
-                data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-trigger-value=""
-                data-activation-type="alwaysActivated" data-activation-value="" data-deactivation-type="neverDeactivate"
-                data-deactivation-value="" data-form-name="Publica tu propiedad" data-height="597"
-                data-layout-iframe-id="inline-1tX0YU5sZDx0rLjf5RJs" data-form-id="1tX0YU5sZDx0rLjf5RJs"
-                title="Publica tu propiedad">
+              <h1
+                style="text-align: center; font-weight: bold; font-size: 1.5rem"
+              >
+                Publica tu propiedad
+              </h1>
+              <iframe
+                src="https://api.leadconnectorhq.com/widget/form/1tX0YU5sZDx0rLjf5RJs"
+                loading="lazy"
+                style="
+                  width: 100%;
+                  height: 100%;
+                  border: none;
+                  border-radius: 3px;
+                "
+                id="inline-1tX0YU5sZDx0rLjf5RJs"
+                data-layout="{'id':'INLINE'}"
+                data-trigger-type="alwaysShow"
+                data-trigger-value=""
+                data-activation-type="alwaysActivated"
+                data-activation-value=""
+                data-deactivation-type="neverDeactivate"
+                data-deactivation-value=""
+                data-form-name="Publica tu propiedad"
+                data-height="597"
+                data-layout-iframe-id="inline-1tX0YU5sZDx0rLjf5RJs"
+                data-form-id="1tX0YU5sZDx0rLjf5RJs"
+                title="Publica tu propiedad"
+              >
               </iframe>
               <script src="https://link.msgsndr.com/js/form_embed.js"></script>
               <!-- <form [formGroup]="formPublicarInmueble">
@@ -217,9 +246,14 @@
                 <p class="text-[26px] text-[#080E36] font-bold mb-4">
                   ¡Si no cuentas con tiempo hablemos directamente aquí!
                 </p>
-                <a onclick="window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU')"
-                  target="_blank" class="inline-block cursor-pointer">
-                  <i class="fab fa-whatsapp text-[60px] text-[#CDAD60] hover:text-[#CDAD60] transition"></i>
+                <a
+                  onclick="window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU')"
+                  target="_blank"
+                  class="inline-block cursor-pointer"
+                >
+                  <i
+                    class="fab fa-whatsapp text-[60px] text-[#CDAD60] hover:text-[#CDAD60] transition"
+                  ></i>
                 </a>
               </div>
             </div>

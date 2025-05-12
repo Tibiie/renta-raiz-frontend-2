@@ -7,7 +7,7 @@ import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { VolverComponent } from "../../../../shared/volver/volver.component";
+import { VolverComponent } from '../../../../shared/volver/volver.component';
 
 @Component({
   selector: 'app-politicar-privacidad',
@@ -20,7 +20,7 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
     BotonesFlotantesComponent,
     FooterComponent,
     BarraFiltrosComponent,
-    VolverComponent
+    VolverComponent,
   ],
   templateUrl: './politicar-privacidad.component.html',
   styleUrl: './politicar-privacidad.component.scss',
@@ -37,10 +37,10 @@ export class PoliticarPrivacidadComponent implements OnInit {
   }
 
   getInmueblesDestacados() {
-    this.inmueblesService.getInmueblesDestacados().subscribe(
+    this.inmueblesService.getInmueblesDestacados(1).subscribe(
       (data: any) => {
         this.inmueblesDestacadosArray = [
-          data.data[0],
+          data.data[1],
           data.data[2],
           data.data[3],
           data.data[4],

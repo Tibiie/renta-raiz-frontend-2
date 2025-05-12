@@ -24,7 +24,12 @@
       >
         <img
           src="assets/images/TextoSlider-vistaInicial.png"
-          class="w-[100%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-6 md:-translate-y-4 xl:-translate-y-2"
+          class="hidden md:block w-[100%] md:w-[60%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] h-auto object-contain -translate-y-6 md:-translate-y-4 xl:-translate-y-2"
+          alt="Texto"
+        />
+        <img
+          src="assets/images/HOME-MOVIL.png"
+          class="block md:hidden w-[100%] h-auto object-contain -translate-y-[-30px]"
           alt="Texto"
         />
       </div>
@@ -54,7 +59,7 @@
         class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10"
       >
         <div
-          *ngFor="let inmueble of inmueblesDestacadosArray"
+          *ngFor="let inmueble of inmueblesDestacadosArray.slice(0, 3)"
           class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6"
         >
           <div class="relative group">
@@ -166,6 +171,55 @@
           </div>
         </div>
       </div>
+      <div class="flex justify-center mb-12">
+        <nav aria-label="Page navigation">
+          <ul class="inline-flex items-center -space-x-px text-sm">
+            <li>
+              <button
+                (click)="paginaAnterior('DESTACADOS')"
+                [disabled]="paginaActualDestacados === 1"
+                class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              >
+                Anterior
+              </button>
+            </li>
+
+            <li *ngFor="let pagina of paginasDestacados" class="mx-0.5">
+              <ng-container *ngIf="pagina === '...'; else paginaBtn">
+                <button
+                  (click)="cambiarPagina(pagina, 'DESTACADOS')"
+                  class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded"
+                >
+                  ...
+                </button>
+              </ng-container>
+              <ng-template #paginaBtn>
+                <button
+                  (click)="cambiarPagina(+pagina, 'DESTACADOS')"
+                  [ngClass]="
+                    pagina === paginaActualDestacados
+                      ? 'text-white bg-[#CDAD60]'
+                      : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
+                  "
+                  class="px-3 py-2 leading-tight border border-gray-300 rounded"
+                >
+                  {{ pagina }}
+                </button>
+              </ng-template>
+            </li>
+
+            <li>
+              <button
+                (click)="paginaSiguiente('DESTACADOS')"
+                [disabled]="paginaActualDestacados === totalPaginasDestacados"
+                class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              >
+                Siguiente
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 
@@ -181,7 +235,7 @@
     </h2>
     <!-- Cards de propiedades -->
     <div
-      *ngIf="inmueblesDestacadosArray"
+      *ngIf="inmueblesVentasArray"
       class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 max-w-6xl w-full pb-10"
     >
       <div
@@ -294,6 +348,55 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="flex justify-center mb-12">
+      <nav aria-label="Page navigation">
+        <ul class="inline-flex items-center -space-x-px text-sm">
+          <li>
+            <button
+              (click)="paginaAnterior('VENTAS')"
+              [disabled]="paginaActualVentas === 1"
+              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+            >
+              Anterior
+            </button>
+          </li>
+
+          <li *ngFor="let pagina of paginasVentas" class="mx-0.5">
+            <ng-container *ngIf="pagina === '...'; else paginaBtn">
+              <button
+                (click)="cambiarPagina(pagina, 'VENTAS')"
+                class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded"
+              >
+                ...
+              </button>
+            </ng-container>
+            <ng-template #paginaBtn>
+              <button
+                (click)="cambiarPagina(+pagina, 'VENTAS')"
+                [ngClass]="
+                  pagina === paginaActualVentas
+                    ? 'text-white bg-[#CDAD60]'
+                    : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
+                "
+                class="px-3 py-2 leading-tight border border-gray-300 rounded"
+              >
+                {{ pagina }}
+              </button>
+            </ng-template>
+          </li>
+
+          <li>
+            <button
+              (click)="paginaSiguiente('VENTAS')"
+              [disabled]="paginaActualVentas === totalPaginasVentas"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+            >
+              Siguiente
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 
@@ -426,6 +529,56 @@
             </div>
           </div>
         </div>
+      </div>
+      <!-- Paginado -->
+      <div class="flex justify-center mb-12">
+        <nav aria-label="Page navigation">
+          <ul class="inline-flex items-center -space-x-px text-sm">
+            <li>
+              <button
+                (click)="paginaAnterior('ARRIENDO')"
+                [disabled]="paginaActualArriendo === 1"
+                class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              >
+                Anterior
+              </button>
+            </li>
+
+            <li *ngFor="let pagina of paginasArriendo" class="mx-0.5">
+              <ng-container *ngIf="pagina === '...'; else paginaBtn">
+                <button
+                  (click)="cambiarPagina(pagina, 'ARRIENDO')"
+                  class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded"
+                >
+                  ...
+                </button>
+              </ng-container>
+              <ng-template #paginaBtn>
+                <button
+                  (click)="cambiarPagina(+pagina, 'ARRIENDO')"
+                  [ngClass]="
+                    pagina === paginaActualArriendo
+                      ? 'text-white bg-[#CDAD60]'
+                      : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
+                  "
+                  class="px-3 py-2 leading-tight border border-gray-300 rounded"
+                >
+                  {{ pagina }}
+                </button>
+              </ng-template>
+            </li>
+
+            <li>
+              <button
+                (click)="paginaSiguiente('ARRIENDO')"
+                [disabled]="paginaActualArriendo === totalPaginasArriendo"
+                class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              >
+                Siguiente
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>

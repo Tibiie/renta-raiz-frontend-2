@@ -472,7 +472,7 @@ export class BarraFiltrosComponent {
   }
 
   getInmueblesDestacados() {
-    this.inmueblesService.getInmueblesDestacados().subscribe(
+    this.inmueblesService.getInmueblesDestacados(1).subscribe(
       (data: any) => {
         this.inmueblesDestacadosArray = data.data.slice(2, 5);
       },

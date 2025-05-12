@@ -15,8 +15,8 @@ import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { MapaComponent } from '../mapa/mapa.component';
 import mediumZoom from 'medium-zoom';
 import { log } from 'console';
-import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/botones-flotantes.component";
-import { VolverComponent } from "../../../../shared/volver/volver.component";
+import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
+import { VolverComponent } from '../../../../shared/volver/volver.component';
 
 @Component({
   selector: 'app-ver-propiedad',
@@ -31,7 +31,7 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
     FooterComponent,
     MapaComponent,
     BotonesFlotantesComponent,
-    VolverComponent
+    VolverComponent,
   ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
@@ -101,7 +101,7 @@ export class VerPropiedadComponent implements OnInit {
       background: 'rgba(0, 0, 0, 0.9)',
       margin: 24,
       scrollOffset: 40,
-      template: '#zoom-template'
+      template: '#zoom-template',
     });
 
     this.zoomInstance.on('open', () => {
@@ -130,13 +130,16 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   prevImageM(): void {
-    this.selectedIndex = (this.selectedIndex - 1 + this.propiedad.images.length) % this.propiedad.images.length;
+    this.selectedIndex =
+      (this.selectedIndex - 1 + this.propiedad.images.length) %
+      this.propiedad.images.length;
     this.resetZoom();
     this.reinitZoom();
   }
 
   nextImageM(): void {
-    this.selectedIndex = (this.selectedIndex + 1) % this.propiedad.images.length;
+    this.selectedIndex =
+      (this.selectedIndex + 1) % this.propiedad.images.length;
     this.resetZoom();
     this.reinitZoom();
   }
@@ -190,7 +193,9 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   private getCurrentImage(): HTMLElement | null {
-    return document.querySelector(`[data-zoom-src="${this.propiedad.images[this.selectedIndex]?.imageurl}"]`);
+    return document.querySelector(
+      `[data-zoom-src="${this.propiedad.images[this.selectedIndex]?.imageurl}"]`
+    );
   }
 
   ngOnDestroy(): void {
@@ -209,7 +214,7 @@ export class VerPropiedadComponent implements OnInit {
         console.log('propiedad', this.propiedad);
 
         this.prepararFiltros();
-        this.enviarFiltros()
+        this.enviarFiltros();
       },
       (error: any) => {
         console.error('Error al obtener la propiedad:', error);
@@ -269,21 +274,41 @@ export class VerPropiedadComponent implements OnInit {
   prepararFiltros() {
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('city', this.propiedad.city_code);
-    this.filtrosSeleccionados.set('biz', this.propiedad.biz_code);
+    if (this.propiedad.biz_code == 1) {
+      this.filtrosSeleccionados.set('pcmin', this.propiedad.rent);
+    }
+
+    if (this.propiedad.biz_code == 2) {
+      this.filtrosSeleccionados.set('pvmin', this.propiedad.saleprice);
+    }
+
+    if (this.propiedad.biz_code == 3) {
+      this.filtrosSeleccionados.set('pcmin', this.propiedad.rent);
+      this.filtrosSeleccionados.set('pvmin', this.propiedad.saleprice);
+    }
   }
 
   enviarFiltros() {
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+
+    console.log(filtrosObj);
+
     const obj = { ...filtrosObj, page: 1 };
 
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         const idActual = this.propiedad.idpro;
-        let filtrados = response.data.filter((inmueble: any) => inmueble.idpro !== idActual);
+        let filtrados = response.data.filter(
+          (inmueble: any) => inmueble.idpro !== idActual
+        );
 
         const faltantes = 3 - filtrados.length;
         if (faltantes > 0) {
-          this.inmueblesService.getFiltrosEnviar({ ...filtrosObj, page: obj.page + 1 }, this.elementsPerPage)
+          this.inmueblesService
+            .getFiltrosEnviar(
+              { ...filtrosObj, page: obj.page + 1 },
+              this.elementsPerPage
+            )
             .subscribe((respuestaSiguiente: any) => {
               filtrados.push(...respuestaSiguiente.data.slice(0, faltantes));
               this.resultadosFiltros = filtrados;
@@ -299,6 +324,8 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro]);
+    this.router.navigate(['/ver-propiedad', codPro]).then(() => {
+      window.scrollTo(0, 0);
+    });
   }
 }

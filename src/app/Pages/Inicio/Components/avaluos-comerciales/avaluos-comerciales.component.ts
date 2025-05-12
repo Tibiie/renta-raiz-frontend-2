@@ -1,5 +1,11 @@
-import { Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
-import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  ViewChild,
+} from '@angular/core';
+import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
@@ -7,8 +13,8 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { log } from 'console';
-import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
-import { VolverComponent } from "../../../../shared/volver/volver.component";
+import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
+import { VolverComponent } from '../../../../shared/volver/volver.component';
 
 @Component({
   selector: 'app-avaluos-comerciales',
@@ -21,13 +27,12 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
     FooterComponent,
     BotonesFlotantesComponent,
     BarraFiltrosComponent,
-    VolverComponent
+    VolverComponent,
   ],
   templateUrl: './avaluos-comerciales.component.html',
-  styleUrl: './avaluos-comerciales.component.scss'
+  styleUrl: './avaluos-comerciales.component.scss',
 })
 export class AvaluosComercialesComponent {
-
   correo: string = 'info@rentaraiz.com';
 
   intervalId: any;
@@ -36,7 +41,6 @@ export class AvaluosComercialesComponent {
   elementsPerPageInicial = 3;
 
   inmueblesDestacadosArray: any = {};
-
 
   isLoading = true;
 
@@ -53,7 +57,7 @@ export class AvaluosComercialesComponent {
   scrollToTop(): void {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 
@@ -62,14 +66,14 @@ export class AvaluosComercialesComponent {
   }
 
   getInmueblesDestacados() {
-    this.inmueblesService.getInmueblesDestacados().subscribe(
+    this.inmueblesService.getInmueblesDestacados(1).subscribe(
       (data: any) => {
         this.inmueblesDestacadosArray = [
-          data.data[0],
+          data.data[1],
           data.data[2],
           data.data[3],
           data.data[4],
-        ]
+        ];
       },
       (error: any) => {
         console.log(error);
@@ -84,7 +88,9 @@ export class AvaluosComercialesComponent {
   }
 
   verPropiedad(codPro: number) {
-    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    const url = this.router
+      .createUrlTree(['/ver-propiedad', codPro])
+      .toString();
     window.open(url, '_blank');
   }
 }

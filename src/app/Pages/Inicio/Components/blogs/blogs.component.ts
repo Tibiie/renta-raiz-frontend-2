@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
-import { VolverComponent } from "../../../../shared/volver/volver.component";
+import { VolverComponent } from '../../../../shared/volver/volver.component';
 
 @Component({
   selector: 'app-blogs',
@@ -17,7 +17,7 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
     NavbarComponent,
     FooterComponent,
     BotonesFlotantesComponent,
-    VolverComponent
+    VolverComponent,
   ],
   templateUrl: './blogs.component.html',
   styleUrl: './blogs.component.scss',
@@ -183,7 +183,7 @@ export class BlogsComponent implements OnInit {
   }
 
   getInmueblesDestacados() {
-    this.inmueblesService.getInmueblesDestacados().subscribe(
+    this.inmueblesService.getInmueblesDestacados(1).subscribe(
       (data: any) => {
         this.inmueblesDestacadosArray = data;
       },

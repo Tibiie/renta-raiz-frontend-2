@@ -81,6 +81,22 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
 
+  // PAGINACION
+  totalPaginasArriendo = 0;
+  paginaActualArriendo = 1;
+  bloqueActualArriendo: number = 0;
+  paginasArriendo: (number | string)[] = [];
+
+  totalPaginasVentas = 0;
+  paginaActualVentas = 1;
+  bloqueActualVentas: number = 0;
+  paginasVentas: (number | string)[] = [];
+
+  totalPaginasDestacados = 0;
+  paginaActualDestacados = 1;
+  bloqueActualDestacados: number = 0;
+  paginasDestacados: (number | string)[] = [];
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngAfterViewInit(): void {
@@ -99,50 +115,62 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
 
   getDatos() {
     this.getAliadosPorGrupo();
-    this.getInmueblesVentas();
-    this.getInmueblesArriendos();
-    this.getInmueblesDestacados();
+    this.getInmueblesVentas(1);
+    this.getInmueblesArriendos(2);
+    this.getInmueblesDestacados(1);
   }
 
-  getInmueblesVentas() {
+  getInmueblesVentas(page: number) {
     this.filtrosInmueblesVenta.clear();
     this.filtrosInmueblesVenta.set('biz', 2);
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesVenta);
     const obj = {
       ...filtrosObj,
-      page: 2,
+      page: page,
     };
-    this.inmueblesService.getFiltrosEnviar(obj, 4).subscribe(
-      (response: any) => {
-        console.log(response.data);
+    this.inmueblesService
+      .getFiltrosEnviar(obj, this.elementsPerPageInicial)
+      .subscribe(
+        (response: any) => {
+          console.log(response.data);
 
-        // this.inmueblesVentasArray = response.data.filter((inm:any)=> inm.image1 != "");
+          var respuesta = response.data;
 
-        var repuesta = [response.data[0], response.data[2], response.data[3]];
+          console.log(response);
 
-        console.log(repuesta);
+          this.inmueblesVentasArray = respuesta;
 
-        this.inmueblesVentasArray = repuesta.filter(
-          (inm: any) => inm.images1 != ''
-        );
-        console.log(this.inmueblesVentasArray);
-      },
+          this.inmueblesVentasArray = respuesta.filter(
+            (inm: any) => inm.images1 != ''
+          );
 
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
-      }
-    );
+          this.totalPaginasVentas = response.last_page || 1;
+          this.paginasVentas = Array.from(
+            { length: this.totalPaginasVentas },
+            (_, i) => i + 1
+          );
+          this.paginaActualVentas = response.current_page || 1;
+
+          this.generarPaginas('VENTAS');
+
+          console.log(this.inmueblesVentasArray);
+        },
+
+        (error: any) => {
+          console.error('Error al enviar los filtros:', error);
+        }
+      );
   }
 
-  getInmueblesArriendos() {
+  getInmueblesArriendos(page: number) {
     this.filtrosInmueblesArriendo.clear();
     this.filtrosInmueblesArriendo.set('biz', 1);
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
     const obj = {
       ...filtrosObj,
-      page: 1,
+      page: page,
     };
     this.inmueblesService
       .getFiltrosEnviar(obj, this.elementsPerPageInicial)
@@ -150,11 +178,20 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
         (response: any) => {
           var respuesta = response.data;
 
-          this.inmueblesArriendosArray = [
-            respuesta[0],
-            respuesta[1],
-            respuesta[2],
-          ];
+          console.log(response);
+
+          this.inmueblesArriendosArray = respuesta.filter(
+            (inm: any) => inm.image1 != ''
+          );
+
+          this.totalPaginasArriendo = response.last_page || 1;
+          this.paginasArriendo = Array.from(
+            { length: this.totalPaginasArriendo },
+            (_, i) => i + 1
+          );
+          this.paginaActualArriendo = response.current_page || 1;
+
+          this.generarPaginas('ARRIENDO');
         },
         (error: any) => {
           console.error('Error al enviar los filtros:', error);
@@ -162,16 +199,25 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
       );
   }
 
-  getInmueblesDestacados() {
-    this.inmueblesService.getInmueblesDestacados().subscribe(
+  getInmueblesDestacados(page: number) {
+    this.inmueblesService.getInmueblesDestacados(page).subscribe(
       (data: any) => {
+        console.log(data);
+
         var respuesta = data.data.filter((inm: any) => inm.image1 != '');
 
-        this.inmueblesDestacadosArray = [
-          respuesta[0],
-          respuesta[1],
-          respuesta[2],
-        ];
+        console.log(data);
+
+        this.inmueblesDestacadosArray = respuesta;
+
+        this.totalPaginasDestacados = data.last_page || 1;
+        this.paginasDestacados = Array.from(
+          { length: this.totalPaginasDestacados },
+          (_, i) => i + 1
+        );
+        this.paginaActualDestacados = data.current_page || 1;
+
+        this.generarPaginas('DESTACADOS');
       },
       (error: any) => {
         console.log(error);
@@ -260,5 +306,158 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   redirigirRentasCortas() {
     const url = 'https://nomalux.com.co';
     window.open(url, '_blank');
+  }
+
+  // PAGINACION
+  generarPaginas(inmueble: string) {
+    if (inmueble === 'ARRIENDO') {
+      this.paginasArriendo = [];
+      const paginasPorBloque = 3;
+      const inicio = this.bloqueActualArriendo * paginasPorBloque + 1;
+      const fin = Math.min(
+        inicio + paginasPorBloque - 1,
+        this.totalPaginasArriendo - 1
+      );
+
+      for (let i = inicio; i <= fin; i++) {
+        this.paginasArriendo.push(i);
+      }
+
+      if (fin < this.totalPaginasArriendo - 1) {
+        this.paginasArriendo.push('...');
+      }
+
+      if (this.totalPaginasArriendo > 1) {
+        this.paginasArriendo.push(this.totalPaginasArriendo);
+      }
+    } else if (inmueble === 'VENTAS') {
+      this.paginasVentas = [];
+      const paginasPorBloque = 3;
+      const inicio = this.bloqueActualVentas * paginasPorBloque + 1;
+      const fin = Math.min(
+        inicio + paginasPorBloque - 1,
+        this.totalPaginasVentas - 1
+      );
+
+      for (let i = inicio; i <= fin; i++) {
+        this.paginasVentas.push(i);
+      }
+
+      if (fin < this.totalPaginasVentas - 1) {
+        this.paginasVentas.push('...');
+      }
+
+      if (this.totalPaginasVentas > 1) {
+        this.paginasVentas.push(this.totalPaginasVentas);
+      }
+    } else {
+      this.paginasDestacados = [];
+      const paginasPorBloque = 3;
+      const inicio = this.bloqueActualDestacados * paginasPorBloque + 1;
+      const fin = Math.min(
+        inicio + paginasPorBloque - 1,
+        this.totalPaginasDestacados - 1
+      );
+
+      for (let i = inicio; i <= fin; i++) {
+        this.paginasDestacados.push(i);
+      }
+
+      if (fin < this.totalPaginasDestacados - 1) {
+        this.paginasDestacados.push('...');
+      }
+
+      if (this.totalPaginasDestacados > 1) {
+        this.paginasDestacados.push(this.totalPaginasDestacados);
+      }
+    }
+  }
+
+  irAlSiguienteBloque(inmueble: string) {
+    if (inmueble === 'ARRIENDO') {
+      const maxBloques = Math.floor((this.totalPaginasArriendo - 1) / 3);
+      if (this.bloqueActualArriendo < maxBloques) {
+        this.bloqueActualArriendo++;
+        this.generarPaginas(inmueble);
+      }
+    } else if (inmueble === 'VENTAS') {
+      const maxBloques = Math.floor((this.totalPaginasVentas - 1) / 3);
+      if (this.bloqueActualVentas < maxBloques) {
+        this.bloqueActualVentas++;
+        this.generarPaginas(inmueble);
+      }
+    } else {
+      const maxBloques = Math.floor((this.totalPaginasDestacados - 1) / 3);
+      if (this.bloqueActualDestacados < maxBloques) {
+        this.bloqueActualDestacados++;
+        this.generarPaginas(inmueble);
+      }
+    }
+  }
+
+  cambiarPagina(pagina: number | string, inmueble: string) {
+    if (inmueble === 'ARRIENDO') {
+      if (pagina === '...') {
+        this.irAlSiguienteBloque(inmueble);
+        return;
+      }
+
+      if (typeof pagina === 'number' && pagina !== this.paginaActualArriendo) {
+        this.getInmueblesArriendos(pagina);
+      }
+    } else if (inmueble === 'VENTAS') {
+      if (pagina === '...') {
+        this.irAlSiguienteBloque(inmueble);
+        return;
+      }
+
+      if (typeof pagina === 'number' && pagina !== this.paginaActualVentas) {
+        this.getInmueblesVentas(pagina);
+      }
+    } else {
+      if (pagina === '...') {
+        this.irAlSiguienteBloque(inmueble);
+        return;
+      }
+
+      if (
+        typeof pagina === 'number' &&
+        pagina !== this.paginaActualDestacados
+      ) {
+        this.getInmueblesDestacados(pagina);
+      }
+    }
+  }
+
+  paginaAnterior(inmueble: string) {
+    if (inmueble === 'ARRIENDO') {
+      if (this.paginaActualArriendo > 1) {
+        this.getInmueblesArriendos(this.paginaActualArriendo - 1);
+      }
+    } else if (inmueble === 'VENTAS') {
+      if (this.paginaActualVentas > 1) {
+        this.getInmueblesVentas(this.paginaActualVentas - 1);
+      }
+    } else {
+      if (this.paginaActualDestacados > 1) {
+        this.getInmueblesDestacados(this.paginaActualDestacados - 1);
+      }
+    }
+  }
+
+  paginaSiguiente(inmueble: string) {
+    if (inmueble === 'ARRIENDO') {
+      if (this.paginaActualArriendo < this.totalPaginasArriendo) {
+        this.getInmueblesArriendos(this.paginaActualArriendo + 1);
+      }
+    } else if (inmueble === 'VENTAS') {
+      if (this.paginaActualVentas < this.totalPaginasVentas) {
+        this.getInmueblesVentas(this.paginaActualVentas + 1);
+      }
+    } else {
+      if (this.paginaActualDestacados < this.totalPaginasDestacados) {
+        this.getInmueblesDestacados(this.paginaActualDestacados + 1);
+      }
+    }
   }
 }

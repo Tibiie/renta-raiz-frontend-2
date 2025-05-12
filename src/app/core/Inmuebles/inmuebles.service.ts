@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InmueblesService {
   Propiedades: any[] = [];
@@ -14,8 +14,10 @@ export class InmueblesService {
     return this.http.get(`${environment.baseUrl}/properties/inmuebles`);
   }
 
-  getInmueblesDestacados() {
-    return this.http.get(`${environment.baseUrl}/properties/destacados`);
+  getInmueblesDestacados(page: number) {
+    return this.http.get(
+      `${environment.baseUrl}/properties/destacados?page=${page}`
+    );
   }
 
   getTipoPropiedad() {
@@ -23,7 +25,9 @@ export class InmueblesService {
   }
 
   getCategoriasInmuebles() {
-    return this.http.get(`${environment.baseUrl}/properties/categoriasInmueble`);
+    return this.http.get(
+      `${environment.baseUrl}/properties/categoriasInmueble`
+    );
   }
 
   getFiltros() {
@@ -31,7 +35,10 @@ export class InmueblesService {
   }
 
   getFiltrosEnviar(filtros: any, elementsPerPage: number) {
-    return this.http.get(`${environment.baseUrl}/properties/?elementsPerPage=${elementsPerPage}`, { params: filtros });
+    return this.http.get(
+      `${environment.baseUrl}/properties/?elementsPerPage=${elementsPerPage}`,
+      { params: filtros }
+    );
   }
 
   createContacto(contacto: any) {
@@ -51,7 +58,10 @@ export class InmueblesService {
   }
 
   publicarInmueble(inmueble: any) {
-    return this.http.post(`${environment.baseUrl}/properties/publicarInmueble`, inmueble);
+    return this.http.post(
+      `${environment.baseUrl}/properties/publicarInmueble`,
+      inmueble
+    );
   }
 
   setPropiedades(propiedades: any[]) {
