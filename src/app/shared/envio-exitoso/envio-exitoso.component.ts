@@ -14,13 +14,11 @@ export class EnvioExitosoComponent implements OnInit {
   router = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.enviarWthatsapp();
-    }, 1500);
-  } enviarWthatsapp() {
+  }
 
-    var param = this.router.snapshot.queryParamMap.get('urlInmueble');
-    var text = `&text=Hola%2C%20Lenys%20estoy%20interesado%20en:%20${param}`;
+  enviarWthatsapp() {
+    const param = this.router.snapshot.queryParamMap.get('urlInmueble');
+    const text = `&text=Hola%2C%20Lenys%20estoy%20interesado%20en:%20${param}`;
     window.location.href = `https://api.whatsapp.com/send?phone=573145438665${text}`;
   }
 }
