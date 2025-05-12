@@ -1,8 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { InmueblesService } from '../../../../../core/Inmuebles/inmuebles.service';
 import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-modal-crear-contacto',
@@ -11,7 +13,8 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './modal-crear-contacto.component.html',
   styleUrl: './modal-crear-contacto.component.scss'
 })
-export class ModalCrearContactoComponent {
+export class ModalCrearContactoComponent implements OnInit {
+
 
   visible = false;
   isLoading = false;
@@ -23,9 +26,17 @@ export class ModalCrearContactoComponent {
   fuente?: string;
   accion: 'telefonos' | 'whatsapp' | 'soloEnviar' = 'soloEnviar';
 
+ 
+  urlBase!: SafeResourceUrl;
+
+
+
+  
   toastr = inject(ToastrService);
   fb = inject(NonNullableFormBuilder);
   inmuebleService = inject(InmueblesService);
+  location = inject(Location);
+  sanitizer = inject(DomSanitizer);
 
   contacto = this.fb.group({
     nombre: ['', Validators.required],
@@ -34,6 +45,18 @@ export class ModalCrearContactoComponent {
     cedula: ['', Validators.required],
     mensaje: ['', Validators.required],
   });
+
+
+
+  ngOnInit(): void {
+    const url = "https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg?urlInmueble=https://rentaraiz.co/ver-propiedad/5875"
+    //this.urlBase = this.urlBase + "?urlInmueble="+ window.location.href
+
+    this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+   console.log(this.urlBase);
+   
+  }
+     
 
   abrirModal(codPro: number, accion: 'telefonos' | 'whatsapp' | 'soloEnviar') {
     this.codPro = codPro;
