@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-envio-exitoso',
@@ -7,9 +8,19 @@ import { Component } from '@angular/core';
   templateUrl: './envio-exitoso.component.html',
   styleUrl: './envio-exitoso.component.scss'
 })
-export class EnvioExitosoComponent {
+export class EnvioExitosoComponent implements OnInit {
 
-  enviarWthatsapp() {
-    window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU', '_blank');
+
+  router = inject(ActivatedRoute);
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.enviarWthatsapp();
+    }, 1500);
+  } enviarWthatsapp() {
+
+    var param = this.router.snapshot.queryParamMap.get('urlInmueble');
+    var text = `&text=Hola%2C%20Lenys%20estoy%20interesado%20en:%20${param}`;
+    window.location.href = `https://api.whatsapp.com/send?phone=573145438665${text}`;
   }
 }

@@ -49,8 +49,8 @@ export class ModalCrearContactoComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const url = "https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg?urlInmueble=https://rentaraiz.co/ver-propiedad/5875"
-    //this.urlBase = this.urlBase + "?urlInmueble="+ window.location.href
+    const url = `https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg?urlInmueble=${window.location.href}`;
+    //this.urlBase = this.urlBase + "?urlInmueble="+ 
 
     this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
    console.log(this.urlBase);
