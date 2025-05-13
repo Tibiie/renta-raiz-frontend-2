@@ -16,7 +16,7 @@ export class EnvioExitosoComponent implements OnInit {
   ngOnInit(): void {
     setTimeout(() => {
       this.enviarWthatsapp();
-    }, 2000);
+    }, 1500);
   } enviarWthatsapp() {
 
     var param = this.router.snapshot.queryParamMap.get('urlInmueble');
