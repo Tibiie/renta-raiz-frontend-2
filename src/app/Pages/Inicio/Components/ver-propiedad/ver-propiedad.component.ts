@@ -29,7 +29,6 @@ import { VolverComponent } from '../../../../shared/volver/volver.component';
     RouterModule,
     ModalCrearContactoComponent,
     FooterComponent,
-    MapaComponent,
     BotonesFlotantesComponent,
     VolverComponent,
   ],

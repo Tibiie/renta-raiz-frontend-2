@@ -1,5 +1,5 @@
 <div class="fixed bottom-6 left-6 flex flex-col gap-3 z-50">
-    <!-- Botón de PSE  -->
+    <!-- Botón de PSE -->
     <a target="_blank"
         onclick="window.open('https://gateway2.tucompra.com.co/sites/RentaRaiz/facturacion.xhtml?idTerminal=2018')"
         class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:brightness-110 transition duration-200 relative overflow-hidden bg-[#003366] md:hidden">
@@ -7,8 +7,8 @@
             class="absolute inset-0 w-full h-full object-contain scale-125" />
     </a>
 
-    <!-- Botón de WhatsApp  -->
-    <a target="_blank"
+    <!-- Botón de WhatsApp (oculto si hideWhatsApp es true) -->
+    <a *ngIf="!hideWhatsApp" target="_blank"
         onclick="window.open('https://api.whatsapp.com/send?phone=573145438665&fbclid=IwAR3QMKqSukr1caiTy37NVGvXSveu2ROlTUQZ1AQgJ7nr4dzz1FZOdH3rrwU')"
         class="cursor-pointer w-[56px] h-[56px] bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:brightness-110 transition duration-200">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-8 h-8" />
