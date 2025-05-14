@@ -445,22 +445,20 @@ export class FiltrosComponent implements OnInit {
         this.obtenerParametrosFiltros(paginaCurrent, queryParams, state);
 
       } else {
+        // Guardar los filtros actuales antes de enviar
+        const currentFilters = new Map(this.filtrosSeleccionados);
+        this.enviarFiltros(this.paginaActual + 1, true);
 
-        this.cargarDesdeState(state);
-        this.router.events.subscribe((event) => {
-          if (event instanceof NavigationEnd) {
-            const newState = window.history.state;
-            this.cargarDesdeState(newState);
+        // Restaurar los filtros de ciudad y barrio después de enviar
+        setTimeout(() => {
+          if (currentFilters.has('city')) {
+            this.filtrosSeleccionados.set('city', currentFilters.get('city'));
           }
-        });
-        console.log(this.filtrosSeleccionados);
-
-
-        this.enviarFiltros(this.paginaActual + 1);
+          if (currentFilters.has('neighborhood_code')) {
+            this.filtrosSeleccionados.set('neighborhood_code', currentFilters.get('neighborhood_code'));
+          }
+        }, 0);
       }
-
-
-
     }
   }
 
@@ -611,12 +609,19 @@ export class FiltrosComponent implements OnInit {
 
   enviarFiltros(pagina: number, prepararFiltros: boolean = true) {
     this.cargando = true;
-
+    const savedCity = this.filtrosSeleccionados.get('city');
+    const savedNeighborhood = this.filtrosSeleccionados.get('neighborhood_code');
 
     console.log(this.filtrosSeleccionados);
 
     if (prepararFiltros) {
       this.prepararFiltros();
+    }
+    if (savedCity) {
+      this.filtrosSeleccionados.set('city', savedCity);
+    }
+    if (savedNeighborhood) {
+      this.filtrosSeleccionados.set('neighborhood_code', savedNeighborhood);
     }
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     console.log('filtrosObj', filtrosObj);
@@ -664,7 +669,7 @@ export class FiltrosComponent implements OnInit {
       this.filtrosSeleccionados.get('isManualSelection') === 'true';
     this.filtrosSeleccionados.delete('isManualSelection');
 
-    if (!skipUbicacion) {
+    if (!skipUbicacion && this.ubicacion) {
       const limpiarTexto = (texto: string) => {
         return (
           texto
