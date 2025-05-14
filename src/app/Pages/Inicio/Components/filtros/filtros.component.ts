@@ -154,19 +154,7 @@ export class FiltrosComponent implements OnInit {
     console.log(queryParams);
 
 
-    if(Object.keys(queryParams).length == 1){
-      var biz = queryParams["biz"]
-      if (biz) {
-        this.filtrosSeleccionados.set('biz', biz);
-        this.enviarFiltros()
-      }else{
-        this.router.navigate(['']);
-      }
-      
-    }
-    
-    if (Object.keys(queryParams).length > 1) {
-      
+    if (Object.keys(queryParams).length == 1) {
       this.filtrosSeleccionados.clear();
       this.selectedProperty = null;
       this.selectedEstates = [];
@@ -184,25 +172,55 @@ export class FiltrosComponent implements OnInit {
         precioMinimo: null,
         precioMaximo: null,
       });
-      
+
+      var biz = queryParams["biz"]
+      if (biz) {
+        this.filtrosSeleccionados.set('biz', biz);
+        this.enviarFiltros()
+      } else {
+        this.router.navigate(['']);
+      }
+
+    }
+
+    if (Object.keys(queryParams).length > 1) {
+
+      this.filtrosSeleccionados.clear();
+      this.selectedProperty = null;
+      this.selectedEstates = [];
+      this.seleccion = {
+        habitaciones: [],
+        banos: [],
+        parqueadero: [],
+        estrato: [],
+      };
+      this.formRangos.patchValue({
+        AreaMinima: null,
+        AreaMaxima: null,
+        precioVentaMinimo: null,
+        precioVentaMaximo: null,
+        precioMinimo: null,
+        precioMaximo: null,
+      });
+
 
       var biz = queryParams["biz"]
       var elementsPerPage = queryParams["elementsPerPage"];
-      if ( biz && elementsPerPage) {
+      if (biz && elementsPerPage) {
 
         this.filtrosSeleccionados.set('biz', biz);
-      
-        this.filtrosSeleccionados.set('elementsPerPage',elementsPerPage );
+
+        this.filtrosSeleccionados.set('elementsPerPage', elementsPerPage);
 
 
         var city = queryParams["city"];
         if (city) {
           this.filtrosSeleccionados.set('city', city);
-        }else{
+        } else {
           var barrio = queryParams["neighborhood_code"];
           if (barrio) {
             this.filtrosSeleccionados.set('neighborhood_code', barrio);
-          }else{
+          } else {
             this.router.navigate(['']);
           }
 
@@ -214,7 +232,7 @@ export class FiltrosComponent implements OnInit {
       } else {
         this.router.navigate(['']);
       }
-      
+
     } else {
 
       this.cargarDesdeState(state);
