@@ -74,6 +74,8 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
 
   cargando = false;
   isLoading = true;
+  loadingPropiedades: boolean = false;
+
 
   // Injectaciones
   router = inject(Router);
@@ -97,7 +99,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   bloqueActualDestacados: number = 0;
   paginasDestacados: (number | string)[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngAfterViewInit(): void {
     const targetEl = document.getElementById('slider');
@@ -121,6 +123,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   getInmueblesVentas(page: number) {
+    this.loadingPropiedades = true;
     this.filtrosInmueblesVenta.clear();
     this.filtrosInmueblesVenta.set('biz', 2);
 
@@ -131,8 +134,8 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     };
     this.inmueblesService
       .getFiltrosEnviar(obj, this.elementsPerPageInicial)
-      .subscribe(
-        (response: any) => {
+      .subscribe({
+        next: (response: any) => {
           console.log(response.data);
 
           var respuesta = response.data;
@@ -156,14 +159,17 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
 
           console.log(this.inmueblesVentasArray);
         },
-
-        (error: any) => {
-          console.error('Error al enviar los filtros:', error);
+        error: (error: any) => {
+          console.error('Error al obtener los inmuebles:', error);
+        },
+        complete: () => {
+          this.loadingPropiedades = false;
         }
-      );
+      });
   }
 
   getInmueblesArriendos(page: number) {
+    this.loadingPropiedades = true;
     this.filtrosInmueblesArriendo.clear();
     this.filtrosInmueblesArriendo.set('biz', 1);
 
@@ -174,8 +180,8 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     };
     this.inmueblesService
       .getFiltrosEnviar(obj, this.elementsPerPageInicial)
-      .subscribe(
-        (response: any) => {
+      .subscribe({
+        next: (response: any) => {
           var respuesta = response.data;
 
           console.log(response);
@@ -193,38 +199,33 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
 
           this.generarPaginas('ARRIENDO');
         },
-        (error: any) => {
-          console.error('Error al enviar los filtros:', error);
+        error: (error: any) => {
+          console.error('Error al obtener los inmuebles:', error);
+        },
+        complete: () => {
+          this.loadingPropiedades = false;
         }
-      );
+      });
   }
 
   getInmueblesDestacados(page: number) {
-    this.inmueblesService.getInmueblesDestacados(page).subscribe(
-      (data: any) => {
-        console.log(data);
+    this.loadingPropiedades = true;
 
-        var respuesta = data.data.filter((inm: any) => inm.image1 != '');
-
-        console.log(data);
-
+    this.inmueblesService.getInmueblesDestacados(page).subscribe({
+      next: (data: any) => {
+        const respuesta = data.data.filter((inm: any) => inm.image1 != '');
         this.inmueblesDestacadosArray = respuesta;
-
         this.totalPaginasDestacados = data.last_page || 1;
-        this.paginasDestacados = Array.from(
-          { length: this.totalPaginasDestacados },
-          (_, i) => i + 1
-        );
         this.paginaActualDestacados = data.current_page || 1;
-
         this.generarPaginas('DESTACADOS');
       },
-      (error: any) => {
-        console.log(error);
-
+      error: (error: any) => {
         console.error('Error al obtener los inmuebles:', error);
+      },
+      complete: () => {
+        this.loadingPropiedades = false;
       }
-    );
+    });
   }
 
   redirigirVerBlog(id: string) {
