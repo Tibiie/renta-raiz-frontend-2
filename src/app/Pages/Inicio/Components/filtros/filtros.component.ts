@@ -152,8 +152,20 @@ export class FiltrosComponent implements OnInit {
     await this.getDatos();
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
+
+
+    if(Object.keys(queryParams).length == 1){
+      var biz = queryParams["biz"]
+      if (biz) {
+        this.filtrosSeleccionados.set('biz', biz);
+        this.enviarFiltros()
+      }else{
+        this.router.navigate(['']);
+      }
+      
+    }
     
-    if (Object.keys(queryParams).length !== 0) {
+    if (Object.keys(queryParams).length > 1) {
       
       this.filtrosSeleccionados.clear();
       this.selectedProperty = null;
