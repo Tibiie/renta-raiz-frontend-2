@@ -11,7 +11,7 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
@@ -127,6 +127,7 @@ export class FiltrosComponent implements OnInit {
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
   geolocalizacionService = inject(GeolocalizacionService);
+  activatedRoute = inject(ActivatedRoute);
 
   mostrarMapa = false;
   address: string | null = null;
@@ -147,15 +148,30 @@ export class FiltrosComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     window.scrollTo(0, 0);
     const state = window.history.state;
-    await this.getDatos();
-    this.cargarDesdeState(state);
 
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const newState = window.history.state;
-        this.cargarDesdeState(newState);
-      }
-    });
+    var queryParams = this.activatedRoute.snapshot.queryParams;
+    if (queryParams) {
+      this.filtrosSeleccionados.set('biz', queryParams["biz"]);
+      this.enviarFiltros()
+    } else {
+      await this.getDatos();
+      this.cargarDesdeState(state);
+
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          const newState = window.history.state;
+          this.cargarDesdeState(newState);
+        }
+      });
+    }
+
+
+
+
+
+
+
+
   }
 
   buildPolygon(lat: any, lng: any, delta = 0.001) {
