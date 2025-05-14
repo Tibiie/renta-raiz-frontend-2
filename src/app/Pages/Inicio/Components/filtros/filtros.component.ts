@@ -35,7 +35,7 @@ import { FooterComponent } from "../../../../shared/footer/footer.component";
 export class FiltrosComponent implements OnInit {
   totalDatos = 0;
   totalPaginas = 0;
-  paginaActual = 1;
+  paginaActual:number = 1;
   elementsPerPage = 12;
   bloqueActual: number = 0;
   isDesktopView = window.innerWidth >= 768;
@@ -152,13 +152,18 @@ export class FiltrosComponent implements OnInit {
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
-    if (queryParams['biz']) {
-      this.selectedProperty = {
-        code: queryParams['biz'],
-        name: '',
-        displayName: ''
-      } as any;
-    }
+    
+    console.log(state);
+    
+
+    this.obtenerParametrosFiltros(1, queryParams, state);
+
+
+    this.isDrawerOpen = !this.isMobileView;
+    
+  }
+
+  obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
 
     if (Object.keys(queryParams).length == 1) {
       this.filtrosSeleccionados.clear();
@@ -182,8 +187,8 @@ export class FiltrosComponent implements OnInit {
       var biz = queryParams["biz"]
       if (biz) {
         this.filtrosSeleccionados.set('biz', biz);
-        this.enviarFiltros()
-         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+        this.enviarFiltros(1)
+        const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
         const state = {
           resultados: this.resultados,
@@ -241,7 +246,7 @@ export class FiltrosComponent implements OnInit {
 
 
 
-        this.enviarFiltros(1, false)
+        this.enviarFiltros(pagina, false)
 
         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
@@ -270,9 +275,6 @@ export class FiltrosComponent implements OnInit {
         }
       });
     }
-
-
-    this.isDrawerOpen = !this.isMobileView;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -349,7 +351,7 @@ export class FiltrosComponent implements OnInit {
 
 
       if (!this.filtrosVistaInicial?.type) {
-        
+
         this.selectedEstates = [];
       } else {
         const estateCodes = this.filtrosVistaInicial.type.split(',');
@@ -430,7 +432,18 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (typeof pagina === 'number' && pagina !== this.paginaActual) {
-      this.enviarFiltros(pagina);
+
+      var queryParams = this.activatedRoute.snapshot.queryParams;
+      const state = window.history.state;
+
+
+
+      if (Object.keys(queryParams).length >= 1) {
+        this.obtenerParametrosFiltros(this.paginaActual + 1, queryParams, state);
+      } else {
+        this.enviarFiltros(pagina);
+      }
+
     }
   }
 
@@ -441,8 +454,36 @@ export class FiltrosComponent implements OnInit {
   }
 
   paginaSiguiente() {
+    
     if (this.paginaActual < this.totalPaginas) {
-      this.enviarFiltros(this.paginaActual + 1);
+      var queryParams = this.activatedRoute.snapshot.queryParams;
+      const state = window.history.state;
+
+      
+      
+      if (Object.keys(queryParams).length >= 1) {
+        var paginaCurrent = this.paginaActual + 1;
+        this.paginaActual = paginaCurrent;
+        
+        this.obtenerParametrosFiltros(paginaCurrent, queryParams, state);
+
+      } else {
+        
+        this.cargarDesdeState(state);
+        this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+            const newState = window.history.state;
+            this.cargarDesdeState(newState);
+          }
+        });
+        console.log(this.filtrosSeleccionados);
+        
+        
+        this.enviarFiltros(this.paginaActual+1);
+      }
+
+      
+
     }
   }
 
@@ -553,6 +594,9 @@ export class FiltrosComponent implements OnInit {
     }
 
     this.cdRef.detectChanges();
+
+    console.log(this.filtrosSeleccionados);
+    
   }
 
   async cargarDesdeState(state: any) {
@@ -584,9 +628,10 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  enviarFiltros(pagina: number = 1, prepararFiltros: boolean = true) {
+  enviarFiltros(pagina:number, prepararFiltros: boolean = true) {
     this.cargando = true;
-    this.paginaActual = pagina;
+    
+    
     console.log(this.filtrosSeleccionados);
 
     if (prepararFiltros) {
@@ -605,15 +650,18 @@ export class FiltrosComponent implements OnInit {
       (response: any) => {
         console.log('response', response);
 
+        
+
         this.resultados = response.data;
         this.totalDatos = response.total;
-
+        this.paginaActual = response.current_page || 1;
         this.paginacion = response;
         this.totalPaginas = response.last_page || 1;
         this.paginas = Array.from(
           { length: this.totalPaginas },
           (_, i) => i + 1
         );
+
 
         this.generarPaginas();
         this.cargando = false;
@@ -622,6 +670,7 @@ export class FiltrosComponent implements OnInit {
           this.isDrawerOpen = false;
           console.log('Drawer cerrado en vista móvil');
         }
+        
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -879,7 +928,7 @@ export class FiltrosComponent implements OnInit {
     this.ubicacion = this.searchTerm;
     this.filtrosSeleccionados.set('isManualSelection', 'true');
     if (this.searchTerm != '') {
-      this.enviarFiltros();
+      this.enviarFiltros(1);
     }
   }
 
@@ -924,7 +973,7 @@ export class FiltrosComponent implements OnInit {
 
     this.cdRef.detectChanges();
 
-    this.enviarFiltros();
+    this.enviarFiltros(1);
   }
 
   clearSearch() {
