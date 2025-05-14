@@ -251,7 +251,7 @@ export class FiltrosComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.isDesktopView = window.innerWidth >= 768;
-    
+
     if (!this.isDesktopView) {
       this.isDrawerOpen = false;
     }
@@ -578,6 +578,10 @@ export class FiltrosComponent implements OnInit {
 
         this.generarPaginas();
         this.cargando = false;
+
+        if (!this.isDesktopView) {
+          this.isDrawerOpen = false;
+        }
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
