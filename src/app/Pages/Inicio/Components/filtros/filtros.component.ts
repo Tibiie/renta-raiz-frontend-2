@@ -39,6 +39,7 @@ export class FiltrosComponent implements OnInit {
   paginaActual = 1;
   elementsPerPage = 12;
   bloqueActual: number = 0;
+  isDesktopView = window.innerWidth >= 768;
 
   seleccion = {
     estrato: [] as number[],
@@ -214,14 +215,17 @@ export class FiltrosComponent implements OnInit {
         }
       });
     }
+    this.isDrawerOpen = !this.isMobileView;
+  }
 
-
-
-
-
-
-
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.isDesktopView = window.innerWidth >= 768;
+    
+    // Cierra automáticamente en móviles para evitar parpadeos
+    if (!this.isDesktopView) {
+      this.isDrawerOpen = false;
+    }
   }
 
   buildPolygon(lat: any, lng: any, delta = 0.001) {
@@ -297,11 +301,6 @@ export class FiltrosComponent implements OnInit {
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.isMobileView = window.innerWidth < 768;
   }
 
   toggleMap() {
