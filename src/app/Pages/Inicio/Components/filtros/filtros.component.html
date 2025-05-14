@@ -234,7 +234,7 @@
             class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200">
             Borrar filtros
           </button>
-          <button [disabled]="cargando" (click)="enviarFiltros()"
+          <button [disabled]="cargando" (click)="enviarFiltros(1)"
             class="flex-1 text-white font-semibold py-2 px-4 rounded-xl transition duration-200" [ngClass]="{
             'bg-[#CDAD60] hover:bg-[#b59a50]': !cargando,
             'bg-gray-400 cursor-not-allowed': cargando
