@@ -11,7 +11,7 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
@@ -39,6 +39,7 @@ export class FiltrosComponent implements OnInit {
   paginaActual = 1;
   elementsPerPage = 12;
   bloqueActual: number = 0;
+  isDesktopView = window.innerWidth >= 768;
 
   seleccion = {
     estrato: [] as number[],
@@ -127,6 +128,7 @@ export class FiltrosComponent implements OnInit {
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
   geolocalizacionService = inject(GeolocalizacionService);
+  activatedRoute = inject(ActivatedRoute);
 
   mostrarMapa = false;
   address: string | null = null;
@@ -145,17 +147,114 @@ export class FiltrosComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
+
     window.scrollTo(0, 0);
     const state = window.history.state;
     await this.getDatos();
-    this.cargarDesdeState(state);
+    var queryParams = this.activatedRoute.snapshot.queryParams;
+    console.log(queryParams);
 
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const newState = window.history.state;
-        this.cargarDesdeState(newState);
+
+    if (Object.keys(queryParams).length == 1) {
+      this.filtrosSeleccionados.clear();
+      this.selectedProperty = null;
+      this.selectedEstates = [];
+      this.seleccion = {
+        habitaciones: [],
+        banos: [],
+        parqueadero: [],
+        estrato: [],
+      };
+      this.formRangos.patchValue({
+        AreaMinima: null,
+        AreaMaxima: null,
+        precioVentaMinimo: null,
+        precioVentaMaximo: null,
+        precioMinimo: null,
+        precioMaximo: null,
+      });
+
+      var biz = queryParams["biz"]
+      if (biz) {
+        this.filtrosSeleccionados.set('biz', biz);
+        this.enviarFiltros()
+      } else {
+        this.router.navigate(['']);
       }
-    });
+
+    }
+
+    if (Object.keys(queryParams).length > 1) {
+
+      this.filtrosSeleccionados.clear();
+      this.selectedProperty = null;
+      this.selectedEstates = [];
+      this.seleccion = {
+        habitaciones: [],
+        banos: [],
+        parqueadero: [],
+        estrato: [],
+      };
+      this.formRangos.patchValue({
+        AreaMinima: null,
+        AreaMaxima: null,
+        precioVentaMinimo: null,
+        precioVentaMaximo: null,
+        precioMinimo: null,
+        precioMaximo: null,
+      });
+
+
+      var biz = queryParams["biz"]
+      var elementsPerPage = queryParams["elementsPerPage"];
+      if (biz && elementsPerPage) {
+
+        this.filtrosSeleccionados.set('biz', biz);
+
+        this.filtrosSeleccionados.set('elementsPerPage', elementsPerPage);
+
+
+        var city = queryParams["city"];
+        if (city) {
+          this.filtrosSeleccionados.set('city', city);
+        } else {
+          var barrio = queryParams["neighborhood_code"];
+          if (barrio) {
+            this.filtrosSeleccionados.set('neighborhood_code', barrio);
+          } else {
+            this.router.navigate(['']);
+          }
+
+        }
+
+
+
+        this.enviarFiltros()
+      } else {
+        this.router.navigate(['']);
+      }
+
+    } else {
+
+      this.cargarDesdeState(state);
+
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          const newState = window.history.state;
+          this.cargarDesdeState(newState);
+        }
+      });
+    }
+    this.isDrawerOpen = !this.isMobileView;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.isDesktopView = window.innerWidth >= 768;
+    
+    if (!this.isDesktopView) {
+      this.isDrawerOpen = false;
+    }
   }
 
   buildPolygon(lat: any, lng: any, delta = 0.001) {
@@ -231,11 +330,6 @@ export class FiltrosComponent implements OnInit {
     } catch (error) {
       console.error('Error al obtener datos:', error);
     }
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.isMobileView = window.innerWidth < 768;
   }
 
   toggleMap() {
@@ -740,6 +834,9 @@ export class FiltrosComponent implements OnInit {
     this.filteredBarrios = [];
     this.ubicacion = this.searchTerm;
     this.filtrosSeleccionados.set('isManualSelection', 'true');
+    if (this.searchTerm != '') {
+      this.enviarFiltros();
+    }
   }
 
   selectOption(type: 'property' | 'estate', option: any): void {

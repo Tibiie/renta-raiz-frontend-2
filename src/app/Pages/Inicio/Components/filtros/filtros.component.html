@@ -2,21 +2,6 @@
 
 <div class="flex flex-col md:flex-row">
   <div class="flex-1">
-    <div class="relative md:fixed text-center top-40 md:top-36 z-50 transition-all duration-300" [ngClass]="{
-      'left-0 md:left-6': !isDrawerOpen,
-      'left-0 md:left-36': isDrawerOpen
-    }">
-
-      <button type="button" (click)="toggleDrawer()" [attr.data-drawer-target]="'modern-drawer'"
-        [attr.data-drawer-show]="!isDrawerOpen ? 'modern-drawer' : null"
-        [attr.data-drawer-hide]="isDrawerOpen ? 'modern-drawer' : null"
-        class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transition duration-300 shadow-lg">
-        <i class="fas fa-filter"></i>
-        {{ !isDrawerOpen ? "" : "Filtros" }}
-      </button>
-
-    </div>
-
     <div *ngIf="isDrawerOpen" class="fixed inset-0 bg-black bg-opacity-50 z-[998] md:hidden" (click)="toggleDrawer()">
     </div>
 
@@ -299,7 +284,7 @@
     }">
     <div class="bg-white shadow-sm">
       <!-- Barra de búsqueda y filtros -->
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 mt-8 sm:mt-0">
         <!-- Barra de búsqueda -->
         <div class="relative flex-1 w-full max-w-2xl">
           <input type="text" id="ubicacion" [(ngModel)]="ubicacion" [(ngModel)]="searchTerm" (input)="filterLocations()"
@@ -323,34 +308,26 @@
           </button>
 
           <div *ngIf="filteredBarrios.length > 0" id="modern-drawer"
-            class="absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
-            <!-- Ciudades -->
-            <div *ngFor="let item of filteredBarrios">
-              <div *ngIf="item.isCity" (click)="selectLocation(item)"
-                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer border-b">
-                <i class="fas fa-city text-gray-500 mt-1 mr-2"></i>
-                <div>
-                  <p class="font-medium">
-                    {{ item.name }}
-                    <strong class="text-xs text-gray-500">(Antioquia)</strong>
-                  </p>
-                  <p class="text-xs text-gray-500">Ciudad</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Barrios -->
-            <div *ngFor="let item of filteredBarrios">
-              <div *ngIf="!item.isCity" (click)="selectLocation(item)"
-                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                <i class="fas fa-map-marker-alt text-gray-500 mt-1 mr-2"></i>
-                <div>
-                  <p class="font-medium">{{ item.city_name }}</p>
-                  <p class="text-xs text-gray-500">{{ item.name }}</p>
-                </div>
+            class="absolute z-[9999] w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
+            <div *ngFor="let barrio of filteredBarrios" (click)="selectLocation(barrio)"
+              class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
+              <i class="fas fa-location-dot text-1xl text-gray-500 mt-1 mr-2"></i>
+              <div>
+                <p class="text-medium text-gray-900">{{ barrio.city_name }}</p>
+                <p class="font-sm text-gray-500">{{ barrio.name }}</p>
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Botón de Filtros (ahora al lado derecho del buscador) -->
+        <div class="flex-shrink-0">
+          <button type="button" (click)="toggleDrawer()" [attr.data-drawer-target]="'modern-drawer'"
+            [attr.data-drawer-show]="!isDrawerOpen ? 'modern-drawer' : null"
+            [attr.data-drawer-hide]="isDrawerOpen ? 'modern-drawer' : null"
+            class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-300 shadow-lg">
+            <i class="fas fa-filter"></i> Filtros
+          </button>
         </div>
 
         <!-- Contador de resultados -->
