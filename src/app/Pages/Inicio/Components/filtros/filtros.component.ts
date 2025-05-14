@@ -35,7 +35,7 @@ import { FooterComponent } from "../../../../shared/footer/footer.component";
 export class FiltrosComponent implements OnInit {
   totalDatos = 0;
   totalPaginas = 0;
-  paginaActual:number = 1;
+  paginaActual: number = 1;
   elementsPerPage = 12;
   bloqueActual: number = 0;
   isDesktopView = window.innerWidth >= 768;
@@ -152,15 +152,15 @@ export class FiltrosComponent implements OnInit {
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
-    
+
     console.log(state);
-    
+
 
     this.obtenerParametrosFiltros(1, queryParams, state);
 
 
     this.isDrawerOpen = !this.isMobileView;
-    
+
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
@@ -431,21 +431,21 @@ export class FiltrosComponent implements OnInit {
   }
 
   paginaSiguiente() {
-    
+
     if (this.paginaActual < this.totalPaginas) {
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
 
-      
-      
+
+
       if (Object.keys(queryParams).length >= 1) {
         var paginaCurrent = this.paginaActual + 1;
         this.paginaActual = paginaCurrent;
-        
+
         this.obtenerParametrosFiltros(paginaCurrent, queryParams, state);
 
       } else {
-        
+
         this.cargarDesdeState(state);
         this.router.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
@@ -454,18 +454,24 @@ export class FiltrosComponent implements OnInit {
           }
         });
         console.log(this.filtrosSeleccionados);
-        
-        
-        this.enviarFiltros(this.paginaActual+1);
+
+
+        this.enviarFiltros(this.paginaActual + 1);
       }
 
-      
+
 
     }
   }
 
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
+    if (f?.city) {
+      this.filtrosSeleccionados.set('city', f.city);
+    }
+    if (f?.neighborhood_code) {
+      this.filtrosSeleccionados.set('neighborhood_code', f.neighborhood_code);
+    }
     if (f?.pcmin !== undefined && f.pcmin !== null) {
       this.formRangos.patchValue({
         precioMinimo: f.pcmin.toString(),
@@ -571,7 +577,7 @@ export class FiltrosComponent implements OnInit {
     this.cdRef.detectChanges();
 
     console.log(this.filtrosSeleccionados);
-    
+
   }
 
   async cargarDesdeState(state: any) {
@@ -603,10 +609,10 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  enviarFiltros(pagina:number, prepararFiltros: boolean = true) {
+  enviarFiltros(pagina: number, prepararFiltros: boolean = true) {
     this.cargando = true;
-    
-    
+
+
     console.log(this.filtrosSeleccionados);
 
     if (prepararFiltros) {
@@ -625,7 +631,7 @@ export class FiltrosComponent implements OnInit {
       (response: any) => {
         console.log('response', response);
 
-        
+
 
         this.resultados = response.data;
         this.totalDatos = response.total;
@@ -645,7 +651,7 @@ export class FiltrosComponent implements OnInit {
           this.isDrawerOpen = false;
           console.log('Drawer cerrado en vista móvil');
         }
-        
+
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
