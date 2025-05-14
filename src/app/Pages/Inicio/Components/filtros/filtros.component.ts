@@ -252,7 +252,6 @@ export class FiltrosComponent implements OnInit {
   onResize(event: Event) {
     this.isDesktopView = window.innerWidth >= 768;
     
-    // Cierra automáticamente en móviles para evitar parpadeos
     if (!this.isDesktopView) {
       this.isDrawerOpen = false;
     }
@@ -768,6 +767,9 @@ export class FiltrosComponent implements OnInit {
     this.filtrosSeleccionados.set('city', barrio.city_code);
     this.filtrosSeleccionados.set('neighborhood_code', barrio.code);
     this.filtrosSeleccionados.set('isManualSelection', 'true');
+    if (this.searchTerm != '') {
+      this.enviarFiltros();
+    }
   }
 
   selectOption(type: 'property' | 'estate', option: any): void {
