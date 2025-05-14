@@ -26,7 +26,6 @@ import { FooterComponent } from "../../../../shared/footer/footer.component";
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    MapaComponent,
     VolverComponent,
     FooterComponent
   ],
@@ -147,7 +146,6 @@ export class FiltrosComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
-
     window.scrollTo(0, 0);
     const state = window.history.state;
     await this.getDatos();
@@ -181,7 +179,6 @@ export class FiltrosComponent implements OnInit {
       } else {
         this.router.navigate(['']);
       }
-
     }
 
     if (Object.keys(queryParams).length > 1) {
@@ -204,15 +201,12 @@ export class FiltrosComponent implements OnInit {
         precioMaximo: null,
       });
 
-
       var biz = queryParams["biz"]
       var elementsPerPage = queryParams["elementsPerPage"];
       if (biz && elementsPerPage) {
 
         this.filtrosSeleccionados.set('biz', biz);
-
         this.filtrosSeleccionados.set('elementsPerPage', elementsPerPage);
-
 
         var city = queryParams["city"];
         if (city) {
@@ -224,20 +218,14 @@ export class FiltrosComponent implements OnInit {
           } else {
             this.router.navigate(['']);
           }
-
         }
-
-
-
         this.enviarFiltros()
       } else {
         this.router.navigate(['']);
       }
 
     } else {
-
       this.cargarDesdeState(state);
-
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
           const newState = window.history.state;
@@ -579,8 +567,9 @@ export class FiltrosComponent implements OnInit {
         this.generarPaginas();
         this.cargando = false;
 
-        if (!this.isDesktopView) {
+        if (this.isMobileView) {
           this.isDrawerOpen = false;
+          console.log('Drawer cerrado en vista móvil');
         }
       },
       (error: any) => {
