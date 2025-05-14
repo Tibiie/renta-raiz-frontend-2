@@ -218,15 +218,16 @@ export class FiltrosComponent implements OnInit {
         var city = queryParams["city"];
         if (city) {
           this.filtrosSeleccionados.set('city', city);
-        } else {
-          var barrio = queryParams["neighborhood_code"];
-          if (barrio) {
-            this.filtrosSeleccionados.set('neighborhood_code', barrio);
-          } else {
-            this.router.navigate(['']);
-          }
         }
-        this.enviarFiltros()
+
+        var barrio = queryParams["neighborhood_code"];
+        if (barrio) {
+          this.filtrosSeleccionados.set('neighborhood_code', barrio);
+        } 
+
+
+
+        this.enviarFiltros(1,false)
       } else {
         this.router.navigate(['']);
       }
@@ -543,11 +544,14 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  enviarFiltros(pagina: number = 1) {
+  enviarFiltros(pagina: number = 1,prepararFiltros: boolean = true) {
     this.cargando = true;
     this.paginaActual = pagina;
-    this.prepararFiltros();
+    console.log(this.filtrosSeleccionados);
 
+    if (prepararFiltros) {
+      this.prepararFiltros();
+    }
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     console.log('filtrosObj', filtrosObj);
     const obj = {
