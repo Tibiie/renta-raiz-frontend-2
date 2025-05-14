@@ -492,21 +492,53 @@ export class FiltrosComponent implements OnInit {
   }
 
   prepararFiltros() {
-    const limpiarTexto = (texto: string) => {
-      return texto
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .trim()
-        .toLowerCase();
-    };
+    const skipUbicacion =
+      this.filtrosSeleccionados.get('isManualSelection') === 'true';
+    this.filtrosSeleccionados.delete('isManualSelection');
 
-    const ciudad = this.ciudades.find(
-      (c) => limpiarTexto(c.name) === limpiarTexto(this.ubicacion)
-    );
-    var codigo = ciudad?.code;
+    if (!skipUbicacion) {
+      const limpiarTexto = (texto: string) => {
+        return (
+          texto
+            ?.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim()
+            .toLowerCase() || ''
+        );
+      };
 
-    if (this.ubicacion) {
-      this.filtrosSeleccionados.set('city', codigo);
+      const ubicacionValue = this.ubicacion;
+
+      if (ubicacionValue) {
+        // Buscar en barrios primero
+        if (this.barrios?.data) {
+          const barrioEncontrado = this.barrios.data.find(
+            (b) =>
+              limpiarTexto(`${b.city_name},${b.name}`) ===
+              limpiarTexto(ubicacionValue)
+          );
+
+          if (barrioEncontrado) {
+            this.filtrosSeleccionados.set('city', barrioEncontrado.city_code);
+            this.filtrosSeleccionados.set(
+              'neighborhood_code',
+              barrioEncontrado.code
+            );
+          }
+        }
+
+        // Buscar en ciudades si no se encontró en barrios
+        if (!this.filtrosSeleccionados.has('city')) {
+          const ciudad = this.ciudades.find(
+            (c) => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
+          );
+          this.filtrosSeleccionados.set('city', ciudad?.code);
+          this.filtrosSeleccionados.delete('neighborhood_code');
+        }
+      } else {
+        this.filtrosSeleccionados.delete('city');
+        this.filtrosSeleccionados.delete('neighborhood_code');
+      }
     }
 
     if (this.selectedProperty) {
@@ -658,20 +690,55 @@ export class FiltrosComponent implements OnInit {
   }
 
   filterLocations() {
-    const search = this.searchTerm.toLowerCase();
-    this.filteredBarrios = this.barrios.data.filter(
-      (barrio: any) =>
-        barrio.name.toLowerCase().includes(search) ||
-        barrio.city_name.toLowerCase().includes(search)
+    const search = this.searchTerm.toLowerCase().trim();
+
+    // Filtrar ciudades que coinciden
+    const ciudadesFiltradas = this.ciudades.filter((ciudad) =>
+      ciudad.name.toLowerCase().includes(search)
     );
+
+    // Filtrar barrios que coinciden con la ciudad o nombre
+    const barriosFiltrados = this.barrios.data.filter(
+      (barrio: any) =>
+        barrio.city_name.toLowerCase().includes(search) ||
+        barrio.name.toLowerCase().includes(search)
+    );
+
+    // Combinar resultados y eliminar duplicados
+    this.filteredBarrios = [
+      ...ciudadesFiltradas.map((c) => ({ ...c, isCity: true })),
+      ...barriosFiltrados,
+    ].filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((i) =>
+          i.isCity ? i.code === item.code : i.code === item.code
+        )
+    );
+
+    // Ordenar: ciudades primero, luego barrios de las ciudades encontradas
+    this.filteredBarrios.sort((a: any, b: any) => {
+      if (a.isCity && !b.isCity) return -1;
+      if (!a.isCity && b.isCity) return 1;
+      return 0;
+    });
   }
 
-  selectLocation(barrio: any) {
-    this.searchTerm = `${barrio.city_name}, ${barrio.name}`;
-    this.filteredBarrios = [];
+  selectLocation(item: any) {
+    if (item.isCity) {
+      // Selección de ciudad
+      this.searchTerm = item.name;
+      this.filtrosSeleccionados.set('city', item.code);
+      this.filtrosSeleccionados.delete('neighborhood_code');
+    } else {
+      // Selección de barrio
+      this.searchTerm = `${item.city_name}, ${item.name}`;
+      this.filtrosSeleccionados.set('city', item.city_code);
+      this.filtrosSeleccionados.set('neighborhood_code', item.code);
+    }
 
-    this.filtrosSeleccionados.set('city', barrio.city_code);
-    this.filtrosSeleccionados.set('neighborhood_code', barrio.code);
+    this.filteredBarrios = [];
+    this.ubicacion = this.searchTerm;
     this.filtrosSeleccionados.set('isManualSelection', 'true');
   }
 
