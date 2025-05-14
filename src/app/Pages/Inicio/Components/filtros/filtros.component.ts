@@ -183,6 +183,20 @@ export class FiltrosComponent implements OnInit {
       if (biz) {
         this.filtrosSeleccionados.set('biz', biz);
         this.enviarFiltros()
+         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+
+        const state = {
+          resultados: this.resultados,
+          paginacion: this.paginacion,
+          filtros: filtrosObj,
+        }
+        this.cargarDesdeState(state);
+        this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+            const newState = window.history.state;
+            this.cargarDesdeState(newState);
+          }
+        });
       } else {
         this.router.navigate(['']);
       }
@@ -223,11 +237,26 @@ export class FiltrosComponent implements OnInit {
         var barrio = queryParams["neighborhood_code"];
         if (barrio) {
           this.filtrosSeleccionados.set('neighborhood_code', barrio);
-        } 
+        }
 
 
 
-        this.enviarFiltros(1,false)
+        this.enviarFiltros(1, false)
+
+        const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+
+        const state = {
+          resultados: this.resultados,
+          paginacion: this.paginacion,
+          filtros: filtrosObj,
+        }
+        this.cargarDesdeState(state);
+        this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+            const newState = window.history.state;
+            this.cargarDesdeState(newState);
+          }
+        });
       } else {
         this.router.navigate(['']);
       }
@@ -241,6 +270,8 @@ export class FiltrosComponent implements OnInit {
         }
       });
     }
+
+
     this.isDrawerOpen = !this.isMobileView;
   }
 
@@ -306,13 +337,19 @@ export class FiltrosComponent implements OnInit {
         return cat;
       });
 
+
+
       this.selectedProperty =
         this.propertyOptions.find((cat) => cat.code === '3') ||
         this.propertyOptions[0];
 
       this.estateOptions = tipoPropiedadResponse.data;
 
+
+
+
       if (!this.filtrosVistaInicial?.type) {
+        
         this.selectedEstates = [];
       } else {
         const estateCodes = this.filtrosVistaInicial.type.split(',');
@@ -519,9 +556,12 @@ export class FiltrosComponent implements OnInit {
   }
 
   async cargarDesdeState(state: any) {
+    console.log("cargar desde state", state)
+
     if (state?.resultados) {
       this.resultados = [...state.resultados];
       this.filtrosVistaInicial = { ...state.filtros };
+      console.log("inicial filtros", this.filtrosVistaInicial)
 
       this.paginacion = state.paginacion;
       this.totalDatos = this.paginacion.total;
@@ -544,7 +584,7 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
-  enviarFiltros(pagina: number = 1,prepararFiltros: boolean = true) {
+  enviarFiltros(pagina: number = 1, prepararFiltros: boolean = true) {
     this.cargando = true;
     this.paginaActual = pagina;
     console.log(this.filtrosSeleccionados);
