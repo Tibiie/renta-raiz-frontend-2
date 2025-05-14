@@ -183,7 +183,7 @@ export class FiltrosComponent implements OnInit {
       if (biz) {
         this.filtrosSeleccionados.set('biz', biz);
         this.enviarFiltros()
-         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+        const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
         const state = {
           resultados: this.resultados,
@@ -239,8 +239,6 @@ export class FiltrosComponent implements OnInit {
           this.filtrosSeleccionados.set('neighborhood_code', barrio);
         }
 
-
-
         this.enviarFiltros(1, false)
 
         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
@@ -270,7 +268,6 @@ export class FiltrosComponent implements OnInit {
         }
       });
     }
-
 
     this.isDrawerOpen = !this.isMobileView;
   }
@@ -304,7 +301,6 @@ export class FiltrosComponent implements OnInit {
       this.coordinates = await this.geolocalizacionService.getCurrentPosition();
       console.log('Coordenadas:', this.coordinates);
 
-      // 2. Obtener dirección
       this.geolocalizacionService
         .getAddress(this.coordinates.latitude, this.coordinates.longitude)
         .subscribe((response: any) => {
@@ -337,19 +333,14 @@ export class FiltrosComponent implements OnInit {
         return cat;
       });
 
-
-
       this.selectedProperty =
         this.propertyOptions.find((cat) => cat.code === '3') ||
         this.propertyOptions[0];
 
       this.estateOptions = tipoPropiedadResponse.data;
 
-
-
-
       if (!this.filtrosVistaInicial?.type) {
-        
+
         this.selectedEstates = [];
       } else {
         const estateCodes = this.filtrosVistaInicial.type.split(',');
@@ -362,23 +353,6 @@ export class FiltrosComponent implements OnInit {
       this.generarPaginas();
     } catch (error) {
       console.error('Error al obtener datos:', error);
-    }
-  }
-
-  toggleMap() {
-    this.drawerMapAbierto = !this.drawerMapAbierto;
-    this.mostrarMapa = true;
-
-    const drawer = document.getElementById('right-map-drawer');
-
-    if (drawer) {
-      if (this.drawerMapAbierto) {
-        drawer.classList.remove('translate-x-full');
-        drawer.classList.add('translate-x-0');
-      } else {
-        drawer.classList.remove('translate-x-0');
-        drawer.classList.add('translate-x-full');
-      }
     }
   }
 
@@ -454,7 +428,6 @@ export class FiltrosComponent implements OnInit {
         precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null
       });
 
-      // Esto convierte a number para comparar
       const pcmin = Number(f.pcmin);
       const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
 
@@ -470,7 +443,6 @@ export class FiltrosComponent implements OnInit {
         }) || null;
       }
 
-      // Asegurar que los filtros tienen los valores iniciales como strings
       this.filtrosSeleccionados.set('pcmin', f.pcmin.toString());
       if (f.pcmax !== undefined) {
         this.filtrosSeleccionados.set('pcmax', f.pcmax.toString());
@@ -648,7 +620,7 @@ export class FiltrosComponent implements OnInit {
       const ubicacionValue = this.ubicacion;
 
       if (ubicacionValue) {
-        // Buscar en barrios primero
+
         if (this.barrios?.data) {
           const barrioEncontrado = this.barrios.data.find(
             (b) =>
@@ -665,7 +637,6 @@ export class FiltrosComponent implements OnInit {
           }
         }
 
-        // Buscar en ciudades si no se encontró en barrios
         if (!this.filtrosSeleccionados.has('city')) {
           const ciudad = this.ciudades.find(
             (c) => limpiarTexto(c.name) === limpiarTexto(ubicacionValue)
@@ -830,19 +801,16 @@ export class FiltrosComponent implements OnInit {
   filterLocations() {
     const search = this.searchTerm.toLowerCase().trim();
 
-    // Filtrar ciudades que coinciden
     const ciudadesFiltradas = this.ciudades.filter((ciudad) =>
       ciudad.name.toLowerCase().includes(search)
     );
 
-    // Filtrar barrios que coinciden con la ciudad o nombre
     const barriosFiltrados = this.barrios.data.filter(
       (barrio: any) =>
         barrio.city_name.toLowerCase().includes(search) ||
         barrio.name.toLowerCase().includes(search)
     );
 
-    // Combinar resultados y eliminar duplicados
     this.filteredBarrios = [
       ...ciudadesFiltradas.map((c) => ({ ...c, isCity: true })),
       ...barriosFiltrados,
@@ -854,7 +822,6 @@ export class FiltrosComponent implements OnInit {
         )
     );
 
-    // Ordenar: ciudades primero, luego barrios de las ciudades encontradas
     this.filteredBarrios.sort((a: any, b: any) => {
       if (a.isCity && !b.isCity) return -1;
       if (!a.isCity && b.isCity) return 1;
@@ -864,12 +831,10 @@ export class FiltrosComponent implements OnInit {
 
   selectLocation(item: any) {
     if (item.isCity) {
-      // Selección de ciudad
       this.searchTerm = item.name;
       this.filtrosSeleccionados.set('city', item.code);
       this.filtrosSeleccionados.delete('neighborhood_code');
     } else {
-      // Selección de barrio
       this.searchTerm = `${item.city_name}, ${item.name}`;
       this.filtrosSeleccionados.set('city', item.city_code);
       this.filtrosSeleccionados.set('neighborhood_code', item.code);
@@ -1035,3 +1000,21 @@ export class FiltrosComponent implements OnInit {
     });
   }
 }
+
+
+// toggleMap() {
+//   this.drawerMapAbierto = !this.drawerMapAbierto;
+//   this.mostrarMapa = true;
+
+//   const drawer = document.getElementById('right-map-drawer');
+
+//   if (drawer) {
+//     if (this.drawerMapAbierto) {
+//       drawer.classList.remove('translate-x-full');
+//       drawer.classList.add('translate-x-0');
+//     } else {
+//       drawer.classList.remove('translate-x-0');
+//       drawer.classList.add('translate-x-full');
+//     }
+//   }
+// }
