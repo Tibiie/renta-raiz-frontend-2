@@ -146,15 +146,65 @@ export class FiltrosComponent implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
+
     window.scrollTo(0, 0);
     const state = window.history.state;
-
+    await this.getDatos();
     var queryParams = this.activatedRoute.snapshot.queryParams;
-    if (queryParams) {
-      this.filtrosSeleccionados.set('biz', queryParams["biz"]);
-      this.enviarFiltros()
+    console.log(queryParams);
+    
+    if (Object.keys(queryParams).length !== 0) {
+      
+      this.filtrosSeleccionados.clear();
+      this.selectedProperty = null;
+      this.selectedEstates = [];
+      this.seleccion = {
+        habitaciones: [],
+        banos: [],
+        parqueadero: [],
+        estrato: [],
+      };
+      this.formRangos.patchValue({
+        AreaMinima: null,
+        AreaMaxima: null,
+        precioVentaMinimo: null,
+        precioVentaMaximo: null,
+        precioMinimo: null,
+        precioMaximo: null,
+      });
+      
+
+      var biz = queryParams["biz"]
+      var elementsPerPage = queryParams["elementsPerPage"];
+      if ( biz && elementsPerPage) {
+
+        this.filtrosSeleccionados.set('biz', biz);
+      
+        this.filtrosSeleccionados.set('elementsPerPage',elementsPerPage );
+
+
+        var city = queryParams["city"];
+        if (city) {
+          this.filtrosSeleccionados.set('city', city);
+        }else{
+          var barrio = queryParams["neighborhood_code"];
+          if (barrio) {
+            this.filtrosSeleccionados.set('neighborhood_code', barrio);
+          }else{
+            this.router.navigate(['']);
+          }
+
+        }
+
+
+
+        this.enviarFiltros()
+      } else {
+        this.router.navigate(['']);
+      }
+      
     } else {
-      await this.getDatos();
+
       this.cargarDesdeState(state);
 
       this.router.events.subscribe((event) => {
