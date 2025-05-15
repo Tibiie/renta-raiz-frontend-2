@@ -155,13 +155,14 @@ export class FiltrosComponent implements OnInit {
 
     console.log(state);
 
-    this.obtenerParametrosFiltros(1, queryParams, state);
-
     this.isDrawerOpen = false;
 
     if (this.isDesktopView) {
       this.isDrawerOpen = true;
     }
+
+    this.obtenerParametrosFiltros(1, queryParams, state);
+
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
@@ -664,7 +665,8 @@ export class FiltrosComponent implements OnInit {
       },
       complete: () => {
         this.loadingResultados = false;
-        if (this.isMobileView) {
+
+        if (this.isMobileView && this.isDrawerOpen) {
           this.toggleDrawer();
         }
       }
