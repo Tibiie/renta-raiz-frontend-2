@@ -157,7 +157,11 @@ export class FiltrosComponent implements OnInit {
 
     this.obtenerParametrosFiltros(1, queryParams, state);
 
-    this.isDrawerOpen = !this.isMobileView;
+    this.isDrawerOpen = false;
+
+    if (this.isDesktopView) {
+      this.isDrawerOpen = true;
+    }
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
@@ -425,7 +429,7 @@ export class FiltrosComponent implements OnInit {
       const nuevaPagina = this.paginaActual + 1;
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
-  
+
       if (Object.keys(queryParams).length >= 1) {
         this.paginaActual = nuevaPagina;
         this.obtenerParametrosFiltros(nuevaPagina, queryParams, state);
@@ -433,7 +437,7 @@ export class FiltrosComponent implements OnInit {
         // Guardar los filtros actuales antes de enviar
         const currentFilters = new Map(this.filtrosSeleccionados);
         this.enviarFiltros(nuevaPagina, true);
-  
+
         // Restaurar los filtros después de enviar
         setTimeout(() => {
           if (currentFilters.has('city')) {
@@ -447,18 +451,18 @@ export class FiltrosComponent implements OnInit {
           }
         }, 0);
       }
-  
+
       // 👇 Actualiza el bloque automáticamente al avanzar
       const paginasPorBloque = 3;
       const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
-  
+
       if (bloqueActual !== this.bloqueActual) {
         this.bloqueActual = bloqueActual;
         this.generarPaginas();
       }
     }
   }
-  
+
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
     if (f?.city) {
