@@ -47,9 +47,10 @@ export class FiltrosComponent implements OnInit {
     habitaciones: [] as (number | string)[],
   };
 
+  filtrosInmueblesArriendo: Map<string, any> = new Map();
   searchTerm: string = '';
   ubicacion: string = '';
-
+  niveles: any = ["diamante", "oro", "plata"]
   cargando = false;
   isDrawerOpen: boolean = true;
   drawerMapAbierto: boolean = false;
@@ -172,6 +173,7 @@ export class FiltrosComponent implements OnInit {
       this.isDrawerOpen = true;
     }
     if (Object.keys(queryParams).length == 1) {
+
       this.filtrosSeleccionados.clear();
       this.selectedProperty = null;
       this.selectedEstates = [];
@@ -191,7 +193,9 @@ export class FiltrosComponent implements OnInit {
       });
 
       var biz = queryParams['biz'];
+
       if (biz) {
+
         this.filtrosSeleccionados.set('biz', biz);
         this.enviarFiltros(1);
         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
@@ -208,8 +212,63 @@ export class FiltrosComponent implements OnInit {
             this.cargarDesdeState(newState);
           }
         });
-      } else {
-        this.router.navigate(['']);
+      }
+
+
+      var nivelParam = queryParams["tipo"]
+
+      if (nivelParam) {
+        
+
+        var resul = this.niveles.find((x: any) => x === nivelParam)
+        if (resul) {
+
+
+
+          if (state.filtros == undefined) {
+            this.getDatos();
+            if (nivelParam === 'diamante') {
+              this.filtrosSeleccionados.set('pcmin', 15000000);
+            } else if (nivelParam === 'oro') {
+              this.filtrosSeleccionados.set('pcmin', 8000000);
+              this.filtrosSeleccionados.set('pcmax', 15000000);
+            } else if (nivelParam === 'plata') {
+              this.filtrosSeleccionados.set('pcmin', 2000000);
+              this.filtrosSeleccionados.set('pcmax', 8000000);
+            }
+
+            this.enviarFiltros(pagina, false);
+
+            const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+
+            const state = {
+              resultados: this.resultados,
+              paginacion: this.paginacion,
+              filtros: filtrosObj,
+            };
+
+            this.cargarDesdeState(state);
+            this.router.events.subscribe((event) => {
+              if (event instanceof NavigationEnd) {
+                const newState = window.history.state;
+                this.cargarDesdeState(newState);
+              }
+            });
+
+          } else {
+            this.cargarDesdeState(state);
+            this.router.events.subscribe((event) => {
+              if (event instanceof NavigationEnd) {
+                const newState = window.history.state;
+                this.cargarDesdeState(newState);
+              }
+            });
+          }
+
+
+        }
+
+
       }
     }
 
@@ -438,7 +497,31 @@ export class FiltrosComponent implements OnInit {
 
       if (Object.keys(queryParams).length >= 1) {
         this.paginaActual = nuevaPagina;
-        this.obtenerParametrosFiltros(nuevaPagina, queryParams, state);
+
+
+
+        if (queryParams['tipo']) {
+          console.log(this.filtrosSeleccionados);
+          
+          // Guardar los filtros actuales antes de enviar
+          const currentFilters = new Map(this.filtrosSeleccionados);
+          this.enviarFiltros(nuevaPagina, false);
+
+          // Restaurar los filtros después de enviar
+          setTimeout(() => {
+            if (currentFilters.has('city')) {
+              this.filtrosSeleccionados.set('city', currentFilters.get('city'));
+            }
+            if (currentFilters.has('neighborhood_code')) {
+              this.filtrosSeleccionados.set(
+                'neighborhood_code',
+                currentFilters.get('neighborhood_code')
+              );
+            }
+          }, 0);
+        } else {
+          this.obtenerParametrosFiltros(nuevaPagina, queryParams, state);
+        }
       } else {
         // Guardar los filtros actuales antes de enviar
         const currentFilters = new Map(this.filtrosSeleccionados);
