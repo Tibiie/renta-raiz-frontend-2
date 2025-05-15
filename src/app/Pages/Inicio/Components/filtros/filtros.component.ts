@@ -166,6 +166,11 @@ export class FiltrosComponent implements OnInit {
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
+    this.isDrawerOpen = false;
+
+    if (this.isDesktopView) {
+      this.isDrawerOpen = true;
+    }
     if (Object.keys(queryParams).length == 1) {
       this.filtrosSeleccionados.clear();
       this.selectedProperty = null;
