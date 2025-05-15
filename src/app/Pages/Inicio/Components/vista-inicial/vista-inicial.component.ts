@@ -74,9 +74,10 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
 
   cargando = false;
   isLoading = true;
-  loadingPropiedades: boolean = false;
-
-
+  loadingDestacados: boolean = false;
+  loadingVentas: boolean = false;
+  loadingArriendos: boolean = false;
+  
   // Injectaciones
   router = inject(Router);
   elementRef = inject(ElementRef);
@@ -123,7 +124,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   getInmueblesVentas(page: number) {
-    this.loadingPropiedades = true;
+    this.loadingVentas = true;
     this.filtrosInmueblesVenta.clear();
     this.filtrosInmueblesVenta.set('biz', 2);
 
@@ -163,13 +164,13 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
           console.error('Error al obtener los inmuebles:', error);
         },
         complete: () => {
-          this.loadingPropiedades = false;
+          this.loadingVentas = false;
         }
       });
   }
 
   getInmueblesArriendos(page: number) {
-    this.loadingPropiedades = true;
+    this.loadingArriendos = true;
     this.filtrosInmueblesArriendo.clear();
     this.filtrosInmueblesArriendo.set('biz', 1);
 
@@ -203,13 +204,13 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
           console.error('Error al obtener los inmuebles:', error);
         },
         complete: () => {
-          this.loadingPropiedades = false;
+          this.loadingArriendos = false;
         }
       });
   }
 
   getInmueblesDestacados(page: number) {
-    this.loadingPropiedades = true;
+    this.loadingDestacados = true;
 
     this.inmueblesService.getInmueblesDestacados(page).subscribe({
       next: (data: any) => {
@@ -223,7 +224,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
         console.error('Error al obtener los inmuebles:', error);
       },
       complete: () => {
-        this.loadingPropiedades = false;
+        this.loadingDestacados = false;
       }
     });
   }
