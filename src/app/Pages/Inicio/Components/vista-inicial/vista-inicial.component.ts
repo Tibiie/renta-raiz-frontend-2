@@ -450,15 +450,48 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   paginaSiguiente(inmueble: string) {
     if (inmueble === 'ARRIENDO') {
       if (this.paginaActualArriendo < this.totalPaginasArriendo) {
-        this.getInmueblesArriendos(this.paginaActualArriendo + 1);
+        this.paginaActualArriendo++;
+        
+        const maxPaginasPorBloque = 3;
+        const inicioBloqueActual = this.bloqueActualArriendo * maxPaginasPorBloque + 1;
+        const finBloqueActual = inicioBloqueActual + maxPaginasPorBloque - 1;
+  
+        if (this.paginaActualArriendo > finBloqueActual) {
+          this.bloqueActualArriendo++;
+        }
+  
+        this.generarPaginas(inmueble);
+        this.getInmueblesArriendos(this.paginaActualArriendo);
       }
     } else if (inmueble === 'VENTAS') {
       if (this.paginaActualVentas < this.totalPaginasVentas) {
-        this.getInmueblesVentas(this.paginaActualVentas + 1);
+        this.paginaActualVentas++;
+  
+        const maxPaginasPorBloque = 3;
+        const inicioBloqueActual = this.bloqueActualVentas * maxPaginasPorBloque + 1;
+        const finBloqueActual = inicioBloqueActual + maxPaginasPorBloque - 1;
+  
+        if (this.paginaActualVentas > finBloqueActual) {
+          this.bloqueActualVentas++;
+        }
+  
+        this.generarPaginas(inmueble);
+        this.getInmueblesVentas(this.paginaActualVentas);
       }
     } else {
       if (this.paginaActualDestacados < this.totalPaginasDestacados) {
-        this.getInmueblesDestacados(this.paginaActualDestacados + 1);
+        this.paginaActualDestacados++;
+  
+        const maxPaginasPorBloque = 3;
+        const inicioBloqueActual = this.bloqueActualDestacados * maxPaginasPorBloque + 1;
+        const finBloqueActual = inicioBloqueActual + maxPaginasPorBloque - 1;
+  
+        if (this.paginaActualDestacados > finBloqueActual) {
+          this.bloqueActualDestacados++;
+        }
+  
+        this.generarPaginas(inmueble);
+        this.getInmueblesDestacados(this.paginaActualDestacados);
       }
     }
   }

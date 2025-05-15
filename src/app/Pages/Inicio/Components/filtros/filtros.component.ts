@@ -53,6 +53,7 @@ export class FiltrosComponent implements OnInit {
   cargando = false;
   isDrawerOpen: boolean = true;
   drawerMapAbierto: boolean = false;
+  loadingResultados: boolean = false;
 
   paginacion: any = {};
   ciudades: any[] = [];
@@ -421,20 +422,19 @@ export class FiltrosComponent implements OnInit {
 
   paginaSiguiente() {
     if (this.paginaActual < this.totalPaginas) {
+      const nuevaPagina = this.paginaActual + 1;
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
-
+  
       if (Object.keys(queryParams).length >= 1) {
-        var paginaCurrent = this.paginaActual + 1;
-        this.paginaActual = paginaCurrent;
-
-        this.obtenerParametrosFiltros(paginaCurrent, queryParams, state);
+        this.paginaActual = nuevaPagina;
+        this.obtenerParametrosFiltros(nuevaPagina, queryParams, state);
       } else {
         // Guardar los filtros actuales antes de enviar
         const currentFilters = new Map(this.filtrosSeleccionados);
-        this.enviarFiltros(this.paginaActual + 1, true);
-
-        // Restaurar los filtros de ciudad y barrio después de enviar
+        this.enviarFiltros(nuevaPagina, true);
+  
+        // Restaurar los filtros después de enviar
         setTimeout(() => {
           if (currentFilters.has('city')) {
             this.filtrosSeleccionados.set('city', currentFilters.get('city'));
@@ -447,9 +447,18 @@ export class FiltrosComponent implements OnInit {
           }
         }, 0);
       }
+  
+      // 👇 Actualiza el bloque automáticamente al avanzar
+      const paginasPorBloque = 3;
+      const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+  
+      if (bloqueActual !== this.bloqueActual) {
+        this.bloqueActual = bloqueActual;
+        this.generarPaginas();
+      }
     }
   }
-
+  
   inicializarFiltrosDesdeVistaInicial() {
     const f = this.filtrosVistaInicial;
     if (f?.city) {
@@ -602,6 +611,7 @@ export class FiltrosComponent implements OnInit {
 
   enviarFiltros(pagina: number, prepararFiltros: boolean = true) {
     this.cargando = true;
+    this.loadingResultados = true;
     const savedCity = this.filtrosSeleccionados.get('city');
     const savedNeighborhood =
       this.filtrosSeleccionados.get('neighborhood_code');
@@ -626,8 +636,8 @@ export class FiltrosComponent implements OnInit {
 
     console.log('Obj', obj);
 
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
-      (response: any) => {
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe({
+      next: (response: any) => {
         console.log('response', response);
 
         this.resultados = response.data;
@@ -648,10 +658,13 @@ export class FiltrosComponent implements OnInit {
           console.log('Drawer cerrado en vista móvil');
         }
       },
-      (error: any) => {
-        console.error('Error al enviar los filtros:', error);
+      error: (error: any) => {
+        console.error('Error al obtener los inmuebles:', error);
+      },
+      complete: () => {
+        this.loadingResultados = false;
       }
-    );
+    });
   }
 
   prepararFiltros() {
