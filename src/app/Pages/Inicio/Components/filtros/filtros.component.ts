@@ -163,7 +163,6 @@ export class FiltrosComponent implements OnInit {
     }
 
     this.obtenerParametrosFiltros(1, queryParams, state);
-
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
@@ -218,7 +217,7 @@ export class FiltrosComponent implements OnInit {
       var nivelParam = queryParams["tipo"]
 
       if (nivelParam) {
-        
+
 
         var resul = this.niveles.find((x: any) => x === nivelParam)
         if (resul) {
@@ -498,11 +497,9 @@ export class FiltrosComponent implements OnInit {
       if (Object.keys(queryParams).length >= 1) {
         this.paginaActual = nuevaPagina;
 
-
-
         if (queryParams['tipo']) {
           console.log(this.filtrosSeleccionados);
-          
+
           // Guardar los filtros actuales antes de enviar
           const currentFilters = new Map(this.filtrosSeleccionados);
           this.enviarFiltros(nuevaPagina, false);
@@ -541,7 +538,7 @@ export class FiltrosComponent implements OnInit {
         }, 0);
       }
 
-      // 👇 Actualiza el bloque automáticamente al avanzar
+      // Actualiza el bloque automáticamente al avanzar
       const paginasPorBloque = 3;
       const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
@@ -549,6 +546,7 @@ export class FiltrosComponent implements OnInit {
         this.bloqueActual = bloqueActual;
         this.generarPaginas();
       }
+      this.cdRef.detectChanges();
     }
   }
 
