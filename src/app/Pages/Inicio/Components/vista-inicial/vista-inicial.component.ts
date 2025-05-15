@@ -240,7 +240,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   redirigirFiltros() {
-    alert('filtros');
+    
     this.cargando = true;
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('biz', '1');
