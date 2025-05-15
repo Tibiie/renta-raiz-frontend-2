@@ -656,17 +656,17 @@ export class FiltrosComponent implements OnInit {
 
         this.generarPaginas();
         this.cargando = false;
+        console.log(this.isDrawerOpen);
 
-        if (this.isMobileView) {
-          this.toggleDrawer();
-          console.log('Drawer cerrado en vista móvil');
-        }
       },
       error: (error: any) => {
         console.error('Error al obtener los inmuebles:', error);
       },
       complete: () => {
         this.loadingResultados = false;
+        if (this.isMobileView) {
+          this.toggleDrawer();
+        }
       }
     });
   }
