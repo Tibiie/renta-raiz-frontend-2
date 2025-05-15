@@ -15,8 +15,8 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
-import { VolverComponent } from "../../../../shared/volver/volver.component";
-import { FooterComponent } from "../../../../shared/footer/footer.component";
+import { VolverComponent } from '../../../../shared/volver/volver.component';
+import { FooterComponent } from '../../../../shared/footer/footer.component';
 
 @Component({
   selector: 'app-filtros',
@@ -27,7 +27,7 @@ import { FooterComponent } from "../../../../shared/footer/footer.component";
     ReactiveFormsModule,
     CommonModule,
     VolverComponent,
-    FooterComponent
+    FooterComponent,
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
@@ -70,11 +70,11 @@ export class FiltrosComponent implements OnInit {
   habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
 
   // Para los Rangos de Precios
-  selectedPriceRange: { min: number, max: number | null } | null = null;
+  selectedPriceRange: { min: number; max: number | null } | null = null;
   priceRanges = [
     { min: 2000000, max: 8000000, displayName: '2.000.000 - 8.000.000' },
     { min: 8000000, max: 15000000, displayName: '8.000.000 - 15.000.000' },
-    { min: 15000000, max: null, displayName: '15.000.000 +' }
+    { min: 15000000, max: null, displayName: '15.000.000 +' },
   ];
 
   // Para Tipo de Propiedad
@@ -152,19 +152,14 @@ export class FiltrosComponent implements OnInit {
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
-
     console.log(state);
-
 
     this.obtenerParametrosFiltros(1, queryParams, state);
 
-
     this.isDrawerOpen = !this.isMobileView;
-
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
-
     if (Object.keys(queryParams).length == 1) {
       this.filtrosSeleccionados.clear();
       this.selectedProperty = null;
@@ -184,17 +179,17 @@ export class FiltrosComponent implements OnInit {
         precioMaximo: null,
       });
 
-      var biz = queryParams["biz"]
+      var biz = queryParams['biz'];
       if (biz) {
         this.filtrosSeleccionados.set('biz', biz);
-        this.enviarFiltros(1)
+        this.enviarFiltros(1);
         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
         const state = {
           resultados: this.resultados,
           paginacion: this.paginacion,
           filtros: filtrosObj,
-        }
+        };
         this.cargarDesdeState(state);
         this.router.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
@@ -208,7 +203,6 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (Object.keys(queryParams).length > 1) {
-
       this.filtrosSeleccionados.clear();
       this.selectedProperty = null;
       this.selectedEstates = [];
@@ -227,26 +221,23 @@ export class FiltrosComponent implements OnInit {
         precioMaximo: null,
       });
 
-      var biz = queryParams["biz"]
-      var elementsPerPage = queryParams["elementsPerPage"];
+      var biz = queryParams['biz'];
+      var elementsPerPage = queryParams['elementsPerPage'];
       if (biz && elementsPerPage) {
-
         this.filtrosSeleccionados.set('biz', biz);
         this.filtrosSeleccionados.set('elementsPerPage', elementsPerPage);
 
-        var city = queryParams["city"];
+        var city = queryParams['city'];
         if (city) {
           this.filtrosSeleccionados.set('city', city);
         }
 
-        var barrio = queryParams["neighborhood_code"];
+        var barrio = queryParams['neighborhood_code'];
         if (barrio) {
           this.filtrosSeleccionados.set('neighborhood_code', barrio);
         }
 
-
-
-        this.enviarFiltros(pagina, false)
+        this.enviarFiltros(pagina, false);
 
         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
@@ -254,7 +245,7 @@ export class FiltrosComponent implements OnInit {
           resultados: this.resultados,
           paginacion: this.paginacion,
           filtros: filtrosObj,
-        }
+        };
         this.cargarDesdeState(state);
         this.router.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
@@ -265,7 +256,6 @@ export class FiltrosComponent implements OnInit {
       } else {
         this.router.navigate(['']);
       }
-
     } else {
       this.cargarDesdeState(state);
       this.router.events.subscribe((event) => {
@@ -345,7 +335,6 @@ export class FiltrosComponent implements OnInit {
       this.estateOptions = tipoPropiedadResponse.data;
 
       if (!this.filtrosVistaInicial?.type) {
-
         this.selectedEstates = [];
       } else {
         const estateCodes = this.filtrosVistaInicial.type.split(',');
@@ -409,18 +398,18 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (typeof pagina === 'number' && pagina !== this.paginaActual) {
-
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
 
-
-
       if (Object.keys(queryParams).length >= 1) {
-        this.obtenerParametrosFiltros(this.paginaActual + 1, queryParams, state);
+        this.obtenerParametrosFiltros(
+          this.paginaActual + 1,
+          queryParams,
+          state
+        );
       } else {
         this.enviarFiltros(pagina);
       }
-
     }
   }
 
@@ -431,19 +420,15 @@ export class FiltrosComponent implements OnInit {
   }
 
   paginaSiguiente() {
-
     if (this.paginaActual < this.totalPaginas) {
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
-
-
 
       if (Object.keys(queryParams).length >= 1) {
         var paginaCurrent = this.paginaActual + 1;
         this.paginaActual = paginaCurrent;
 
         this.obtenerParametrosFiltros(paginaCurrent, queryParams, state);
-
       } else {
         // Guardar los filtros actuales antes de enviar
         const currentFilters = new Map(this.filtrosSeleccionados);
@@ -455,7 +440,10 @@ export class FiltrosComponent implements OnInit {
             this.filtrosSeleccionados.set('city', currentFilters.get('city'));
           }
           if (currentFilters.has('neighborhood_code')) {
-            this.filtrosSeleccionados.set('neighborhood_code', currentFilters.get('neighborhood_code'));
+            this.filtrosSeleccionados.set(
+              'neighborhood_code',
+              currentFilters.get('neighborhood_code')
+            );
           }
         }, 0);
       }
@@ -473,22 +461,28 @@ export class FiltrosComponent implements OnInit {
     if (f?.pcmin !== undefined && f.pcmin !== null) {
       this.formRangos.patchValue({
         precioMinimo: f.pcmin.toString(),
-        precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null
+        precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null,
       });
 
       const pcmin = Number(f.pcmin);
       const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
 
-      this.selectedPriceRange = this.priceRanges.find(range => {
-        return range.min === pcmin &&
-          (range.max === pcmax || (range.max === null && pcmax === null));
-      }) || null;
+      this.selectedPriceRange =
+        this.priceRanges.find((range) => {
+          return (
+            range.min === pcmin &&
+            (range.max === pcmax || (range.max === null && pcmax === null))
+          );
+        }) || null;
 
       if (!this.selectedPriceRange) {
-        this.selectedPriceRange = this.priceRanges.find(range => {
-          return pcmin >= range.min &&
-            (range.max === null || (pcmax !== null && pcmax <= range.max));
-        }) || null;
+        this.selectedPriceRange =
+          this.priceRanges.find((range) => {
+            return (
+              pcmin >= range.min &&
+              (range.max === null || (pcmax !== null && pcmax <= range.max))
+            );
+          }) || null;
       }
 
       this.filtrosSeleccionados.set('pcmin', f.pcmin.toString());
@@ -575,16 +569,15 @@ export class FiltrosComponent implements OnInit {
     this.cdRef.detectChanges();
 
     console.log(this.filtrosSeleccionados);
-
   }
 
   async cargarDesdeState(state: any) {
-    console.log("cargar desde state", state)
+    console.log('cargar desde state', state);
 
     if (state?.resultados) {
       this.resultados = [...state.resultados];
       this.filtrosVistaInicial = { ...state.filtros };
-      console.log("inicial filtros", this.filtrosVistaInicial)
+      console.log('inicial filtros', this.filtrosVistaInicial);
 
       this.paginacion = state.paginacion;
       this.totalDatos = this.paginacion.total;
@@ -610,7 +603,8 @@ export class FiltrosComponent implements OnInit {
   enviarFiltros(pagina: number, prepararFiltros: boolean = true) {
     this.cargando = true;
     const savedCity = this.filtrosSeleccionados.get('city');
-    const savedNeighborhood = this.filtrosSeleccionados.get('neighborhood_code');
+    const savedNeighborhood =
+      this.filtrosSeleccionados.get('neighborhood_code');
 
     console.log(this.filtrosSeleccionados);
 
@@ -636,8 +630,6 @@ export class FiltrosComponent implements OnInit {
       (response: any) => {
         console.log('response', response);
 
-
-
         this.resultados = response.data;
         this.totalDatos = response.total;
         this.paginaActual = response.current_page || 1;
@@ -648,15 +640,13 @@ export class FiltrosComponent implements OnInit {
           (_, i) => i + 1
         );
 
-
         this.generarPaginas();
         this.cargando = false;
 
         if (this.isMobileView) {
-          this.isDrawerOpen = false;
+          this.toggleDrawer();
           console.log('Drawer cerrado en vista móvil');
         }
-
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -683,7 +673,6 @@ export class FiltrosComponent implements OnInit {
       const ubicacionValue = this.ubicacion;
 
       if (ubicacionValue) {
-
         if (this.barrios?.data) {
           const barrioEncontrado = this.barrios.data.find(
             (b) =>
@@ -824,13 +813,13 @@ export class FiltrosComponent implements OnInit {
     this.enviarFiltros(1);
   }
 
-  selectPriceRange(range: { min: number, max: number | null }): void {
+  selectPriceRange(range: { min: number; max: number | null }): void {
     console.log('rango', range);
     if (this.selectedPriceRange?.min === range.min) {
       this.selectedPriceRange = null;
       this.formRangos.patchValue({
         precioMinimo: null,
-        precioMaximo: null
+        precioMaximo: null,
       });
       this.filtrosSeleccionados.delete('pcmin');
       this.filtrosSeleccionados.delete('pcmax');
@@ -838,7 +827,7 @@ export class FiltrosComponent implements OnInit {
       this.selectedPriceRange = range;
       this.formRangos.patchValue({
         precioMinimo: range.min.toString(),
-        precioMaximo: range.max ? range.max.toString() : null
+        precioMaximo: range.max ? range.max.toString() : null,
       });
       this.filtrosSeleccionados.set('pcmin', range.min.toString());
 
@@ -1052,7 +1041,9 @@ export class FiltrosComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    const url = this.router.createUrlTree(['/ver-propiedad', codPro]).toString();
+    const url = this.router
+      .createUrlTree(['/ver-propiedad', codPro])
+      .toString();
     this.router.navigate(['/ver-propiedad', codPro]);
   }
 
@@ -1063,7 +1054,6 @@ export class FiltrosComponent implements OnInit {
     });
   }
 }
-
 
 // toggleMap() {
 //   this.drawerMapAbierto = !this.drawerMapAbierto;
