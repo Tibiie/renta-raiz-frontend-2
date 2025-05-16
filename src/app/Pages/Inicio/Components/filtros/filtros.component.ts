@@ -53,7 +53,7 @@ export class FiltrosComponent implements OnInit {
   ubicacion: string = '';
   niveles: any = ['diamante', 'oro', 'plata'];
   cargando = false;
-  isDrawerOpen: boolean = true;
+  isDrawerOpen: boolean = false;
   drawerMapAbierto: boolean = false;
   loadingResultados: boolean = false;
 
@@ -158,8 +158,6 @@ export class FiltrosComponent implements OnInit {
     console.log(queryParams);
 
     console.log(state);
-
-    this.isDrawerOpen = false;
 
     if (this.isDesktopView) {
       this.isDrawerOpen = true;
