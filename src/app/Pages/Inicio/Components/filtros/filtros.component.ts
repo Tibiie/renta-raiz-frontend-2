@@ -50,7 +50,7 @@ export class FiltrosComponent implements OnInit {
   filtrosInmueblesArriendo: Map<string, any> = new Map();
   searchTerm: string = '';
   ubicacion: string = '';
-  niveles: any = ["diamante", "oro", "plata"]
+  niveles: any = ['diamante', 'oro', 'plata'];
   cargando = false;
   isDrawerOpen: boolean = true;
   drawerMapAbierto: boolean = false;
@@ -172,7 +172,6 @@ export class FiltrosComponent implements OnInit {
       this.isDrawerOpen = true;
     }
     if (Object.keys(queryParams).length == 1) {
-
       this.filtrosSeleccionados.clear();
       this.selectedProperty = null;
       this.selectedEstates = [];
@@ -194,7 +193,6 @@ export class FiltrosComponent implements OnInit {
       var biz = queryParams['biz'];
 
       if (biz) {
-
         this.filtrosSeleccionados.set('biz', biz);
         this.enviarFiltros(1);
         const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
@@ -213,17 +211,11 @@ export class FiltrosComponent implements OnInit {
         });
       }
 
-
-      var nivelParam = queryParams["tipo"]
+      var nivelParam = queryParams['tipo'];
 
       if (nivelParam) {
-
-
-        var resul = this.niveles.find((x: any) => x === nivelParam)
+        var resul = this.niveles.find((x: any) => x === nivelParam);
         if (resul) {
-
-
-
           if (state.filtros == undefined) {
             this.getDatos();
             if (nivelParam === 'diamante') {
@@ -253,7 +245,6 @@ export class FiltrosComponent implements OnInit {
                 this.cargarDesdeState(newState);
               }
             });
-
           } else {
             this.cargarDesdeState(state);
             this.router.events.subscribe((event) => {
@@ -263,11 +254,7 @@ export class FiltrosComponent implements OnInit {
               }
             });
           }
-
-
         }
-
-
       }
     }
 
@@ -727,36 +714,38 @@ export class FiltrosComponent implements OnInit {
 
     console.log('Obj', obj);
 
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe({
-      next: (response: any) => {
-        console.log('response', response);
+    this.inmueblesService
+      .getFiltrosEnviar(obj, this.elementsPerPage)
+      .subscribe({
+        next: (response: any) => {
+          console.log('response', response);
 
-        this.resultados = response.data;
-        this.totalDatos = response.total;
-        this.paginaActual = response.current_page || 1;
-        this.paginacion = response;
-        this.totalPaginas = response.last_page || 1;
-        this.paginas = Array.from(
-          { length: this.totalPaginas },
-          (_, i) => i + 1
-        );
+          this.resultados = response.data;
+          this.totalDatos = response.total;
+          this.paginaActual = response.current_page || 1;
+          this.paginacion = response;
+          this.totalPaginas = response.last_page || 1;
+          this.paginas = Array.from(
+            { length: this.totalPaginas },
+            (_, i) => i + 1
+          );
 
-        this.generarPaginas();
-        this.cargando = false;
-        console.log(this.isDrawerOpen);
+          this.generarPaginas();
+          this.cargando = false;
+          console.log(this.isDrawerOpen);
+        },
+        error: (error: any) => {
+          console.error('Error al obtener los inmuebles:', error);
+        },
+        complete: () => {
+          this.loadingResultados = false;
 
-      },
-      error: (error: any) => {
-        console.error('Error al obtener los inmuebles:', error);
-      },
-      complete: () => {
-        this.loadingResultados = false;
-
-        if (this.isMobileView && this.isDrawerOpen) {
-          this.toggleDrawer();
-        }
-      }
-    });
+          if (this.isMobileView && this.isDrawerOpen) {
+            this.isDrawerOpen = false;
+            console.log(this.isDrawerOpen);
+          }
+        },
+      });
   }
 
   prepararFiltros() {
