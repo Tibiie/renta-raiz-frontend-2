@@ -2,10 +2,11 @@ declare var fbq: Function;
 import {
   ChangeDetectorRef,
   Component,
+  ElementRef,
   HostListener,
-  Inject,
   inject,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -146,6 +147,8 @@ export class FiltrosComponent implements OnInit {
   formFiltrosSelect = this.formBuilder.group({
     opcion: [''],
   });
+
+  @ViewChild('closeButton') closeButton!: ElementRef<HTMLButtonElement>;
 
   async ngOnInit(): Promise<void> {
     window.scrollTo(0, 0);
@@ -741,11 +744,18 @@ export class FiltrosComponent implements OnInit {
           this.loadingResultados = false;
 
           if (this.isMobileView && this.isDrawerOpen) {
-            this.isDrawerOpen = false;
+            this.closeDrawer();
             console.log(this.isDrawerOpen);
           }
         },
       });
+  }
+
+  closeDrawer() {
+    if (this.closeButton?.nativeElement) {
+      console.log('click');
+      this.closeButton.nativeElement.click();
+    }
   }
 
   prepararFiltros() {
