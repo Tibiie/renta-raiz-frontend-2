@@ -109,7 +109,7 @@ export class VistaInicialComponent implements OnInit {
   getDatos() {
     this.getAliadosPorGrupo();
     this.getInmueblesVentas(1);
-    this.getInmueblesArriendos(2);
+    this.getInmueblesArriendos(1);
     this.getInmueblesDestacados(1);
   }
 
