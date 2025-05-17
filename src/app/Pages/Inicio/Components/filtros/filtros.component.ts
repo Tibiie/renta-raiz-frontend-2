@@ -425,7 +425,7 @@ export class FiltrosComponent implements OnInit {
     this.paginas = [];
     const paginasPorBloque = 3;
     const inicio = this.bloqueActual * paginasPorBloque + 1;
-    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas - 1);
+    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
 
     for (let i = inicio; i <= fin; i++) {
       this.paginas.push(i);
@@ -448,22 +448,55 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
+  irAlBloqueAnterior() {
+    const paginasPorBloque = 3;
+
+    if (this.bloqueActual > 0) {
+      const nuevoBloque = this.bloqueActual - 1;
+      const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
+      const finNuevoBloque = Math.min(
+        inicioNuevoBloque + paginasPorBloque - 1,
+        this.totalPaginas
+      );
+
+      if (this.paginaActual >= inicioNuevoBloque) {
+        this.bloqueActual = nuevoBloque;
+      } else {
+        this.bloqueActual = nuevoBloque;
+        this.paginaActual = finNuevoBloque;
+      }
+
+      this.generarPaginas();
+      this.enviarFiltros(this.paginaActual);
+    }
+  }
+
   cambiarPagina(pagina: number | string) {
     if (pagina === '...') {
-      this.irAlSiguienteBloque();
+      const primerElemento = this.paginas[0];
+      if (
+        typeof primerElemento === 'number' &&
+        this.paginaActual < primerElemento
+      ) {
+        this.irAlBloqueAnterior();
+      } else {
+        this.irAlSiguienteBloque();
+      }
       return;
     }
 
     if (typeof pagina === 'number' && pagina !== this.paginaActual) {
+      const nuevoBloque = Math.floor((pagina - 1) / 3);
+      if (nuevoBloque !== this.bloqueActual) {
+        this.bloqueActual = nuevoBloque;
+        this.generarPaginas();
+      }
+
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
 
       if (Object.keys(queryParams).length >= 1) {
-        this.obtenerParametrosFiltros(
-          this.paginaActual + 1,
-          queryParams,
-          state
-        );
+        this.obtenerParametrosFiltros(pagina, queryParams, state);
       } else {
         this.enviarFiltros(pagina);
       }
@@ -472,7 +505,16 @@ export class FiltrosComponent implements OnInit {
 
   paginaAnterior() {
     if (this.paginaActual > 1) {
-      this.enviarFiltros(this.paginaActual - 1);
+      const nuevaPagina = this.paginaActual - 1;
+      const paginasPorBloque = 3;
+      const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+
+      if (nuevoBloque !== this.bloqueActual) {
+        this.bloqueActual = nuevoBloque;
+        this.generarPaginas();
+      }
+
+      this.enviarFiltros(nuevaPagina);
     }
   }
 
@@ -488,11 +530,9 @@ export class FiltrosComponent implements OnInit {
         if (queryParams['tipo']) {
           console.log(this.filtrosSeleccionados);
 
-          // Guardar los filtros actuales antes de enviar
           const currentFilters = new Map(this.filtrosSeleccionados);
           this.enviarFiltros(nuevaPagina, false);
 
-          // Restaurar los filtros después de enviar
           setTimeout(() => {
             if (currentFilters.has('city')) {
               this.filtrosSeleccionados.set('city', currentFilters.get('city'));
@@ -508,11 +548,9 @@ export class FiltrosComponent implements OnInit {
           this.obtenerParametrosFiltros(nuevaPagina, queryParams, state);
         }
       } else {
-        // Guardar los filtros actuales antes de enviar
         const currentFilters = new Map(this.filtrosSeleccionados);
         this.enviarFiltros(nuevaPagina, true);
 
-        // Restaurar los filtros después de enviar
         setTimeout(() => {
           if (currentFilters.has('city')) {
             this.filtrosSeleccionados.set('city', currentFilters.get('city'));
@@ -526,7 +564,6 @@ export class FiltrosComponent implements OnInit {
         }, 0);
       }
 
-      // Actualiza el bloque automáticamente al avanzar
       const paginasPorBloque = 3;
       const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 

@@ -197,6 +197,16 @@
               </button>
             </li>
 
+            <li *ngIf="bloqueActualDestacados > 0">
+              <button
+                (click)="irAlBloqueAnterior('DESTACADOS')"
+                [disabled]="bloqueActualDestacados === 0"
+                class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              >
+                ...
+              </button>
+            </li>
+
             <li *ngFor="let pagina of paginasDestacados" class="mx-0.5">
               <ng-container *ngIf="pagina === '...'; else paginaBtn">
                 <button
@@ -389,6 +399,16 @@
               class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
             >
               Anterior
+            </button>
+          </li>
+
+          <li *ngIf="bloqueActualVentas > 0">
+            <button
+              (click)="irAlBloqueAnterior('VENTAS')"
+              [disabled]="bloqueActualVentas === 0"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+            >
+              ...
             </button>
           </li>
 
@@ -585,6 +605,16 @@
                 class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
               >
                 Anterior
+              </button>
+            </li>
+
+            <li *ngIf="bloqueActualArriendo > 0">
+              <button
+                (click)="irAlBloqueAnterior('ARRIENDO')"
+                [disabled]="bloqueActualArriendo === 0"
+                class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              >
+                ...
               </button>
             </li>
 
