@@ -36,7 +36,7 @@ declare const Carousel: any;
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss'],
 })
-export class VistaInicialComponent implements OnInit, AfterViewInit {
+export class VistaInicialComponent implements OnInit {
   @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
 
   intervalId: any;
@@ -77,7 +77,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   loadingDestacados: boolean = false;
   loadingVentas: boolean = false;
   loadingArriendos: boolean = false;
-  
+
   // Injectaciones
   router = inject(Router);
   elementRef = inject(ElementRef);
@@ -100,17 +100,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   bloqueActualDestacados: number = 0;
   paginasDestacados: (number | string)[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
-
-  ngAfterViewInit(): void {
-    const targetEl = document.getElementById('slider');
-    if (targetEl) {
-      new Carousel(targetEl, {
-        interval: 3000,
-        ride: 'carousel',
-      });
-    }
-  }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
     this.getDatos();
@@ -119,7 +109,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   getDatos() {
     this.getAliadosPorGrupo();
     this.getInmueblesVentas(1);
-    this.getInmueblesArriendos(2);
+    this.getInmueblesArriendos(1);
     this.getInmueblesDestacados(1);
   }
 
@@ -165,7 +155,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
         },
         complete: () => {
           this.loadingVentas = false;
-        }
+        },
       });
   }
 
@@ -205,7 +195,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
         },
         complete: () => {
           this.loadingArriendos = false;
-        }
+        },
       });
   }
 
@@ -225,7 +215,7 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
       },
       complete: () => {
         this.loadingDestacados = false;
-      }
+      },
     });
   }
 
@@ -240,7 +230,6 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   }
 
   redirigirFiltros() {
-    
     this.cargando = true;
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('biz', '1');
@@ -397,36 +386,103 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     }
   }
 
-  cambiarPagina(pagina: number | string, inmueble: string) {
-    if (inmueble === 'ARRIENDO') {
-      if (pagina === '...') {
-        this.irAlSiguienteBloque(inmueble);
-        return;
-      }
+  irAlBloqueAnterior(inmueble: string) {
+    const paginasPorBloque = 3;
 
-      if (typeof pagina === 'number' && pagina !== this.paginaActualArriendo) {
-        this.getInmueblesArriendos(pagina);
+    if (inmueble === 'ARRIENDO') {
+      if (this.bloqueActualArriendo > 0) {
+        const nuevoBloque = this.bloqueActualArriendo - 1;
+        const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
+        const finNuevoBloque = Math.min(
+          inicioNuevoBloque + paginasPorBloque - 1,
+          this.totalPaginasArriendo
+        );
+
+        if (this.paginaActualArriendo >= inicioNuevoBloque) {
+          this.bloqueActualArriendo = nuevoBloque;
+        } else {
+          this.bloqueActualArriendo = nuevoBloque;
+          this.paginaActualArriendo = finNuevoBloque;
+        }
+
+        this.generarPaginas(inmueble);
+        this.getInmueblesArriendos(this.paginaActualArriendo);
       }
     } else if (inmueble === 'VENTAS') {
-      if (pagina === '...') {
-        this.irAlSiguienteBloque(inmueble);
-        return;
-      }
+      if (this.bloqueActualVentas > 0) {
+        const nuevoBloque = this.bloqueActualVentas - 1;
+        const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
+        const finNuevoBloque = Math.min(
+          inicioNuevoBloque + paginasPorBloque - 1,
+          this.totalPaginasVentas
+        );
 
-      if (typeof pagina === 'number' && pagina !== this.paginaActualVentas) {
-        this.getInmueblesVentas(pagina);
+        if (this.paginaActualVentas >= inicioNuevoBloque) {
+          this.bloqueActualVentas = nuevoBloque;
+        } else {
+          this.bloqueActualVentas = nuevoBloque;
+          this.paginaActualVentas = finNuevoBloque;
+        }
+
+        this.generarPaginas(inmueble);
+        this.getInmueblesVentas(this.paginaActualVentas);
       }
     } else {
-      if (pagina === '...') {
-        this.irAlSiguienteBloque(inmueble);
-        return;
-      }
+      if (this.bloqueActualDestacados > 0) {
+        const nuevoBloque = this.bloqueActualDestacados - 1;
+        const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
+        const finNuevoBloque = Math.min(
+          inicioNuevoBloque + paginasPorBloque - 1,
+          this.totalPaginasDestacados
+        );
 
-      if (
-        typeof pagina === 'number' &&
-        pagina !== this.paginaActualDestacados
-      ) {
-        this.getInmueblesDestacados(pagina);
+        if (this.paginaActualDestacados >= inicioNuevoBloque) {
+          this.bloqueActualDestacados = nuevoBloque;
+        } else {
+          this.bloqueActualDestacados = nuevoBloque;
+          this.paginaActualDestacados = finNuevoBloque;
+        }
+
+        this.generarPaginas(inmueble);
+        this.getInmueblesDestacados(this.paginaActualDestacados);
+      }
+    }
+  }
+
+  cambiarPagina(pagina: number | string, inmueble: string) {
+    if (pagina === '...') {
+      this.irAlSiguienteBloque(inmueble);
+      return;
+    }
+
+    if (typeof pagina === 'number') {
+      if (inmueble === 'ARRIENDO') {
+        const primerElemento = this.paginasArriendo[0];
+        if (typeof primerElemento === 'number' && pagina < primerElemento) {
+          this.irAlBloqueAnterior(inmueble);
+          return;
+        }
+        if (pagina !== this.paginaActualArriendo) {
+          this.getInmueblesArriendos(pagina);
+        }
+      } else if (inmueble === 'VENTAS') {
+        const primerElemento = this.paginasVentas[0];
+        if (typeof primerElemento === 'number' && pagina < primerElemento) {
+          this.irAlBloqueAnterior(inmueble);
+          return;
+        }
+        if (pagina !== this.paginaActualVentas) {
+          this.getInmueblesVentas(pagina);
+        }
+      } else {
+        const primerElemento = this.paginasDestacados[0];
+        if (typeof primerElemento === 'number' && pagina < primerElemento) {
+          this.irAlBloqueAnterior(inmueble);
+          return;
+        }
+        if (pagina !== this.paginaActualDestacados) {
+          this.getInmueblesDestacados(pagina);
+        }
       }
     }
   }
@@ -434,15 +490,48 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
   paginaAnterior(inmueble: string) {
     if (inmueble === 'ARRIENDO') {
       if (this.paginaActualArriendo > 1) {
-        this.getInmueblesArriendos(this.paginaActualArriendo - 1);
+        this.paginaActualArriendo--;
+
+        const maxPaginasPorBloque = 3;
+        const inicioBloqueActual =
+          this.bloqueActualArriendo * maxPaginasPorBloque + 1;
+
+        if (this.paginaActualArriendo < inicioBloqueActual) {
+          this.bloqueActualArriendo--;
+        }
+
+        this.generarPaginas(inmueble);
+        this.getInmueblesArriendos(this.paginaActualArriendo);
       }
     } else if (inmueble === 'VENTAS') {
       if (this.paginaActualVentas > 1) {
-        this.getInmueblesVentas(this.paginaActualVentas - 1);
+        this.paginaActualVentas--;
+
+        const maxPaginasPorBloque = 3;
+        const inicioBloqueActual =
+          this.bloqueActualVentas * maxPaginasPorBloque + 1;
+
+        if (this.paginaActualVentas < inicioBloqueActual) {
+          this.bloqueActualVentas--;
+        }
+
+        this.generarPaginas(inmueble);
+        this.getInmueblesVentas(this.paginaActualVentas);
       }
     } else {
       if (this.paginaActualDestacados > 1) {
-        this.getInmueblesDestacados(this.paginaActualDestacados - 1);
+        this.paginaActualDestacados--;
+
+        const maxPaginasPorBloque = 3;
+        const inicioBloqueActual =
+          this.bloqueActualDestacados * maxPaginasPorBloque + 1;
+
+        if (this.paginaActualDestacados < inicioBloqueActual) {
+          this.bloqueActualDestacados--;
+        }
+
+        this.generarPaginas(inmueble);
+        this.getInmueblesDestacados(this.paginaActualDestacados);
       }
     }
   }
@@ -451,45 +540,48 @@ export class VistaInicialComponent implements OnInit, AfterViewInit {
     if (inmueble === 'ARRIENDO') {
       if (this.paginaActualArriendo < this.totalPaginasArriendo) {
         this.paginaActualArriendo++;
-        
+
         const maxPaginasPorBloque = 3;
-        const inicioBloqueActual = this.bloqueActualArriendo * maxPaginasPorBloque + 1;
+        const inicioBloqueActual =
+          this.bloqueActualArriendo * maxPaginasPorBloque + 1;
         const finBloqueActual = inicioBloqueActual + maxPaginasPorBloque - 1;
-  
+
         if (this.paginaActualArriendo > finBloqueActual) {
           this.bloqueActualArriendo++;
         }
-  
+
         this.generarPaginas(inmueble);
         this.getInmueblesArriendos(this.paginaActualArriendo);
       }
     } else if (inmueble === 'VENTAS') {
       if (this.paginaActualVentas < this.totalPaginasVentas) {
         this.paginaActualVentas++;
-  
+
         const maxPaginasPorBloque = 3;
-        const inicioBloqueActual = this.bloqueActualVentas * maxPaginasPorBloque + 1;
+        const inicioBloqueActual =
+          this.bloqueActualVentas * maxPaginasPorBloque + 1;
         const finBloqueActual = inicioBloqueActual + maxPaginasPorBloque - 1;
-  
+
         if (this.paginaActualVentas > finBloqueActual) {
           this.bloqueActualVentas++;
         }
-  
+
         this.generarPaginas(inmueble);
         this.getInmueblesVentas(this.paginaActualVentas);
       }
     } else {
       if (this.paginaActualDestacados < this.totalPaginasDestacados) {
         this.paginaActualDestacados++;
-  
+
         const maxPaginasPorBloque = 3;
-        const inicioBloqueActual = this.bloqueActualDestacados * maxPaginasPorBloque + 1;
+        const inicioBloqueActual =
+          this.bloqueActualDestacados * maxPaginasPorBloque + 1;
         const finBloqueActual = inicioBloqueActual + maxPaginasPorBloque - 1;
-  
+
         if (this.paginaActualDestacados > finBloqueActual) {
           this.bloqueActualDestacados++;
         }
-  
+
         this.generarPaginas(inmueble);
         this.getInmueblesDestacados(this.paginaActualDestacados);
       }
