@@ -12,12 +12,13 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { firstValueFrom, forkJoin } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { filter, firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 import { VolverComponent } from '../../../../shared/volver/volver.component';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
+import { UrlParamService } from '../../../../core/configs/url-param.service';
 
 @Component({
   selector: 'app-filtros',
@@ -131,6 +132,7 @@ export class FiltrosComponent implements OnInit {
   inmueblesService = inject(InmueblesService);
   geolocalizacionService = inject(GeolocalizacionService);
   activatedRoute = inject(ActivatedRoute);
+  urlParamService = inject(UrlParamService);
 
   mostrarMapa = false;
   address: string | null = null;
@@ -154,10 +156,20 @@ export class FiltrosComponent implements OnInit {
     window.scrollTo(0, 0);
     const state = window.history.state;
     await this.getDatos();
+
+
+
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
-    console.log(state);
+    if (queryParams['utm_source'] != undefined || queryParams['utm_source'] != null) {
+      
+      this.urlParamService.guardarParamLocalStorage('utm_source', queryParams['utm_source']);
+     
+     
+    }
+
+
 
     if (this.isDesktopView) {
       this.isDrawerOpen = true;
@@ -166,12 +178,18 @@ export class FiltrosComponent implements OnInit {
     this.obtenerParametrosFiltros(1, queryParams, state);
   }
 
-  obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
+  obtenerParametrosFiltros(pagina: number, queryPa: any, state: any) {
+
+    var queryParams = { ...queryPa }
     this.isDrawerOpen = false;
 
     if (this.isDesktopView) {
       this.isDrawerOpen = true;
     }
+
+
+
+
     if (Object.keys(queryParams).length == 1) {
       this.filtrosSeleccionados.clear();
       this.selectedProperty = null;
