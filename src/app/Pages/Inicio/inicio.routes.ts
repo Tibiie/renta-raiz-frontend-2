@@ -27,6 +27,7 @@ export const routes: Routes = [
   {
     path: 'filtros',
     component: FiltrosComponent,
+    canActivate: [urlparamsGuard]
     
   },
   {
