@@ -498,14 +498,16 @@
   </div> -->
 
   <div
-    class="w-full mt-12 mb-6 transition-all duration-300 ease-in-out px-4 md:px-0 md:mt-32"
+    class="w-full mt-11 mb-6 transition-all duration-300 ease-in-out px-4 md:px-0 md:mt-32"
     [ngClass]="{
       'md:ml-[28rem] md:px-6': isDrawerOpen,
       'md:ml-0 md:px-32': !isDrawerOpen
     }"
   >
-  <div class="bg-white shadow-sm sticky top-20 z-50 mb-4">
-    <!-- Barra de búsqueda y filtros -->
+    <div
+      class="bg-white shadow-sm sticky md:top-[72px] top-[48px] mt-1 z-50 mb-4 md:p-4 px-4 py-1 rounded-md"
+    >
+      <!-- Barra de búsqueda y filtros -->
       <div
         class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 mt-8 sm:mt-0"
       >
@@ -617,7 +619,11 @@
         </div>
 
         <!-- Contador de resultados -->
-        <div class="text-gray-600 text-lg font-bold">
+        <div
+          class="text-gray-600 text-lg font-bold"
+          [class.hidden]="isSticky"
+          [class.sm:flex]="true"
+        >
           {{ totalDatos }} resultados
         </div>
       </div>
@@ -625,6 +631,8 @@
       <!-- Sección de título inmuebles encontrados -->
       <div
         class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+        [class.hidden]="isSticky"
+        [class.sm:flex]="true"
       >
         <h2 class="text-xl font-bold text-gray-800">Inmuebles Encontrados</h2>
 
