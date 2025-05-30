@@ -157,7 +157,7 @@ export class FiltrosComponent implements OnInit {
   onWindowScroll() {
     clearTimeout(this.scrollTimeout);
     this.scrollTimeout = setTimeout(() => {
-      this.isSticky = window.scrollY > 40;
+      this.isSticky = window.scrollY > 50;
       this.cdRef.detectChanges();
     }, 12);
   }
