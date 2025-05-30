@@ -159,7 +159,7 @@ export class FiltrosComponent implements OnInit {
     this.scrollTimeout = setTimeout(() => {
       this.isSticky = window.scrollY > 20;
       this.cdRef.detectChanges();
-    }, 12);
+    }, 16);
   }
 
   async ngOnInit(): Promise<void> {
