@@ -504,7 +504,9 @@
       'md:ml-0 md:px-32': !isDrawerOpen
     }"
   >
-    <div class="bg-white shadow-sm">
+    <div
+      class="bg-white shadow-sm sticky md:top-[72px] top-[48px] mt-1 z-50 mb-4 md:p-4 px-4 py-1 rounded-md transition-all duration-200"
+    >
       <!-- Barra de búsqueda y filtros -->
       <div
         class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 mt-8 sm:mt-0"
@@ -617,7 +619,11 @@
         </div>
 
         <!-- Contador de resultados -->
-        <div class="text-gray-600 text-lg font-bold">
+        <div
+          class="text-gray-600 text-lg font-bold"
+          [class.hidden]="isSticky"
+          [class.sm:flex]="true"
+        >
           {{ totalDatos }} resultados
         </div>
       </div>
@@ -625,6 +631,8 @@
       <!-- Sección de título inmuebles encontrados -->
       <div
         class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+        [class.hidden]="isSticky"
+        [class.sm:flex]="true"
       >
         <h2 class="text-xl font-bold text-gray-800">Inmuebles Encontrados</h2>
 

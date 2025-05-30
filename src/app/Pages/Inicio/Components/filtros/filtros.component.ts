@@ -40,6 +40,7 @@ export class FiltrosComponent implements OnInit {
   elementsPerPage = 12;
   bloqueActual: number = 0;
   isDesktopView = window.innerWidth >= 768;
+  isSticky = false;
 
   seleccion = {
     estrato: [] as number[],
@@ -149,6 +150,11 @@ export class FiltrosComponent implements OnInit {
   });
 
   @ViewChild('closeButton') closeButton!: ElementRef<HTMLButtonElement>;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isSticky = window.scrollY > 20;
+  }
 
   async ngOnInit(): Promise<void> {
     window.scrollTo(0, 0);
