@@ -149,11 +149,17 @@ export class FiltrosComponent implements OnInit {
     opcion: [''],
   });
 
+  private scrollTimeout: any;
+
   @ViewChild('closeButton') closeButton!: ElementRef<HTMLButtonElement>;
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isSticky = window.scrollY > 20;
+    clearTimeout(this.scrollTimeout);
+    this.scrollTimeout = setTimeout(() => {
+      this.isSticky = window.scrollY > 40;
+      this.cdRef.detectChanges();
+    }, 12);
   }
 
   async ngOnInit(): Promise<void> {
