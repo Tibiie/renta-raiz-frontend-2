@@ -18,6 +18,7 @@ import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 import { VolverComponent } from '../../../../shared/volver/volver.component';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
+import { UrlparamService } from '../../../../core/config/urlparam.service';
 
 @Component({
   selector: 'app-filtros',
@@ -132,6 +133,7 @@ export class FiltrosComponent implements OnInit {
   inmueblesService = inject(InmueblesService);
   geolocalizacionService = inject(GeolocalizacionService);
   activatedRoute = inject(ActivatedRoute);
+  urlParamService = inject(UrlparamService);
 
   mostrarMapa = false;
   address: string | null = null;
@@ -166,10 +168,16 @@ export class FiltrosComponent implements OnInit {
     window.scrollTo(0, 0);
     const state = window.history.state;
     await this.getDatos();
+    
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
-    console.log(state);
+    if (queryParams['utm_source'] != undefined || queryParams['utm_source'] != null) {
+      
+      this.urlParamService.guardarParamLocalStorage('utm_source', queryParams['utm_source']);
+     
+     
+    }
 
     if (this.isDesktopView) {
       this.isDrawerOpen = true;
