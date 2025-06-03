@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
+import { UrlParamService } from '../../core/configs/url-param.service';
 
 @Component({
   selector: 'app-navbar',
@@ -39,6 +40,7 @@ export class NavbarComponent implements OnInit {
   // Injecciones
   _router = inject(Router);
   inmueblesService = inject(InmueblesService);
+  urlParamService = inject(UrlParamService);
 
   ngOnInit(): void {
     if (this.alwaysScrolled) {
@@ -150,7 +152,7 @@ export class NavbarComponent implements OnInit {
             paginacion: response,
             filtros: obj,
           },
-          queryParams: { tipo: tipo },
+          queryParams: { tipo: tipo , utm_source: this.urlParamService.obtenerParamLocalStorage('utm_source') }
         });
       },
       (error: any) => {

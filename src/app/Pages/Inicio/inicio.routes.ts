@@ -13,8 +13,7 @@ import { PublicarInmuebleComponent } from './Components/publicar-inmueble/public
 import { PoliticarPrivacidadComponent } from './Components/politicar-privacidad/politicar-privacidad.component';
 import { AvaluosComercialesComponent } from './Components/avaluos-comerciales/avaluos-comerciales.component';
 import { EnvioExitosoComponent } from '../../shared/envio-exitoso/envio-exitoso.component';
-import { urlparamsGuard } from '../../core/config/urlparams.guard';
-
+import { urlparamsGuard } from '../../core/configs/urlparams.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -22,13 +21,13 @@ export const routes: Routes = [
   {
     path: '',
     component: VistaInicialComponent,
+    canActivate: [urlparamsGuard]
   },
 
   {
     path: 'filtros',
     component: FiltrosComponent,
     canActivate: [urlparamsGuard]
-    
   },
   {
     path: 'filtros/:tipo',
