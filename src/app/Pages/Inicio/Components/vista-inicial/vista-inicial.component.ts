@@ -51,7 +51,7 @@ export class VistaInicialComponent implements OnInit {
   filtros: any = {};
   aliadosPorGrupo: string[][] = [];
   inmueblesVentasArray: any[] = [];
-  inmueblesDestacadosArray: any = {};
+  inmueblesDestacadosArray: any[] = [];
   inmueblesArriendosArray: any[] = [];
 
   aliados: string[] = [
