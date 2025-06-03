@@ -180,7 +180,7 @@ export class FiltrosComponent implements OnInit {
 
   obtenerParametrosFiltros(pagina: number, queryPa: any, state: any) {
 
-    var queryParams = { ...queryPa }
+    const { utm_source, ...queryParams } = queryPa;
     this.isDrawerOpen = false;
 
     if (this.isDesktopView) {
@@ -188,6 +188,8 @@ export class FiltrosComponent implements OnInit {
     }
 
 
+    console.log(queryParams);
+    
 
 
     if (Object.keys(queryParams).length == 1) {

@@ -21,12 +21,13 @@ export const routes: Routes = [
   {
     path: '',
     component: VistaInicialComponent,
+    canActivate: [urlparamsGuard]
   },
 
   {
     path: 'filtros',
     component: FiltrosComponent,
-    
+    canActivate: [urlparamsGuard]
   },
   {
     path: 'filtros/:tipo',
