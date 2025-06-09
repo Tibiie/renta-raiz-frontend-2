@@ -4,6 +4,10 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { initFlowbite } from 'flowbite';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
+import { filter } from 'rxjs/operators';
+
+declare let fbq: Function; // Importante para que TypeScript no dé error
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -28,5 +32,14 @@ export class AppComponent implements OnInit {
         }
       });
     }
+
+
+
+     this.router.events
+      .pipe(filter((event:any) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        fbq('track', 'PageView'); // ← Aquí disparas el evento de página vista
+      });
+
   }
 }
