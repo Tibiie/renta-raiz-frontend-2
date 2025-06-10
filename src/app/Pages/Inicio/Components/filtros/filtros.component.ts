@@ -181,6 +181,14 @@ export class FiltrosComponent implements OnInit {
      
     }
 
+    if (queryParams['fbclid'] != undefined || queryParams['fbclid'] != null) {
+      
+      this.urlParamService.guardarParamLocalStorage('fbclid', queryParams['fbclid']);
+     
+     
+    }
+
+
 
 
     if (this.isDesktopView) {

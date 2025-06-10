@@ -21,39 +21,39 @@ export const routes: Routes = [
   {
     path: '',
     component: VistaInicialComponent,
-    canActivate: [urlparamsGuard]
+    
   },
 
   {
     path: 'filtros',
     component: FiltrosComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'filtros/:tipo',
     component: FiltrosComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'contacto',
     component: ContactanosComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'ver-propiedad/:codpro',
     component: VerPropiedadComponent,
-     canActivate: [urlparamsGuard]
+    
  
   },
   {
     path: 'nuestro-equipo',
     component: NuestroEquipoComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'quienes-somos',
     component: QuienesSomosComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'mapa',
@@ -62,32 +62,32 @@ export const routes: Routes = [
   {
     path: 'blogs',
     component: BlogsComponent,
-    canActivate: [urlparamsGuard]
+   
   },
   {
     path: 'ver-blog/:id',
     component: VerBlogComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'publicar-inmueble',
     component: PublicarInmuebleComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'politicas-de-privacidad',
     component: PoliticarPrivacidadComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'avaluos-comerciales',
     component: AvaluosComercialesComponent,
-    canActivate: [urlparamsGuard]
+    
   },
   {
     path: 'formulario-enviado-con-exito',
     component: EnvioExitosoComponent,
-    canActivate: [urlparamsGuard]
+    
   },
 ];
 

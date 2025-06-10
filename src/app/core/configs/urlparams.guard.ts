@@ -25,17 +25,18 @@ export class urlparamsGuard implements CanActivate {
       return true;
     }
 
-    // Si el param existe y no está ya en la URL
-    if (utmSource && (queryParams['utm_source'] == undefined || queryParams['utm_source'] == null)) {
-        
-       const cleanPath = state.url.split('?')[0];
-      return this.router.navigate([cleanPath], {  queryParams: {...queryParams ,utm_source: utmSource }, queryParamsHandling: 'merge' });
-      
+     // Si hay valor en localStorage pero no en la URL
+  if (utmSource) {
+    const cleanPath = state.url.split('?')[0];
 
-    }
+    return this.router.createUrlTree([cleanPath], {
+      queryParams: { ...queryParams, utm_source: utmSource },
+      queryParamsHandling: 'merge',
+      preserveFragment: true,
+    });
+  }
 
-    return true;
-
+  return true;
   }
 
 }
