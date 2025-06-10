@@ -45,30 +45,36 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         const url = new URL(window.location.href);
-        const utmSourceLocal = localStorage.getItem('utm_source');
-        const fbclidLocal = localStorage.getItem('fbclid');
 
-        if (utmSourceLocal && !url.searchParams.has('utm_source')) {
-          // Agrega utm_source sin perder el state
-          url.searchParams.set('utm_source', utmSourceLocal);
+        // Paso 1: guardar en localStorage si están en la URL
+        const utmParams = ['utm_source', 'utm_medium', 'utm_id', 'fbclid'];
 
-          if (fbclidLocal && !url.searchParams.has('fbclid')) {
-            // Agrega utm_source sin perder el state
-            url.searchParams.set('fbclid', fbclidLocal);
+        let updated = false;
 
-
+        utmParams.forEach(param => {
+          const value = url.searchParams.get(param);
+          if (value) {
+            localStorage.setItem(param, value);
           }
-          // Mantiene el mismo state
+        });
+
+        // Paso 2: agregar desde localStorage si faltan en la URL
+        utmParams.forEach(param => {
+          const localValue = localStorage.getItem(param);
+          if (localValue && !url.searchParams.has(param)) {
+            url.searchParams.set(param, localValue);
+            updated = true;
+          }
+        });
+
+        if (updated) {
           window.history.replaceState(
             window.history.state,
             '',
             url.toString()
           );
         }
-
-
       }
     });
-
   }
 }
