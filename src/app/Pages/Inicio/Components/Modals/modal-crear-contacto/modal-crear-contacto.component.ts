@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { InmueblesService } from '../../../../../core/Inmuebles/inmuebles.service';
 import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
@@ -25,18 +25,19 @@ export class ModalCrearContactoComponent implements OnInit {
   codPro?: number;
   fuente?: string;
   accion: 'telefonos' | 'whatsapp' | 'soloEnviar' = 'soloEnviar';
+  utm_source = '';
 
- 
   urlBase!: SafeResourceUrl;
 
 
 
-  
+
   toastr = inject(ToastrService);
   fb = inject(NonNullableFormBuilder);
   inmuebleService = inject(InmueblesService);
   location = inject(Location);
   sanitizer = inject(DomSanitizer);
+  activatedRoute = inject(ActivatedRoute);
 
   contacto = this.fb.group({
     nombre: ['', Validators.required],
@@ -49,14 +50,40 @@ export class ModalCrearContactoComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const url = `https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg?urlInmueble=${window.location.href}`;
+
+    var queryParams = this.activatedRoute.snapshot.queryParams;
+    console.log(queryParams);
+
+
+    var urlIframe = ""
+
+    if (queryParams['utm_source'] != undefined || queryParams['utm_source'] != null) {
+      
+      console.log(queryParams['utm_source']);
+      
+      switch (queryParams['utm_source']) {
+        case 'meta ads':
+          urlIframe = "https://api.leadconnectorhq.com/widget/form/LArCYkvLIbfXbvaQMJ4Q"
+          break;
+        
+        default:
+          urlIframe = "https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
+          break;
+      }
+
+    }else{
+      urlIframe = "https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
+    }
+
+
+    const url = `${urlIframe}?urlInmueble=${window.location.href}`;
     //this.urlBase = this.urlBase + "?urlInmueble="+ 
 
     this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-   console.log(this.urlBase);
-   
+    console.log(this.urlBase);
+
   }
-     
+
 
   abrirModal(codPro: number, accion: 'telefonos' | 'whatsapp' | 'soloEnviar') {
     this.codPro = codPro;
