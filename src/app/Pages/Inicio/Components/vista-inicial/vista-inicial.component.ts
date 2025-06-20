@@ -189,6 +189,8 @@ export class VistaInicialComponent implements OnInit {
           this.paginaActualArriendo = response.current_page || 1;
 
           this.generarPaginas('ARRIENDO');
+          console.log(this.inmueblesArriendosArray);
+          
         },
         error: (error: any) => {
           console.error('Error al obtener los inmuebles:', error);
