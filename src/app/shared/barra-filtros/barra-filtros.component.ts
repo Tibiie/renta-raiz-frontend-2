@@ -403,6 +403,8 @@ export class BarraFiltrosComponent {
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     const obj = {
       ...filtrosObj,
+      sort: 'desc',
+      order: 'consignation_date',
       page: 1,
     };
 
