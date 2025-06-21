@@ -12,7 +12,12 @@ import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+} from '@angular/router';
 import { filter, firstValueFrom, forkJoin } from 'rxjs';
 import { MapaComponent } from '../mapa/mapa.component';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
@@ -76,10 +81,26 @@ export class FiltrosComponent implements OnInit {
 
   // Para los Rangos de Precios
   selectedPriceRange: { min: number; max: number | null } | null = null;
-  priceRanges = [
+  selectedPriceRangeVentas: { min: number; max: number | null } | null = null;
+  priceRangesArriendos = [
     { min: 2000000, max: 8000000, displayName: '2.000.000 - 8.000.000' },
     { min: 8000000, max: 15000000, displayName: '8.000.000 - 15.000.000' },
     { min: 15000000, max: null, displayName: '15.000.000 +' },
+  ];
+
+  priceRangesVentas = [
+    // { min: 20000000, max: 100000000, displayName: '20.000.000 - 100.000.000' },
+    {
+      min: 100000000,
+      max: 500000000,
+      displayName: '100.000.000 - 500.000.000',
+    },
+    {
+      min: 500000000,
+      max: 1000000000,
+      displayName: '500.000.000 - 1.000.000.000',
+    },
+    { min: 1000000000, max: null, displayName: '1.000.000.000 +' },
   ];
 
   // Para Tipo de Propiedad
@@ -169,27 +190,25 @@ export class FiltrosComponent implements OnInit {
     const state = window.history.state;
     await this.getDatos();
 
-
-
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
-    if (queryParams['utm_source'] != undefined || queryParams['utm_source'] != null) {
-      
-      this.urlParamService.guardarParamLocalStorage('utm_source', queryParams['utm_source']);
-     
-     
+    if (
+      queryParams['utm_source'] != undefined ||
+      queryParams['utm_source'] != null
+    ) {
+      this.urlParamService.guardarParamLocalStorage(
+        'utm_source',
+        queryParams['utm_source']
+      );
     }
 
     if (queryParams['fbclid'] != undefined || queryParams['fbclid'] != null) {
-      
-      this.urlParamService.guardarParamLocalStorage('fbclid', queryParams['fbclid']);
-     
-     
+      this.urlParamService.guardarParamLocalStorage(
+        'fbclid',
+        queryParams['fbclid']
+      );
     }
-
-
-
 
     if (this.isDesktopView) {
       this.isDrawerOpen = true;
@@ -199,7 +218,6 @@ export class FiltrosComponent implements OnInit {
   }
 
   obtenerParametrosFiltros(pagina: number, queryPa: any, state: any) {
-
     const { utm_source, ...queryParams } = queryPa;
     this.isDrawerOpen = false;
 
@@ -207,10 +225,7 @@ export class FiltrosComponent implements OnInit {
       this.isDrawerOpen = true;
     }
 
-
     console.log(queryParams);
-    
-
 
     if (Object.keys(queryParams).length == 1) {
       this.filtrosSeleccionados.clear();
@@ -261,12 +276,18 @@ export class FiltrosComponent implements OnInit {
             this.getDatos();
             if (nivelParam === 'diamante') {
               this.filtrosSeleccionados.set('pcmin', 15000000);
+              this.filtrosSeleccionados.set('order', 'consignation_date');
+              this.filtrosSeleccionados.set('sort', 'desc');
             } else if (nivelParam === 'oro') {
               this.filtrosSeleccionados.set('pcmin', 8000000);
               this.filtrosSeleccionados.set('pcmax', 15000000);
+              this.filtrosSeleccionados.set('order', 'consignation_date');
+              this.filtrosSeleccionados.set('sort', 'desc');
             } else if (nivelParam === 'plata') {
               this.filtrosSeleccionados.set('pcmin', 2000000);
               this.filtrosSeleccionados.set('pcmax', 8000000);
+              this.filtrosSeleccionados.set('order', 'consignation_date');
+              this.filtrosSeleccionados.set('sort', 'desc');
             }
 
             this.enviarFiltros(pagina, false);
@@ -632,27 +653,75 @@ export class FiltrosComponent implements OnInit {
       const pcmin = Number(f.pcmin);
       const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
 
-      this.selectedPriceRange =
-        this.priceRanges.find((range) => {
-          return (
-            range.min === pcmin &&
-            (range.max === pcmax || (range.max === null && pcmax === null))
-          );
-        }) || null;
+      if (f?.pcmin !== undefined && f.pcmin !== null) {
+        const pcmin = Number(f.pcmin);
+        const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
 
-      if (!this.selectedPriceRange) {
+        // Buscar en arriendos
         this.selectedPriceRange =
-          this.priceRanges.find((range) => {
+          this.priceRangesArriendos.find((range) => {
             return (
-              pcmin >= range.min &&
-              (range.max === null || (pcmax !== null && pcmax <= range.max))
+              range.min === pcmin &&
+              (range.max === pcmax || (range.max === null && pcmax === null))
             );
           }) || null;
+
+        if (!this.selectedPriceRange) {
+          this.selectedPriceRange =
+            this.priceRangesArriendos.find((range) => {
+              return (
+                pcmin >= range.min &&
+                (range.max === null || (pcmax !== null && pcmax <= range.max))
+              );
+            }) || null;
+        }
+
+        if (this.selectedPriceRange) {
+          this.formRangos.patchValue({
+            precioMinimo: f.pcmin.toString(),
+            precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null,
+          });
+          this.filtrosSeleccionados.set('pcmin', f.pcmin.toString());
+          if (f.pcmax !== undefined) {
+            this.filtrosSeleccionados.set('pcmax', f.pcmax.toString());
+          }
+        }
       }
 
-      this.filtrosSeleccionados.set('pcmin', f.pcmin.toString());
-      if (f.pcmax !== undefined) {
-        this.filtrosSeleccionados.set('pcmax', f.pcmax.toString());
+      if (f?.pvmin !== undefined && f.pvmin !== null) {
+        const pvmin = Number(f.pvmin);
+        const pvmax = f.pvmax !== undefined ? Number(f.pvmax) : null;
+
+        // Buscar en ventas
+        this.selectedPriceRangeVentas =
+          this.priceRangesVentas.find((range) => {
+            return (
+              range.min === pvmin &&
+              (range.max === pvmax || (range.max === null && pvmax === null))
+            );
+          }) || null;
+
+        if (!this.selectedPriceRangeVentas) {
+          this.selectedPriceRangeVentas =
+            this.priceRangesVentas.find((range) => {
+              return (
+                pvmin >= range.min &&
+                (range.max === null || (pvmax !== null && pvmax <= range.max))
+              );
+            }) || null;
+        }
+
+        if (this.selectedPriceRangeVentas) {
+          this.formRangos.patchValue({
+            precioVentaMinimo: f.pvmin.toString(),
+            precioVentaMaximo:
+              f.pvmax !== undefined ? f.pvmax.toString() : null,
+          });
+          this.filtrosSeleccionados.set('pvmin', f.pvmin.toString());
+          if (f.pvmax !== undefined) {
+            this.filtrosSeleccionados.set('pvmax', f.pvmax.toString());
+          }
+        }
       }
     }
 
@@ -942,34 +1011,44 @@ export class FiltrosComponent implements OnInit {
       );
     }
 
-    const precioMinimo = this.formRangos.value.precioMinimo;
-    const precioMaximo = this.formRangos.value.precioMaximo;
+    this.filtrosSeleccionados.delete('pcmin');
+    this.filtrosSeleccionados.delete('pcmax');
+    this.filtrosSeleccionados.delete('pvmin');
+    this.filtrosSeleccionados.delete('pvmax');
 
-    if (precioMinimo && precioMinimo !== '') {
-      this.filtrosSeleccionados.set('pcmin', precioMinimo);
-    } else {
-      this.filtrosSeleccionados.delete('pcmin');
-    }
+    if (this.selectedProperty) {
+      const propertyType = this.selectedProperty.code;
 
-    if (precioMaximo && precioMaximo !== '') {
-      this.filtrosSeleccionados.set('pcmax', precioMaximo);
-    } else {
-      this.filtrosSeleccionados.delete('pcmax');
-    }
+      if (
+        (propertyType === '1' || propertyType === '3') &&
+        (this.selectedPriceRange || this.formRangos.value.precioMinimo)
+      ) {
+        const precioMinimo = this.formRangos.value.precioMinimo;
+        const precioMaximo = this.formRangos.value.precioMaximo;
 
-    const precioVentaMinimo = this.formRangos.value.precioVentaMinimo;
-    const precioVentaMaximo = this.formRangos.value.precioVentaMaximo;
+        if (precioMinimo && precioMinimo !== '') {
+          this.filtrosSeleccionados.set('pcmin', precioMinimo);
+        }
+        if (precioMaximo && precioMaximo !== '') {
+          this.filtrosSeleccionados.set('pcmax', precioMaximo);
+        }
+      }
 
-    if (precioVentaMinimo && precioVentaMinimo !== '') {
-      this.filtrosSeleccionados.set('pvmin', precioVentaMinimo);
-    } else {
-      this.filtrosSeleccionados.delete('pvmin');
-    }
+      if (
+        (propertyType === '2' || propertyType === '3') &&
+        (this.selectedPriceRangeVentas ||
+          this.formRangos.value.precioVentaMinimo)
+      ) {
+        const precioVentaMinimo = this.formRangos.value.precioVentaMinimo;
+        const precioVentaMaximo = this.formRangos.value.precioVentaMaximo;
 
-    if (precioVentaMaximo && precioVentaMaximo !== '') {
-      this.filtrosSeleccionados.set('pvmax', precioVentaMaximo);
-    } else {
-      this.filtrosSeleccionados.delete('pvmax');
+        if (precioVentaMinimo && precioVentaMinimo !== '') {
+          this.filtrosSeleccionados.set('pvmin', precioVentaMinimo);
+        }
+        if (precioVentaMaximo && precioVentaMaximo !== '') {
+          this.filtrosSeleccionados.set('pvmax', precioVentaMaximo);
+        }
+      }
     }
   }
 
@@ -992,33 +1071,57 @@ export class FiltrosComponent implements OnInit {
     this.enviarFiltros(1);
   }
 
-  selectPriceRange(range: { min: number; max: number | null }): void {
-    console.log('rango', range);
-    if (this.selectedPriceRange?.min === range.min) {
-      this.selectedPriceRange = null;
-      this.formRangos.patchValue({
-        precioMinimo: null,
-        precioMaximo: null,
-      });
-      this.filtrosSeleccionados.delete('pcmin');
-      this.filtrosSeleccionados.delete('pcmax');
-    } else {
-      this.selectedPriceRange = range;
-      this.formRangos.patchValue({
-        precioMinimo: range.min.toString(),
-        precioMaximo: range.max ? range.max.toString() : null,
-      });
-      this.filtrosSeleccionados.set('pcmin', range.min.toString());
-
-      if (range.max !== null) {
-        this.filtrosSeleccionados.set('pcmax', range.max.toString());
-      } else {
+  selectPriceRange(
+    range: { min: number; max: number | null },
+    type: 'arriendo' | 'venta'
+  ): void {
+    if (type === 'arriendo') {
+      if (this.selectedPriceRange?.min === range.min) {
+        this.selectedPriceRange = null;
+        this.formRangos.patchValue({
+          precioMinimo: null,
+          precioMaximo: null,
+        });
+        this.filtrosSeleccionados.delete('pcmin');
         this.filtrosSeleccionados.delete('pcmax');
+      } else {
+        this.selectedPriceRange = range;
+        this.formRangos.patchValue({
+          precioMinimo: range.min.toString(),
+          precioMaximo: range.max ? range.max.toString() : null,
+        });
+        this.filtrosSeleccionados.set('pcmin', range.min.toString());
+        if (range.max !== null) {
+          this.filtrosSeleccionados.set('pcmax', range.max.toString());
+        } else {
+          this.filtrosSeleccionados.delete('pcmax');
+        }
+      }
+    } else if (type === 'venta') {
+      if (this.selectedPriceRangeVentas?.min === range.min) {
+        this.selectedPriceRangeVentas = null;
+        this.formRangos.patchValue({
+          precioVentaMinimo: null,
+          precioVentaMaximo: null,
+        });
+        this.filtrosSeleccionados.delete('pvmin');
+        this.filtrosSeleccionados.delete('pvmax');
+      } else {
+        this.selectedPriceRangeVentas = range;
+        this.formRangos.patchValue({
+          precioVentaMinimo: range.min.toString(),
+          precioVentaMaximo: range.max ? range.max.toString() : null,
+        });
+        this.filtrosSeleccionados.set('pvmin', range.min.toString());
+        if (range.max !== null) {
+          this.filtrosSeleccionados.set('pvmax', range.max.toString());
+        } else {
+          this.filtrosSeleccionados.delete('pvmax');
+        }
       }
     }
     this.cdRef.detectChanges();
   }
-
   seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
     const arr = this.seleccion[categoria] as (number | string)[];
     const index = arr.indexOf(valor);
@@ -1233,20 +1336,3 @@ export class FiltrosComponent implements OnInit {
     });
   }
 }
-
-// toggleMap() {
-//   this.drawerMapAbierto = !this.drawerMapAbierto;
-//   this.mostrarMapa = true;
-
-//   const drawer = document.getElementById('right-map-drawer');
-
-//   if (drawer) {
-//     if (this.drawerMapAbierto) {
-//       drawer.classList.remove('translate-x-full');
-//       drawer.classList.add('translate-x-0');
-//     } else {
-//       drawer.classList.remove('translate-x-0');
-//       drawer.classList.add('translate-x-full');
-//     }
-//   }
-// }
