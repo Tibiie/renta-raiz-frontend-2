@@ -222,10 +222,8 @@ export class VistaInicialComponent implements OnInit {
   }
 
   redirigirVerBlog(id: string) {
-    // En el código que abre la nueva pestaña:
-    window.open(`/ver-blog/${id}?timestamp=${Date.now()}`, '_blank');
-    // const url = this.router.createUrlTree(['/ver-blog', id]).toString();
-    // window.open(url, '_blank');
+    const url = this.router.createUrlTree(['/ver-blog', id]).toString();
+    window.open(url, '_blank');
   }
 
   redirigirAvaluosComerciales() {
