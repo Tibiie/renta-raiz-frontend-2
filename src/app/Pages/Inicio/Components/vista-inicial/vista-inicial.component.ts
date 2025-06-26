@@ -100,7 +100,7 @@ export class VistaInicialComponent implements OnInit {
   bloqueActualDestacados: number = 0;
   paginasDestacados: (number | string)[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
     this.getDatos();
@@ -190,7 +190,6 @@ export class VistaInicialComponent implements OnInit {
 
           this.generarPaginas('ARRIENDO');
           console.log(this.inmueblesArriendosArray);
-          
         },
         error: (error: any) => {
           console.error('Error al obtener los inmuebles:', error);
@@ -212,7 +211,6 @@ export class VistaInicialComponent implements OnInit {
         this.paginaActualDestacados = data.current_page || 1;
         this.generarPaginas('DESTACADOS');
         console.log(this.inmueblesDestacadosArray);
-
       },
       error: (error: any) => {
         console.error('Error al obtener los inmuebles:', error);
