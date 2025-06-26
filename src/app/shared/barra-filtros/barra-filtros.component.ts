@@ -35,7 +35,7 @@ export class BarraFiltrosComponent {
   inmueblesDestacadosArray: any = {};
   barrios: { data: any[] } = { data: [] };
 
-  estrato: number[] = [1, 2, 3, 4];
+  estrato: number[] = [1, 2, 3, 4, 5, 6];
   banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
   parqueadero: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
   habitaciones: (number | string)[] = [1, 2, 3, 4, 5, '+6'];

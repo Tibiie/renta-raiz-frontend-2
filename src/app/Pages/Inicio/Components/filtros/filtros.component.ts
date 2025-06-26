@@ -66,7 +66,7 @@ export class FiltrosComponent implements OnInit {
   filtrosVistaInicial: any = {};
   filtrosDesdeNavbar: any = {};
   categoriasInmuebles: any[] = [];
-  estrato: number[] = [1, 2, 3, 4];
+  estrato: number[] = [1, 2, 3, 4, 5, 6];
   paginas: (number | string)[] = [];
   barrios: { data: any[] } = { data: [] };
   banos: (number | string)[] = [1, 2, 3, 4, 5, '+6'];
@@ -175,17 +175,17 @@ export class FiltrosComponent implements OnInit {
     console.log(queryParams);
 
     if (queryParams['utm_source'] != undefined || queryParams['utm_source'] != null) {
-      
+
       this.urlParamService.guardarParamLocalStorage('utm_source', queryParams['utm_source']);
-     
-     
+
+
     }
 
     if (queryParams['fbclid'] != undefined || queryParams['fbclid'] != null) {
-      
+
       this.urlParamService.guardarParamLocalStorage('fbclid', queryParams['fbclid']);
-     
-     
+
+
     }
 
 
@@ -209,7 +209,7 @@ export class FiltrosComponent implements OnInit {
 
 
     console.log(queryParams);
-    
+
 
 
     if (Object.keys(queryParams).length == 1) {
