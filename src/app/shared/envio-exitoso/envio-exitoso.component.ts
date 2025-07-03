@@ -20,7 +20,7 @@ export class EnvioExitosoComponent implements OnInit {
   } enviarWthatsapp() {
 
     var param = this.router.snapshot.queryParamMap.get('urlInmueble');
-    var text = `&text=Hola%2C%20Lenys%20estoy%20interesado%20en:%20${param}`;
+    var text = `&text=Hola%2C%20Lenys%20me%20interesa%20este%20inmueble:%20${param}`;
     window.location.href = `https://api.whatsapp.com/send?phone=573145438665${text}`;
   }
 }
