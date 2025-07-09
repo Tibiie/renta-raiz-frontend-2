@@ -1,7 +1,12 @@
 import { CommonModule, Location } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { InmueblesService } from '../../../../../core/Inmuebles/inmuebles.service';
-import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -11,10 +16,16 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './modal-crear-contacto.component.html',
-  styleUrl: './modal-crear-contacto.component.scss'
+  styleUrl: './modal-crear-contacto.component.scss',
 })
 export class ModalCrearContactoComponent implements OnInit {
-
+  iframeEspecial: { [codPro: number]: string } = {
+    5975: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ',
+    2531: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu',
+    5970: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S',
+    2411: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC',
+    5689: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz',
+  };
 
   visible = false;
   isLoading = false;
@@ -28,9 +39,6 @@ export class ModalCrearContactoComponent implements OnInit {
   utm_source = '';
 
   urlBase!: SafeResourceUrl;
-
-
-
 
   toastr = inject(ToastrService);
   fb = inject(NonNullableFormBuilder);
@@ -47,50 +55,46 @@ export class ModalCrearContactoComponent implements OnInit {
     mensaje: ['', Validators.required],
   });
 
-
-
   ngOnInit(): void {
-
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
+    var urlIframe = '';
 
-    var urlIframe = ""
-
-    if (queryParams['utm_source'] != undefined || queryParams['utm_source'] != null) {
-      
+    if (
+      queryParams['utm_source'] != undefined ||
+      queryParams['utm_source'] != null
+    ) {
       console.log(queryParams['utm_source']);
-      
+
       switch (queryParams['utm_source']) {
         case 'meta ads':
-          urlIframe = "https://api.leadconnectorhq.com/widget/form/LArCYkvLIbfXbvaQMJ4Q"
+          urlIframe =
+            'https://api.leadconnectorhq.com/widget/form/LArCYkvLIbfXbvaQMJ4Q';
           break;
-        
+
         default:
-          urlIframe = "https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
+          urlIframe =
+            'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
           break;
       }
-
-    }else{
-      urlIframe = "https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
+    } else {
+      urlIframe =
+        'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
     }
 
-
     const url = `${urlIframe}?urlInmueble=${window.location.href}`;
-    //this.urlBase = this.urlBase + "?urlInmueble="+ 
+    //this.urlBase = this.urlBase + "?urlInmueble="+
 
     this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     console.log(this.urlBase);
-
   }
-
 
   abrirModal(codPro: number, accion: 'telefonos' | 'whatsapp' | 'soloEnviar') {
     this.codPro = codPro;
     this.accion = accion;
 
     const yaEnviado = this.contactoEnviadoPorCodPro[codPro];
-
     if (accion === 'telefonos' && yaEnviado) {
       this.abrirModalTelefonos();
       return;
@@ -98,10 +102,15 @@ export class ModalCrearContactoComponent implements OnInit {
 
     this.visible = true;
 
+    let urlIframe =
+      this.iframeEspecial[codPro] ||
+      'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
+    const url = `${urlIframe}?urlInmueble=${window.location.href}`;
+    this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
     setTimeout(() => {
       const iframe = document.getElementById('formIframe');
       const container = document.getElementById('iframe-container');
-
       if (iframe && container && !container.contains(iframe)) {
         container.appendChild(iframe);
         iframe.style.display = 'block';
@@ -157,15 +166,21 @@ export class ModalCrearContactoComponent implements OnInit {
         this.cerrarModal();
 
         if (this.accion === 'whatsapp') {
-          this.abrirPestana(`https://api.whatsapp.com/send?phone=${this.contacto.value.telefono}&text=${this.contacto.value.mensaje}`);
+          this.abrirPestana(
+            `https://api.whatsapp.com/send?phone=${this.contacto.value.telefono}&text=${this.contacto.value.mensaje}`
+          );
         }
 
         if (this.accion === 'soloEnviar') {
-          this.toastr.success('¡Gracias!', 'Tu mensaje ha sido enviado con éxito!', {
-            closeButton: true,
-            progressBar: true,
-            timeOut: 5000,
-          });
+          this.toastr.success(
+            '¡Gracias!',
+            'Tu mensaje ha sido enviado con éxito!',
+            {
+              closeButton: true,
+              progressBar: true,
+              timeOut: 5000,
+            }
+          );
           return;
         }
 
@@ -173,7 +188,6 @@ export class ModalCrearContactoComponent implements OnInit {
           this.contactoEnviadoPorCodPro[this.codPro!] = true;
           this.abrirModalTelefonos();
         }
-
       },
       (error: any) => {
         console.error('Error al enviar el contacto:', error);

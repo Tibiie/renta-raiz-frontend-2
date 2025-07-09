@@ -1,47 +1,67 @@
-<div style="display: none;">
-    <iframe src="https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg" id="preload-iframe"
-        style="width:0;height:0;border:0;" (load)="iframeListo = true" title="Preload Leads">
-    </iframe>
+<div style="display: none">
+  <iframe
+    src="https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
+    id="preload-iframe"
+    style="width: 0; height: 0; border: 0"
+    (load)="iframeListo = true"
+    title="Preload Leads"
+  >
+  </iframe>
 </div>
 
-<div *ngIf="visible"
-    class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
-    <div class="relative w-full max-w-md">
-        <div class="relative bg-white rounded-lg shadow-sm overflow-hidden">
+<div
+  *ngIf="visible"
+  class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+>
+  <div class="relative w-full max-w-md">
+    <div class="relative bg-white rounded-lg shadow-sm overflow-hidden">
+      <div
+        class="flex items-center justify-between p-4 border-b border-gray-200"
+      >
+        <h3 class="text-xl font-semibold text-black w-full text-center">
+          ¿Te interesa este inmueble?
+        </h3>
+        <button (click)="cerrarModal()" class="text-gray-400 hover:text-black">
+          ✕
+        </button>
+      </div>
 
-            <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 class="text-xl font-semibold text-black w-full text-center">
-                    ¿Te interesa este inmueble?
-                </h3>
-                <button (click)="cerrarModal()" class="text-gray-400 hover:text-black">
-                    ✕
-                </button>
-            </div>
+      <div class="p-0 m-0">
+        <iframe
+          *ngIf="iframeListo"
+          [src]="urlBase"
+          style="width: 100%; height: 600px; border: none; border-radius: 3px"
+          title="Leads"
+        >
+        </iframe>
 
-            <div class="p-0 m-0">
-                <iframe *ngIf="iframeListo" [src]="urlBase"
-                    style="width:100%; height:600px; border:none; border-radius:3px;" id="inline-9SRYMPh2FynzdxY045gg"
-                    title="Leads">
-                </iframe>
-
-                <div *ngIf="!iframeListo" class="flex justify-center items-center h-[400px]">
-                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
-                </div>
-            </div>
-
+        <div
+          *ngIf="!iframeListo"
+          class="flex justify-center items-center h-[400px]"
+        >
+          <div
+            class="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"
+          ></div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal para mostrar teléfonos -->
-<div *ngIf="mostrarModalTelefonos" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-    <div class="bg-white rounded-lg p-6 w-80 text-center shadow-lg">
-        <h2 class="text-xl font-bold mb-4 text-[#080E36]">Teléfonos de contacto</h2>
-        <p class="text-lg text-gray-700">📞 +57 300 111 2233</p>
-        <p class="text-lg text-gray-700">📞 +57 310 444 5566</p>
-        <button (click)="cerrarModalTelefonos()"
-            class="mt-4 bg-[#080E36] text-white px-4 py-2 rounded hover:bg-[#0b1144] w-full">
-            Cerrar
-        </button>
-    </div>
+<div
+  *ngIf="mostrarModalTelefonos"
+  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+>
+  <div class="bg-white rounded-lg p-6 w-80 text-center shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-[#080E36]">Teléfonos de contacto</h2>
+    <p class="text-lg text-gray-700">📞 +57 300 111 2233</p>
+    <p class="text-lg text-gray-700">📞 +57 310 444 5566</p>
+    <button
+      (click)="cerrarModalTelefonos()"
+      class="mt-4 bg-[#080E36] text-white px-4 py-2 rounded hover:bg-[#0b1144] w-full"
+    >
+      Cerrar
+    </button>
+  </div>
 </div>
