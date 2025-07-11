@@ -188,22 +188,20 @@ export class FiltrosComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     window.scrollTo(0, 0);
     const state = window.history.state;
+
     await this.getDatos();
 
-    var queryParams = this.activatedRoute.snapshot.queryParams;
+    const queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
-    if (
-      queryParams['utm_source'] != undefined ||
-      queryParams['utm_source'] != null
-    ) {
+    if (queryParams['utm_source']) {
       this.urlParamService.guardarParamLocalStorage(
         'utm_source',
         queryParams['utm_source']
       );
     }
 
-    if (queryParams['fbclid'] != undefined || queryParams['fbclid'] != null) {
+    if (queryParams['fbclid']) {
       this.urlParamService.guardarParamLocalStorage(
         'fbclid',
         queryParams['fbclid']
@@ -217,171 +215,123 @@ export class FiltrosComponent implements OnInit {
     this.obtenerParametrosFiltros(1, queryParams, state);
   }
 
-  obtenerParametrosFiltros(pagina: number, queryPa: any, state: any) {
-    const { utm_source, ...queryParams } = queryPa;
-    this.isDrawerOpen = false;
+  obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
+    const { utm_source, ...filteredParams } = queryParams;
+    this.isDrawerOpen = this.isDesktopView;
 
-    if (this.isDesktopView) {
-      this.isDrawerOpen = true;
-    }
+    this.filtrosSeleccionados.clear();
+    this.selectedProperty = null;
+    this.selectedEstates = [];
+    this.seleccion = {
+      habitaciones: [],
+      banos: [],
+      parqueadero: [],
+      estrato: [],
+    };
+    this.formRangos.patchValue({
+      AreaMinima: null,
+      AreaMaxima: null,
+      precioVentaMinimo: null,
+      precioVentaMaximo: null,
+      precioMinimo: null,
+      precioMaximo: null,
+    });
 
-    console.log(queryParams);
-
-    if (Object.keys(queryParams).length == 1) {
-      this.filtrosSeleccionados.clear();
-      this.selectedProperty = null;
-      this.selectedEstates = [];
-      this.seleccion = {
-        habitaciones: [],
-        banos: [],
-        parqueadero: [],
-        estrato: [],
-      };
-      this.formRangos.patchValue({
-        AreaMinima: null,
-        AreaMaxima: null,
-        precioVentaMinimo: null,
-        precioVentaMaximo: null,
-        precioMinimo: null,
-        precioMaximo: null,
-      });
-
-      var biz = queryParams['biz'];
-
-      if (biz) {
-        this.filtrosSeleccionados.set('biz', biz);
-        this.enviarFiltros(1);
-        const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-
-        const state = {
-          resultados: this.resultados,
-          paginacion: this.paginacion,
-          filtros: filtrosObj,
-        };
-        this.cargarDesdeState(state);
-        this.router.events.subscribe((event) => {
-          if (event instanceof NavigationEnd) {
-            const newState = window.history.state;
-            this.cargarDesdeState(newState);
+    // === A. Manejo de "tipo" (ej: tipo=diamante) ===
+    const nivelParam = queryParams['tipo'];
+    if (nivelParam) {
+      const nivelValido = this.niveles.find((x: any) => x === nivelParam);
+      if (nivelValido) {
+        if (!state.filtros) {
+          this.getDatos();
+          if (nivelParam === 'diamante') {
+            this.filtrosSeleccionados.set('pcmin', 15000000);
+          } else if (nivelParam === 'oro') {
+            this.filtrosSeleccionados.set('pcmin', 8000000);
+            this.filtrosSeleccionados.set('pcmax', 15000000);
+          } else if (nivelParam === 'plata') {
+            this.filtrosSeleccionados.set('pcmin', 2000000);
+            this.filtrosSeleccionados.set('pcmax', 8000000);
           }
-        });
-      }
 
-      var nivelParam = queryParams['tipo'];
+          this.filtrosSeleccionados.set('order', 'consignation_date');
+          this.filtrosSeleccionados.set('sort', 'desc');
 
-      if (nivelParam) {
-        var resul = this.niveles.find((x: any) => x === nivelParam);
-        if (resul) {
-          if (state.filtros == undefined) {
-            this.getDatos();
-            if (nivelParam === 'diamante') {
-              this.filtrosSeleccionados.set('pcmin', 15000000);
-              this.filtrosSeleccionados.set('order', 'consignation_date');
-              this.filtrosSeleccionados.set('sort', 'desc');
-            } else if (nivelParam === 'oro') {
-              this.filtrosSeleccionados.set('pcmin', 8000000);
-              this.filtrosSeleccionados.set('pcmax', 15000000);
-              this.filtrosSeleccionados.set('order', 'consignation_date');
-              this.filtrosSeleccionados.set('sort', 'desc');
-            } else if (nivelParam === 'plata') {
-              this.filtrosSeleccionados.set('pcmin', 2000000);
-              this.filtrosSeleccionados.set('pcmax', 8000000);
-              this.filtrosSeleccionados.set('order', 'consignation_date');
-              this.filtrosSeleccionados.set('sort', 'desc');
+          this.enviarFiltros(pagina, false);
+
+          const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+          const newState = {
+            resultados: this.resultados,
+            paginacion: this.paginacion,
+            filtros: filtrosObj,
+          };
+
+          this.cargarDesdeState(newState);
+          this.router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+              this.cargarDesdeState(window.history.state);
             }
-
-            this.enviarFiltros(pagina, false);
-
-            const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-
-            const state = {
-              resultados: this.resultados,
-              paginacion: this.paginacion,
-              filtros: filtrosObj,
-            };
-
-            this.cargarDesdeState(state);
-            this.router.events.subscribe((event) => {
-              if (event instanceof NavigationEnd) {
-                const newState = window.history.state;
-                this.cargarDesdeState(newState);
-              }
-            });
-          } else {
-            this.cargarDesdeState(state);
-            this.router.events.subscribe((event) => {
-              if (event instanceof NavigationEnd) {
-                const newState = window.history.state;
-                this.cargarDesdeState(newState);
-              }
-            });
-          }
+          });
+        } else {
+          this.cargarDesdeState(state);
+          this.router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+              this.cargarDesdeState(window.history.state);
+            }
+          });
         }
+        return; // 🚫 IMPORTANTE: evitar que caiga en la redirección más abajo
       }
     }
 
-    if (Object.keys(queryParams).length > 1) {
-      this.filtrosSeleccionados.clear();
-      this.selectedProperty = null;
-      this.selectedEstates = [];
-      this.seleccion = {
-        habitaciones: [],
-        banos: [],
-        parqueadero: [],
-        estrato: [],
+    // === B. Manejo de filtros por "biz" y "elementsPerPage" ===
+    const biz = queryParams['biz'];
+    const elementsPerPage = queryParams['elementsPerPage'];
+
+    if (biz && elementsPerPage) {
+      this.filtrosSeleccionados.set('biz', biz);
+      this.filtrosSeleccionados.set('elementsPerPage', elementsPerPage);
+
+      const city = queryParams['city'];
+      if (city) {
+        this.filtrosSeleccionados.set('city', city);
+      }
+
+      const barrio = queryParams['neighborhood_code'];
+      if (barrio) {
+        this.filtrosSeleccionados.set('neighborhood_code', barrio);
+      }
+
+      this.enviarFiltros(pagina, false);
+
+      const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+      const newState = {
+        resultados: this.resultados,
+        paginacion: this.paginacion,
+        filtros: filtrosObj,
       };
-      this.formRangos.patchValue({
-        AreaMinima: null,
-        AreaMaxima: null,
-        precioVentaMinimo: null,
-        precioVentaMaximo: null,
-        precioMinimo: null,
-        precioMaximo: null,
+
+      this.cargarDesdeState(newState);
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.cargarDesdeState(window.history.state);
+        }
       });
 
-      var biz = queryParams['biz'];
-      var elementsPerPage = queryParams['elementsPerPage'];
-      if (biz && elementsPerPage) {
-        this.filtrosSeleccionados.set('biz', biz);
-        this.filtrosSeleccionados.set('elementsPerPage', elementsPerPage);
+      return; // 👈 Cortamos aquí si ya cargamos desde filtros
+    }
 
-        var city = queryParams['city'];
-        if (city) {
-          this.filtrosSeleccionados.set('city', city);
-        }
-
-        var barrio = queryParams['neighborhood_code'];
-        if (barrio) {
-          this.filtrosSeleccionados.set('neighborhood_code', barrio);
-        }
-
-        this.enviarFiltros(pagina, false);
-
-        const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-
-        const state = {
-          resultados: this.resultados,
-          paginacion: this.paginacion,
-          filtros: filtrosObj,
-        };
-        this.cargarDesdeState(state);
-        this.router.events.subscribe((event) => {
-          if (event instanceof NavigationEnd) {
-            const newState = window.history.state;
-            this.cargarDesdeState(newState);
-          }
-        });
-      } else {
-        this.router.navigate(['']);
-      }
-    } else {
+    // === C. Si no hay filtros válidos, cargar state o redirigir al inicio ===
+    if (state?.filtros) {
       this.cargarDesdeState(state);
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
-          const newState = window.history.state;
-          this.cargarDesdeState(newState);
+          this.cargarDesdeState(window.history.state);
         }
       });
+    } else {
+      // Redirige solo si no hay filtros válidos ni state
+      this.router.navigate(['']);
     }
   }
 
