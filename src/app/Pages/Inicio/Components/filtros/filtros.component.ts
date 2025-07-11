@@ -237,7 +237,6 @@ export class FiltrosComponent implements OnInit {
       precioMaximo: null,
     });
 
-    // === A. Manejo de "tipo" (ej: tipo=diamante) ===
     const nivelParam = queryParams['tipo'];
     if (nivelParam) {
       const nivelValido = this.niveles.find((x: any) => x === nivelParam);
@@ -280,11 +279,10 @@ export class FiltrosComponent implements OnInit {
             }
           });
         }
-        return; // 🚫 IMPORTANTE: evitar que caiga en la redirección más abajo
+        return; 
       }
     }
 
-    // === B. Manejo de filtros por "biz" y "elementsPerPage" ===
     const biz = queryParams['biz'];
     const elementsPerPage = queryParams['elementsPerPage'];
 
@@ -318,10 +316,9 @@ export class FiltrosComponent implements OnInit {
         }
       });
 
-      return; // 👈 Cortamos aquí si ya cargamos desde filtros
+      return; 
     }
 
-    // === C. Si no hay filtros válidos, cargar state o redirigir al inicio ===
     if (state?.filtros) {
       this.cargarDesdeState(state);
       this.router.events.subscribe((event) => {
@@ -330,7 +327,6 @@ export class FiltrosComponent implements OnInit {
         }
       });
     } else {
-      // Redirige solo si no hay filtros válidos ni state
       this.router.navigate(['']);
     }
   }
