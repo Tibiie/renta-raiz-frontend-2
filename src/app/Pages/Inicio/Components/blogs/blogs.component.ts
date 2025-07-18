@@ -245,7 +245,7 @@ export class BlogsComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro], {
+    this.router.navigate(['/ver-propiedad', codPro, 0], {
       state: { codPro: codPro },
     });
   }

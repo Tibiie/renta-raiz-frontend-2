@@ -285,7 +285,7 @@ export class VistaInicialComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro]);
+    this.router.navigate(['/ver-propiedad', codPro, 0]);
   }
 
   abrirBrochure() {

@@ -35,7 +35,7 @@ export const routes: Routes = [
     component: ContactanosComponent,
   },
   {
-    path: 'ver-propiedad/:codpro',
+    path: 'ver-propiedad/:codpro/:ocultarContenido',
     component: VerPropiedadComponent,
   },
 

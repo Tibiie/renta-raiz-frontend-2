@@ -56,7 +56,7 @@ export class PoliticarPrivacidadComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     const url = this.router
-      .createUrlTree(['/ver-propiedad', codPro])
+      .createUrlTree(['/ver-propiedad', codPro, 0])
       .toString();
     window.open(url, '_blank');
   }

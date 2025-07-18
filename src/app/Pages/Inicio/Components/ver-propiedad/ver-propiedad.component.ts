@@ -46,7 +46,6 @@ export class VerPropiedadComponent implements OnInit {
   thumbnailsPerPage = 3;
   resultadosFiltros: any[] = [];
   selectedImageUrl: string | null = null;
-  propiedadesRestringidas = [5975, 2531, 5970, 2411, 5689];
 
   isModalOpen = false;
   datosCargados = false;
@@ -73,7 +72,10 @@ export class VerPropiedadComponent implements OnInit {
 
     this.route.paramMap.subscribe((params) => {
       this.codPro = Number(params.get('codpro'));
-      this.mostrarContenido = !this.propiedadesRestringidas.includes(this.codPro);
+      const ocultar = Number(params.get('ocultarContenido')) === 1;
+
+      this.mostrarContenido = !ocultar;  
+
       this.getDatos();
     });
   }
@@ -216,10 +218,6 @@ export class VerPropiedadComponent implements OnInit {
       (response: any) => {
         this.propiedad = response.data;
 
-        this.mostrarContenido = !this.propiedadesRestringidas.includes(
-          Number(this.codPro)
-        );
-
         this.datosCargados = true;
 
         this.prepararFiltros();
@@ -231,6 +229,7 @@ export class VerPropiedadComponent implements OnInit {
       }
     );
   }
+
 
   selectImage(index: number) {
     this.selectedIndex = index;
@@ -334,7 +333,7 @@ export class VerPropiedadComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     this.router
-      .navigate(['/ver-propiedad', codPro])
+      .navigate(['/ver-propiedad', codPro, 0])
       .then(() => {
         window.scrollTo(0, 0);
       });
