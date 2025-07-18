@@ -73,10 +73,7 @@ export class VerPropiedadComponent implements OnInit {
 
     this.route.paramMap.subscribe((params) => {
       this.codPro = Number(params.get('codpro'));
-      const mostrar = Number(params.get('mostrarContenido'));
-
-      this.mostrarContenido = mostrar === 1;
-
+      this.mostrarContenido = !this.propiedadesRestringidas.includes(this.codPro);
       this.getDatos();
     });
   }
@@ -337,7 +334,7 @@ export class VerPropiedadComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     this.router
-      .navigate(['/ver-propiedad', codPro, this.mostrarContenido])
+      .navigate(['/ver-propiedad', codPro])
       .then(() => {
         window.scrollTo(0, 0);
       });

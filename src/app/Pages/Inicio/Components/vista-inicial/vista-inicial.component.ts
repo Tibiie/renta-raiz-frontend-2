@@ -285,10 +285,7 @@ export class VistaInicialComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    const propiedadesRestringidas = [5975, 2531, 5970, 2411, 5689];
-    const mostrarContenido = propiedadesRestringidas.includes(codPro) ? 0 : 1;
-
-    this.router.navigate(['/ver-propiedad', codPro, mostrarContenido]);
+    this.router.navigate(['/ver-propiedad', codPro]);
   }
 
   abrirBrochure() {
