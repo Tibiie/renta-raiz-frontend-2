@@ -42,22 +42,26 @@ export class VerPropiedadComponent implements OnInit {
   codPro?: number;
   selectedIndex = 0;
   propiedad: any = {};
-  isModalOpen = false;
   elementsPerPage = 3;
   thumbnailsPerPage = 3;
   resultadosFiltros: any[] = [];
   selectedImageUrl: string | null = null;
+  propiedadesRestringidas = [5975, 2531, 5970, 2411, 5689];
+
+  isModalOpen = false;
+  datosCargados = false;
+  mostrarContenido = false;
+
   filtrosSeleccionados: Map<string, any> = new Map();
 
-  private isZoomActive = false;
-  private zoomInstance: any;
   private currentScale = 1;
+  private zoomInstance: any;
+  private isZoomActive = false;
 
   visibleThumbnailsStart = 0;
   selectedImage: string = '';
   tabActivo: string = 'fotos';
 
-  // Injectaciones
   router = inject(Router);
   route = inject(ActivatedRoute);
   cdRef = inject(ChangeDetectorRef);
@@ -66,8 +70,13 @@ export class VerPropiedadComponent implements OnInit {
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.initZoom();
+
     this.route.paramMap.subscribe((params) => {
       this.codPro = Number(params.get('codpro'));
+      const mostrar = Number(params.get('mostrarContenido'));
+
+      this.mostrarContenido = mostrar === 1;
+
       this.getDatos();
     });
   }
@@ -80,8 +89,6 @@ export class VerPropiedadComponent implements OnInit {
   openModal(index: number): void {
     this.selectedIndex = index;
     this.isModalOpen = true;
-
-    // Esperamos a que el modal se renderice completamente
     setTimeout(() => {
       this.initZoom();
     }, 100);
@@ -206,17 +213,24 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   getDatosPropiedad() {
+    this.datosCargados = false;
+
     this.inmueblesService.getDatosPropiedad(this.codPro!).subscribe(
       (response: any) => {
         this.propiedad = response.data;
 
-        console.log('propiedad', this.propiedad);
+        this.mostrarContenido = !this.propiedadesRestringidas.includes(
+          Number(this.codPro)
+        );
+
+        this.datosCargados = true;
 
         this.prepararFiltros();
         this.enviarFiltros();
       },
       (error: any) => {
         console.error('Error al obtener la propiedad:', error);
+        this.datosCargados = true;
       }
     );
   }
@@ -224,7 +238,6 @@ export class VerPropiedadComponent implements OnInit {
   selectImage(index: number) {
     this.selectedIndex = index;
   }
-
   prevImage() {
     if (this.selectedIndex === 0) {
       this.selectedIndex = this.propiedad.images.length - 1;
@@ -323,8 +336,10 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro]).then(() => {
-      window.scrollTo(0, 0);
-    });
+    this.router
+      .navigate(['/ver-propiedad', codPro, this.mostrarContenido])
+      .then(() => {
+        window.scrollTo(0, 0);
+      });
   }
 }

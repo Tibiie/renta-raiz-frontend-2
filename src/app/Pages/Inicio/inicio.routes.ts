@@ -21,39 +21,32 @@ export const routes: Routes = [
   {
     path: '',
     component: VistaInicialComponent,
-    
   },
 
   {
     path: 'filtros',
     component: FiltrosComponent,
-    
   },
   {
     path: 'filtros/:tipo',
     component: FiltrosComponent,
-    
   },
   {
     path: 'contacto',
     component: ContactanosComponent,
-    
   },
   {
-    path: 'ver-propiedad/:codpro',
+    path: 'ver-propiedad/:codpro/:mostrarContenido',
     component: VerPropiedadComponent,
-    
- 
   },
+
   {
     path: 'nuestro-equipo',
     component: NuestroEquipoComponent,
-    
   },
   {
     path: 'quienes-somos',
     component: QuienesSomosComponent,
-    
   },
   {
     path: 'mapa',
@@ -62,32 +55,26 @@ export const routes: Routes = [
   {
     path: 'blogs',
     component: BlogsComponent,
-   
   },
   {
     path: 'ver-blog/:id',
     component: VerBlogComponent,
-    
   },
   {
     path: 'publicar-inmueble',
     component: PublicarInmuebleComponent,
-    
   },
   {
     path: 'politicas-de-privacidad',
     component: PoliticarPrivacidadComponent,
-    
   },
   {
     path: 'avaluos-comerciales',
     component: AvaluosComercialesComponent,
-    
   },
   {
     path: 'formulario-enviado-con-exito',
     component: EnvioExitosoComponent,
-    
   },
 ];
 
