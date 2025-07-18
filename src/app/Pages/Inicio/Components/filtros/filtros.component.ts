@@ -1272,7 +1272,7 @@ export class FiltrosComponent implements OnInit {
     const url = this.router
       .createUrlTree(['/ver-propiedad', codPro])
       .toString();
-    this.router.navigate(['/ver-propiedad', codPro]);
+    this.router.navigateByUrl(url);
   }
 
   scrollToTop() {
