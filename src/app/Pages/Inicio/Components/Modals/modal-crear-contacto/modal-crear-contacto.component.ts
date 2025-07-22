@@ -68,7 +68,7 @@ export class ModalCrearContactoComponent implements OnInit {
       console.log(queryParams['utm_source']);
 
       switch (queryParams['utm_source']) {
-        case 'meta ads':
+        case 'meta_ads':
           urlIframe =
             'https://api.leadconnectorhq.com/widget/form/LArCYkvLIbfXbvaQMJ4Q';
           break;
