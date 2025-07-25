@@ -19,52 +19,18 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './modal-crear-contacto.component.scss',
 })
 export class ModalCrearContactoComponent implements OnInit {
-  iframeEspecial: { [codPro: number]: any } = {
-    5975: {
-      src: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ',
-      id: 'inline-DBQBxa2NZQgSAYMiukLJ',
-      formId: 'DBQBxa2NZQgSAYMiukLJ',
-      title: 'Propiedad código 5975',
-      height: '401'
-    },
-    2531: {
-      src: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu',
-      id: 'inline-M1injuZo8jl0AFnLbjzu',
-      formId: 'M1injuZo8jl0AFnLbjzu',
-      title: 'Propiedad código 2531',
-      height: '401'
-    },
-    5970: {
-      src: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S',
-      id: 'inline-XeOz8uDX43OxILBxg74S',
-      formId: 'XeOz8uDX43OxILBxg74S',
-      title: 'Propiedad código 5970',
-      height: '401'
-    },
-    2411: {
-      src: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC',
-      id: 'inline-5CmVcLxMiLpUTEImetKC',
-      formId: '5CmVcLxMiLpUTEImetKC',
-      title: 'Propiedad código 2411',
-      height: '401'
-    },
-    5689: {
-      src: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz',
-      id: 'inline-tanbgyswwkJ82IjFdrwz',
-      formId: 'tanbgyswwkJ82IjFdrwz',
-      title: 'Lote en las Palmas (Yeferson Cossio)',
-      height: '402'
-    },
+  iframeEspecial: { [codPro: number]: string } = {
+    5975: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ',
+    2531: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu',
+    5970: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S',
+    2411: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC',
+    5689: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz',
   };
 
-  iframeActual: any = null;
-  usarIframeEspecial: boolean = false;
-  
   visible = false;
   isLoading = false;
   iframeListo = false;
   mostrarModalTelefonos = false;
-  public urlActual: string = window.location.href;
   private contactoEnviadoPorCodPro: { [codPro: number]: boolean } = {};
 
   codPro?: number;
@@ -124,45 +90,55 @@ export class ModalCrearContactoComponent implements OnInit {
     console.log(this.urlBase);
   }
 
- abrirModal(codPro: number, accion: 'telefonos' | 'whatsapp' | 'soloEnviar') {
-  this.codPro = codPro;
-  this.accion = accion;
+  abrirModal(codPro: number, accion: 'telefonos' | 'whatsapp' | 'soloEnviar') {
+    this.codPro = codPro;
+    this.accion = accion;
 
-  const yaEnviado = this.contactoEnviadoPorCodPro[codPro];
-  if (accion === 'telefonos' && yaEnviado) {
-    this.abrirModalTelefonos();
-    return;
-  }
-
-  this.visible = true;
-  this.usarIframeEspecial = false;
-
-  if (this.iframeEspecial[codPro]) {
-    this.iframeActual = this.iframeEspecial[codPro];
-    this.usarIframeEspecial = true;
-  } else {
-    const urlBase = this.getIframePorUTM() + '?urlInmueble=' + window.location.href;
-    this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(urlBase);
-  }
-
-  setTimeout(() => {
-    const iframe = document.getElementById('formIframe');
-    const container = document.getElementById('iframe-container');
-    if (iframe && container && !container.contains(iframe)) {
-      container.appendChild(iframe);
-      iframe.style.display = 'block';
+    const yaEnviado = this.contactoEnviadoPorCodPro[codPro];
+    if (accion === 'telefonos' && yaEnviado) {
+      this.abrirModalTelefonos();
+      return;
     }
-  }, 0);
-}
 
-getIframePorUTM(): string {
-  const queryParams = this.activatedRoute.snapshot.queryParams;
-  const utmSource = queryParams['utm_source'];
-  if (utmSource === 'meta ads') {
-    return 'https://api.leadconnectorhq.com/widget/form/LArCYkvLIbfXbvaQMJ4Q';
+    this.visible = true;
+
+    let urlIframe = '';
+
+    if (this.iframeEspecial[codPro]) {
+      urlIframe = this.iframeEspecial[codPro];
+    } else {
+      const queryParams = this.activatedRoute.snapshot.queryParams;
+      const utmSource = queryParams['utm_source'];
+
+      if (utmSource) {
+        switch (utmSource) {
+          case 'meta ads':
+            urlIframe =
+              'https://api.leadconnectorhq.com/widget/form/LArCYkvLIbfXbvaQMJ4Q';
+            break;
+          default:
+            urlIframe =
+              'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
+            break;
+        }
+      } else {
+        urlIframe =
+          'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
+      }
+    }
+
+    const url = `${urlIframe}?urlInmueble=${window.location.href}`;
+    this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
+    setTimeout(() => {
+      const iframe = document.getElementById('formIframe');
+      const container = document.getElementById('iframe-container');
+      if (iframe && container && !container.contains(iframe)) {
+        container.appendChild(iframe);
+        iframe.style.display = 'block';
+      }
+    }, 0);
   }
-  return 'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
-}
 
   cerrarModal() {
     this.visible = false;
