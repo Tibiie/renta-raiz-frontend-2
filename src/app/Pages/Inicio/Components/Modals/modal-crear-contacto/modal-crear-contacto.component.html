@@ -1,4 +1,3 @@
-<!-- Preload iframe oculto -->
 <div style="display: none">
   <iframe
     src="https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
@@ -9,14 +8,12 @@
   ></iframe>
 </div>
 
-<!-- Modal -->
 <div
   *ngIf="visible"
   class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
 >
   <div class="relative w-full max-w-md">
     <div class="relative bg-white rounded-lg shadow-sm overflow-hidden">
-      <!-- Título y botón cerrar -->
       <div class="flex items-center justify-between p-4 border-b border-gray-200">
         <h3 class="text-xl font-semibold text-black w-full text-center">
           ¿Te interesa este inmueble?
@@ -26,11 +23,8 @@
         </button>
       </div>
 
-      <!-- Contenido -->
       <div class="p-0 m-0">
-        <!-- Mostrar iframe según lógica -->
         <ng-container *ngIf="iframeListo">
-          <!-- Iframe especial -->
           <iframe
             *ngIf="usarIframeEspecial"
             [src]="sanitizer.bypassSecurityTrustResourceUrl(iframeActual.src + '?urlInmueble=' + urlActual)"
@@ -50,7 +44,6 @@
             style="width: 100%; height: 600px; border: none; border-radius: 3px;"
           ></iframe>
 
-          <!-- Iframe por defecto -->
           <iframe
             *ngIf="!usarIframeEspecial"
             [src]="urlBase"
@@ -60,7 +53,6 @@
           ></iframe>
         </ng-container>
 
-        <!-- Spinner mientras carga -->
         <div *ngIf="!iframeListo" class="flex justify-center items-center h-[400px]">
           <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
         </div>
