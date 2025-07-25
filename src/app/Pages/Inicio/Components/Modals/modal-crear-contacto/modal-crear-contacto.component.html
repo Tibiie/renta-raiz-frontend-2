@@ -1,3 +1,4 @@
+<!-- Preload iframe oculto -->
 <div style="display: none">
   <iframe
     src="https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
@@ -5,19 +6,18 @@
     style="width: 0; height: 0; border: 0"
     (load)="iframeListo = true"
     title="Preload Leads"
-  >
-  </iframe>
+  ></iframe>
 </div>
 
+<!-- Modal -->
 <div
   *ngIf="visible"
   class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
 >
   <div class="relative w-full max-w-md">
     <div class="relative bg-white rounded-lg shadow-sm overflow-hidden">
-      <div
-        class="flex items-center justify-between p-4 border-b border-gray-200"
-      >
+      <!-- Título y botón cerrar -->
+      <div class="flex items-center justify-between p-4 border-b border-gray-200">
         <h3 class="text-xl font-semibold text-black w-full text-center">
           ¿Te interesa este inmueble?
         </h3>
@@ -26,27 +26,49 @@
         </button>
       </div>
 
+      <!-- Contenido -->
       <div class="p-0 m-0">
-        <iframe
-          *ngIf="iframeListo"
-          [src]="urlBase"
-          style="width: 100%; height: 600px; border: none; border-radius: 3px"
-          title="Leads"
-        >
-        </iframe>
+        <!-- Mostrar iframe según lógica -->
+        <ng-container *ngIf="iframeListo">
+          <!-- Iframe especial -->
+          <iframe
+            *ngIf="usarIframeEspecial"
+            [src]="sanitizer.bypassSecurityTrustResourceUrl(iframeActual.src + '?urlInmueble=' + urlActual)"
+            [id]="iframeActual.id"
+            [attr.data-layout]="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            [attr.data-form-name]="iframeActual.title"
+            [attr.data-height]="iframeActual.height"
+            [attr.data-layout-iframe-id]="iframeActual.id"
+            [attr.data-form-id]="iframeActual.formId"
+            [attr.title]="iframeActual.title"
+            style="width: 100%; height: 600px; border: none; border-radius: 3px;"
+          ></iframe>
 
-        <div
-          *ngIf="!iframeListo"
-          class="flex justify-center items-center h-[400px]"
-        >
-          <div
-            class="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"
-          ></div>
+          <!-- Iframe por defecto -->
+          <iframe
+            *ngIf="!usarIframeEspecial"
+            [src]="urlBase"
+            id="formIframe"
+            style="width: 100%; height: 600px; border: none; border-radius: 3px"
+            title="Leads"
+          ></iframe>
+        </ng-container>
+
+        <!-- Spinner mientras carga -->
+        <div *ngIf="!iframeListo" class="flex justify-center items-center h-[400px]">
+          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- Modal para mostrar teléfonos -->
 <div
