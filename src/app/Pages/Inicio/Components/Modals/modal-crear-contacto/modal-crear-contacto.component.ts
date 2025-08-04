@@ -25,6 +25,7 @@ export class ModalCrearContactoComponent implements OnInit {
     5970: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S',
     2411: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC',
     5689: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz',
+    5024: 'https://api.leadconnectorhq.com/widget/form/1H6XwJGDZfAL1YuEcp0d',
   };
 
   visible = false;
