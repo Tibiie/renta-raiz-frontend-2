@@ -19,19 +19,19 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './modal-crear-contacto.component.scss',
 })
 export class ModalCrearContactoComponent implements OnInit {
- iframeConfig: { [codPro: number]: {
-  url: string;
-  formId: string;
-  formName: string;
-  height?: number;
-} } = {
-  5975: { url: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ', formId: 'DBQBxa2NZQgSAYMiukLJ', formName: 'Propiedad código 5975', height: 401 },
-  2531: { url: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu', formId: 'M1injuZo8jl0AFnLbjzu', formName: 'Propiedad código 2531', height: 401 },
-  5970: { url: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S', formId: 'XeOz8uDX43OxILBxg74S', formName: 'Propiedad código 5970', height: 401 },
-  2411: { url: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC', formId: '5CmVcLxMiLpUTEImetKC', formName: 'Propiedad código 2411', height: 401 },
-  5689: { url: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz', formId: 'tanbgyswwkJ82IjFdrwz', formName: 'Lote en las Palmas (Yeferson Cossio)', height: 402 },
-  5024: { url: 'https://api.leadconnectorhq.com/widget/form/1H6XwJGDZfAL1YuEcp0d', formId: '1H6XwJGDZfAL1YuEcp0d', formName: 'Propiedad código 5024', height: 401 }
-};
+  iframeConfig: { [codPro: number]: {
+    url: string;
+    formId: string;
+    formName: string;
+    height?: number;
+  } } = {
+    5975: { url: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ', formId: 'DBQBxa2NZQgSAYMiukLJ', formName: 'Propiedad código 5975', height: 401 },
+    2531: { url: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu', formId: 'M1injuZo8jl0AFnLbjzu', formName: 'Propiedad código 2531', height: 401 },
+    5970: { url: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S', formId: 'XeOz8uDX43OxILBxg74S', formName: 'Propiedad código 5970', height: 401 },
+    2411: { url: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC', formId: '5CmVcLxMiLpUTEImetKC', formName: 'Propiedad código 2411', height: 401 },
+    5689: { url: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz', formId: 'tanbgyswwkJ82IjFdrwz', formName: 'Lote en las Palmas (Yeferson Cossio)', height: 402 },
+    5024: { url: 'https://api.leadconnectorhq.com/widget/form/1H6XwJGDZfAL1YuEcp0d', formId: '1H6XwJGDZfAL1YuEcp0d', formName: 'Propiedad código 5024', height: 401 }
+  };
 
   iframeId = '';
   iframeTitle = '';
