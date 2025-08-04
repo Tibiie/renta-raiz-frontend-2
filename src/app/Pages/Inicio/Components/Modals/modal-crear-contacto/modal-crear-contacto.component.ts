@@ -19,14 +19,25 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './modal-crear-contacto.component.scss',
 })
 export class ModalCrearContactoComponent implements OnInit {
-  iframeEspecial: { [codPro: number]: string } = {
-    5975: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ',
-    2531: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu',
-    5970: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S',
-    2411: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC',
-    5689: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz',
-    5024: 'https://api.leadconnectorhq.com/widget/form/1H6XwJGDZfAL1YuEcp0d',
-  };
+ iframeConfig: { [codPro: number]: {
+  url: string;
+  formId: string;
+  formName: string;
+  height?: number;
+} } = {
+  5975: { url: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ', formId: 'DBQBxa2NZQgSAYMiukLJ', formName: 'Propiedad código 5975', height: 401 },
+  2531: { url: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu', formId: 'M1injuZo8jl0AFnLbjzu', formName: 'Propiedad código 2531', height: 401 },
+  5970: { url: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S', formId: 'XeOz8uDX43OxILBxg74S', formName: 'Propiedad código 5970', height: 401 },
+  2411: { url: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC', formId: '5CmVcLxMiLpUTEImetKC', formName: 'Propiedad código 2411', height: 401 },
+  5689: { url: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz', formId: 'tanbgyswwkJ82IjFdrwz', formName: 'Lote en las Palmas (Yeferson Cossio)', height: 402 },
+  5024: { url: 'https://api.leadconnectorhq.com/widget/form/1H6XwJGDZfAL1YuEcp0d', formId: '1H6XwJGDZfAL1YuEcp0d', formName: 'Propiedad código 5024', height: 401 }
+};
+
+  iframeId = '';
+  iframeTitle = '';
+  iframeSrc: any = '';
+  
+  iframeHeight = 600;
 
   visible = false;
   isLoading = false;
@@ -104,41 +115,36 @@ export class ModalCrearContactoComponent implements OnInit {
     this.visible = true;
 
     let urlIframe = '';
+    let formId = '';
+    let formName = '';
+    let iframeHeight = 600;
 
-    if (this.iframeEspecial[codPro]) {
-      urlIframe = this.iframeEspecial[codPro];
+    const cfg = this.iframeConfig[codPro];
+    if (cfg) {
+      urlIframe = cfg.url;
+      formId = cfg.formId;
+      formName = cfg.formName;
+      iframeHeight = cfg.height || 600;
     } else {
       const queryParams = this.activatedRoute.snapshot.queryParams;
       const utmSource = queryParams['utm_source'];
 
-      if (utmSource) {
-        switch (utmSource) {
-          case 'meta ads':
-            urlIframe =
-              'https://api.leadconnectorhq.com/widget/form/LArCYkvLIbfXbvaQMJ4Q';
-            break;
-          default:
-            urlIframe =
-              'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
-            break;
-        }
+      if (utmSource === 'meta ads') {
+        urlIframe = 'https://api.leadconnectorhq.com/widget/form/LArCYkvLIbfXbvaQMJ4Q';
       } else {
-        urlIframe =
-          'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
+        urlIframe = 'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
       }
+
+      formId = urlIframe.split('/').pop() || 'default';
+      formName = `Propiedad código ${codPro}`;
     }
 
-    const url = `${urlIframe}?urlInmueble=${window.location.href}`;
-    this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.iframeId = `inline-${formId}`;
+    this.iframeTitle = formName;
+    this.iframeHeight = iframeHeight;
 
-    setTimeout(() => {
-      const iframe = document.getElementById('formIframe');
-      const container = document.getElementById('iframe-container');
-      if (iframe && container && !container.contains(iframe)) {
-        container.appendChild(iframe);
-        iframe.style.display = 'block';
-      }
-    }, 0);
+    const url = `${urlIframe}?urlInmueble=${window.location.href}`;
+    this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   cerrarModal() {
