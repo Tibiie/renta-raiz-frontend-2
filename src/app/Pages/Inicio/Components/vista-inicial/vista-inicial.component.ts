@@ -107,6 +107,7 @@ export class VistaInicialComponent implements OnInit {
   }
 
   getDatos() {
+    this.getFiltros();
     this.getAliadosPorGrupo();
     this.getInmueblesVentas(1);
     this.getInmueblesArriendos(1);
@@ -585,5 +586,17 @@ export class VistaInicialComponent implements OnInit {
         this.getInmueblesDestacados(this.paginaActualDestacados);
       }
     }
+  }
+
+  getFiltros(){
+    this.inmueblesService.getFiltros().subscribe({
+      next: (response: any) => {
+        this.filtros = response;
+        console.log('Filtros obtenidos:', this.filtros);
+      } ,
+      error: (error: any) => {
+        console.error('Error al obtener los filtros:', error);
+      }
+    });
   }
 }

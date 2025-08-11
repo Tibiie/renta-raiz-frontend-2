@@ -387,7 +387,7 @@ export class FiltrosComponent implements OnInit {
       this.categoriasInmuebles = categoriasResponse.data;
       this.propertyOptions = this.categoriasInmuebles.map((cat: any) => {
         if (cat.code === '3') {
-          return { ...cat, displayName: 'Todas' };
+          return { ...cat, displayName: 'Arriendo/venta' };
         }
         return cat;
       });
@@ -1237,7 +1237,7 @@ export class FiltrosComponent implements OnInit {
 
         this.propertyOptions = response.data.map((cat: any) => {
           if (cat.code === '3') {
-            return { ...cat, displayName: 'Todas' };
+            return { ...cat, displayName: 'Arriendo/venta' };
           }
           return cat;
         });

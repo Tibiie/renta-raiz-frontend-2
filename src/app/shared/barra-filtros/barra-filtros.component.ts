@@ -442,7 +442,7 @@ export class BarraFiltrosComponent {
 
         this.propertyOptions = response.data.map((cat: any) => {
           if (cat.code === '3') {
-            return { ...cat, displayName: 'Todas' };
+            return { ...cat, displayName: 'Arriendo/Venta' };
           }
           return cat;
         });
@@ -457,7 +457,7 @@ export class BarraFiltrosComponent {
       }
     );
   }
-
+  
   getTipoPropiedad() {
     this.inmueblesService.getTipoPropiedad().subscribe(
       (response: any) => {
