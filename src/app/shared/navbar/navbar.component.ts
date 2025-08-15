@@ -125,13 +125,13 @@ export class NavbarComponent implements OnInit {
     this.filtrosInmueblesArriendo.clear();
 
     if (tipo === 'diamante') {
-      this.filtrosInmueblesArriendo.set('pcmin', 15000000);
+      this.filtrosInmueblesArriendo.set('pcmin', 15000001);
     } else if (tipo === 'oro') {
       this.filtrosInmueblesArriendo.set('pcmin', 8000000);
       this.filtrosInmueblesArriendo.set('pcmax', 15000000);
     } else if (tipo === 'plata') {
       this.filtrosInmueblesArriendo.set('pcmin', 2000000);
-      this.filtrosInmueblesArriendo.set('pcmax', 8000000);
+      this.filtrosInmueblesArriendo.set('pcmax', 7999999);
     }
 
     this.filtrosInmueblesArriendo.set('biz', '1');

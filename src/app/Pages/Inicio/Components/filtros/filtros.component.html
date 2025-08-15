@@ -738,11 +738,21 @@
               >
                 {{ inmueble.type | titlecase }}
               </span>
-              <button
-                class="text-white text-base hover:text-[#ea6666] transition-colors"
-              >
-                <i class="fas fa-heart text-xl"></i>
-              </button>
+
+                <div class="flex items-center gap-2">
+                    <ng-container *ngIf="inmueble.price > 15000001">
+                      <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
+                    </ng-container>
+                    <ng-container *ngIf="inmueble.price >= 8000000 && inmueble.price <= 15000000">
+                      <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
+                    </ng-container>
+                    <ng-container *ngIf="inmueble.price >= 2000000 && inmueble.price <= 7999999">
+                      <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
+                    </ng-container>
+                    <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                      <i class="fas fa-heart text-2xl"></i>
+                    </button>
+                </div>
             </div>
           </div>
 
