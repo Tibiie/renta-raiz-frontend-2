@@ -20,7 +20,7 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
 export class ContactanosComponent implements OnInit {
 
   cargando = false;
-  email = "direccioncomercial@rentaraiz.com";
+  email = "coordinadoracomercial@rentaraiz.com";
 
   // Injeccciones
   toastr = inject(ToastrService);
