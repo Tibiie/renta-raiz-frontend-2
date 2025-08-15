@@ -727,14 +727,14 @@
               } @if (propiedad.biz_code === 3) {
               <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
                 <span class="text-black">{{
-                  propiedad.saleprice | currency
+                  propiedad.saleprice | currency : "COP" : "symbol-narrow" : "1.0-0"
                 }}</span>
               </p>
               } @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
               <p class="text-gray-500 text-sm mb-1">Valor de arriendo en:</p>
               } @if (propiedad.biz_code === 3) {
               <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
-                <span class="text-black">{{ propiedad.rent | currency }}</span>
+                <span class="text-black">{{ propiedad.rent | currency : "COP" : "symbol-narrow" : "1.0-0" }}</span>
               </p>
               } @if (propiedad.biz_code === 1 || propiedad.biz_code === 2) {
               <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
