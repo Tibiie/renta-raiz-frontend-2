@@ -279,7 +279,7 @@ export class FiltrosComponent implements OnInit {
             }
           });
         }
-        return; 
+        return;
       }
     }
 
@@ -316,7 +316,7 @@ export class FiltrosComponent implements OnInit {
         }
       });
 
-      return; 
+      return;
     }
 
     if (state?.filtros) {
@@ -1272,7 +1272,11 @@ export class FiltrosComponent implements OnInit {
     const url = this.router
       .createUrlTree(['/ver-propiedad', codPro, 0])
       .toString();
-    this.router.navigateByUrl(url);
+    // Construir la URL absoluta con el dominio actual
+    const fullUrl = window.location.origin + url;
+
+    // Abrir en nueva pestaña
+    window.open(fullUrl, '_blank');
   }
 
   scrollToTop() {
