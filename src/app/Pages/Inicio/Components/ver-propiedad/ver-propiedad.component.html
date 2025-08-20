@@ -1,7 +1,14 @@
 <app-navbar
-  *ngIf="datosCargados && mostrarContenido"
+  *ngIf=" mostrarContenido"
   [alwaysScrolled]="true"
 ></app-navbar>
+
+
+
+<!-- navbar  -->
+<app-navbar-2 [alwaysScrolled]="true" *ngIf=" !mostrarContenido"></app-navbar-2>
+
+
 
 <div class="flex flex-col mt-28" *ngIf="datosCargados">
   <nav
@@ -10,9 +17,10 @@
   >
     <ol class="flex flex-wrap items-center gap-x-1 gap-y-2 md:space-x-3">
       <li class="inline-flex items-center">
-        <a
-          href="#"
+        <button
+         
           class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-900"
+          (click)="enviarFiltrosMigajas('biz', propiedad.biz)"
         >
           <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -20,7 +28,7 @@
             />
           </svg>
           {{ propiedad.biz | titlecase }}
-        </a>
+        </button>
       </li>
       <li>
         <div class="flex items-center">
@@ -33,12 +41,12 @@
               d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z"
             />
           </svg>
-          <a
-            href="#"
+          <button
+            (click)="enviarFiltrosMigajas('biz', propiedad.biz)"
             class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900"
           >
             {{ propiedad.type | titlecase }}
-          </a>
+          </button>
         </div>
       </li>
       <li>
@@ -52,12 +60,12 @@
               d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z"
             />
           </svg>
-          <a
-            href="#"
+          <button
+            (click)="enviarFiltrosMigajas('biz', propiedad.biz)"
             class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900"
           >
             {{ propiedad.city | titlecase }}
-          </a>
+          </button>
         </div>
       </li>
       <li>

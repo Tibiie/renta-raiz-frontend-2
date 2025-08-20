@@ -2,34 +2,18 @@
 
 <div class="flex flex-col md:flex-row">
   <div class="flex-1">
-    <div
-      *ngIf="isDrawerOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 z-[998] md:hidden"
-      (click)="toggleDrawer()"
-    ></div>
+    <div *ngIf="isDrawerOpen" class="fixed inset-0 bg-black bg-opacity-50 z-[998] md:hidden" (click)="toggleDrawer()">
+    </div>
 
-    <div
-      id="modern-drawer"
+    <div id="modern-drawer"
       class="fixed top-0 md:top-48 left-0 z-[999] h-full md:max-h-[calc(100vh-4rem)] w-full md:w-[28rem] lg:w-[28rem] bg-white shadow-xl flex flex-col transition-transform duration-300 ease-in-out overflow-y-auto pb-[env(safe-area-inset-bottom)]"
-      [class.translate-x-0]="isDrawerOpen"
-      [class.-translate-x-full]="!isDrawerOpen"
-      [attr.aria-hidden]="!isDrawerOpen"
-      style="border: 1px solid #cdad60"
-      tabindex="-1"
-      (click)="$event.stopPropagation()"
-    >
-      <div
-        class="bg-blue-100/50 rounded-t-lg p-1 flex justify-between items-center mb-1 sticky top-0 z-10"
-      >
+      [class.translate-x-0]="isDrawerOpen" [class.-translate-x-full]="!isDrawerOpen" [attr.aria-hidden]="!isDrawerOpen"
+      style="border: 1px solid #cdad60" tabindex="-1" (click)="$event.stopPropagation()">
+      <div class="bg-blue-100/50 rounded-t-lg p-1 flex justify-between items-center mb-1 sticky top-0 z-10">
         <h3 class="text-lg font-semibold text-gray-800"></h3>
-        <button
-          #closeButton
-          type="button"
-          (click)="toggleDrawer()"
-          data-drawer-hide="modern-drawer"
+        <button #closeButton type="button" (click)="toggleDrawer()" data-drawer-hide="modern-drawer"
           aria-controls="modern-drawer"
-          class="text-gray-600 hover:text-black transition-colors duration-200 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:shadow-md"
-        >
+          class="text-gray-600 hover:text-black transition-colors duration-200 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:shadow-md">
           <span class="text-xl leading-none">×</span>
         </button>
       </div>
@@ -37,215 +21,120 @@
       <form [formGroup]="formRangos">
         <div class="flex-1 overflow-y-auto max-h-[calc(100vh-20rem)]">
           <ul class="space-y-3 font-medium">
-            <li
-              class="border-b border-[#d1d5db] pb-4 mb-4"
-              *ngIf="
+            <li class="border-b border-[#d1d5db] pb-4 mb-4" *ngIf="
                 selectedProperty?.code === '3' || selectedProperty?.code === '1'
-              "
-            >
-              <a
-                class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <i
-                  class="fas fa-money-bill-wave text-xl text-[#000000] mr-3"
-                ></i>
+              ">
+              <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-money-bill-wave text-xl text-[#000000] mr-3"></i>
                 <span class="font-semibold">Rango de precios de arriendo</span>
               </a>
 
               <div class="mt-2 px-3">
                 <div class="flex gap-4">
                   <div class="flex flex-col w-44">
-                    <label
-                      for="min-price"
-                      class="text-sm font-medium text-gray-700 mb-1"
-                      >Precio mínimo</label
-                    >
-                    <input
-                      id="min-price"
-                      formControlName="precioMinimo"
-                      type="number"
-                      step="1000000"
-                      min="100000"
+                    <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
+                    <input id="min-price" formControlName="precioMinimo" type="number" step="1000000" min="100000"
                       placeholder="Desde $"
-                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                    />
+                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                   </div>
                   <div class="flex flex-col w-44">
-                    <label
-                      for="max-price"
-                      class="text-sm font-medium text-gray-700 mb-1"
-                      >Precio máximo</label
-                    >
-                    <input
-                      id="max-price"
-                      formControlName="precioMaximo"
-                      type="number"
-                      step="1000000"
-                      min="100000"
+                    <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
+                    <input id="max-price" formControlName="precioMaximo" type="number" step="1000000" min="100000"
                       placeholder="Hasta $"
-                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                    />
+                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                   </div>
                 </div>
               </div>
             </li>
 
-            <li
-              class="border-b border-[#d1d5db] pb-4 mb-4"
-              *ngIf="
+            <li class="border-b border-[#d1d5db] pb-4 mb-4" *ngIf="
                 selectedProperty?.code === '3' || selectedProperty?.code === '2'
-              "
-            >
-              <a
-                class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <i
-                  class="fas fa-money-bill-wave text-xl text-[#000000] mr-3"
-                ></i>
+              ">
+              <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-money-bill-wave text-xl text-[#000000] mr-3"></i>
                 <span class="font-semibold">Rango de Precios de venta</span>
               </a>
 
               <div class="mt-2 px-3">
                 <div class="flex gap-4">
                   <div class="flex flex-col w-44">
-                    <label
-                      for="min-price"
-                      class="text-sm font-medium text-gray-700 mb-1"
-                      >Precio mínimo</label
-                    >
-                    <input
-                      id="min-price"
-                      formControlName="precioVentaMinimo"
-                      step="1000000"
-                      min="100000"
-                      type="number"
+                    <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
+                    <input id="min-price" formControlName="precioVentaMinimo" step="1000000" min="100000" type="number"
                       placeholder="Desde $"
-                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                    />
+                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                   </div>
                   <div class="flex flex-col w-44">
-                    <label
-                      for="max-price"
-                      class="text-sm font-medium text-gray-700 mb-1"
-                      >Precio máximo</label
-                    >
-                    <input
-                      id="max-price"
-                      formControlName="precioVentaMaximo"
-                      step="1000000"
-                      min="100000"
-                      type="number"
+                    <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
+                    <input id="max-price" formControlName="precioVentaMaximo" step="1000000" min="100000" type="number"
                       placeholder="Hasta $"
-                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                    />
+                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
                   </div>
                 </div>
               </div>
             </li>
 
-            <li
-              class="border-b border-[#d1d5db] pb-4 mb-4"
-              *ngIf="
+            <li class="border-b border-[#d1d5db] pb-4 mb-4" *ngIf="
                 selectedProperty?.code === '1' || selectedProperty?.code === '3'
-              "
-            >
-              <a
-                class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-              >
+              ">
+              <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-dollar-sign text-xl text-[#000000] mr-3"></i>
-                <span class="font-semibold"
-                  >Rangos de precios predefinidos</span
-                >
+                <span class="font-semibold">Rangos de precios predefinidos</span>
               </a>
 
               <div class="mt-2">
                 <div class="flex flex-wrap gap-2">
-                  <button
-                    *ngFor="let range of priceRangesArriendos"
-                    (click)="selectPriceRange(range, 'arriendo')"
+                  <button *ngFor="let range of priceRangesArriendos" (click)="selectPriceRange(range, 'arriendo')"
                     [class]="
                       getButtonClass(selectedPriceRange?.min === range.min)
-                    "
-                  >
+                    ">
                     {{ range.displayName }}
-                    <span
-                      *ngIf="selectedPriceRange?.min === range.min"
-                      class="ml-1"
-                      >✔</span
-                    >
+                    <span *ngIf="selectedPriceRange?.min === range.min" class="ml-1">✔</span>
                   </button>
                 </div>
               </div>
             </li>
 
-            <li
-              class="border-b border-[#d1d5db] pb-4 mb-4"
-              *ngIf="selectedProperty?.code === '2'"
-            >
-              <a
-                class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-              >
+            <li class="border-b border-[#d1d5db] pb-4 mb-4" *ngIf="selectedProperty?.code === '2'">
+              <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-dollar-sign text-xl text-[#000000] mr-3"></i>
-                <span class="font-semibold"
-                  >Rangos de precios predefinidos de venta</span
-                >
+                <span class="font-semibold">Rangos de precios predefinidos de venta</span>
               </a>
 
               <div class="mt-2">
                 <div class="flex flex-wrap gap-2">
-                  <button
-                    *ngFor="let range of priceRangesVentas"
-                    (click)="selectPriceRange(range, 'venta')"
-                    [class]="
+                  <button *ngFor="let range of priceRangesVentas" (click)="selectPriceRange(range, 'venta')" [class]="
                       getButtonClass(
                         selectedPriceRangeVentas?.min === range.min
                       )
-                    "
-                  >
+                    ">
                     {{ range.displayName }}
-                    <span
-                      *ngIf="selectedPriceRangeVentas?.min === range.min"
-                      class="ml-1"
-                      >✔</span
-                    >
+                    <span *ngIf="selectedPriceRangeVentas?.min === range.min" class="ml-1">✔</span>
                   </button>
                 </div>
               </div>
             </li>
 
             <li class="border-b border-[#d1d5db] pb-4 mb-4">
-              <a
-                class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-              >
+              <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-tags text-xl text-[#000000] mr-3"></i>
                 <span class="font-semibold">Categoría</span>
               </a>
 
               <div class="mt-2">
                 <div class="flex flex-wrap gap-2">
-                  <button
-                    *ngFor="let option of propertyOptions"
-                    (click)="selectOption('property', option)"
-                    [class]="
+                  <button *ngFor="let option of propertyOptions" (click)="selectOption('property', option)" [class]="
                       getButtonClass(selectedProperty?.code === option.code)
-                    "
-                  >
+                    ">
                     <i [class]="getIcon('property', option)" class="mr-2"></i>
                     {{ option.displayName || option.name | titlecase }}
-                    <span
-                      *ngIf="selectedProperty?.code === option.code"
-                      class="ml-1"
-                      >✔</span
-                    >
+                    <span *ngIf="selectedProperty?.code === option.code" class="ml-1">✔</span>
                   </button>
                 </div>
               </div>
             </li>
 
             <li class="border-b border-[#d1d5db] pb-4 mb-4">
-              <a
-                class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-              >
+              <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-home text-xl text-[#000000] mr-3"></i>
                 <span class="font-semibold">Tipo de inmueble</span>
               </a>
@@ -256,11 +145,8 @@
                 </p>
 
                 <div class="flex flex-wrap gap-2">
-                  <button
-                    *ngFor="let option of estateOptions"
-                    (click)="selectOption('estate', option)"
-                    [class]="getButtonClass(isEstateSelected(option))"
-                  >
+                  <button *ngFor="let option of estateOptions" (click)="selectOption('estate', option)"
+                    [class]="getButtonClass(isEstateSelected(option))">
                     <i [class]="getIcon('estate', option)" class="mr-2"></i>
                     {{ option.name || option.name | titlecase }}
                     <span *ngIf="isEstateSelected(option)" class="ml-1">✔</span>
@@ -270,48 +156,24 @@
             </li>
 
             <li class="border-b border-[#d1d5db] pb-4 mb-4">
-              <a
-                class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <i
-                  class="fas fa-ruler-combined text-xl text-[#000000] mr-3"
-                ></i>
+              <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-ruler-combined text-xl text-[#000000] mr-3"></i>
                 <span>Área</span>
               </a>
 
               <div class="mt-2 px-3">
                 <div class="flex gap-4">
                   <div class="flex flex-col w-44">
-                    <label
-                      for="min-price"
-                      class="text-sm font-medium text-gray-700 mb-1"
-                      >Mínima</label
-                    >
-                    <input
-                      id="min-price"
-                      type="number"
-                      placeholder="Ej. 60 m2"
-                      min="10"
+                    <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Mínima</label>
+                    <input id="min-price" type="number" placeholder="Ej. 60 m2" min="10"
                       class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                      id="AreaMinima"
-                      formControlName="AreaMinima"
-                    />
+                      id="AreaMinima" formControlName="AreaMinima" />
                   </div>
                   <div class="flex flex-col w-44">
-                    <label
-                      for="max-price"
-                      class="text-sm font-medium text-gray-700 mb-1"
-                      >Máxima</label
-                    >
-                    <input
-                      id="max-price"
-                      type="number"
-                      placeholder="Ej. 120 m2"
-                      min="10"
+                    <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Máxima</label>
+                    <input id="max-price" type="number" placeholder="Ej. 120 m2" min="10"
                       class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-                      id="AreaMaxima"
-                      formControlName="AreaMaxima"
-                    />
+                      id="AreaMaxima" formControlName="AreaMaxima" />
                   </div>
                 </div>
               </div>
@@ -320,29 +182,20 @@
             <li class="border-b border-[#d1d5db] pb-4 mb-4">
               <div class="p-3">
                 <div class="flex items-center mb-4">
-                  <i
-                    class="fas fa-clipboard-list text-xl text-[#000000] mr-3"
-                  ></i>
-                  <span class="font-semibold text-lg"
-                    >Detalles del proyecto</span
-                  >
+                  <i class="fas fa-clipboard-list text-xl text-[#000000] mr-3"></i>
+                  <span class="font-semibold text-lg">Detalles del proyecto</span>
                 </div>
 
                 <div class="space-y-4">
                   <div>
                     <p class="text-gray-700 font-medium mb-2">Habitaciones</p>
                     <div class="flex gap-2 flex-wrap">
-                      <button
-                        *ngFor="let hab of habitaciones"
-                        (click)="seleccionar('habitaciones', hab)"
-                        [ngClass]="{
+                      <button *ngFor="let hab of habitaciones" (click)="seleccionar('habitaciones', hab)" [ngClass]="{
                           'bg-gray-700 text-white font-semibold':
                             seleccion.habitaciones.includes(hab),
                           'bg-blue-100 text-blue-700':
                             !seleccion.habitaciones.includes(hab)
-                        }"
-                        class="w-8 h-8 rounded-md"
-                      >
+                        }" class="w-8 h-8 rounded-md">
                         {{ hab }}
                       </button>
                     </div>
@@ -352,17 +205,12 @@
                   <div>
                     <p class="text-gray-700 font-medium mb-2">Baños</p>
                     <div class="flex gap-2 flex-wrap">
-                      <button
-                        *ngFor="let bano of banos"
-                        (click)="seleccionar('banos', bano)"
-                        [ngClass]="{
+                      <button *ngFor="let bano of banos" (click)="seleccionar('banos', bano)" [ngClass]="{
                           'bg-gray-700 text-white font-semibold':
                             seleccion.banos.includes(bano),
                           'bg-blue-100 text-blue-700':
                             !seleccion.banos.includes(bano)
-                        }"
-                        class="w-8 h-8 rounded-md"
-                      >
+                        }" class="w-8 h-8 rounded-md">
                         {{ bano }}
                       </button>
                     </div>
@@ -372,17 +220,12 @@
                   <div>
                     <p class="text-gray-700 font-medium mb-2">Parqueadero</p>
                     <div class="flex gap-2 flex-wrap">
-                      <button
-                        *ngFor="let p of parqueadero"
-                        (click)="seleccionar('parqueadero', p)"
-                        [ngClass]="{
+                      <button *ngFor="let p of parqueadero" (click)="seleccionar('parqueadero', p)" [ngClass]="{
                           'bg-gray-700 text-white font-semibold':
                             seleccion.parqueadero.includes(p),
                           'bg-blue-100 text-blue-700':
                             !seleccion.parqueadero.includes(p)
-                        }"
-                        class="w-8 h-8 rounded-md"
-                      >
+                        }" class="w-8 h-8 rounded-md">
                         {{ p }}
                       </button>
                     </div>
@@ -392,17 +235,12 @@
                   <div>
                     <p class="text-gray-700 font-medium mb-2">Estrato</p>
                     <div class="flex gap-2 flex-wrap">
-                      <button
-                        *ngFor="let e of estrato"
-                        (click)="seleccionar('estrato', e)"
-                        [ngClass]="{
+                      <button *ngFor="let e of estrato" (click)="seleccionar('estrato', e)" [ngClass]="{
                           'bg-gray-700 text-white font-semibold':
                             seleccion.estrato.includes(e),
                           'bg-blue-100 text-blue-700':
                             !seleccion.estrato.includes(e)
-                        }"
-                        class="w-8 h-8 rounded-md"
-                      >
+                        }" class="w-8 h-8 rounded-md">
                         {{ e }}
                       </button>
                     </div>
@@ -415,49 +253,26 @@
       </form>
 
       <!-- ESCRITORIO -->
-      <div
-        class="hidden md:block sticky bg-white pt-2 mt-4 z-10 border-t border-gray-200 md:pb-4 pb-16"
-      >
+      <div class="hidden md:block sticky bg-white pt-2 mt-4 z-10 border-t border-gray-200 md:pb-4 pb-16">
         <div class="flex justify-between gap-4 px-4">
-          <button
-            (click)="borrarFiltros()"
-            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200"
-          >
+          <button (click)="borrarFiltros()"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200">
             Borrar filtros
           </button>
-          <button
-            [disabled]="cargando"
-            (click)="enviarFiltros(1)"
-            class="flex-1 text-white font-semibold py-2 px-4 rounded-xl transition duration-200"
-            [ngClass]="{
+          <button [disabled]="cargando" (click)="enviarFiltros(1)"
+            class="flex-1 text-white font-semibold py-2 px-4 rounded-xl transition duration-200" [ngClass]="{
               'bg-[#CDAD60] hover:bg-[#b59a50]': !cargando,
               'bg-gray-400 cursor-not-allowed': cargando
-            }"
-          >
+            }">
             <ng-container *ngIf="!cargando; else loadingFiltros">
               Aplicar filtros
             </ng-container>
             <ng-template #loadingFiltros>
               <div class="flex items-center justify-center">
-                <svg
-                  class="animate-spin h-5 w-5 text-white mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                  ></circle>
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
+                <svg class="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                 </svg>
                 Cargando...
               </div>
@@ -467,49 +282,26 @@
       </div>
 
       <!-- MOVIL -->
-      <div
-        class="block md:hidden bg-white pt-2 mt-4 z-10 border-t border-gray-200 md:pb-4 pb-20"
-      >
+      <div class="block md:hidden bg-white pt-2 mt-4 z-10 border-t border-gray-200 md:pb-4 pb-20">
         <div class="flex justify-between gap-4 px-4">
-          <button
-            (click)="borrarFiltros()"
-            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200"
-          >
+          <button (click)="borrarFiltros()"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-xl transition duration-200">
             Borrar filtros
           </button>
-          <button
-            [disabled]="cargando"
-            (click)="enviarFiltros(1)"
-            class="flex-1 text-white font-semibold py-2 px-4 rounded-xl transition duration-200"
-            [ngClass]="{
+          <button [disabled]="cargando" (click)="enviarFiltros(1)"
+            class="flex-1 text-white font-semibold py-2 px-4 rounded-xl transition duration-200" [ngClass]="{
               'bg-[#CDAD60] hover:bg-[#b59a50]': !cargando,
               'bg-gray-400 cursor-not-allowed': cargando
-            }"
-          >
+            }">
             <ng-container *ngIf="!cargando; else loadingFiltros">
               Aplicar filtros
             </ng-container>
             <ng-template #loadingFiltros>
               <div class="flex items-center justify-center">
-                <svg
-                  class="animate-spin h-5 w-5 text-white mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                  ></circle>
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
+                <svg class="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                 </svg>
                 Cargando...
               </div>
@@ -520,83 +312,42 @@
     </div>
   </div>
 
-  <div
-    class="w-full mt-12 mb-6 transition-all duration-300 ease-in-out px-4 md:px-0 md:mt-32"
-    [ngClass]="{
+  <div class="w-full mt-12 mb-6 transition-all duration-300 ease-in-out px-4 md:px-0 md:mt-32" [ngClass]="{
       'md:ml-[28rem] md:px-6': isDrawerOpen,
       'md:ml-0 md:px-32': !isDrawerOpen
-    }"
-  >
+    }">
     <div
-      class="sticky-element transform-gpu will-change-transform bg-white shadow-sm sticky md:top-[72px] top-[48px] mt-1 z-40 mb-4 md:p-4 px-4 py-1 rounded-md transition-all duration-200"
-    >
+      class="sticky-element transform-gpu will-change-transform bg-white shadow-sm sticky md:top-[72px] top-[48px] mt-1 z-40 mb-4 md:p-4 px-4 py-1 rounded-md transition-all duration-200">
       <!-- Barra de búsqueda y filtros -->
-      <div
-        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 mt-8 sm:mt-0"
-      >
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 mt-8 sm:mt-0">
         <!-- Barra de búsqueda -->
         <div class="relative flex-1 w-full max-w-2xl">
-          <input
-            type="text"
-            id="ubicacion"
-            [(ngModel)]="ubicacion"
-            [(ngModel)]="searchTerm"
-            (input)="filterLocations()"
+          <input type="text" id="ubicacion" [(ngModel)]="ubicacion" [(ngModel)]="searchTerm" (input)="filterLocations()"
             placeholder="Ciudad, barrio, sector o sitio..."
-            class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-          />
+            class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
 
           <div class="absolute left-3 top-2.5 text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
 
-          <button
-            *ngIf="searchTerm"
-            type="button"
-            (click)="clearSearch()"
-            class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
+          <button *ngIf="searchTerm" type="button" (click)="clearSearch()"
+            class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
-          <div
-            *ngIf="filteredBarrios.length > 0"
-            id="modern-drawer"
-            class="absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto"
-          >
+          <div *ngIf="filteredBarrios.length > 0" id="modern-drawer"
+            class="absolute z-10 w-[250px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto">
             <!-- Ciudades -->
             <div *ngFor="let item of filteredBarrios">
-              <div
-                *ngIf="item.isCity"
-                (click)="selectLocation(item)"
-                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer border-b"
-              >
+              <div *ngIf="item.isCity" (click)="selectLocation(item)"
+                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer border-b">
                 <i class="fas fa-city text-gray-500 mt-1 mr-2"></i>
                 <div>
                   <p class="font-medium">
@@ -610,11 +361,8 @@
 
             <!-- Barrios -->
             <div *ngFor="let item of filteredBarrios">
-              <div
-                *ngIf="!item.isCity"
-                (click)="selectLocation(item)"
-                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer"
-              >
+              <div *ngIf="!item.isCity" (click)="selectLocation(item)"
+                class="flex items-start px-4 py-2 hover:bg-gray-100 cursor-pointer">
                 <i class="fas fa-map-marker-alt text-gray-500 mt-1 mr-2"></i>
                 <div>
                   <p class="font-medium">{{ item.city_name }}</p>
@@ -627,55 +375,35 @@
 
         <!-- Botón de Filtros -->
         <div class="flex-shrink-0">
-          <button
-            type="button"
-            (click)="toggleDrawer()"
-            [attr.data-drawer-target]="'modern-drawer'"
+          <button type="button" (click)="toggleDrawer()" [attr.data-drawer-target]="'modern-drawer'"
             [attr.data-drawer-show]="!isDrawerOpen ? 'modern-drawer' : null"
-            [attr.data-drawer-hide]="isDrawerOpen ? 'modern-drawer' : null"
-            data-drawer-backdrop="false"
+            [attr.data-drawer-hide]="isDrawerOpen ? 'modern-drawer' : null" data-drawer-backdrop="false"
             data-drawer-body-scrolling="true"
-            class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-300 shadow-lg"
-          >
+            class="text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:outline-none focus:ring-2 focus:ring-[#CDAD60]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-300 shadow-lg">
             <i class="fas fa-filter"></i> Filtros
           </button>
         </div>
 
         <!-- Contador de resultados -->
-        <div
-          class="text-gray-600 text-lg font-bold"
-          [class.hidden]="isSticky"
-          [class.sm:flex]="true"
-        >
+        <div class="text-gray-600 text-lg font-bold" [class.hidden]="isSticky" [class.sm:flex]="true">
           {{ totalDatos }} resultados
         </div>
       </div>
 
       <!-- Sección de título inmuebles encontrados -->
-      <div
-        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
-        [class.hidden]="isSticky"
-        [class.sm:flex]="true"
-      >
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4" [class.hidden]="isSticky"
+        [class.sm:flex]="true">
         <h2 class="text-xl font-bold text-gray-800">Inmuebles Encontrados</h2>
 
-        <div
-          class="w-full md:w-auto flex flex-col sm:flex-row flex-wrap gap-3 mb-6 md:mb-0"
-        >
-          <!-- Selector de orden -->
+        <div class="w-full md:w-auto flex flex-col sm:flex-row flex-wrap gap-3 mb-6 md:mb-0">
           <form [formGroup]="formFiltrosSelect" class="w-full sm:w-auto">
-            <select
-              formControlName="opcion"
-              (change)="enviarFiltrosSelect()"
-              class="w-full sm:w-auto px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
-            >
-              <form [formGroup]="formFiltrosSelect">
-                <option disabled selected value="">Ordenar por</option>
-                <option value="order-mayor">Menor precio</option>
-                <option value="order-menor">Mayor precio</option>
-                <option value="sort-des">Más recientes</option>
-                <option value="sort-asc">Menos recientes</option>
-              </form>
+            <select formControlName="opcion" (change)="enviarFiltrosSelect()"
+              class="w-full sm:w-auto px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#CDAD60]">
+              <option disabled selected value="">Ordenar por</option>
+              <option value="order-mayor">Menor precio</option>
+              <option value="order-menor">Mayor precio</option>
+              <option value="sort-des">Más recientes</option>
+              <option value="sort-asc">Menos recientes</option>
             </select>
           </form>
         </div>
@@ -684,93 +412,68 @@
 
     <div class="relative w-full">
       <!-- Overlay de carga -->
-      <div
-        *ngIf="loadingResultados"
-        class="absolute inset-0 bg-white bg-opacity-70 z-40 flex items-center justify-center"
-      >
+      <div *ngIf="loadingResultados"
+        class="absolute inset-0 bg-white bg-opacity-70 z-40 flex items-center justify-center">
         <div class="flex flex-col items-center">
-          <div
-            class="w-10 h-10 border-4 border-[#CDAD60] border-t-transparent rounded-full animate-spin"
-          ></div>
+          <div class="w-10 h-10 border-4 border-[#CDAD60] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
 
       <!-- Contenido de resultados -->
-      <div
-        *ngIf="resultados.length > 0"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10 relative z-0"
-      >
-        <div
-          *ngFor="let inmueble of resultados"
-          class="z-10 relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-4 text-sm w-full mx-auto"
-        >
+      <div *ngIf="resultados.length > 0"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10 relative z-0">
+        <div *ngFor="let inmueble of resultados"
+          class="z-10 relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-4 text-sm w-full mx-auto">
           <div class="relative group">
             <a href="#">
-              <img
-                class="rounded-t-lg w-full h-44 object-cover"
-                [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-                [alt]="inmueble.address"
-              />
+              <img class="rounded-t-lg w-full h-44 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+                [alt]="inmueble.address" />
             </a>
 
             <div
-              class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10"
-            >
-              <a
-                (click)="verPropiedad(inmueble.codpro)"
-                class="cursor-pointer bg-white text-[#080E36] px-4 py-1 font-medium rounded shadow hover:bg-[#CDAD60] hover:text-white text-xs"
-              >
+              class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+              <a (click)="verPropiedad(inmueble.codpro)"
+                class="cursor-pointer bg-white text-[#080E36] px-4 py-1 font-medium rounded shadow hover:bg-[#CDAD60] hover:text-white text-xs">
                 Ver propiedad
               </a>
             </div>
 
             <div
-              class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]"
-            >
+              class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]">
               {{ inmueble.biz | titlecase }}
             </div>
 
-            <div
-              class="absolute bottom-1 left-1 right-1 flex justify-between items-center px-2 z-20"
-            >
-              <span
-                class="bg-[#CDAD60] text-white text-xs font-medium px-2 py-0.5 rounded shadow"
-              >
+            <div class="absolute bottom-1 left-1 right-1 flex justify-between items-center px-2 z-20">
+              <span class="bg-[#CDAD60] text-white text-xs font-medium px-2 py-0.5 rounded shadow">
                 {{ inmueble.type | titlecase }}
               </span>
 
-                <div class="flex items-center gap-2">
-                    <ng-container *ngIf="inmueble.price > 15000001">
-                      <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
-                    </ng-container>
-                    <ng-container *ngIf="inmueble.price >= 8000000 && inmueble.price <= 15000000">
-                      <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
-                    </ng-container>
-                    <ng-container *ngIf="inmueble.price >= 2000000 && inmueble.price <= 7999999">
-                      <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
-                    </ng-container>
-                    <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                      <i class="fas fa-heart text-2xl"></i>
-                    </button>
-                </div>
+              <div class="flex items-center gap-2">
+                <ng-container *ngIf="inmueble.price > 15000001">
+                  <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
+                </ng-container>
+                <ng-container *ngIf="inmueble.price >= 8000000 && inmueble.price <= 15000000">
+                  <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
+                </ng-container>
+                <ng-container *ngIf="inmueble.price >= 2000000 && inmueble.price <= 7999999">
+                  <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
+                </ng-container>
+                <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                  <i class="fas fa-heart text-2xl"></i>
+                </button>
+              </div>
             </div>
           </div>
 
           <div class="p-3">
             <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
-              <h5
-                class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug"
-              >
+              <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug">
                 {{
-                  inmueble.neighborhood || "Sin barrio especificado" | titlecase
+                inmueble.neighborhood || "Sin barrio especificado" | titlecase
                 }}
-                <span class="text-[#080E36] text-sm font-semibold"
-                  >(Barrio)</span
-                >
+                <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
               </h5>
-              <p
-                class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs"
-              >
+              <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
                 {{ inmueble.description }}
               </p>
             </a>
@@ -805,10 +508,10 @@
               <span>Precio:</span>
               <span class="text-[#000000] mt-1 text-base font-semibold">
                 {{
-                  inmueble.price_format ||
-                    (inmueble.price
-                      | currency : "COP" : "symbol-narrow" : "1.0-0") ||
-                    "Consultar"
+                inmueble.price_format ||
+                (inmueble.price
+                | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                "Consultar"
                 }}
               </span>
             </div>
@@ -817,10 +520,7 @@
       </div>
     </div>
 
-    <div
-      *ngIf="resultados.length === 0"
-      class="text-center py-20 mt-60 mb-60 text-gray-500"
-    >
+    <div *ngIf="resultados.length === 0" class="text-center py-20 mt-60 mb-60 text-gray-500">
       No se encontraron inmuebles con los filtros seleccionados.
     </div>
 
@@ -829,55 +529,40 @@
       <nav aria-label="Page navigation">
         <ul class="inline-flex items-center -space-x-px text-sm">
           <li>
-            <button
-              (click)="paginaAnterior()"
-              [disabled]="paginaActual === 1"
-              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
-            >
+            <button (click)="paginaAnterior()" [disabled]="paginaActual === 1"
+              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
               Anterior
             </button>
           </li>
 
           <li *ngIf="bloqueActual > 0">
-            <button
-              (click)="irAlBloqueAnterior()"
-              [disabled]="bloqueActual === 0"
-              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
-            >
+            <button (click)="irAlBloqueAnterior()" [disabled]="bloqueActual === 0"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
               ...
             </button>
           </li>
 
           <li *ngFor="let pagina of paginas" class="mx-0.5">
             <ng-container *ngIf="pagina === '...'; else paginaBtn">
-              <button
-                (click)="cambiarPagina(pagina)"
-                class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded"
-              >
+              <button (click)="cambiarPagina(pagina)"
+                class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded">
                 ...
               </button>
             </ng-container>
             <ng-template #paginaBtn>
-              <button
-                (click)="cambiarPagina(+pagina)"
-                [ngClass]="
+              <button (click)="cambiarPagina(pagina)" [ngClass]="
                   pagina === paginaActual
                     ? 'text-white bg-[#CDAD60]'
                     : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
-                "
-                class="px-3 py-2 leading-tight border border-gray-300 rounded"
-              >
+                " class="px-3 py-2 leading-tight border border-gray-300 rounded">
                 {{ pagina }}
               </button>
             </ng-template>
           </li>
 
           <li>
-            <button
-              (click)="paginaSiguiente()"
-              [disabled]="paginaActual === totalPaginas"
-              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
-            >
+            <button (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
               Siguiente
             </button>
           </li>
@@ -887,24 +572,12 @@
   </div>
 
   <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
-    <button
-      (click)="scrollToTop()"
+    <button (click)="scrollToTop()"
       class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:bg-[#CDAD60] transition-all duration-300 bg-[#080E36] flex items-center justify-center"
-      aria-label="Volver arriba"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 text-white"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M5 15l7-7 7 7"
-        />
+      aria-label="Volver arriba">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
       </svg>
     </button>
   </div>

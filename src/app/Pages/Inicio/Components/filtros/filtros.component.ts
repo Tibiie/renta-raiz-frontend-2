@@ -271,13 +271,16 @@ export class FiltrosComponent implements OnInit {
               this.cargarDesdeState(window.history.state);
             }
           });
+          
         } else {
           this.cargarDesdeState(state);
           this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
+              
               this.cargarDesdeState(window.history.state);
             }
           });
+          
         }
         return;
       }
@@ -430,7 +433,7 @@ export class FiltrosComponent implements OnInit {
 
   generarPaginas() {
     this.paginas = [];
-    const paginasPorBloque = 3;
+    const paginasPorBloque = 2;
     const inicio = this.bloqueActual * paginasPorBloque + 1;
     const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
 
@@ -492,19 +495,26 @@ export class FiltrosComponent implements OnInit {
       return;
     }
 
-    if (typeof pagina === 'number' && pagina !== this.paginaActual) {
+    if (typeof pagina === 'number' ) {
+      
       const nuevoBloque = Math.floor((pagina - 1) / 3);
       if (nuevoBloque !== this.bloqueActual) {
+        
         this.bloqueActual = nuevoBloque;
         this.generarPaginas();
       }
 
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
+      console.log(state)
+      
 
       if (Object.keys(queryParams).length >= 1) {
+        
         this.obtenerParametrosFiltros(pagina, queryParams, state);
+        
       } else {
+        
         this.enviarFiltros(pagina);
       }
     }

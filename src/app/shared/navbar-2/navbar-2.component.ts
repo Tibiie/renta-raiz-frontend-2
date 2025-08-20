@@ -13,13 +13,13 @@ import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 import { UrlParamService } from '../../core/configs/url-param.service';
 
 @Component({
-  selector: 'app-navbar',
+  selector: 'app-navbar-2',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss',
+  templateUrl: './navbar-2.component.html',
+  styleUrl: './navbar-2.component.scss',
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent2 implements OnInit {
   @ViewChild('nosotrosDropdown') nosotrosDropdownRef: ElementRef | undefined;
   @ViewChild('arriendosDropdown') arriendosDropdownRef: ElementRef | undefined;
   @ViewChild('clientesDropdown') clientesDropdownRef: ElementRef | undefined;

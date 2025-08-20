@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
+import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,7 +32,8 @@ import { VolverComponent } from '../../../../shared/volver/volver.component';
     FooterComponent,
     BotonesFlotantesComponent,
     VolverComponent,
-  ],
+    NavbarComponent2
+],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
 })
@@ -337,5 +339,36 @@ export class VerPropiedadComponent implements OnInit {
       .then(() => {
         window.scrollTo(0, 0);
       });
+  }
+
+  enviarFiltrosMigajas(tipo: string, value: string) {
+
+
+   
+
+     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+     const obj = {
+      ...filtrosObj,
+      sort: 'desc',
+      order: 'consignation_date',
+      page: 1,
+    };
+
+     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+      (response: any) => {
+        this.router.navigate(['/filtros'], {
+          state: {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+        });
+ 
+      },
+      (error: any) => {
+        console.error('Error al enviar los filtros:', error);
+      }
+    );
+
   }
 }
