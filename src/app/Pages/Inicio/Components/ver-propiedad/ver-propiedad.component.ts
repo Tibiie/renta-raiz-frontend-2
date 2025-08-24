@@ -32,8 +32,8 @@ import { VolverComponent } from '../../../../shared/volver/volver.component';
     FooterComponent,
     BotonesFlotantesComponent,
     VolverComponent,
-    NavbarComponent2
-],
+    NavbarComponent2,
+  ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
 })
@@ -44,7 +44,7 @@ export class VerPropiedadComponent implements OnInit {
   codPro?: number;
   selectedIndex = 0;
   propiedad: any = {};
-  elementsPerPage = 3;
+  elementsPerPage = 12;
   thumbnailsPerPage = 3;
   resultadosFiltros: any[] = [];
   selectedImageUrl: string | null = null;
@@ -76,7 +76,7 @@ export class VerPropiedadComponent implements OnInit {
       this.codPro = Number(params.get('codpro'));
       const ocultar = Number(params.get('ocultarContenido')) === 1;
 
-      this.mostrarContenido = !ocultar;  
+      this.mostrarContenido = !ocultar;
 
       this.getDatos();
     });
@@ -224,54 +224,14 @@ export class VerPropiedadComponent implements OnInit {
 
         this.prepararFiltros();
         this.enviarFiltros();
+
+        console.log(this.propiedad);
       },
       (error: any) => {
         console.error('Error al obtener la propiedad:', error);
         this.datosCargados = true;
       }
     );
-  }
-
-
-  selectImage(index: number) {
-    this.selectedIndex = index;
-  }
-  prevImage() {
-    if (this.selectedIndex === 0) {
-      this.selectedIndex = this.propiedad.images.length - 1;
-    } else {
-      this.selectedIndex--;
-    }
-  }
-
-  nextImage() {
-    if (this.selectedIndex === this.propiedad.images.length - 1) {
-      this.selectedIndex = 0;
-    } else {
-      this.selectedIndex++;
-    }
-  }
-
-  get visibleThumbnails() {
-    return (
-      this.propiedad?.images?.slice(
-        this.visibleThumbnailsStart,
-        this.visibleThumbnailsStart + this.thumbnailsPerPage
-      ) || []
-    );
-  }
-
-  prevThumbs() {
-    if (this.visibleThumbnailsStart > 0) {
-      this.visibleThumbnailsStart -= this.thumbnailsPerPage;
-    }
-  }
-
-  nextThumbs() {
-    const maxStart = this.propiedad.images.length - this.thumbnailsPerPage;
-    if (this.visibleThumbnailsStart < maxStart) {
-      this.visibleThumbnailsStart += this.thumbnailsPerPage;
-    }
   }
 
   openModalCrearContacto(
@@ -334,27 +294,33 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    this.router
-      .navigate(['/ver-propiedad', codPro, 0])
-      .then(() => {
-        window.scrollTo(0, 0);
-      });
+    this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
+      window.scrollTo(0, 0);
+    });
   }
 
   enviarFiltrosMigajas(tipo: string, value: string) {
+    // Limpiar los filtros seleccionados
+    this.filtrosSeleccionados = new Map(); // Vaciar los filtros anteriores
 
+    // Convertir el valor a string si es necesario
+    this.filtrosSeleccionados.set(tipo, String(value)); // Forzar que el valor sea un string
 
-   
+    // Convertir el Map a un objeto
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
-     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-     const obj = {
+    // Crear el objeto para la solicitud
+    const obj = {
       ...filtrosObj,
       sort: 'desc',
       order: 'consignation_date',
       page: 1,
     };
 
-     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+    console.log(obj);
+
+    // Enviar la solicitud al servicio
+    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         this.router.navigate(['/filtros'], {
           state: {
@@ -363,12 +329,52 @@ export class VerPropiedadComponent implements OnInit {
             filtros: obj,
           },
         });
- 
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
       }
     );
+  }
 
+  selectImage(index: number) {
+    this.selectedIndex = index;
+  }
+
+  prevImage() {
+    if (this.selectedIndex === 0) {
+      this.selectedIndex = this.propiedad.images.length - 1;
+    } else {
+      this.selectedIndex--;
+    }
+  }
+
+  nextImage() {
+    if (this.selectedIndex === this.propiedad.images.length - 1) {
+      this.selectedIndex = 0;
+    } else {
+      this.selectedIndex++;
+    }
+  }
+
+  get visibleThumbnails() {
+    return (
+      this.propiedad?.images?.slice(
+        this.visibleThumbnailsStart,
+        this.visibleThumbnailsStart + this.thumbnailsPerPage
+      ) || []
+    );
+  }
+
+  prevThumbs() {
+    if (this.visibleThumbnailsStart > 0) {
+      this.visibleThumbnailsStart -= this.thumbnailsPerPage;
+    }
+  }
+
+  nextThumbs() {
+    const maxStart = this.propiedad.images.length - this.thumbnailsPerPage;
+    if (this.visibleThumbnailsStart < maxStart) {
+      this.visibleThumbnailsStart += this.thumbnailsPerPage;
+    }
   }
 }

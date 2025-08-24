@@ -89,7 +89,6 @@ export class FiltrosComponent implements OnInit {
   ];
 
   priceRangesVentas = [
-    // { min: 20000000, max: 100000000, displayName: '20.000.000 - 100.000.000' },
     {
       min: 100000000,
       max: 500000000,
@@ -777,6 +776,7 @@ export class FiltrosComponent implements OnInit {
       this.paginaActual = this.filtrosVistaInicial.page || 1;
 
       this.inmueblesService.setPropiedades(this.resultados);
+      console.log(this.resultados);
 
       await this.getCiudades();
 
@@ -836,6 +836,8 @@ export class FiltrosComponent implements OnInit {
           this.generarPaginas();
           this.cargando = false;
           console.log(this.isDrawerOpen);
+          console.log(response);
+          
         },
         error: (error: any) => {
           console.error('Error al obtener los inmuebles:', error);
@@ -1078,6 +1080,7 @@ export class FiltrosComponent implements OnInit {
     }
     this.cdRef.detectChanges();
   }
+
   seleccionar(categoria: keyof typeof this.seleccion, valor: number | string) {
     const arr = this.seleccion[categoria] as (number | string)[];
     const index = arr.indexOf(valor);

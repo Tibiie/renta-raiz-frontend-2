@@ -18,9 +18,8 @@
     <ol class="flex flex-wrap items-center gap-x-1 gap-y-2 md:space-x-3">
       <li class="inline-flex items-center">
         <button
-         
           class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-900"
-          (click)="enviarFiltrosMigajas('biz', propiedad.biz)"
+          (click)="enviarFiltrosMigajas('biz', propiedad.biz_code)"
         >
           <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -42,7 +41,7 @@
             />
           </svg>
           <button
-            (click)="enviarFiltrosMigajas('biz', propiedad.biz)"
+            (click)="enviarFiltrosMigajas('type', propiedad.type_code)"
             class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900"
           >
             {{ propiedad.type | titlecase }}
@@ -61,7 +60,7 @@
             />
           </svg>
           <button
-            (click)="enviarFiltrosMigajas('biz', propiedad.biz)"
+            (click)="enviarFiltrosMigajas('city', propiedad.city_code)"
             class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900"
           >
             {{ propiedad.city | titlecase }}
