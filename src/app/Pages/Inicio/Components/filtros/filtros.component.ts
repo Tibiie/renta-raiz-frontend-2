@@ -481,6 +481,8 @@ export class FiltrosComponent implements OnInit {
   }
 
   cambiarPagina(pagina: number | string) {
+    console.log(pagina);
+    
     if (pagina === '...') {
       const primerElemento = this.paginas[0];
       if (
@@ -495,6 +497,9 @@ export class FiltrosComponent implements OnInit {
     }
 
     if (typeof pagina === 'number' ) {
+
+      console.log(typeof pagina);
+      
       
       const nuevoBloque = Math.floor((pagina - 1) / 3);
       if (nuevoBloque !== this.bloqueActual) {
@@ -507,12 +512,14 @@ export class FiltrosComponent implements OnInit {
       const state = window.history.state;
       console.log(state)
       
-
-      if (Object.keys(queryParams).length >= 1) {
+      console.log();
+      
+      if (Object.keys(queryParams).length >= 1 && !queryParams['tipo']) {
         
         this.obtenerParametrosFiltros(pagina, queryParams, state);
         
       } else {
+        console.log('no hay params');
         
         this.enviarFiltros(pagina);
       }
