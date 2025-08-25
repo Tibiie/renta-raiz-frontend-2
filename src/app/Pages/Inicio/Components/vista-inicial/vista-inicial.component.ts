@@ -286,7 +286,14 @@ export class VistaInicialComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro, 0]);
+    const url = this.router
+      .createUrlTree(['/ver-propiedad', codPro, 0])
+      .toString();
+    // Construir la URL absoluta con el dominio actual
+    const fullUrl = window.location.origin + url;
+
+    // Abrir en nueva pestaña
+    window.open(fullUrl, '_blank');
   }
 
   abrirBrochure() {
@@ -321,6 +328,8 @@ export class VistaInicialComponent implements OnInit {
       if (this.totalPaginasArriendo > 1) {
         this.paginasArriendo.push(this.totalPaginasArriendo);
       }
+      console.log(this.paginasArriendo);
+      
     } else if (inmueble === 'VENTAS') {
       this.paginasVentas = [];
       const paginasPorBloque = 3;
@@ -444,6 +453,7 @@ export class VistaInicialComponent implements OnInit {
         }
 
         this.generarPaginas(inmueble);
+        
         this.getInmueblesDestacados(this.paginaActualDestacados);
       }
     }
