@@ -431,27 +431,35 @@ export class FiltrosComponent implements OnInit {
   }
 
   generarPaginas() {
-    this.paginas = [];
-    const paginasPorBloque = 2;
-    const inicio = this.bloqueActual * paginasPorBloque + 1;
-    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
+  this.paginas = [];
+  const paginasPorBloque = 3;
+  const inicio = this.bloqueActual * paginasPorBloque + 1;
+  const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
 
-    for (let i = inicio; i <= fin; i++) {
-      this.paginas.push(i);
-    }
-
-    if (fin < this.totalPaginas - 1) {
-      this.paginas.push('...');
-    }
-
-    if (this.totalPaginas > 1) {
-      this.paginas.push(this.totalPaginas);
-    }
+  for (let i = inicio; i <= fin; i++) {
+    this.paginas.push(i);
   }
+
+  if (fin < this.totalPaginas - 1) {
+    this.paginas.push('...');
+  }
+
+  if (this.totalPaginas > 1 && !this.paginas.includes(this.totalPaginas)) {
+    this.paginas.push(this.totalPaginas);
+  }
+
+  console.log(this.paginas);
+}
 
   irAlSiguienteBloque() {
     const maxBloques = Math.floor((this.totalPaginas - 1) / 3);
+    console.log(this.bloqueActual < maxBloques);
+    console.log(this.bloqueActual);
+    
+    
     if (this.bloqueActual < maxBloques) {
+      console.log('bloque sig');
+      
       this.bloqueActual++;
       this.generarPaginas();
     }
@@ -459,7 +467,8 @@ export class FiltrosComponent implements OnInit {
 
   irAlBloqueAnterior() {
     const paginasPorBloque = 3;
-
+    console.log('bloque ant');
+    
     if (this.bloqueActual > 0) {
       const nuevoBloque = this.bloqueActual - 1;
       const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
@@ -482,21 +491,23 @@ export class FiltrosComponent implements OnInit {
 
   cambiarPagina(pagina: number | string) {
     console.log(pagina);
+    console.log('primer elemento', this.paginas[0]);
+    console.log('pagina', this.paginaActual);
     
+
     if (pagina === '...') {
-      const primerElemento = this.paginas[0];
-      if (
-        typeof primerElemento === 'number' &&
-        this.paginaActual < primerElemento
-      ) {
-        this.irAlBloqueAnterior();
-      } else {
-        this.irAlSiguienteBloque();
-      }
+      this.irAlSiguienteBloque();
       return;
     }
 
     if (typeof pagina === 'number' ) {
+
+      const primerElemento = this.paginas[0];
+
+      if (typeof primerElemento === 'number' && this.paginaActual < primerElemento) {
+        this.irAlBloqueAnterior();
+        return;
+      }
 
       console.log(typeof pagina);
       
@@ -798,6 +809,7 @@ export class FiltrosComponent implements OnInit {
   }
 
   enviarFiltros(pagina: number, prepararFiltros: boolean = true) {
+    this.filtrosSeleccionados = new Map();
     this.cargando = true;
     this.loadingResultados = true;
     const savedCity = this.filtrosSeleccionados.get('city');

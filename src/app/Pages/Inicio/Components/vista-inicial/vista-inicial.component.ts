@@ -328,6 +328,8 @@ export class VistaInicialComponent implements OnInit {
       if (this.totalPaginasArriendo > 1) {
         this.paginasArriendo.push(this.totalPaginasArriendo);
       }
+      console.log(this.paginasArriendo);
+      
     } else if (inmueble === 'VENTAS') {
       this.paginasVentas = [];
       const paginasPorBloque = 3;
@@ -451,6 +453,7 @@ export class VistaInicialComponent implements OnInit {
         }
 
         this.generarPaginas(inmueble);
+        
         this.getInmueblesDestacados(this.paginaActualDestacados);
       }
     }
