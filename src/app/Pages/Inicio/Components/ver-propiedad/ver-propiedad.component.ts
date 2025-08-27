@@ -45,6 +45,7 @@ export class VerPropiedadComponent implements OnInit {
   selectedIndex = 0;
   propiedad: any = {};
   elementsPerPage = 12;
+  totalInmuebles = 3;
   thumbnailsPerPage = 3;
   resultadosFiltros: any[] = [];
   selectedImageUrl: string | null = null;
@@ -265,7 +266,7 @@ export class VerPropiedadComponent implements OnInit {
 
     const obj = { ...filtrosObj, page: 1 };
 
-    this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
+    this.inmueblesService.getFiltrosEnviar(obj, this.totalInmuebles).subscribe(
       (response: any) => {
         const idActual = this.propiedad.idpro;
         let filtrados = response.data.filter(
@@ -300,16 +301,12 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   enviarFiltrosMigajas(tipo: string, value: string) {
-    // Limpiar los filtros seleccionados
-    this.filtrosSeleccionados = new Map(); // Vaciar los filtros anteriores
+    this.filtrosSeleccionados = new Map();
 
-    // Convertir el valor a string si es necesario
-    this.filtrosSeleccionados.set(tipo, String(value)); // Forzar que el valor sea un string
+    this.filtrosSeleccionados.set(tipo, String(value)); 
 
-    // Convertir el Map a un objeto
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
-    // Crear el objeto para la solicitud
     const obj = {
       ...filtrosObj,
       sort: 'desc',
@@ -319,7 +316,6 @@ export class VerPropiedadComponent implements OnInit {
 
     console.log(obj);
 
-    // Enviar la solicitud al servicio
     this.inmueblesService.getFiltrosEnviar(obj, this.elementsPerPage).subscribe(
       (response: any) => {
         this.router.navigate(['/filtros'], {
