@@ -36,7 +36,7 @@ import { MatInputModule } from '@angular/material/input';
     VolverComponent,
     FooterComponent,
     MatAutocompleteModule,
-    MatInputModule,  
+    MatInputModule,
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
@@ -188,13 +188,40 @@ export class FiltrosComponent implements OnInit {
   @ViewChild('closeButton') closeButton!: ElementRef<HTMLButtonElement>;
 
   async ngOnInit(): Promise<void> {
+
+    var data = this.urlParamService.obtenerParamLocalStorage('data');
+    if (data) {
+      var obj = JSON.parse(data);
+      if (obj.url === "") {
+
+        obj.url = window.location.href;
+        this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(obj));
+      }
+    }
+
     this.filteredMin = this.initAutoComplete(this.precioMinimoCtrl);
     this.filteredMax = this.initAutoComplete(this.precioMaximoCtrl);
     this.filteredVentaMin = this.initAutoComplete(this.precioVentaMinimoCtrl);
     this.filteredVentaMax = this.initAutoComplete(this.precioVentaMaximoCtrl);
-  
+
     window.scrollTo(0, 0);
     const state = window.history.state;
+
+
+    if (!state?.paginacion && !state?.resultados) {
+      var data = this.urlParamService.obtenerParamLocalStorage('data');
+
+      if (data) {
+        var obj = JSON.parse(data);
+        state.resultados = obj.state.resultados;
+        state.paginacion = obj.state.paginacion;
+        state.filtros = obj.state.filtros;
+
+
+      }
+
+    }
+
 
     await this.getDatos();
 
@@ -220,6 +247,12 @@ export class FiltrosComponent implements OnInit {
     }
 
     this.obtenerParametrosFiltros(1, queryParams, state);
+
+
+
+    console.log(window.history);
+
+
   }
 
   @HostListener('window:scroll', [])
@@ -287,16 +320,16 @@ export class FiltrosComponent implements OnInit {
               this.cargarDesdeState(window.history.state);
             }
           });
-          
+
         } else {
           this.cargarDesdeState(state);
           this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
-              
+
               this.cargarDesdeState(window.history.state);
             }
           });
-          
+
         }
         return;
       }
@@ -448,35 +481,35 @@ export class FiltrosComponent implements OnInit {
   }
 
   generarPaginas() {
-  this.paginas = [];
-  const paginasPorBloque = 3;
-  const inicio = this.bloqueActual * paginasPorBloque + 1;
-  const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
+    this.paginas = [];
+    const paginasPorBloque = 3;
+    const inicio = this.bloqueActual * paginasPorBloque + 1;
+    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
 
-  for (let i = inicio; i <= fin; i++) {
-    this.paginas.push(i);
+    for (let i = inicio; i <= fin; i++) {
+      this.paginas.push(i);
+    }
+
+    if (fin < this.totalPaginas - 1) {
+      this.paginas.push('...');
+    }
+
+    if (this.totalPaginas > 1 && !this.paginas.includes(this.totalPaginas)) {
+      this.paginas.push(this.totalPaginas);
+    }
+
+    console.log(this.paginas);
   }
-
-  if (fin < this.totalPaginas - 1) {
-    this.paginas.push('...');
-  }
-
-  if (this.totalPaginas > 1 && !this.paginas.includes(this.totalPaginas)) {
-    this.paginas.push(this.totalPaginas);
-  }
-
-  console.log(this.paginas);
-}
 
   irAlSiguienteBloque() {
     const maxBloques = Math.floor((this.totalPaginas - 1) / 3);
     console.log(this.bloqueActual < maxBloques);
     console.log(this.bloqueActual);
-    
-    
+
+
     if (this.bloqueActual < maxBloques) {
       console.log('bloque sig');
-      
+
       this.bloqueActual++;
       this.generarPaginas();
     }
@@ -485,7 +518,7 @@ export class FiltrosComponent implements OnInit {
   irAlBloqueAnterior() {
     const paginasPorBloque = 3;
     console.log('bloque ant');
-    
+
     if (this.bloqueActual > 0) {
       const nuevoBloque = this.bloqueActual - 1;
       const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
@@ -510,14 +543,14 @@ export class FiltrosComponent implements OnInit {
     console.log(pagina);
     console.log('primer elemento', this.paginas[0]);
     console.log('pagina', this.paginaActual);
-    
+
 
     if (pagina === '...') {
       this.irAlSiguienteBloque();
       return;
     }
 
-    if (typeof pagina === 'number' ) {
+    if (typeof pagina === 'number') {
 
       const primerElemento = this.paginas[0];
 
@@ -527,11 +560,11 @@ export class FiltrosComponent implements OnInit {
       }
 
       console.log(typeof pagina);
-      
-      
+
+
       const nuevoBloque = Math.floor((pagina - 1) / 3);
       if (nuevoBloque !== this.bloqueActual) {
-        
+
         this.bloqueActual = nuevoBloque;
         this.generarPaginas();
       }
@@ -539,16 +572,16 @@ export class FiltrosComponent implements OnInit {
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
       console.log(state)
-      
+
       console.log();
-      
+
       if (Object.keys(queryParams).length >= 1 && !queryParams['tipo']) {
-        
+
         this.obtenerParametrosFiltros(pagina, queryParams, state);
-        
+
       } else {
         console.log('no hay params');
-        
+
         this.enviarFiltros(pagina);
       }
     }
@@ -873,7 +906,18 @@ export class FiltrosComponent implements OnInit {
           this.cargando = false;
           console.log(this.isDrawerOpen);
           console.log(response);
-          
+
+          var data = {
+            "url": window.location.href,
+            "state": {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          }
+
+          this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(data));
+
         },
         error: (error: any) => {
           console.error('Error al obtener los inmuebles:', error);
@@ -1335,22 +1379,22 @@ export class FiltrosComponent implements OnInit {
     });
   }
 
-private initAutoComplete(ctrl: FormControl): Observable<number[]> {
-  return ctrl.valueChanges.pipe(
-    startWith(''),
-    map(value => this.generateSuggestions(value))
-  );
-}
+  private initAutoComplete(ctrl: FormControl): Observable<number[]> {
+    return ctrl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.generateSuggestions(value))
+    );
+  }
 
-private generateSuggestions(value: string | number | null): number[] {
-  const num = parseInt((value || '').toString().replace(/\D/g, ''), 10);
+  private generateSuggestions(value: string | number | null): number[] {
+    const num = parseInt((value || '').toString().replace(/\D/g, ''), 10);
 
-  if (!num || isNaN(num)) return [];
+    if (!num || isNaN(num)) return [];
 
-  return [
-    num * 1_000_000,
-    num * 10_000_000,
-    num * 100_000_000
-  ];
-}
+    return [
+      num * 1_000_000,
+      num * 10_000_000,
+      num * 100_000_000
+    ];
+  }
 }
