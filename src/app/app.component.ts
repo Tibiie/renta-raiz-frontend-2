@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, ResolveEnd, Router, RouterOutlet } from '@angular/router';
 import { initFlowbite } from 'flowbite';
-import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
 
 import { filter } from 'rxjs/operators';
 
@@ -16,8 +16,29 @@ declare let fbq: Function; // Importante para que TypeScript no dé error
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  router = inject(Router);
+
   platformId = inject(PLATFORM_ID);
+
+  constructor(private router: Router, private loaderService: NgxUiLoaderService) {
+    this.router.events.pipe(
+      // Filtramos los eventos que nos interesan
+      filter(event =>
+        event instanceof NavigationStart ||
+        event instanceof ResolveEnd ||
+        event instanceof NavigationError ||
+        event instanceof NavigationCancel
+      )
+    ).subscribe(event => {
+      if (event instanceof NavigationStart) {
+        // Al comenzar cualquier navegación, mostramos el loader
+        this.loaderService.start();
+        return;
+      }
+
+      // Al terminar la navegación (ya sea con éxito, error o cancelación), lo ocultamos
+      this.loaderService.stop();
+    });
+  }
 
 
   ngOnInit(): void {
