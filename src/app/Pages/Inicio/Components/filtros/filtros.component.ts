@@ -9,21 +9,21 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, NgClass } from '@angular/common';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import {
   ActivatedRoute,
   NavigationEnd,
-  NavigationStart,
   Router,
 } from '@angular/router';
-import { filter, firstValueFrom, forkJoin } from 'rxjs';
-import { MapaComponent } from '../mapa/mapa.component';
+import { firstValueFrom, forkJoin, map, Observable, startWith } from 'rxjs';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 import { VolverComponent } from '../../../../shared/volver/volver.component';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { UrlParamService } from '../../../../core/configs/url-param.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-filtros',
@@ -35,11 +35,25 @@ import { UrlParamService } from '../../../../core/configs/url-param.service';
     CommonModule,
     VolverComponent,
     FooterComponent,
+    MatAutocompleteModule,
+    MatInputModule,  
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
 })
 export class FiltrosComponent implements OnInit {
+  private scrollTimeout: any;
+
+  precioMinimoCtrl = new FormControl('');
+  precioMaximoCtrl = new FormControl('');
+  precioVentaMinimoCtrl = new FormControl('');
+  precioVentaMaximoCtrl = new FormControl('');
+
+  filteredMin!: Observable<number[]>;
+  filteredMax!: Observable<number[]>;
+  filteredVentaMin!: Observable<number[]>;
+  filteredVentaMax!: Observable<number[]>;
+
   totalDatos = 0;
   totalPaginas = 0;
   paginaActual: number = 1;
@@ -171,20 +185,14 @@ export class FiltrosComponent implements OnInit {
     opcion: [''],
   });
 
-  private scrollTimeout: any;
-
   @ViewChild('closeButton') closeButton!: ElementRef<HTMLButtonElement>;
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    clearTimeout(this.scrollTimeout);
-    this.scrollTimeout = setTimeout(() => {
-      this.isSticky = window.scrollY > 45;
-      this.cdRef.detectChanges();
-    }, 16);
-  }
-
   async ngOnInit(): Promise<void> {
+    this.filteredMin = this.initAutoComplete(this.precioMinimoCtrl);
+    this.filteredMax = this.initAutoComplete(this.precioMaximoCtrl);
+    this.filteredVentaMin = this.initAutoComplete(this.precioVentaMinimoCtrl);
+    this.filteredVentaMax = this.initAutoComplete(this.precioVentaMaximoCtrl);
+  
     window.scrollTo(0, 0);
     const state = window.history.state;
 
@@ -212,6 +220,15 @@ export class FiltrosComponent implements OnInit {
     }
 
     this.obtenerParametrosFiltros(1, queryParams, state);
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    clearTimeout(this.scrollTimeout);
+    this.scrollTimeout = setTimeout(() => {
+      this.isSticky = window.scrollY > 45;
+      this.cdRef.detectChanges();
+    }, 16);
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
@@ -1317,4 +1334,23 @@ export class FiltrosComponent implements OnInit {
       behavior: 'smooth',
     });
   }
+
+private initAutoComplete(ctrl: FormControl): Observable<number[]> {
+  return ctrl.valueChanges.pipe(
+    startWith(''),
+    map(value => this.generateSuggestions(value))
+  );
+}
+
+private generateSuggestions(value: string | number | null): number[] {
+  const num = parseInt((value || '').toString().replace(/\D/g, ''), 10);
+
+  if (!num || isNaN(num)) return [];
+
+  return [
+    num * 1_000_000,
+    num * 10_000_000,
+    num * 100_000_000
+  ];
+}
 }
