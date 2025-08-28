@@ -17,72 +17,78 @@ import { propiedadResolver } from '../../core/resolvers/propiedad.resolver';
 import { blogsResolver } from '../../core/resolvers/blogs.resolver';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '', pathMatch: 'full' },
-
   {
     path: '',
-    component: VistaInicialComponent,
+    children: [
+      {
+        path: '',
+        component: VistaInicialComponent,
+      },
+
+      {
+        path: 'filtros',
+        component: FiltrosComponent,
+      },
+      {
+        path: 'filtros/:tipo',
+        component: FiltrosComponent,
+      },
+      {
+        path: 'contacto',
+        component: ContactanosComponent,
+      },
+      {
+        path: 'ver-propiedad/:codpro/:ocultarContenido',
+        component: VerPropiedadComponent,
+        resolve: { propiedad: propiedadResolver }
+      },
+
+      {
+        path: 'nuestro-equipo',
+        component: NuestroEquipoComponent,
+      },
+      {
+        path: 'quienes-somos',
+        component: QuienesSomosComponent,
+      },
+      {
+        path: 'mapa',
+        component: MapaComponent,
+      },
+      {
+        path: 'blogs',
+        component: BlogsComponent,
+      },
+      {
+        path: 'ver-blog/:id',
+        component: VerBlogComponent,
+        resolve: { blogs: blogsResolver }
+      },
+      {
+        path: 'publicar-inmueble',
+        component: PublicarInmuebleComponent,
+      },
+      {
+        path: 'politicas-de-privacidad',
+        component: PoliticarPrivacidadComponent,
+      },
+      {
+        path: 'avaluos-comerciales',
+        component: AvaluosComercialesComponent,
+      },
+      {
+        path: 'formulario-enviado-con-exito',
+        component: EnvioExitosoComponent,
+      },
+    ]
   },
 
-  {
-    path: 'filtros',
-    component: FiltrosComponent,
-  },
-  {
-    path: 'filtros/:tipo',
-    component: FiltrosComponent,
-  },
-  {
-    path: 'contacto',
-    component: ContactanosComponent,
-  },
-  {
-    path: 'ver-propiedad/:codpro/:ocultarContenido',
-    component: VerPropiedadComponent,
-     resolve: { propiedad: propiedadResolver }
-  },
 
-  {
-    path: 'nuestro-equipo',
-    component: NuestroEquipoComponent,
-  },
-  {
-    path: 'quienes-somos',
-    component: QuienesSomosComponent,
-  },
-  {
-    path: 'mapa',
-    component: MapaComponent,
-  },
-  {
-    path: 'blogs',
-    component: BlogsComponent,
-  },
-  {
-    path: 'ver-blog/:id',
-    component: VerBlogComponent,
-    resolve: { blogs: blogsResolver }
-  },
-  {
-    path: 'publicar-inmueble',
-    component: PublicarInmuebleComponent,
-  },
-  {
-    path: 'politicas-de-privacidad',
-    component: PoliticarPrivacidadComponent,
-  },
-  {
-    path: 'avaluos-comerciales',
-    component: AvaluosComercialesComponent,
-  },
-  {
-    path: 'formulario-enviado-con-exito',
-    component: EnvioExitosoComponent,
-  },
+
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class InicioRoutingModule {}
+export class InicioRoutingModule { }
