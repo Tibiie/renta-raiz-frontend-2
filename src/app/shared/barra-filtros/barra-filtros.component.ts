@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { UrlParamService } from '../../core/configs/url-param.service';
 
 @Component({
   selector: 'app-barra-filtros',
@@ -99,6 +100,7 @@ export class BarraFiltrosComponent {
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
   toastr = inject(ToastrService);
+  urlParamService = inject(UrlParamService);
 
   formRangos = this.formBuilder.group({
     AreaMinima: [''],
@@ -110,6 +112,7 @@ export class BarraFiltrosComponent {
 
   ngOnInit(): void {
     this.getDatos();
+    this.urlParamService.eliminarParamLocalStorage('data');
   }
 
   scrollToTop(): void {
@@ -417,6 +420,18 @@ export class BarraFiltrosComponent {
           },
         });
         this.cargando = false;
+
+        var data = {
+          "url": "",
+          "state": {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+        }
+
+        this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(data));
+
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);

@@ -20,5 +20,9 @@ export class UrlParamService {
     return null;
   }
 
+  eliminarParamLocalStorage(key: string) {
+    localStorage.removeItem(key);
+  }
+
   
 }

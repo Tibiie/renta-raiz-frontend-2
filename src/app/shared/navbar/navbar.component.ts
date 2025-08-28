@@ -114,6 +114,17 @@ export class NavbarComponent implements OnInit {
               },
             });
           });
+
+           var data = {
+          "url": "",
+          "state": {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+        }
+
+        this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(data));
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);
@@ -133,7 +144,7 @@ export class NavbarComponent implements OnInit {
       this.filtrosInmueblesArriendo.set('pcmin', 2000000);
       this.filtrosInmueblesArriendo.set('pcmax', 7999999);
     }
-
+    
     this.filtrosInmueblesArriendo.set('biz', '1');
 
     const filtrosObj = Object.fromEntries(this.filtrosInmueblesArriendo);
@@ -156,6 +167,18 @@ export class NavbarComponent implements OnInit {
           },
           queryParams: { tipo: tipo , utm_source: this.urlParamService.obtenerParamLocalStorage('utm_source') }
         });
+
+
+         var data = {
+          "url": "",
+          "state": {
+            resultados: response.data,
+            paginacion: response,
+            filtros: obj,
+          },
+        }
+
+        this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(data));
       },
       (error: any) => {
         console.error('Error al enviar los filtros:', error);

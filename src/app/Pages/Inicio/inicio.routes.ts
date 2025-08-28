@@ -13,6 +13,8 @@ import { PublicarInmuebleComponent } from './Components/publicar-inmueble/public
 import { PoliticarPrivacidadComponent } from './Components/politicar-privacidad/politicar-privacidad.component';
 import { AvaluosComercialesComponent } from './Components/avaluos-comerciales/avaluos-comerciales.component';
 import { EnvioExitosoComponent } from '../../shared/envio-exitoso/envio-exitoso.component';
+import { propiedadResolver } from '../../core/resolvers/propiedad.resolver';
+import { blogsResolver } from '../../core/resolvers/blogs.resolver';
 
 export const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -37,6 +39,7 @@ export const routes: Routes = [
   {
     path: 'ver-propiedad/:codpro/:ocultarContenido',
     component: VerPropiedadComponent,
+     resolve: { propiedad: propiedadResolver }
   },
 
   {
@@ -58,6 +61,7 @@ export const routes: Routes = [
   {
     path: 'ver-blog/:id',
     component: VerBlogComponent,
+    resolve: { blogs: blogsResolver }
   },
   {
     path: 'publicar-inmueble',

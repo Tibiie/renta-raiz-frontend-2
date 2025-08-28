@@ -9,21 +9,21 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, NgClass } from '@angular/common';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import {
   ActivatedRoute,
   NavigationEnd,
-  NavigationStart,
   Router,
 } from '@angular/router';
-import { filter, firstValueFrom, forkJoin } from 'rxjs';
-import { MapaComponent } from '../mapa/mapa.component';
+import { firstValueFrom, forkJoin, map, Observable, startWith } from 'rxjs';
 import { GeolocalizacionService } from '../../../../core/Geolocalizacion/geolocalizacion.service';
 import { VolverComponent } from '../../../../shared/volver/volver.component';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { UrlParamService } from '../../../../core/configs/url-param.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-filtros',
@@ -35,11 +35,25 @@ import { UrlParamService } from '../../../../core/configs/url-param.service';
     CommonModule,
     VolverComponent,
     FooterComponent,
+    MatAutocompleteModule,
+    MatInputModule,
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
 })
 export class FiltrosComponent implements OnInit {
+  private scrollTimeout: any;
+
+  precioMinimoCtrl = new FormControl('');
+  precioMaximoCtrl = new FormControl('');
+  precioVentaMinimoCtrl = new FormControl('');
+  precioVentaMaximoCtrl = new FormControl('');
+
+  filteredMin!: Observable<number[]>;
+  filteredMax!: Observable<number[]>;
+  filteredVentaMin!: Observable<number[]>;
+  filteredVentaMax!: Observable<number[]>;
+
   totalDatos = 0;
   totalPaginas = 0;
   paginaActual: number = 1;
@@ -84,22 +98,22 @@ export class FiltrosComponent implements OnInit {
   selectedPriceRangeVentas: { min: number; max: number | null } | null = null;
   priceRangesArriendos = [
     { min: 2000000, max: 8000000, displayName: '2.000.000 - 8.000.000' },
-    { min: 8000000, max: 15000000, displayName: '8.000.000 - 15.000.000' },
-    { min: 15000000, max: null, displayName: '15.000.000 +' },
+    { min: 8000001, max: 15000000, displayName: '8.000.000 - 15.000.000' },
+    { min: 15000001, max: 0, displayName: '15.000.000 +' },
   ];
 
   priceRangesVentas = [
     {
       min: 100000000,
-      max: 500000000,
-      displayName: '100.000.000 - 500.000.000',
+      max: 1000000000,
+      displayName: '100.000.000 - 1.000.000.000',
     },
     {
-      min: 500000000,
-      max: 1000000000,
-      displayName: '500.000.000 - 1.000.000.000',
+      min: 1000000001,
+      max: 2000000000,
+      displayName: '1.000.000.001 - 2.000.000.000',
     },
-    { min: 1000000000, max: null, displayName: '1.000.000.000 +' },
+    { min: 2000000001, max: 0, displayName: '2.000.000.000 +' },
   ];
 
   // Para Tipo de Propiedad
@@ -171,22 +185,43 @@ export class FiltrosComponent implements OnInit {
     opcion: [''],
   });
 
-  private scrollTimeout: any;
-
   @ViewChild('closeButton') closeButton!: ElementRef<HTMLButtonElement>;
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    clearTimeout(this.scrollTimeout);
-    this.scrollTimeout = setTimeout(() => {
-      this.isSticky = window.scrollY > 45;
-      this.cdRef.detectChanges();
-    }, 16);
-  }
-
   async ngOnInit(): Promise<void> {
+
+    var data = this.urlParamService.obtenerParamLocalStorage('data');
+    if (data) {
+      var obj = JSON.parse(data);
+      if (obj.url === "") {
+
+        obj.url = window.location.href;
+        this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(obj));
+      }
+    }
+
+    this.filteredMin = this.initAutoComplete(this.precioMinimoCtrl);
+    this.filteredMax = this.initAutoComplete(this.precioMaximoCtrl);
+    this.filteredVentaMin = this.initAutoComplete(this.precioVentaMinimoCtrl);
+    this.filteredVentaMax = this.initAutoComplete(this.precioVentaMaximoCtrl);
+
     window.scrollTo(0, 0);
     const state = window.history.state;
+
+
+    if (!state?.paginacion && !state?.resultados) {
+      var data = this.urlParamService.obtenerParamLocalStorage('data');
+
+      if (data) {
+        var obj = JSON.parse(data);
+        state.resultados = obj.state.resultados;
+        state.paginacion = obj.state.paginacion;
+        state.filtros = obj.state.filtros;
+
+
+      }
+
+    }
+
 
     await this.getDatos();
 
@@ -212,6 +247,21 @@ export class FiltrosComponent implements OnInit {
     }
 
     this.obtenerParametrosFiltros(1, queryParams, state);
+
+
+
+    console.log(window.history);
+
+
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    clearTimeout(this.scrollTimeout);
+    this.scrollTimeout = setTimeout(() => {
+      this.isSticky = window.scrollY > 45;
+      this.cdRef.detectChanges();
+    }, 16);
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
@@ -270,16 +320,16 @@ export class FiltrosComponent implements OnInit {
               this.cargarDesdeState(window.history.state);
             }
           });
-          
+
         } else {
           this.cargarDesdeState(state);
           this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
-              
+
               this.cargarDesdeState(window.history.state);
             }
           });
-          
+
         }
         return;
       }
@@ -431,35 +481,35 @@ export class FiltrosComponent implements OnInit {
   }
 
   generarPaginas() {
-  this.paginas = [];
-  const paginasPorBloque = 3;
-  const inicio = this.bloqueActual * paginasPorBloque + 1;
-  const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
+    this.paginas = [];
+    const paginasPorBloque = 3;
+    const inicio = this.bloqueActual * paginasPorBloque + 1;
+    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
 
-  for (let i = inicio; i <= fin; i++) {
-    this.paginas.push(i);
+    for (let i = inicio; i <= fin; i++) {
+      this.paginas.push(i);
+    }
+
+    if (fin < this.totalPaginas - 1) {
+      this.paginas.push('...');
+    }
+
+    if (this.totalPaginas > 1 && !this.paginas.includes(this.totalPaginas)) {
+      this.paginas.push(this.totalPaginas);
+    }
+
+    console.log(this.paginas);
   }
-
-  if (fin < this.totalPaginas - 1) {
-    this.paginas.push('...');
-  }
-
-  if (this.totalPaginas > 1 && !this.paginas.includes(this.totalPaginas)) {
-    this.paginas.push(this.totalPaginas);
-  }
-
-  console.log(this.paginas);
-}
 
   irAlSiguienteBloque() {
     const maxBloques = Math.floor((this.totalPaginas - 1) / 3);
     console.log(this.bloqueActual < maxBloques);
     console.log(this.bloqueActual);
-    
-    
+
+
     if (this.bloqueActual < maxBloques) {
       console.log('bloque sig');
-      
+
       this.bloqueActual++;
       this.generarPaginas();
     }
@@ -468,7 +518,7 @@ export class FiltrosComponent implements OnInit {
   irAlBloqueAnterior() {
     const paginasPorBloque = 3;
     console.log('bloque ant');
-    
+
     if (this.bloqueActual > 0) {
       const nuevoBloque = this.bloqueActual - 1;
       const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
@@ -493,14 +543,14 @@ export class FiltrosComponent implements OnInit {
     console.log(pagina);
     console.log('primer elemento', this.paginas[0]);
     console.log('pagina', this.paginaActual);
-    
+
 
     if (pagina === '...') {
       this.irAlSiguienteBloque();
       return;
     }
 
-    if (typeof pagina === 'number' ) {
+    if (typeof pagina === 'number') {
 
       const primerElemento = this.paginas[0];
 
@@ -510,11 +560,11 @@ export class FiltrosComponent implements OnInit {
       }
 
       console.log(typeof pagina);
-      
-      
+
+
       const nuevoBloque = Math.floor((pagina - 1) / 3);
       if (nuevoBloque !== this.bloqueActual) {
-        
+
         this.bloqueActual = nuevoBloque;
         this.generarPaginas();
       }
@@ -522,16 +572,16 @@ export class FiltrosComponent implements OnInit {
       var queryParams = this.activatedRoute.snapshot.queryParams;
       const state = window.history.state;
       console.log(state)
-      
+
       console.log();
-      
+
       if (Object.keys(queryParams).length >= 1 && !queryParams['tipo']) {
-        
+
         this.obtenerParametrosFiltros(pagina, queryParams, state);
-        
+
       } else {
         console.log('no hay params');
-        
+
         this.enviarFiltros(pagina);
       }
     }
@@ -856,7 +906,18 @@ export class FiltrosComponent implements OnInit {
           this.cargando = false;
           console.log(this.isDrawerOpen);
           console.log(response);
-          
+
+          var data = {
+            "url": window.location.href,
+            "state": {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          }
+
+          this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(data));
+
         },
         error: (error: any) => {
           console.error('Error al obtener los inmuebles:', error);
@@ -1033,6 +1094,7 @@ export class FiltrosComponent implements OnInit {
     this.prepararFiltros();
 
     const opcion = this.formFiltrosSelect.value.opcion;
+    
     if (opcion === 'order-mayor') {
       this.filtrosSeleccionados.set('order', 'pricemin');
     } else if (opcion === 'order-menor') {
@@ -1045,7 +1107,77 @@ export class FiltrosComponent implements OnInit {
       this.filtrosSeleccionados.set('order', 'consignation_date');
     }
 
-    this.enviarFiltros(1);
+    console.log(this.filtrosSeleccionados);
+    
+    this.cargando = true;
+    this.loadingResultados = true;
+    const savedCity = this.filtrosSeleccionados.get('city');
+    const savedNeighborhood =
+      this.filtrosSeleccionados.get('neighborhood_code');
+
+    console.log(this.filtrosSeleccionados);
+
+   
+    if (savedCity) {
+      this.filtrosSeleccionados.set('city', savedCity);
+    }
+    if (savedNeighborhood) {
+      this.filtrosSeleccionados.set('neighborhood_code', savedNeighborhood);
+    }
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    console.log('filtrosObj', filtrosObj);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    };
+
+    console.log('Obj', obj);
+
+    this.inmueblesService
+      .getFiltrosEnviar(obj, this.elementsPerPage)
+      .subscribe({
+        next: (response: any) => {
+          console.log('response', response);
+
+          this.resultados = response.data;
+          this.totalDatos = response.total;
+          this.paginaActual = response.current_page || 1;
+          this.paginacion = response;
+          this.totalPaginas = response.last_page || 1;
+          this.paginas = Array.from(
+            { length: this.totalPaginas },
+            (_, i) => i + 1
+          );
+
+          this.generarPaginas();
+          this.cargando = false;
+          console.log(this.isDrawerOpen);
+          console.log(response);
+
+          var data = {
+            "url": window.location.href,
+            "state": {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          }
+
+          this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(data));
+
+        },
+        error: (error: any) => {
+          console.error('Error al obtener los inmuebles:', error);
+        },
+        complete: () => {
+          this.loadingResultados = false;
+
+          if (this.isMobileView && this.isDrawerOpen) {
+            this.closeDrawer();
+            console.log(this.isDrawerOpen);
+          }
+        },
+      });
   }
 
   selectPriceRange(
@@ -1316,5 +1448,24 @@ export class FiltrosComponent implements OnInit {
       top: 0,
       behavior: 'smooth',
     });
+  }
+
+  private initAutoComplete(ctrl: FormControl): Observable<number[]> {
+    return ctrl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.generateSuggestions(value))
+    );
+  }
+
+  private generateSuggestions(value: string | number | null): number[] {
+    const num = parseInt((value || '').toString().replace(/\D/g, ''), 10);
+
+    if (!num || isNaN(num)) return [];
+
+    return [
+      num * 1_000_000,
+      num * 10_000_000,
+      num * 100_000_000
+    ];
   }
 }

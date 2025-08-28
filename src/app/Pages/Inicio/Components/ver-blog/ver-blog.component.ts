@@ -60,16 +60,9 @@ export class VerBlogComponent implements OnInit {
   }
 
   getInmueblesDestacados() {
-    this.inmueblesService.getInmueblesDestacados(1).subscribe(
-      (data: any) => {
-        this.inmueblesDestacadosArray = data.data.slice(2, 5);
-      },
-      (error: any) => {
-        console.log(error);
+    this.inmueblesDestacadosArray = this.route.snapshot.data['blogs'].data.slice(2, 5);
 
-        console.error('Error al obtener los inmuebles:', error);
-      }
-    );
+   
   }
 
   verPropiedad(codPro: number) {
