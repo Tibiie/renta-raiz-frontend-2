@@ -218,22 +218,30 @@ export class VerPropiedadComponent implements OnInit {
   getDatosPropiedad() {
     this.datosCargados = false;
 
-    this.inmueblesService.getDatosPropiedad(this.codPro!).subscribe(
-      (response: any) => {
-        this.propiedad = response.data;
+    this.propiedad = this.route.snapshot.data['propiedad'].data;
 
-        this.datosCargados = true;
+    this.datosCargados = true;
 
-        this.prepararFiltros();
-        this.enviarFiltros();
+    this.prepararFiltros();
+    this.enviarFiltros();
 
-        console.log(this.propiedad);
-      },
-      (error: any) => {
-        console.error('Error al obtener la propiedad:', error);
-        this.datosCargados = true;
-      }
-    );
+    console.log(this.propiedad);
+    // this.inmueblesService.getDatosPropiedad(this.codPro!).subscribe(
+    //   (response: any) => {
+    //     this.propiedad = response.data;
+
+    //     this.datosCargados = true;
+
+    //     this.prepararFiltros();
+    //     this.enviarFiltros();
+
+    //     console.log(this.propiedad);
+    //   },
+    //   (error: any) => {
+    //     console.error('Error al obtener la propiedad:', error);
+    //     this.datosCargados = true;
+    //   }
+    // );
   }
 
   openModalCrearContacto(
@@ -304,7 +312,7 @@ export class VerPropiedadComponent implements OnInit {
   enviarFiltrosMigajas(tipo: string, value: string) {
     this.filtrosSeleccionados = new Map();
 
-    this.filtrosSeleccionados.set(tipo, String(value)); 
+    this.filtrosSeleccionados.set(tipo, String(value));
 
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 

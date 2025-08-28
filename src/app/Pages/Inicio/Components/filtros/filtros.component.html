@@ -863,7 +863,7 @@
                 <ng-container
                   *ngIf="
                     (inmueble.saleprice && inmueble.saleprice > 2000000000) ||
-                    (inmueble.rent && inmueble.rent > 2000000000)
+                    (inmueble.rent && inmueble.rent > 15000000)
                   "
                 >
                   <i
@@ -878,8 +878,8 @@
                       inmueble.saleprice >= 1000000001 &&
                       inmueble.saleprice <= 2000000000) ||
                     (inmueble.rent &&
-                      inmueble.rent >= 1000000001 &&
-                      inmueble.rent <= 2000000000)
+                      inmueble.rent >= 8000000 &&
+                      inmueble.rent <= 15000000)
                   "
                 >
                   <i
@@ -894,8 +894,8 @@
                       inmueble.saleprice >= 100000000 &&
                       inmueble.saleprice <= 1000000000) ||
                     (inmueble.rent &&
-                      inmueble.rent >= 100000000 &&
-                      inmueble.rent <= 1000000000)
+                      inmueble.rent >= 2000000 &&
+                      inmueble.rent <= 8000000)
                   "
                 >
                   <i
