@@ -18,10 +18,19 @@ export class VolverComponent {
 
   vistaAnterior(): void {
 
+
+    var url = window.location.href;
+    if (url.includes('filtros')) {
+      this.router.navigate(['']);
+      return;
+    }
+
     var data = this.urlParamService.obtenerParamLocalStorage('data');
 
     if (data) {
       var obj = JSON.parse(data);
+
+      
       
       if (obj.url.includes('filtros')) {
         this.router.navigate(['/filtros'], {

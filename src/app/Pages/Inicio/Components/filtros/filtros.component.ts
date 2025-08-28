@@ -98,8 +98,8 @@ export class FiltrosComponent implements OnInit {
   selectedPriceRangeVentas: { min: number; max: number | null } | null = null;
   priceRangesArriendos = [
     { min: 2000000, max: 8000000, displayName: '2.000.000 - 8.000.000' },
-    { min: 8000000, max: 15000000, displayName: '8.000.000 - 15.000.000' },
-    { min: 15000000, max: null, displayName: '15.000.000 +' },
+    { min: 8000001, max: 15000000, displayName: '8.000.000 - 15.000.000' },
+    { min: 15000001, max: 0, displayName: '15.000.000 +' },
   ];
 
   priceRangesVentas = [
@@ -113,7 +113,7 @@ export class FiltrosComponent implements OnInit {
       max: 2000000000,
       displayName: '1.000.000.001 - 2.000.000.000',
     },
-    { min: 2000000001, max: null, displayName: '2.000.000.000 +' },
+    { min: 2000000001, max: 0, displayName: '2.000.000.000 +' },
   ];
 
   // Para Tipo de Propiedad
