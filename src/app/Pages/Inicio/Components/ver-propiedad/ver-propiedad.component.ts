@@ -74,14 +74,16 @@ export class VerPropiedadComponent implements OnInit {
     window.scrollTo(0, 0);
     this.initZoom();
 
-    this.route.paramMap.subscribe((params) => {
-      this.codPro = Number(params.get('codpro'));
-      const ocultar = Number(params.get('ocultarContenido')) === 1;
+    // this.route.paramMap.subscribe((params) => {
+    //   this.codPro = Number(params.get('codpro'));
+    //   const ocultar = Number(params.get('ocultarContenido')) === 1;
 
-      this.mostrarContenido = !ocultar;
 
-      this.getDatos();
-    });
+    // });
+    const ocultar = Number(this.route.snapshot.paramMap.get('ocultarContenido')) === 1;
+    this.mostrarContenido = !ocultar;
+
+    this.getDatos();
   }
 
   getDatos() {
