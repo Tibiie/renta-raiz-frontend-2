@@ -15,71 +15,79 @@ import { AvaluosComercialesComponent } from './Components/avaluos-comerciales/av
 import { EnvioExitosoComponent } from '../../shared/envio-exitoso/envio-exitoso.component';
 import { propiedadResolver } from '../../core/resolvers/propiedad.resolver';
 import { blogsResolver } from '../../core/resolvers/blogs.resolver';
+import { AppComponent } from '../../app.component';
 
 export const routes: Routes = [
 
 
-  {
-    path: 'filtros',
-    component: FiltrosComponent,
-  },
-  {
-    path: 'filtros/:tipo',
-    component: FiltrosComponent,
-  },
-  {
-    path: 'contacto',
-    component: ContactanosComponent,
-  },
-  {
-    path: 'ver-propiedad/:codpro/:ocultarContenido',
-    component: VerPropiedadComponent,
-     resolve: { propiedad: propiedadResolver }
-  },
-
-  {
-    path: 'nuestro-equipo',
-    component: NuestroEquipoComponent,
-  },
-  {
-    path: 'quienes-somos',
-    component: QuienesSomosComponent,
-  },
-  {
-    path: 'mapa',
-    component: MapaComponent,
-  },
-  {
-    path: 'blogs',
-    component: BlogsComponent,
-  },
-  {
-    path: 'ver-blog/:id',
-    component: VerBlogComponent,
-    resolve: { blogs: blogsResolver }
-  },
-  {
-    path: 'publicar-inmueble',
-    component: PublicarInmuebleComponent,
-  },
-  {
-    path: 'politicas-de-privacidad',
-    component: PoliticarPrivacidadComponent,
-  },
-  {
-    path: 'avaluos-comerciales',
-    component: AvaluosComercialesComponent,
-  },
-  {
-    path: 'formulario-enviado-con-exito',
-    component: EnvioExitosoComponent,
-  },
 
 
-  
   {
     path: '',
-    component: VistaInicialComponent,
+    component: AppComponent,
+    children: [
+      {
+        path: '',
+        component: VistaInicialComponent,
+      },
+
+      {
+        path: 'filtros',
+        component: FiltrosComponent,
+      },
+      {
+        path: 'filtros/:tipo',
+        component: FiltrosComponent,
+      },
+      {
+        path: 'contacto',
+        component: ContactanosComponent,
+      },
+      {
+        path: 'ver-propiedad/:codpro/:ocultarContenido',
+        component: VerPropiedadComponent,
+        resolve: { propiedad: propiedadResolver }
+      },
+
+      {
+        path: 'nuestro-equipo',
+        component: NuestroEquipoComponent,
+      },
+      {
+        path: 'quienes-somos',
+        component: QuienesSomosComponent,
+      },
+      {
+        path: 'mapa',
+        component: MapaComponent,
+      },
+      {
+        path: 'blogs',
+        component: BlogsComponent,
+      },
+      {
+        path: 'ver-blog/:id',
+        component: VerBlogComponent,
+        resolve: { blogs: blogsResolver }
+      },
+      {
+        path: 'publicar-inmueble',
+        component: PublicarInmuebleComponent,
+      },
+      {
+        path: 'politicas-de-privacidad',
+        component: PoliticarPrivacidadComponent,
+      },
+      {
+        path: 'avaluos-comerciales',
+        component: AvaluosComercialesComponent,
+      },
+      {
+        path: 'formulario-enviado-con-exito',
+        component: EnvioExitosoComponent,
+      },
+
+    ]
   },
 ];
 
