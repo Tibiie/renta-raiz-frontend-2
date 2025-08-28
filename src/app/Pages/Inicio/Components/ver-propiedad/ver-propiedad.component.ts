@@ -19,6 +19,7 @@ import { log } from 'console';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { VolverComponent } from '../../../../shared/volver/volver.component';
 
+
 @Component({
   selector: 'app-ver-propiedad',
   standalone: true,

@@ -1094,6 +1094,7 @@ export class FiltrosComponent implements OnInit {
     this.prepararFiltros();
 
     const opcion = this.formFiltrosSelect.value.opcion;
+    
     if (opcion === 'order-mayor') {
       this.filtrosSeleccionados.set('order', 'pricemin');
     } else if (opcion === 'order-menor') {
@@ -1106,7 +1107,77 @@ export class FiltrosComponent implements OnInit {
       this.filtrosSeleccionados.set('order', 'consignation_date');
     }
 
-    this.enviarFiltros(1);
+    console.log(this.filtrosSeleccionados);
+    
+    this.cargando = true;
+    this.loadingResultados = true;
+    const savedCity = this.filtrosSeleccionados.get('city');
+    const savedNeighborhood =
+      this.filtrosSeleccionados.get('neighborhood_code');
+
+    console.log(this.filtrosSeleccionados);
+
+   
+    if (savedCity) {
+      this.filtrosSeleccionados.set('city', savedCity);
+    }
+    if (savedNeighborhood) {
+      this.filtrosSeleccionados.set('neighborhood_code', savedNeighborhood);
+    }
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+    console.log('filtrosObj', filtrosObj);
+    const obj = {
+      ...filtrosObj,
+      page: 1,
+    };
+
+    console.log('Obj', obj);
+
+    this.inmueblesService
+      .getFiltrosEnviar(obj, this.elementsPerPage)
+      .subscribe({
+        next: (response: any) => {
+          console.log('response', response);
+
+          this.resultados = response.data;
+          this.totalDatos = response.total;
+          this.paginaActual = response.current_page || 1;
+          this.paginacion = response;
+          this.totalPaginas = response.last_page || 1;
+          this.paginas = Array.from(
+            { length: this.totalPaginas },
+            (_, i) => i + 1
+          );
+
+          this.generarPaginas();
+          this.cargando = false;
+          console.log(this.isDrawerOpen);
+          console.log(response);
+
+          var data = {
+            "url": window.location.href,
+            "state": {
+              resultados: response.data,
+              paginacion: response,
+              filtros: obj,
+            },
+          }
+
+          this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(data));
+
+        },
+        error: (error: any) => {
+          console.error('Error al obtener los inmuebles:', error);
+        },
+        complete: () => {
+          this.loadingResultados = false;
+
+          if (this.isMobileView && this.isDrawerOpen) {
+            this.closeDrawer();
+            console.log(this.isDrawerOpen);
+          }
+        },
+      });
   }
 
   selectPriceRange(
