@@ -31,7 +31,7 @@ COPY --from=build /usr/src/app/package*.json ./
 RUN npm install --omit=dev
 
 # Puerto en el que corre Angular Universal
-EXPOSE 9998
+EXPOSE 4000
 
 # Arrancar el servidor SSR
 CMD ["node", "dist/renta-raiz-frontend-2/server/server.mjs"]
