@@ -1,29 +1,36 @@
+# Etapa 1: Build
 FROM node:20.15.1-alpine AS build
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-# Cambiar la zona horaria a America/New_York (ajústala según tus necesidades)
+# Configurar zona horaria
 RUN apk --no-cache add tzdata && \
-    cp /usr/share/zoneinfo/America/Bogota  /etc/localtime && \
+    cp /usr/share/zoneinfo/America/Bogota /etc/localtime && \
     echo "America/Bogota" > /etc/timezone && \
     apk del tzdata
-
 
 RUN npm install
 
 COPY . .
 
-RUN npm run build 
+# 👇 Aquí cambiamos a build SSR en lugar del build normal
+RUN npm run build:ssr
 
-RUN ls -alt
+# Etapa 2: Runtime
+FROM node:20.15.1-alpine AS runtime
 
+WORKDIR /usr/src/app
 
-#stage 2
-FROM nginx:1.17.1-alpine
+# Copiamos solo los artefactos de build y package.json
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/package*.json ./
 
-COPY --from=build /usr/src/app/dist/renta-raiz-frontend-2/browser /usr/share/nginx/html
-COPY --from=build /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
+RUN npm install --omit=dev
 
-EXPOSE 9998
+# Puerto del servidor SSR
+EXPOSE 4000
+
+# Arranque del servidor Angular Universal
+CMD ["node", "dist/renta-raiz-frontend-2/server/server.mjs"]
