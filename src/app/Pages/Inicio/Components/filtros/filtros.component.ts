@@ -1468,4 +1468,27 @@ export class FiltrosComponent implements OnInit {
       num * 100_000_000
     ];
   }
+
+
+  onMinSelected(event: any) {
+    const value = event.option.value;
+    this.precioMinimoCtrl.setValue(value, { emitEvent: true });
+    this.filtrosSeleccionados.set('pcmin', this.precioMinimoCtrl.value);
+     this.formRangos.patchValue({
+        precioMinimo: this.precioMinimoCtrl.value,
+        precioVentaMinimo: this.precioVentaMinimoCtrl.value,
+      });
+    
+  }
+
+  onMaxSelected(event: any) {
+    const value = event.option.value;
+    this.precioMaximoCtrl.setValue(value, { emitEvent: true });
+    this.filtrosSeleccionados.set('pcmax', this.precioMaximoCtrl.value);
+    this.formRangos.patchValue({
+        precioMaximo: this.precioMaximoCtrl.value,
+        precioVentaMaximo: this.precioVentaMaximoCtrl.value,
+      });
+   
+  }
 }

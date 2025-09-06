@@ -68,9 +68,9 @@
                       placeholder="Desde $"
                       [formControl]="precioMinimoCtrl"
                       [matAutocomplete]="autoMin"
-                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                      class="w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
                     />
-                    <mat-autocomplete #autoMin="matAutocomplete">
+                    <mat-autocomplete #autoMin="matAutocomplete" (optionSelected)="onMinSelected($event)">
                       <mat-option
                         *ngFor="let option of filteredMin | async"
                         [value]="option"
@@ -94,9 +94,9 @@
                       placeholder="Hasta $"
                       [formControl]="precioMaximoCtrl"
                       [matAutocomplete]="autoMax"
-                      class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
+                      class="w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]"
                     />
-                    <mat-autocomplete #autoMax="matAutocomplete">
+                    <mat-autocomplete #autoMax="matAutocomplete" (optionSelected)="onMaxSelected($event)">
                       <mat-option
                         *ngFor="let option of filteredMax | async"
                         [value]="option"
@@ -143,7 +143,7 @@
                       [matAutocomplete]="autoVentaMin"
                       class="px-4 py-2 border border-gray-300 rounded-md"
                     />
-                    <mat-autocomplete #autoVentaMin="matAutocomplete">
+                    <mat-autocomplete #autoVentaMin="matAutocomplete" (optionSelected)="onMinSelected($event)">
                       <mat-option
                         *ngFor="let option of filteredVentaMin | async"
                         [value]="option"
@@ -169,7 +169,7 @@
                       [matAutocomplete]="autoVentaMax"
                       class="px-4 py-2 border border-gray-300 rounded-md"
                     />
-                    <mat-autocomplete #autoVentaMax="matAutocomplete">
+                    <mat-autocomplete #autoVentaMax="matAutocomplete" (optionSelected)="onMaxSelected($event)">
                       <mat-option
                         *ngFor="let option of filteredVentaMax | async"
                         [value]="option"

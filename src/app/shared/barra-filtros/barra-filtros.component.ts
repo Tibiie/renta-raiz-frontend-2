@@ -5,22 +5,31 @@ import {
   inject,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { UrlParamService } from '../../core/configs/url-param.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { map, Observable, startWith } from 'rxjs';
+import { MatInputModule } from '@angular/material/input';
+import { log } from 'console';
 
 @Component({
   selector: 'app-barra-filtros',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatAutocompleteModule, MatInputModule,],
   templateUrl: './barra-filtros.component.html',
   styleUrl: './barra-filtros.component.scss',
 })
 export class BarraFiltrosComponent {
   @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
+
+  precioMinimoCtrl = new FormControl('');
+  precioMaximoCtrl = new FormControl('');
+  filteredMin!: Observable<number[]>;
+  filteredMax!: Observable<number[]>;
 
   intervalId: any;
   currentSlide = 0;
@@ -113,6 +122,12 @@ export class BarraFiltrosComponent {
   ngOnInit(): void {
     this.getDatos();
     this.urlParamService.eliminarParamLocalStorage('data');
+    this.filteredMin = this.initAutoComplete(this.precioMinimoCtrl);
+    this.filteredMax = this.initAutoComplete(this.precioMaximoCtrl);
+
+
+
+
   }
 
   scrollToTop(): void {
@@ -141,12 +156,15 @@ export class BarraFiltrosComponent {
       this.cerrarTodosLosDropdowns();
       this.filteredBarrios = [];
     }
+
+
   }
+
 
   cerrarTodosLosDropdowns() {
     this.isPropertyDropdownOpen = false;
     this.isEstateDropdownOpen = false;
-    this.isPreciosOpen = false;
+
     this.isMasFiltrosOpen = false;
   }
 
@@ -213,6 +231,8 @@ export class BarraFiltrosComponent {
     if (this.selectedEstate) {
       this.filtrosSeleccionados.set('type', this.selectedEstate.code);
     }
+
+    console.log(this.filtrosSeleccionados);
 
     if (
       this.formRangos.value.AreaMinima != '' ||
@@ -341,7 +361,7 @@ export class BarraFiltrosComponent {
   }
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro, 0 ]);
+    this.router.navigate(['/ver-propiedad', codPro, 0]);
   }
 
   filterLocations() {
@@ -472,7 +492,7 @@ export class BarraFiltrosComponent {
       }
     );
   }
-  
+
   getTipoPropiedad() {
     this.inmueblesService.getTipoPropiedad().subscribe(
       (response: any) => {
@@ -572,6 +592,7 @@ export class BarraFiltrosComponent {
   }
 
   redirigirFiltros() {
+    this.isPreciosOpen = false;
     this.cargando = true;
     this.prepararFiltros();
     this.getEnviarFiltros();
@@ -584,5 +605,37 @@ export class BarraFiltrosComponent {
   clearSearch() {
     this.searchTerm = '';
     this.filteredBarrios = [];
+  }
+
+  private initAutoComplete(ctrl: FormControl): Observable<number[]> {
+    return ctrl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.generateSuggestions(value))
+    );
+  }
+
+  private generateSuggestions(value: string | number | null): number[] {
+    const num = parseInt((value || '').toString().replace(/\D/g, ''), 10);
+
+    if (!num || isNaN(num)) return [];
+
+    return [
+      num * 1_000_000,
+      num * 10_000_000,
+      num * 100_000_000
+    ];
+  }
+
+
+  onMinSelected(event: any) {
+    const value = event.option.value;
+    this.precioMinimoCtrl.setValue(value, { emitEvent: true });
+    this.filtrosSeleccionados.set('pcmin', this.precioMinimoCtrl.value);
+  }
+
+  onMaxSelected(event: any) {
+    const value = event.option.value;
+    this.precioMaximoCtrl.setValue(value, { emitEvent: true });
+    this.filtrosSeleccionados.set('pcmax', this.precioMaximoCtrl.value);
   }
 }
