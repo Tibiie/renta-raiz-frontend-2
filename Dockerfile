@@ -15,22 +15,23 @@ RUN npm install
 
 COPY . .
 
-# 👇 Aquí cambiamos a build SSR en lugar del build normal
-RUN npm run build:ssr
+# 👇 En Angular 17 con @angular/ssr el build normal ya genera SSR
+RUN npm run build
 
 # Etapa 2: Runtime
 FROM node:20.15.1-alpine AS runtime
 
 WORKDIR /usr/src/app
 
-# Copiamos solo los artefactos de build y package.json
+# Copiamos solo lo necesario
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/package*.json ./
 
+# Instalar dependencias de producción
 RUN npm install --omit=dev
 
-# Puerto del servidor SSR
+# Puerto en el que corre Angular Universal
 EXPOSE 4000
 
-# Arranque del servidor Angular Universal
+# Arrancar el servidor SSR
 CMD ["node", "dist/renta-raiz-frontend-2/server/server.mjs"]
