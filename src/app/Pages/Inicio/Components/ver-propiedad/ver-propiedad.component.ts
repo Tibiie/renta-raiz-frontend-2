@@ -84,6 +84,7 @@ export class VerPropiedadComponent implements OnInit {
     this.mostrarContenido = !ocultar;
 
     this.getDatos();
+    this.updateParams();
   }
 
   getDatos() {
@@ -215,6 +216,52 @@ export class VerPropiedadComponent implements OnInit {
 
   seleccionarTab(tab: string) {
     this.tabActivo = tab;
+  }
+
+  updateParams() {
+
+
+    var pamrams = { "city": this.propiedad.city_code, "biz": this.propiedad.biz, "category": "" };
+
+
+    if(this.propiedad.biz === "VENTA"){
+      if( (this.propiedad.rent && this.propiedad.rent > 15000000)){
+        pamrams["category"] = "DIAMANTE";
+      }
+
+      if(this.propiedad.rent && this.propiedad.rent >= 8000000 && this.propiedad.rent <= 15000000){
+        pamrams["category"] = "ORO";
+      }
+
+      if(this.propiedad.rent && this.propiedad.rent >= 2000000 && this.propiedad.rent <= 8000000){
+        pamrams["category"] = "PLATA";
+      }
+    }
+
+
+    if(this.propiedad.biz === "VENTA"){
+      if( (this.propiedad.saleprice && this.propiedad.saleprice > 2000000000)){
+        pamrams["category"] = "DIAMANTE";
+      }
+
+      if(this.propiedad.saleprice && this.propiedad.saleprice >= 1000000001 && this.propiedad.saleprice <= 2000000000){
+        pamrams["category"] = "ORO";
+      }
+
+      if(this.propiedad.saleprice && this.propiedad.saleprice >= 100000000 && this.propiedad.saleprice <= 1000000000){
+        pamrams["category"] = "PLATA";
+      }
+    }
+
+
+
+
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: pamrams,
+      queryParamsHandling: 'merge',
+    });
   }
 
   getDatosPropiedad() {

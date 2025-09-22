@@ -54,8 +54,10 @@ export function app(): express.Express {
       pageCache.set(url, html);
 
       res.send(html);
+      return;
     } catch (err) {
       next(err);
+      return;
     }
   });
 
