@@ -221,10 +221,13 @@ export class VerPropiedadComponent implements OnInit {
   updateParams() {
 
 
-    var pamrams = { "city": this.propiedad.city_code, "biz": this.propiedad.biz, "category": "" };
+    var pamrams = { "description":"","city": this.propiedad.city, "biz": this.propiedad.biz, "category": "" };
 
+    var valueDescription = `${this.propiedad.type} ${this.propiedad.biz} ${this.propiedad.city} ${this.propiedad.neighborhood}`.toLowerCase();
 
-    if(this.propiedad.biz === "VENTA"){
+    pamrams["description"] = valueDescription.split(" ").join("-");
+
+    if(this.propiedad.biz === "ARRIENDO"){
       if( (this.propiedad.rent && this.propiedad.rent > 15000000)){
         pamrams["category"] = "DIAMANTE";
       }
