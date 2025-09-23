@@ -20,7 +20,19 @@ export class EnvioExitosoComponent implements OnInit {
   } enviarWthatsapp() {
 
     var param = this.router.snapshot.queryParamMap.get('urlInmueble');
-    var text = `&text=Hola%2C%20Lenys%20me%20interesa%20este%20inmueble:%20${param}`;
-    window.location.href = `https://api.whatsapp.com/send?phone=573145438665${text}`;
+
+    if (param) {
+      var paramCode = atob(param); // Decodificas la URL
+
+      var urlCode = encodeURIComponent(paramCode);
+      var text = `&text=Hola%2C%20Lenys%20me%20interesa%20este%20inmueble:%20${urlCode}`;
+ 
+      window.location.href = `https://api.whatsapp.com/send?phone=573145438665${text}`;
+    } else {
+      console.error("No llegó el parámetro urlInmueble");
+    }
+
+  
+
   }
 }

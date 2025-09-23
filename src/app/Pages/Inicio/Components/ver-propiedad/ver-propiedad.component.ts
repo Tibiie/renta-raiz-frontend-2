@@ -265,6 +265,9 @@ export class VerPropiedadComponent implements OnInit {
       queryParams: pamrams,
       queryParamsHandling: 'merge',
     });
+
+
+    
   }
 
   getDatosPropiedad() {

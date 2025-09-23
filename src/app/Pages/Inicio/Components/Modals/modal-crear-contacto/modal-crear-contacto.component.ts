@@ -100,6 +100,9 @@ export class ModalCrearContactoComponent implements OnInit {
 
     this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     console.log(this.urlBase);
+
+    
+
   }
 
   abrirModal(codPro: number, accion: 'telefonos' | 'whatsapp' | 'soloEnviar') {
@@ -142,8 +145,11 @@ export class ModalCrearContactoComponent implements OnInit {
     this.iframeId = `inline-${formId}`;
     this.iframeTitle = formName;
     this.iframeHeight = iframeHeight;
-
-    const url = `${urlIframe}?urlInmueble=${window.location.href}`;
+  
+    const urlCurrent = window.location.href
+   const encodedUrl =  btoa(urlCurrent)
+    const url = `${urlIframe}?urlInmueble=${encodedUrl}`;
+    
     this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
