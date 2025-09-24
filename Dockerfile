@@ -26,6 +26,10 @@ WORKDIR /usr/src/app
 # Copiamos solo lo necesario
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/package*.json ./
+# Copiar sitemap y robots.txt a la carpeta pública
+RUN cp /usr/src/app/dist/renta-raiz-frontend-2/sitemap.xml /usr/src/app/dist/renta-raiz-frontend-2/browser/ && \
+    cp /usr/src/app/robots.txt /usr/src/app/dist/renta-raiz-frontend-2/browser/
+
 
 # Instalar dependencias de producción
 RUN npm install --omit=dev
