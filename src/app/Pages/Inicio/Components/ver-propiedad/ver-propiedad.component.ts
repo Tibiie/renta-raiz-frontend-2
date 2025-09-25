@@ -74,12 +74,13 @@ export class VerPropiedadComponent implements OnInit {
     window.scrollTo(0, 0);
     this.initZoom();
 
-    // this.route.paramMap.subscribe((params) => {
-    //   this.codPro = Number(params.get('codpro'));
-    //   const ocultar = Number(params.get('ocultarContenido')) === 1;
+    this.route.paramMap.subscribe((params) => {
+      this.codPro = Number(params.get('codpro'));
+      const ocultar = Number(params.get('ocultarContenido')) === 1;
+      this.getDatosPropiedad();
+      this.updateParams();
 
-
-    // });
+    });
     const ocultar = Number(this.route.snapshot.paramMap.get('ocultarContenido')) === 1;
     this.mostrarContenido = !ocultar;
 
@@ -88,7 +89,7 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   getDatos() {
-    this.getDatosPropiedad();
+    // this.getDatosPropiedad();
     this.prepararFiltros();
   }
 
@@ -165,7 +166,7 @@ export class VerPropiedadComponent implements OnInit {
   reinitZoom(): void {
     setTimeout(() => {
       this.initZoom();
-    }, 50);
+    }, 200);
   }
 
   zoomIn(): void {
@@ -297,6 +298,8 @@ export class VerPropiedadComponent implements OnInit {
     //     this.datosCargados = true;
     //   }
     // );
+
+   console.log(this.propiedad.images);
   }
 
   openModalCrearContacto(

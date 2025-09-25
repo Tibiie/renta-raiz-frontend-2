@@ -286,14 +286,9 @@ export class VistaInicialComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    const url = this.router
-      .createUrlTree(['/ver-propiedad', codPro, 0])
-      .toString();
-    // Construir la URL absoluta con el dominio actual
-    const fullUrl = window.location.origin + url;
-
-    // Abrir en nueva pestaña
-    window.open(fullUrl, '_blank');
+    this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
+    window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
+  });
   }
 
   abrirBrochure() {

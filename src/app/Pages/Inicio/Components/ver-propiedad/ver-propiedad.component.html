@@ -101,13 +101,15 @@
                       hidden: selectedIndex !== i,
                       block: selectedIndex === i
                     }"
-                    class="duration-700 ease-in-out"
+                    class="relative w-full h-full !translate-x-0 duration-700 ease-in-out"
                     data-carousel-item
                   >
+                   
                     <img
                       [src]="img.imageurl"
+                      
                       alt="Imagen ampliada"
-                      class="absolute w-full h-full object-cover rounded-xl"
+                      class="absolute inset-0 w-full h-full object-cover rounded-xl"
                       (click)="openModal(i)"
                     />
                   </div>

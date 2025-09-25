@@ -249,6 +249,14 @@ export class FiltrosComponent implements OnInit {
     this.obtenerParametrosFiltros(1, queryParams, state);
 
 
+    //-----------------------------------------------------
+
+
+
+
+
+
+
 
     console.log(window.history);
 
@@ -352,13 +360,69 @@ export class FiltrosComponent implements OnInit {
         this.filtrosSeleccionados.set('neighborhood_code', barrio);
       }
 
-      this.enviarFiltros(pagina, false);
 
+
+      //this.enviarFiltros(pagina, false);
       const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+      console.log('filtrosObj', filtrosObj);
+      const obj = {
+        ...filtrosObj,
+        page: pagina,
+      };
+
+      console.log('Obj', obj);
+
+      this.inmueblesService
+        .getFiltrosEnviar(obj, this.elementsPerPage)
+        .subscribe({
+          next: (response: any) => {
+            console.log('response', response);
+
+            this.resultados = response.data;
+            this.totalDatos = response.total;
+            this.paginaActual = response.current_page || 1;
+            this.paginacion = response;
+            this.totalPaginas = response.last_page || 1;
+            this.paginas = Array.from(
+              { length: this.totalPaginas },
+              (_, i) => i + 1
+            );
+
+            this.generarPaginas();
+            this.cargando = false;
+            console.log(this.isDrawerOpen);
+            console.log(response);
+
+            var data = {
+              "url": window.location.href,
+              "state": {
+                resultados: response.data,
+                paginacion: response,
+                filtros: obj,
+              },
+            }
+
+            this.urlParamService.guardarParamLocalStorage('data', JSON.stringify(data));
+
+          },
+          error: (error: any) => {
+            console.error('Error al obtener los inmuebles:', error);
+          },
+          complete: () => {
+            this.loadingResultados = false;
+
+            if (this.isMobileView && this.isDrawerOpen) {
+              this.closeDrawer();
+              console.log(this.isDrawerOpen);
+            }
+          },
+        });
+
+      const filtrosObje = Object.fromEntries(this.filtrosSeleccionados);
       const newState = {
         resultados: this.resultados,
         paginacion: this.paginacion,
-        filtros: filtrosObj,
+        filtros: filtrosObje,
       };
 
       this.cargarDesdeState(newState);
@@ -1094,7 +1158,7 @@ export class FiltrosComponent implements OnInit {
     this.prepararFiltros();
 
     const opcion = this.formFiltrosSelect.value.opcion;
-    
+
     if (opcion === 'order-mayor') {
       this.filtrosSeleccionados.set('order', 'pricemin');
     } else if (opcion === 'order-menor') {
@@ -1108,7 +1172,7 @@ export class FiltrosComponent implements OnInit {
     }
 
     console.log(this.filtrosSeleccionados);
-    
+
     this.cargando = true;
     this.loadingResultados = true;
     const savedCity = this.filtrosSeleccionados.get('city');
@@ -1117,7 +1181,7 @@ export class FiltrosComponent implements OnInit {
 
     console.log(this.filtrosSeleccionados);
 
-   
+
     if (savedCity) {
       this.filtrosSeleccionados.set('city', savedCity);
     }
@@ -1433,14 +1497,9 @@ export class FiltrosComponent implements OnInit {
   }
 
   verPropiedad(codPro: number) {
-    const url = this.router
-      .createUrlTree(['/ver-propiedad', codPro, 0])
-      .toString();
-    // Construir la URL absoluta con el dominio actual
-    const fullUrl = window.location.origin + url;
-
-    // Abrir en nueva pestaña
-    window.open(fullUrl, '_blank');
+    this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
+    window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
+  });
   }
 
   scrollToTop() {
@@ -1474,11 +1533,11 @@ export class FiltrosComponent implements OnInit {
     const value = event.option.value;
     this.precioMinimoCtrl.setValue(value, { emitEvent: true });
     this.filtrosSeleccionados.set('pcmin', this.precioMinimoCtrl.value);
-     this.formRangos.patchValue({
-        precioMinimo: this.precioMinimoCtrl.value,
-        precioVentaMinimo: this.precioVentaMinimoCtrl.value,
-      });
-    
+    this.formRangos.patchValue({
+      precioMinimo: this.precioMinimoCtrl.value,
+      precioVentaMinimo: this.precioVentaMinimoCtrl.value,
+    });
+
   }
 
   onMaxSelected(event: any) {
@@ -1486,9 +1545,9 @@ export class FiltrosComponent implements OnInit {
     this.precioMaximoCtrl.setValue(value, { emitEvent: true });
     this.filtrosSeleccionados.set('pcmax', this.precioMaximoCtrl.value);
     this.formRangos.patchValue({
-        precioMaximo: this.precioMaximoCtrl.value,
-        precioVentaMaximo: this.precioVentaMaximoCtrl.value,
-      });
-   
+      precioMaximo: this.precioMaximoCtrl.value,
+      precioVentaMaximo: this.precioVentaMaximoCtrl.value,
+    });
+
   }
 }

@@ -2,12 +2,12 @@
 
 <div class="flex flex-col">
   <div class="banner-contacto w-full max-h-[60vh] overflow-hidden" data-carousel="slide" data-carousel-interval="5000">
-    <div class="relative w-full h-[60vh]">
+    <div class="relative w-full h-[40vh] md:h-[60vh]">
       <div *ngFor="let imagen of sliderFotos; let i = index"
-        class="absolute top-0 left-0 w-full h-full transition-opacity duration-700"
+       class="absolute top-0 left-0 w-full h-full transition-opacity duration-700"
         [attr.data-carousel-item]="i === 0 ? 'active' : ''">
         <img [src]="imagen"
-          class="w-full h-full md:object-cover lg:object-cover xl:object-cover 2xl:object-cover object-fill"
+         class="w-full h-full object-cover"
           alt="Slide {{ i + 1 }}" />
       </div>
 
