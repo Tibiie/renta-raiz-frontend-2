@@ -10,7 +10,14 @@ import { Router } from '@angular/router';
 })
 export class FooterComponent {
 
+  
+
   router = inject(Router);
+
+  abrirPoliticasAcoso() {
+    const url = this.router.createUrlTree(['/politicas-de-acoso-sexual']).toString();
+    window.open(url, '_blank');
+  }
 
   abrirPoliticas() {
     const url = this.router.createUrlTree(['/politicas-de-privacidad']).toString();

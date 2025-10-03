@@ -16,6 +16,7 @@ import { EnvioExitosoComponent } from '../../shared/envio-exitoso/envio-exitoso.
 import { propiedadResolver } from '../../core/resolvers/propiedad.resolver';
 import { blogsResolver } from '../../core/resolvers/blogs.resolver';
 import { AppComponent } from '../../app.component';
+import { PoliticaAcosoComponent } from './Components/politica-acoso/politica-acoso.component';
 
 export const routes: Routes = [
 
@@ -77,6 +78,10 @@ export const routes: Routes = [
       {
         path: 'politicas-de-privacidad',
         component: PoliticarPrivacidadComponent,
+      },
+        {
+        path: 'politicas-de-acoso-sexual',
+        component: PoliticaAcosoComponent,
       },
       {
         path: 'avaluos-comerciales',
