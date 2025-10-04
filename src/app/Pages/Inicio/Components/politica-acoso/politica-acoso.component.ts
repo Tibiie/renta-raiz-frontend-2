@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { SafeResourceUrl } from '@angular/platform-browser';
+import { Component, OnInit,NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-politica-acoso',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule, // 👈 Necesario para *ngIf, *ngFor, etc.
+  ],
   templateUrl: './politica-acoso.component.html',
   styleUrl: './politica-acoso.component.scss'
 })
@@ -15,12 +18,10 @@ export class PoliticaAcosoComponent implements OnInit{
    pdfUrl = '/assets/images/POLITICA_ACOSO_SEXUAL.pdf';
   isIOS = false;
 
-  constructor() {
-   
-  }
+ constructor(private sanitizer: DomSanitizer) {}
   ngOnInit(): void {
      this.isSafariOrIOS = this.detectSafariOrIOS();
-
+      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrl);
      if (this.isSafariOrIOS) {
       // En iOS/Safari abrir el PDF directamente
       this.openPdfExternally();

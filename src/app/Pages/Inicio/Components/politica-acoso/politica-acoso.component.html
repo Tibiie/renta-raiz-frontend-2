@@ -1,12 +1,15 @@
-<div class="w-full h-screen">
-  <object 
-    data="/assets/images/POLITICA_ACOSO_SEXUAL.pdf" 
-    type="application/pdf" 
-    width="100%" 
-    height="100%">
-      <p>
-        Tu navegador no soporta la visualización de PDF. 
-        <a href="/assets/images/POLITICA_ACOSO_SEXUAL.pdf" target="_blank">Descargar PDF</a>
-      </p>
-  </object>
+<div *ngIf="!isSafariOrIOS" class="pdf-container">
+  <iframe
+    [src]="safeUrl"
+    width="100%"
+    height="600px"
+    style="border: none;"
+  ></iframe>
+</div>
+
+<div *ngIf="isSafariOrIOS" class="pdf-download">
+  <p>El visor nativo de iOS/Safari se ha abierto en otra pestaña.</p>
+  <a [href]="pdfUrl" target="_blank" rel="noopener noreferrer">
+    Si no se abrió, haz clic aquí para ver el PDF
+  </a>
 </div>
