@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-politica-acoso',
@@ -7,20 +8,35 @@ import { Component } from '@angular/core';
   templateUrl: './politica-acoso.component.html',
   styleUrl: './politica-acoso.component.scss'
 })
-export class PoliticaAcosoComponent {
+export class PoliticaAcosoComponent implements OnInit{
+  safeUrl!: SafeResourceUrl;
+  isSafariOrIOS = false;
 
    pdfUrl = '/assets/images/POLITICA_ACOSO_SEXUAL.pdf';
   isIOS = false;
 
   constructor() {
-    this.isIOS = this.detectIOS();
+   
   }
+  ngOnInit(): void {
+     this.isSafariOrIOS = this.detectSafariOrIOS();
 
-  private detectIOS(): boolean {
-    if (typeof navigator !== 'undefined') {
-      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+     if (this.isSafariOrIOS) {
+      // En iOS/Safari abrir el PDF directamente
+      this.openPdfExternally();
     }
-    return false;
   }
 
+   private detectSafariOrIOS(): boolean {
+    const ua = navigator.userAgent;
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    return isIOS || isSafari;
+  }
+
+
+  private openPdfExternally(): void {
+    // Abre el PDF en una nueva pestaña para que iOS/Safari lo maneje nativamente
+    window.open(this.pdfUrl, '_blank');
+  }
 }
