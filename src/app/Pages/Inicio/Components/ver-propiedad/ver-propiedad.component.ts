@@ -309,6 +309,16 @@ export class VerPropiedadComponent implements OnInit {
     this.modalCrearContacto.abrirModal(codPro, accion);
   }
 
+
+  
+   openModalTelefono(
+    codPro: number,
+    accion: 'telefonos' | 'whatsapp' | 'soloEnviar'
+  ) {
+    this.modalCrearContacto.abrirModalTelefonos();
+  }
+
+
   prepararFiltros() {
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('city', this.propiedad.city_code);

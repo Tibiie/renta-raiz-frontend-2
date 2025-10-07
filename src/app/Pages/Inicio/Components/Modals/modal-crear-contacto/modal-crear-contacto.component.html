@@ -1,17 +1,10 @@
 <div style="display: none">
-  <iframe
-    src="https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg"
-    id="preload-iframe"
-    style="width: 0; height: 0; border: 0"
-    (load)="iframeListo = true"
-    title="Preload Leads"
-  ></iframe>
+  <iframe src="https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg" id="preload-iframe"
+    style="width: 0; height: 0; border: 0" (load)="iframeListo = true" title="Preload Leads"></iframe>
 </div>
 
-<div
-  *ngIf="visible"
-  class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
->
+<div *ngIf="visible"
+  class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
   <div class="relative w-full max-w-md">
     <div class="relative bg-white rounded-lg shadow-sm overflow-hidden">
       <div class="flex items-center justify-between p-4 border-b border-gray-200">
@@ -24,43 +17,31 @@
       </div>
 
       <div class="p-0 m-0">
-        <iframe
-          *ngIf="iframeSrc"
-          [src]="iframeSrc"
-          [id]="iframeId"
-          attr.data-layout='{"id":"INLINE"}'
-          data-trigger-type="alwaysShow"
-          data-trigger-value=""
-          data-activation-type="alwaysActivated"
-          data-activation-value=""
-          data-deactivation-type="neverDeactivate"
-          data-deactivation-value=""
-          [attr.data-form-name]="iframeTitle"
-          [attr.data-height]="iframeHeight"
-          [attr.data-layout-iframe-id]="iframeId"
-          [attr.data-form-id]="iframeId.replace('inline-', '')"
-          [title]="iframeTitle"
-          style="width: 100%; border: none; border-radius: 3px;"
-          [style.height.px]="iframeHeight"
-        ></iframe>
+        <iframe *ngIf="iframeSrc" [src]="iframeSrc" [id]="iframeId" attr.data-layout='{"id":"INLINE"}'
+          data-trigger-type="alwaysShow" data-trigger-value="" data-activation-type="alwaysActivated"
+          data-activation-value="" data-deactivation-type="neverDeactivate" data-deactivation-value=""
+          [attr.data-form-name]="iframeTitle" [attr.data-height]="iframeHeight" [attr.data-layout-iframe-id]="iframeId"
+          [attr.data-form-id]="iframeId.replace('inline-', '')" [title]="iframeTitle"
+          style="width: 100%; border: none; border-radius: 3px;" [style.height.px]="iframeHeight"></iframe>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Modal para mostrar teléfonos -->
-<div
-  *ngIf="mostrarModalTelefonos"
-  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
->
+<div *ngIf="mostrarModalTelefonos" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
   <div class="bg-white rounded-lg p-6 w-80 text-center shadow-lg">
     <h2 class="text-xl font-bold mb-4 text-[#080E36]">Teléfonos de contacto</h2>
-    <p class="text-lg text-gray-700">📞 +57 300 111 2233</p>
-    <p class="text-lg text-gray-700">📞 +57 310 444 5566</p>
-    <button
-      (click)="cerrarModalTelefonos()"
-      class="mt-4 bg-[#080E36] text-white px-4 py-2 rounded hover:bg-[#0b1144] w-full"
-    >
+
+
+
+    <button type="button" (click)="abrirToCall()"
+      class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-white border border-[#080E36] hover:bg-[#cdad60] focus:ring-4 focus:outline-none focus:ring-[#080E36] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
+      <i class="fas fa-phone-alt fa-sm"></i>+57 300 111 2233
+    </button>
+
+    <button (click)="cerrarModalTelefonos()"
+      class="mt-4 bg-[#080E36] text-white px-4 py-2 rounded hover:bg-[#0b1144] w-full">
       Cerrar
     </button>
   </div>

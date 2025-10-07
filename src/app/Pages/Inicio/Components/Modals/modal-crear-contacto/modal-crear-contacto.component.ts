@@ -169,6 +169,10 @@ export class ModalCrearContactoComponent implements OnInit {
     this.mostrarModalTelefonos = true;
   }
 
+  abrirToCall(){
+    window.location.href='tel:+573007088061'
+  }
+
   cerrarModalTelefonos() {
     this.mostrarModalTelefonos = false;
   }
