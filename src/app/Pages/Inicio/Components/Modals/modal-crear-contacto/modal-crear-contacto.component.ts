@@ -169,8 +169,8 @@ export class ModalCrearContactoComponent implements OnInit {
     this.mostrarModalTelefonos = true;
   }
 
-  abrirToCall(){
-    window.location.href='tel:+573007088061'
+  abrirToCall(number:string){
+    window.location.href= `tel:${number}`
   }
 
   cerrarModalTelefonos() {
