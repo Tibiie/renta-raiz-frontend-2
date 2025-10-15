@@ -219,40 +219,59 @@ export class VerPropiedadComponent implements OnInit {
     this.tabActivo = tab;
   }
 
+  removeSpecialChars(text: string): string {
+    if (!text) return '';
+
+    // 1. Normaliza los caracteres para separar tildes de las letras
+    text = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    // 2. Reemplaza la ñ y Ñ por n y N
+    text = text.replace(/ñ/g, 'n').replace(/Ñ/g, 'N');
+
+    // 3. Elimina cualquier carácter que no sea letra, número o espacio
+    text = text.replace(/[^a-zA-Z0-9\s]/g, '');
+
+    // 4. Quita espacios múltiples
+    text = text.replace(/\s+/g, ' ').trim();
+
+    return text;
+  }
+
+
   updateParams() {
 
 
-    var pamrams = { "description":"","city": this.propiedad.city, "biz": this.propiedad.biz, "category": "" };
+    var pamrams = { "description": "", "city": this.removeSpecialChars(this.propiedad.city), "biz": this.propiedad.biz, "category": "" };
 
     var valueDescription = `${this.propiedad.type} ${this.propiedad.biz} ${this.propiedad.city} ${this.propiedad.neighborhood}`.toLowerCase();
 
-    pamrams["description"] = valueDescription.split(" ").join("-");
+    pamrams["description"] = this.removeSpecialChars(valueDescription).replaceAll("-","").split(" ").join("-");
 
-    if(this.propiedad.biz === "ARRIENDO"){
-      if( (this.propiedad.rent && this.propiedad.rent > 15000000)){
+    if (this.propiedad.biz === "ARRIENDO") {
+      if ((this.propiedad.rent && this.propiedad.rent > 15000000)) {
         pamrams["category"] = "DIAMANTE";
       }
 
-      if(this.propiedad.rent && this.propiedad.rent >= 8000000 && this.propiedad.rent <= 15000000){
+      if (this.propiedad.rent && this.propiedad.rent >= 8000000 && this.propiedad.rent <= 15000000) {
         pamrams["category"] = "ORO";
       }
 
-      if(this.propiedad.rent && this.propiedad.rent >= 2000000 && this.propiedad.rent <= 8000000){
+      if (this.propiedad.rent && this.propiedad.rent >= 2000000 && this.propiedad.rent <= 8000000) {
         pamrams["category"] = "PLATA";
       }
     }
 
 
-    if(this.propiedad.biz === "VENTA"){
-      if( (this.propiedad.saleprice && this.propiedad.saleprice > 2000000000)){
+    if (this.propiedad.biz === "VENTA") {
+      if ((this.propiedad.saleprice && this.propiedad.saleprice > 2000000000)) {
         pamrams["category"] = "DIAMANTE";
       }
 
-      if(this.propiedad.saleprice && this.propiedad.saleprice >= 1000000001 && this.propiedad.saleprice <= 2000000000){
+      if (this.propiedad.saleprice && this.propiedad.saleprice >= 1000000001 && this.propiedad.saleprice <= 2000000000) {
         pamrams["category"] = "ORO";
       }
 
-      if(this.propiedad.saleprice && this.propiedad.saleprice >= 100000000 && this.propiedad.saleprice <= 1000000000){
+      if (this.propiedad.saleprice && this.propiedad.saleprice >= 100000000 && this.propiedad.saleprice <= 1000000000) {
         pamrams["category"] = "PLATA";
       }
     }
@@ -268,7 +287,7 @@ export class VerPropiedadComponent implements OnInit {
     });
 
 
-    
+
   }
 
   getDatosPropiedad() {
@@ -299,7 +318,7 @@ export class VerPropiedadComponent implements OnInit {
     //   }
     // );
 
-   console.log(this.propiedad.images);
+    console.log(this.propiedad.images);
   }
 
   openModalCrearContacto(
@@ -310,8 +329,8 @@ export class VerPropiedadComponent implements OnInit {
   }
 
 
-  
-   openModalTelefono(
+
+  openModalTelefono(
     codPro: number,
     accion: 'telefonos' | 'whatsapp' | 'soloEnviar'
   ) {
