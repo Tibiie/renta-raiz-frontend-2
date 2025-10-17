@@ -22,8 +22,6 @@ import { PortafolioAsesoresComponent } from './Components/portafolio-asesores/po
 export const routes: Routes = [
 
 
-
-
   {
     path: '',
     component: AppComponent,
@@ -91,7 +89,8 @@ export const routes: Routes = [
       {
         path: 'formulario-enviado-con-exito',
         component: EnvioExitosoComponent,
-      },
+      }
+      ,
       {
         path: 'portafolio/:asesor',
         component: PortafolioAsesoresComponent,

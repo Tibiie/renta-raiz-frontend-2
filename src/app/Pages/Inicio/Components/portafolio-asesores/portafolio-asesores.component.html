@@ -1,5 +1,15 @@
-<div class="flex flex-col md:flex-row">
-<div class="relative w-full">
+
+
+<!-- navbar  -->
+<app-navbar-2 [alwaysScrolled]="true" *ngIf=" !mostrarContenido"></app-navbar-2>
+<div class="w-full mt-12 mb-6 transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-32" [ngClass]="{
+      'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
+      'md:ml-0': !isDrawerOpen
+    }">
+
+
+  <div class="flex flex-col md:flex-row">
+    <div class="relative w-full">
       <!-- Overlay de carga -->
       <div *ngIf="loadingResultados"
         class="absolute inset-0 bg-white bg-opacity-70 z-40 flex items-center justify-center">
@@ -7,6 +17,37 @@
           <div class="w-10 h-10 border-4 border-[#CDAD60] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
+
+
+      
+      <div
+  class="bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row items-center md:items-center justify-center transition hover:scale-105 duration-300 md:space-x-6 space-y-4 md:space-y-0 overflow-hidden">
+  
+  <!-- Imagen -->
+  <img 
+    src="assets/images/JuanOspina-rr24-210x210.jpg" 
+    alt="Juan Pablo Ospina"
+    class="w-32 h-32 rounded-full object-cover flex-shrink-0"
+  />
+
+  <!-- Datos -->
+  <div class="flex flex-col justify-center text-center md:text-left">
+    <h3 class="text-lg font-bold text-gray-900">
+      Juan Pablo Ospina
+    </h3>
+    <p class="text-sm font-medium text-gray-900">
+      Ejecutivo Comercial de Alto Valor
+    </p>
+    <div class="flex justify-center md:justify-start items-center text-gray-600 mt-2">
+      <i class="fa-solid fa-phone text-lg"></i>
+      <span class="ml-2 text-sm">350 223 9393</span>
+    </div>
+    <div class="flex justify-center md:justify-start items-center text-gray-600 mt-1">
+      <i class="fa-solid fa-envelope text-lg"></i>
+      <span class="ml-2 text-sm">Juanpablo.rentaraiz&#64;gmail.com</span>
+    </div>
+  </div>
+</div>
 
       <!-- Contenido de resultados -->
       <div *ngIf="resultados.length > 0"
@@ -133,53 +174,54 @@
       No se encontraron inmuebles con los filtros seleccionados.
     </div>
 
-    <!-- Paginado -->
-    <div class="flex justify-center mt-6">
-      <nav aria-label="Page navigation">
-        <ul class="inline-flex items-center -space-x-px text-sm">
-          <li>
-            <button (click)="paginaAnterior()" [disabled]="paginaActual === 1"
-              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
-              Anterior
-            </button>
-          </li>
 
-          <li *ngIf="bloqueActual > 0">
-            <button (click)="irAlBloqueAnterior()" [disabled]="bloqueActual === 0"
-              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+  </div>
+
+  <!-- Paginado -->
+  <div class="flex justify-center mt-6" *ngIf="resultados.length > 0">
+    <nav aria-label="Page navigation">
+      <ul class="inline-flex items-center -space-x-px text-sm">
+        <li>
+          <button (click)="paginaAnterior()" [disabled]="paginaActual === 1"
+            class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+            Anterior
+          </button>
+        </li>
+
+        <li *ngIf="bloqueActual > 0">
+          <button (click)="irAlBloqueAnterior()" [disabled]="bloqueActual === 0"
+            class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+            ...
+          </button>
+        </li>
+
+        <li *ngFor="let pagina of paginas" class="mx-0.5">
+          <ng-container *ngIf="pagina === '...'; else paginaBtn">
+            <button (click)="cambiarPagina(pagina)"
+              class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded">
               ...
             </button>
-          </li>
-
-          <li *ngFor="let pagina of paginas" class="mx-0.5">
-            <ng-container *ngIf="pagina === '...'; else paginaBtn">
-              <button (click)="cambiarPagina(pagina)"
-                class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded">
-                ...
-              </button>
-            </ng-container>
-            <ng-template #paginaBtn>
-              <button (click)="cambiarPagina(pagina)" [ngClass]="
+          </ng-container>
+          <ng-template #paginaBtn>
+            <button (click)="cambiarPagina(pagina)" [ngClass]="
                   pagina === paginaActual
                     ? 'text-white bg-[#CDAD60]'
                     : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
                 " class="px-3 py-2 leading-tight border border-gray-300 rounded">
-                {{ pagina }}
-              </button>
-            </ng-template>
-          </li>
-
-          <li>
-            <button (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas"
-              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
-              Siguiente
+              {{ pagina }}
             </button>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
+          </ng-template>
+        </li>
 
+        <li>
+          <button (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas"
+            class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+            Siguiente
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
   <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
     <button (click)="scrollToTop()"
       class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:bg-[#CDAD60] transition-all duration-300 bg-[#080E36] flex items-center justify-center"
@@ -190,3 +232,4 @@
       </svg>
     </button>
   </div>
+</div>
