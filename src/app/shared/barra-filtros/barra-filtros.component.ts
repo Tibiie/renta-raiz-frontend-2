@@ -14,6 +14,8 @@ import { UrlParamService } from '../../core/configs/url-param.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+
 import { log } from 'console';
 
 @Component({
@@ -594,6 +596,16 @@ export class BarraFiltrosComponent {
   redirigirFiltros() {
     this.isPreciosOpen = false;
     this.cargando = true;
+
+    console.log(this.filtrosSeleccionados);
+    
+     if (this.precioMaximoCtrl.value !== "" && this.precioMinimoCtrl.value !== "") {
+
+      this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
+      this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
+    }
+
+  
     this.prepararFiltros();
     this.getEnviarFiltros();
   }
@@ -616,26 +628,51 @@ export class BarraFiltrosComponent {
 
   private generateSuggestions(value: string | number | null): number[] {
     const num = parseInt((value || '').toString().replace(/\D/g, ''), 10);
-
     if (!num || isNaN(num)) return [];
 
-    return [
-      num * 1_000_000,
-      num * 10_000_000,
-      num * 100_000_000
-    ];
+    const multipliers = [1, 10, 100, 1000, 10000];
+    const suggestions = multipliers.map(m => num * m).filter(v => v <= 50000000000); // por ejemplo, máximo 500 millones
+
+    return suggestions;
   }
 
 
-  onMinSelected(event: any) {
+  onMinSelected(event: any,trigger: MatAutocompleteTrigger) {
     const value = event.option.value;
     this.precioMinimoCtrl.setValue(value, { emitEvent: true });
-    this.filtrosSeleccionados.set('pcmin', this.precioMinimoCtrl.value);
+    this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
+     // 👇 Cierra el panel
+  trigger.closePanel();
   }
 
-  onMaxSelected(event: any) {
+  onMaxSelected(event: any,trigger: MatAutocompleteTrigger) {
     const value = event.option.value;
     this.precioMaximoCtrl.setValue(value, { emitEvent: true });
-    this.filtrosSeleccionados.set('pcmax', this.precioMaximoCtrl.value);
+    this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
+     // 👇 Cierra el panel
+  trigger.closePanel();
+  }
+
+
+  formatCurrencyInput(ctrl: FormControl): void {
+    const rawValue = ctrl.value?.toString().replace(/\D/g, '') || '';
+    if (!rawValue) {
+      ctrl.setValue('', { emitEvent: false });
+      return;
+    }
+
+    const numericValue = parseInt(rawValue, 10);
+    const formattedValue = numericValue.toLocaleString('es-CO'); // Ej: 1.000.000
+
+    // Actualizamos el input solo visualmente
+    ctrl.setValue(formattedValue, { emitEvent: false });
+  }
+
+  getNumericValue(ctrl: FormControl): number {
+    return parseInt(ctrl.value.toString().replace(/\D/g, ''), 10) || 0;
+  }
+
+  onInputBlur(trigger: MatAutocompleteTrigger): void {
+    trigger.closePanel();
   }
 }

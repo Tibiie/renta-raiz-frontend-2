@@ -24,6 +24,7 @@ import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { UrlParamService } from '../../../../core/configs/url-param.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-filtros',
@@ -930,6 +931,22 @@ export class FiltrosComponent implements OnInit {
     const savedNeighborhood =
       this.filtrosSeleccionados.get('neighborhood_code');
 
+    console.log(this.precioMaximoCtrl.value);
+
+    if (this.precioMaximoCtrl.value !== "" && this.precioMinimoCtrl.value !== "") {
+
+      this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
+      this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
+    }
+
+    if (this.precioVentaMinimoCtrl.value !== "" && this.precioVentaMaximoCtrl.value !== "") {
+      this.filtrosSeleccionados.set('pvmin', this.getNumericValue(this.precioVentaMinimoCtrl));
+      this.filtrosSeleccionados.set('pvmax', this.getNumericValue(this.precioVentaMaximoCtrl));
+    }
+
+
+
+
     console.log(this.filtrosSeleccionados);
 
     if (prepararFiltros) {
@@ -941,6 +958,7 @@ export class FiltrosComponent implements OnInit {
     if (savedNeighborhood) {
       this.filtrosSeleccionados.set('neighborhood_code', savedNeighborhood);
     }
+
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
     console.log('filtrosObj', filtrosObj);
     const obj = {
@@ -1113,11 +1131,20 @@ export class FiltrosComponent implements OnInit {
       );
     }
 
-    this.filtrosSeleccionados.delete('pcmin');
-    this.filtrosSeleccionados.delete('pcmax');
-    this.filtrosSeleccionados.delete('pvmin');
-    this.filtrosSeleccionados.delete('pvmax');
+    if (this.filtrosSeleccionados.get('pcmin') === "" || this.filtrosSeleccionados.get('pcmin') === undefined) {
+      this.filtrosSeleccionados.delete('pcmin');
+    }
 
+    if (this.filtrosSeleccionados.get('pcmax') === "" || this.filtrosSeleccionados.get('pcmax') === undefined) {
+      this.filtrosSeleccionados.delete('pcmax');
+    }
+    if (this.filtrosSeleccionados.get('pvmin') === "" || this.filtrosSeleccionados.get('pvmin') === undefined) {
+      this.filtrosSeleccionados.delete('pvmin');
+    }
+
+    if (this.filtrosSeleccionados.get('pvmax') === "" || this.filtrosSeleccionados.get('pvmax') === undefined) {
+      this.filtrosSeleccionados.delete('pvmax');
+    }
     if (this.selectedProperty) {
       const propertyType = this.selectedProperty.code;
 
@@ -1498,8 +1525,8 @@ export class FiltrosComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
-    window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
-  });
+      window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
+    });
   }
 
   scrollToTop() {
@@ -1518,18 +1545,16 @@ export class FiltrosComponent implements OnInit {
 
   private generateSuggestions(value: string | number | null): number[] {
     const num = parseInt((value || '').toString().replace(/\D/g, ''), 10);
-
     if (!num || isNaN(num)) return [];
 
-    return [
-      num * 1_000_000,
-      num * 10_000_000,
-      num * 100_000_000
-    ];
+    const multipliers = [1, 10, 100, 1000, 10000];
+    const suggestions = multipliers.map(m => num * m).filter(v => v <= 50000000000); // por ejemplo, máximo 500 millones
+
+    return suggestions;
   }
 
 
-  onMinSelected(event: any) {
+  onMinSelected(event: any,trigger: MatAutocompleteTrigger) {
     const value = event.option.value;
     this.precioMinimoCtrl.setValue(value, { emitEvent: true });
     this.filtrosSeleccionados.set('pcmin', this.precioMinimoCtrl.value);
@@ -1538,9 +1563,12 @@ export class FiltrosComponent implements OnInit {
       precioVentaMinimo: this.precioVentaMinimoCtrl.value,
     });
 
+     // 👇 Cierra el panel
+  trigger.closePanel();
+
   }
 
-  onMaxSelected(event: any) {
+  onMaxSelected(event: any,trigger: MatAutocompleteTrigger) {
     const value = event.option.value;
     this.precioMaximoCtrl.setValue(value, { emitEvent: true });
     this.filtrosSeleccionados.set('pcmax', this.precioMaximoCtrl.value);
@@ -1548,6 +1576,32 @@ export class FiltrosComponent implements OnInit {
       precioMaximo: this.precioMaximoCtrl.value,
       precioVentaMaximo: this.precioVentaMaximoCtrl.value,
     });
-
+ // 👇 Cierra el panel
+  trigger.closePanel();
   }
+
+
+  formatCurrencyInput(ctrl: FormControl): void {
+    const rawValue = ctrl.value?.toString().replace(/\D/g, '') || '';
+    if (!rawValue) {
+      ctrl.setValue('', { emitEvent: false });
+      return;
+    }
+
+    const numericValue = parseInt(rawValue, 10);
+    const formattedValue = numericValue.toLocaleString('es-CO'); // Ej: 1.000.000
+
+    // Actualizamos el input solo visualmente
+    ctrl.setValue(formattedValue, { emitEvent: false });
+  }
+
+ getNumericValue(ctrl: FormControl): number {
+  return parseInt(ctrl.value.toString().replace(/\D/g, ''), 10) || 0;
+}
+
+onInputBlur(trigger: MatAutocompleteTrigger): void {
+  trigger.closePanel();
+}
+
+
 }
