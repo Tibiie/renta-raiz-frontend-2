@@ -54,6 +54,7 @@ export class PortafolioAsesoresComponent implements OnInit {
 
   obtenerPropiedades(asesorID: number, page: number) {
     this.filtrosSeleccionados.set('broker', asesorID);
+    this.filtrosSeleccionados.set('bz', 2);
     
 
      const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
@@ -66,7 +67,7 @@ export class PortafolioAsesoresComponent implements OnInit {
       console.log(obj);
       
    
-    this.inmubeService.getFiltrosEnviar(obj, 12).subscribe(
+    this.inmubeService.getFiltrosEnviar(obj, 4).subscribe(
       (data: any) => {
         this.resultados = data.data;
         console.log(this.resultados);
