@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from 'express';
+
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
 import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
@@ -26,11 +26,13 @@ export class PortafolioAsesoresComponent implements OnInit {
   bloqueActual: number = 0;
   loadingResultados: boolean = false;
   isDrawerOpen: boolean = false;
-  resultados: any[] = [];
+  resultadosVenta: any[] = [];
+  resultadosArriendo: any[] = [];
   paginas: (number | string)[] = [];
 
 
    activatedRoute = inject(ActivatedRoute);
+   router = inject(Router);
   // router = inject(Router);
    inmubeService = inject(InmueblesService);
 
@@ -40,19 +42,19 @@ export class PortafolioAsesoresComponent implements OnInit {
     
      this.asesorId = this.activatedRoute.snapshot.paramMap.get('asesor')!;
      
-     this.obtenerPropiedades(Number(this.asesorId), 1);
+     this.obtenerPropiedadesVenta(Number(this.asesorId), 1);
   }
 
 
 
   verPropiedad(codPro: number) {
-    // this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
-    //   window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
-    // });
+    this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
+      window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
+    });
   }
 
 
-  obtenerPropiedades(asesorID: number, page: number) {
+  obtenerPropiedadesVenta(asesorID: number, page: number) {
     this.filtrosSeleccionados.set('broker', asesorID);
     this.filtrosSeleccionados.set('bz', 2);
     
@@ -66,17 +68,46 @@ export class PortafolioAsesoresComponent implements OnInit {
       };
       console.log(obj);
       
-   
-    this.inmubeService.getFiltrosEnviar(obj, 4).subscribe(
+     this.inmubeService.getFiltrosEnviar(obj, 4).subscribe(
       (data: any) => {
-        this.resultados = data.data;
-        console.log(this.resultados);
+        this.resultadosVenta = data.data;
+        console.log(this.resultadosVenta);
       },
       (error: any) => {
         console.error('Error al obtener las propiedades:', error);
       }
     );
+   
+    
   }
+
+  obtenerPropiedadesArriendo(asesorID: number, page: number) {
+    this.filtrosSeleccionados.set('broker', asesorID);
+    this.filtrosSeleccionados.set('bz', 1);
+    
+
+     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+
+     
+      const obj = {
+        ...filtrosObj,
+        page: page,
+      };
+      console.log(obj);
+     this.inmubeService.getFiltrosEnviar(obj, 4).subscribe(
+      (data: any) => {
+        this.resultadosArriendo = data.data;
+        console.log(this.resultadosArriendo);
+      },
+      (error: any) => {
+        console.error('Error al obtener las propiedades:', error);
+      }
+    );
+   
+    
+  }
+
+  
 
 
   generarPaginas() {
