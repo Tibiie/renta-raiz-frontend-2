@@ -1,10 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
 import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
+import e from 'express';
+import { get } from 'node:http';
+import { PortafolioEnum } from '../../../../core/enums/PortafolioEnum';
 
 
 @Component({
@@ -16,35 +19,71 @@ import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component
 })
 export class PortafolioAsesoresComponent implements OnInit {
 
-    mostrarContenido = false;
+  paginacionVenta: any = {};
+  paginacionArriendo: any = {};
+  mostrarContenido = false;
   asesorId!: string;
   filtrosSeleccionados: Map<string, any> = new Map();
-  totalDatos = 0;
-  totalPaginas = 0;
-  paginaActual: number = 1;
+  totalDatosVenta = 0;
+  totalDatosArriendo = 0;
+  totalPaginasVenta = 0;
+  totalPaginasArriendo = 0;
+  paginaActualVenta: number = 1;
+  paginaActualArriendo: number = 1;
   elementsPerPage = 12;
-  bloqueActual: number = 0;
+  bloqueActualVenta: number = 0;
+  bloqueActualArriendo: number = 0;
+
   loadingResultados: boolean = false;
   isDrawerOpen: boolean = false;
   resultadosVenta: any[] = [];
   resultadosArriendo: any[] = [];
-  paginas: (number | string)[] = [];
+  paginasVenta: (number | string)[] = [];
+  paginasArriendo: (number | string)[] = [];
+  isSmallScreen = false;
 
-
-   activatedRoute = inject(ActivatedRoute);
-   router = inject(Router);
+  activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
   // router = inject(Router);
-   inmubeService = inject(InmueblesService);
+  inmubeService = inject(InmueblesService);
 
 
 
   ngOnInit(): void {
-    
-     this.asesorId = this.activatedRoute.snapshot.paramMap.get('asesor')!;
-     
-     this.obtenerPropiedadesVenta(Number(this.asesorId), 1);
+
+    this.asesorId = this.activatedRoute.snapshot.paramMap.get('asesor')!;
+
+    this.obtenerPropiedadesVenta(Number(this.asesorId), 1, 4);
+    this.obtenerPropiedadesArriendo(Number(this.asesorId), 1, 4);
+    this.checkScreenSize();
   }
 
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+
+
+  private checkScreenSize() {
+    this.isSmallScreen = window.innerWidth <= 1024 && window.innerWidth >= 1000; // lg breakpoint de Tailwind
+    console.log('isSmallScreen:', this.isSmallScreen);
+
+  }
+
+  get inmueblesVisiblesVenta() {
+
+    return this.isSmallScreen
+      ? window.innerWidth <= 1000 ? this.resultadosVenta.slice(0, 4) : this.resultadosVenta.slice(0, 3)
+      : this.resultadosVenta.slice(0, 4);
+  }
+
+  get inmueblesVisiblesArriendo() {
+    return this.isSmallScreen
+      ? window.innerWidth <= 1000 ? this.resultadosArriendo.slice(0, 4) : this.resultadosArriendo.slice(0, 3)
+      : this.resultadosArriendo.slice(0, 4);
+  }
 
 
   verPropiedad(codPro: number) {
@@ -54,208 +93,384 @@ export class PortafolioAsesoresComponent implements OnInit {
   }
 
 
-  obtenerPropiedadesVenta(asesorID: number, page: number) {
+  obtenerPropiedadesVenta(asesorID: number, page: number, elementsPerPage: number) {
+    this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('broker', asesorID);
-    this.filtrosSeleccionados.set('bz', 2);
-    
+    this.filtrosSeleccionados.set('biz', 2);
 
-     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
-     
-      const obj = {
-        ...filtrosObj,
-        page: page,
-      };
-      console.log(obj);
-      
-     this.inmubeService.getFiltrosEnviar(obj, 4).subscribe(
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+
+
+    const obj = {
+      ...filtrosObj,
+      page: page,
+    };
+    console.log(obj);
+
+    this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
       (data: any) => {
         this.resultadosVenta = data.data;
-        console.log(this.resultadosVenta);
+        this.totalDatosVenta = data.total;
+        this.paginaActualVenta = data.current_page || 1;
+        this.paginacionVenta = data;
+        this.totalPaginasVenta = data.last_page || 1;
+        this.paginasVenta = Array.from(
+          { length: this.totalPaginasVenta },
+          (_, i) => i + 1
+        );
+
+        
+        this.generarPaginas(PortafolioEnum.VENTA);
+        console.log(this.paginacionVenta);
       },
       (error: any) => {
         console.error('Error al obtener las propiedades:', error);
       }
     );
-   
-    
+
+
   }
 
-  obtenerPropiedadesArriendo(asesorID: number, page: number) {
+  obtenerPropiedadesArriendo(asesorID: number, page: number, elementsPerPage: number) {
+    this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('broker', asesorID);
-    this.filtrosSeleccionados.set('bz', 1);
-    
+    this.filtrosSeleccionados.set('biz', 1);
 
-     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
 
-     
-      const obj = {
-        ...filtrosObj,
-        page: page,
-      };
-      console.log(obj);
-     this.inmubeService.getFiltrosEnviar(obj, 4).subscribe(
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+
+
+    const obj = {
+      ...filtrosObj,
+      page: page,
+    };
+    console.log(obj);
+    this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
       (data: any) => {
         this.resultadosArriendo = data.data;
+        this.resultadosArriendo = data.data;
+
+        this.totalDatosArriendo = data.total;
+        this.paginaActualArriendo = data.current_page || 1;
+        this.paginacionArriendo = data;
+        this.totalPaginasArriendo = data.last_page || 1;
+        this.paginasArriendo = Array.from(
+          { length: this.totalPaginasArriendo },
+          (_, i) => i + 1
+        );
+         this.generarPaginas(PortafolioEnum.ARRIENDO);
+         
         console.log(this.resultadosArriendo);
       },
       (error: any) => {
         console.error('Error al obtener las propiedades:', error);
       }
     );
-   
-    
+
+
   }
 
-  
 
 
-  generarPaginas() {
-    this.paginas = [];
-    const paginasPorBloque = 3;
-    const inicio = this.bloqueActual * paginasPorBloque + 1;
-    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginas);
 
-    for (let i = inicio; i <= fin; i++) {
-      this.paginas.push(i);
-    }
+  generarPaginas(tipo: string) {
+    if (tipo == PortafolioEnum.VENTA) {
+      this.paginasVenta = [];
+      const paginasPorBloque = 3;
+      const inicio = this.bloqueActualVenta * paginasPorBloque + 1;
+      const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginasVenta);
 
-    if (fin < this.totalPaginas - 1) {
-      this.paginas.push('...');
-    }
-
-    if (this.totalPaginas > 1 && !this.paginas.includes(this.totalPaginas)) {
-      this.paginas.push(this.totalPaginas);
-    }
-
-    console.log(this.paginas);
-  }
-
-  irAlSiguienteBloque() {
-    const maxBloques = Math.floor((this.totalPaginas - 1) / 3);
-    console.log(this.bloqueActual < maxBloques);
-    console.log(this.bloqueActual);
-
-
-    if (this.bloqueActual < maxBloques) {
-      console.log('bloque sig');
-
-      this.bloqueActual++;
-      this.generarPaginas();
-    }
-  }
-
-  irAlBloqueAnterior() {
-    const paginasPorBloque = 3;
-    console.log('bloque ant');
-
-    if (this.bloqueActual > 0) {
-      const nuevoBloque = this.bloqueActual - 1;
-      const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
-      const finNuevoBloque = Math.min(
-        inicioNuevoBloque + paginasPorBloque - 1,
-        this.totalPaginas
-      );
-
-      if (this.paginaActual >= inicioNuevoBloque) {
-        this.bloqueActual = nuevoBloque;
-      } else {
-        this.bloqueActual = nuevoBloque;
-        this.paginaActual = finNuevoBloque;
+      for (let i = inicio; i <= fin; i++) {
+        this.paginasVenta.push(i);
       }
 
-      this.generarPaginas();
+      if (fin < this.totalPaginasVenta - 1) {
+        this.paginasVenta.push('...');
+      }
 
+      if (this.totalPaginasVenta > 1 && !this.paginasVenta.includes(this.totalPaginasVenta)) {
+        this.paginasVenta.push(this.totalPaginasVenta);
+      }
+
+      console.log(this.paginasVenta);
+    }
+
+    if (tipo == PortafolioEnum.ARRIENDO) {
+      this.paginasArriendo = [];
+      const paginasPorBloque = 3;
+      const inicio = this.bloqueActualArriendo * paginasPorBloque + 1;
+      const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginasArriendo);
+
+      for (let i = inicio; i <= fin; i++) {
+        this.paginasArriendo.push(i);
+      }
+
+      if (fin < this.totalPaginasArriendo - 1) {
+        this.paginasArriendo.push('...');
+      }
+
+      if (this.totalPaginasArriendo > 1 && !this.paginasArriendo.includes(this.totalPaginasArriendo)) {
+        this.paginasArriendo.push(this.totalPaginasArriendo);
+      }
+
+      console.log(this.paginasArriendo);
     }
   }
 
-  cambiarPagina(pagina: number | string) {
-    console.log(pagina);
-    console.log('primer elemento', this.paginas[0]);
-    console.log('pagina', this.paginaActual);
+  irAlSiguienteBloque(tipo: string) {
+    if (tipo == PortafolioEnum.VENTA) {
+      const maxBloques = Math.floor((this.totalPaginasVenta - 1) / 3);
+      console.log(this.bloqueActualVenta < maxBloques);
+      console.log(this.bloqueActualVenta);
 
 
-    if (pagina === '...') {
-      this.irAlSiguienteBloque();
-      return;
+      if (this.bloqueActualVenta < maxBloques) {
+        console.log('bloque sig');
+
+        this.bloqueActualVenta++;
+        this.generarPaginas(PortafolioEnum.VENTA);
+      }
     }
 
-    if (typeof pagina === 'number') {
 
-      const primerElemento = this.paginas[0];
+    if (tipo == PortafolioEnum.ARRIENDO) {
+      const maxBloques = Math.floor((this.totalPaginasArriendo - 1) / 3);
+      console.log(this.bloqueActualArriendo < maxBloques);
+      console.log(this.bloqueActualArriendo);
 
-      if (typeof primerElemento === 'number' && this.paginaActual < primerElemento) {
-        this.irAlBloqueAnterior();
+
+      if (this.bloqueActualArriendo < maxBloques) {
+        console.log('bloque sig');
+
+        this.bloqueActualArriendo++;
+        this.generarPaginas(PortafolioEnum.ARRIENDO);
+      }
+    }
+
+  }
+
+  irAlBloqueAnterior(tipo: string) {
+    if (tipo == PortafolioEnum.VENTA) {
+      const paginasPorBloque = 3;
+      console.log('bloque ant');
+
+      if (this.bloqueActualVenta > 0) {
+        const nuevoBloque = this.bloqueActualVenta - 1;
+        const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
+        const finNuevoBloque = Math.min(
+          inicioNuevoBloque + paginasPorBloque - 1,
+          this.totalPaginasVenta
+        );
+
+        if (this.paginaActualVenta >= inicioNuevoBloque) {
+          this.bloqueActualVenta = nuevoBloque;
+        } else {
+          this.bloqueActualVenta = nuevoBloque;
+          this.paginaActualVenta = finNuevoBloque;
+        }
+
+        this.generarPaginas(PortafolioEnum.ARRIENDO);
+
+      }
+    }
+
+    if (tipo == PortafolioEnum.ARRIENDO) {
+      const paginasPorBloque = 3;
+      console.log('bloque ant');
+
+      if (this.bloqueActualArriendo > 0) {
+        const nuevoBloque = this.bloqueActualArriendo - 1;
+        const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
+        const finNuevoBloque = Math.min(
+          inicioNuevoBloque + paginasPorBloque - 1,
+          this.totalPaginasArriendo
+        );
+
+        if (this.paginaActualArriendo >= inicioNuevoBloque) {
+          this.bloqueActualArriendo = nuevoBloque;
+        } else {
+          this.bloqueActualArriendo = nuevoBloque;
+          this.paginaActualArriendo = finNuevoBloque;
+        }
+
+        this.generarPaginas(PortafolioEnum.ARRIENDO);
+
+      }
+    }
+  }
+
+  cambiarPagina(pagina: number | string, tipo: string) {
+    if (tipo == PortafolioEnum.VENTA) {
+      console.log(pagina);
+      console.log('primer elemento', this.paginasVenta[0]);
+      console.log('pagina', this.paginaActualVenta);
+
+
+      if (pagina === '...') {
+        this.irAlSiguienteBloque(tipo);
         return;
       }
 
-      console.log(typeof pagina);
+      if (typeof pagina === 'number') {
+
+        const primerElemento = this.paginasVenta[0];
+
+        if (typeof primerElemento === 'number' && this.paginaActualVenta < primerElemento) {
+          this.irAlBloqueAnterior(tipo);
+          return;
+        }
+
+        console.log(typeof pagina);
 
 
-      const nuevoBloque = Math.floor((pagina - 1) / 3);
-      if (nuevoBloque !== this.bloqueActual) {
+        const nuevoBloque = Math.floor((pagina - 1) / 3);
+        if (nuevoBloque !== this.bloqueActualVenta) {
 
-        this.bloqueActual = nuevoBloque;
-        this.generarPaginas();
+          this.bloqueActualVenta = nuevoBloque;
+          this.generarPaginas(tipo);
+        }
+
+        // var queryParams = this.activatedRoute.snapshot.queryParams;
+        // const state = window.history.state;
+        // console.log(state)
+
+        // console.log();
+
+        // if (Object.keys(queryParams).length >= 1 && !queryParams['tipo']) {
+
+
+
+        // } else {
+        //   console.log('no hay params');
+
+        // }
+      }
+    }
+
+    if (tipo == PortafolioEnum.ARRIENDO) {
+      console.log(pagina);
+      console.log('primer elemento', this.paginasArriendo[0]);
+      console.log('pagina', this.paginaActualArriendo);
+
+
+      if (pagina === '...') {
+        this.irAlSiguienteBloque(tipo);
+        return;
       }
 
-      // var queryParams = this.activatedRoute.snapshot.queryParams;
-      // const state = window.history.state;
-      // console.log(state)
+      if (typeof pagina === 'number') {
 
-      // console.log();
+        const primerElemento = this.paginasArriendo[0];
 
-      // if (Object.keys(queryParams).length >= 1 && !queryParams['tipo']) {
+        if (typeof primerElemento === 'number' && this.paginaActualArriendo < primerElemento) {
+          this.irAlBloqueAnterior(tipo);
+          return;
+        }
+
+        console.log(typeof pagina);
+
+
+        const nuevoBloque = Math.floor((pagina - 1) / 3);
+        if (nuevoBloque !== this.bloqueActualArriendo) {
+
+          this.bloqueActualArriendo = nuevoBloque;
+          this.generarPaginas(tipo);
+        }
+
+
+        // var queryParams = this.activatedRoute.snapshot.queryParams;
+        // const state = window.history.state;
+        // console.log(state)
+
+        // console.log();
+
+        // if (Object.keys(queryParams).length >= 1 && !queryParams['tipo']) {
 
 
 
-      // } else {
-      //   console.log('no hay params');
+        // } else {
+        //   console.log('no hay params');
 
-      // }
+        // }
+      }
     }
   }
 
 
-  paginaAnterior() {
-    if (this.paginaActual > 1) {
-      const nuevaPagina = this.paginaActual - 1;
-      const paginasPorBloque = 3;
-      const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+  paginaAnterior(tipo: string) {
+    if (tipo == PortafolioEnum.VENTA) {
+      if (this.paginaActualVenta > 1) {
+        const nuevaPagina = this.paginaActualVenta - 1;
+        const paginasPorBloque = 3;
+        const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
-      if (nuevoBloque !== this.bloqueActual) {
-        this.bloqueActual = nuevoBloque;
-        this.generarPaginas();
+        if (nuevoBloque !== this.bloqueActualVenta) {
+          this.bloqueActualVenta = nuevoBloque;
+          this.generarPaginas(tipo);
+        }
+
       }
+    }
 
+    if (tipo == PortafolioEnum.ARRIENDO) {
+      if (this.paginaActualArriendo > 1) {
+        const nuevaPagina = this.paginaActualArriendo - 1;
+        const paginasPorBloque = 3;
+        const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+
+        if (nuevoBloque !== this.bloqueActualArriendo) {
+          this.bloqueActualArriendo = nuevoBloque;
+          this.generarPaginas(tipo);
+        }
+
+      }
     }
   }
 
-  paginaSiguiente() {
-    if (this.paginaActual < this.totalPaginas) {
-      const nuevaPagina = this.paginaActual + 1;
-      // var queryParams = this.activatedRoute.snapshot.queryParams;
-      // const state = window.history.state;
+  paginaSiguiente(tipo: string) {
+    if (tipo == PortafolioEnum.VENTA) {
+      if (this.paginaActualVenta < this.totalPaginasVenta) {
+        const nuevaPagina = this.paginaActualVenta + 1;
 
-      // if (Object.keys(queryParams).length >= 1) {
-      //   this.paginaActual = nuevaPagina;
+        this.obtenerPropiedadesVenta(nuevaPagina, 1, 4);
+        
+        const paginasPorBloque = 3;
+        const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
+        if (bloqueActual !== this.bloqueActualVenta) {
+          this.bloqueActualVenta = bloqueActual;
+          this.generarPaginas(tipo);
+        }
 
-
-
-
-      // } else {
-
-      // }
-
-      const paginasPorBloque = 3;
-      const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
-
-      if (bloqueActual !== this.bloqueActual) {
-        this.bloqueActual = bloqueActual;
-        this.generarPaginas();
       }
+    }
+    if (tipo == PortafolioEnum.ARRIENDO) {
+      if (this.paginaActualArriendo < this.totalPaginasArriendo) {
+        const nuevaPagina = this.paginaActualVenta + 1;
+        // var queryParams = this.activatedRoute.snapshot.queryParams;
+        // const state = window.history.state;
 
+        // if (Object.keys(queryParams).length >= 1) {
+        //   this.paginaActual = nuevaPagina;
+
+
+
+
+
+        // } else {
+
+        // }
+
+        const paginasPorBloque = 3;
+        const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+
+        if (bloqueActual !== this.bloqueActualVenta) {
+          this.bloqueActualVenta = bloqueActual;
+          this.generarPaginas(tipo);
+        }
+
+      }
     }
   }
 
