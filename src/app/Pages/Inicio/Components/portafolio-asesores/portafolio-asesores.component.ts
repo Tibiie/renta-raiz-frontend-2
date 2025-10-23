@@ -30,11 +30,13 @@ export class PortafolioAsesoresComponent implements OnInit {
   totalPaginasArriendo = 0;
   paginaActualVenta: number = 1;
   paginaActualArriendo: number = 1;
-  elementsPerPage = 12;
+  elementsPerPage = 8;
   bloqueActualVenta: number = 0;
   bloqueActualArriendo: number = 0;
-
-  loadingResultados: boolean = false;
+  inmueblesVisiblesArriendo: any[] = [];
+  inmueblesVisiblesVenta: any[] = [];
+  loadingResultadosVenta: boolean = false;
+  loadingResultadosArriendo: boolean = false;
   isDrawerOpen: boolean = false;
   resultadosVenta: any[] = [];
   resultadosArriendo: any[] = [];
@@ -51,38 +53,77 @@ export class PortafolioAsesoresComponent implements OnInit {
 
   ngOnInit(): void {
 
+
     this.asesorId = this.activatedRoute.snapshot.paramMap.get('asesor')!;
 
-    this.obtenerPropiedadesVenta(Number(this.asesorId), 1, 4);
-    this.obtenerPropiedadesArriendo(Number(this.asesorId), 1, 4);
-    this.checkScreenSize();
+
+    // var tamano = window.innerWidth <= 1024 && window.innerWidth >= 1000;
+    // var elementsPerPage = tamano ? 4 : 3;
+
+    this.obtenerPropiedadesVenta(Number(this.asesorId), 1, this.elementsPerPage);
+    this.obtenerPropiedadesArriendo(Number(this.asesorId), 1, this.elementsPerPage);
+
+
+
   }
 
 
   @HostListener('window:resize', [])
   onResize() {
     this.checkScreenSize();
+
+    this.actualizarInmueblesVisiblesArriendo();
+    this.actualizarInmueblesVisiblesVenta();
   }
 
 
 
   private checkScreenSize() {
-    this.isSmallScreen = window.innerWidth <= 1024 && window.innerWidth >= 1000; // lg breakpoint de Tailwind
-    console.log('isSmallScreen:', this.isSmallScreen);
+    this.isSmallScreen = window.innerWidth <= 1024 && window.innerWidth >= 800; // lg breakpoint de Tailwind
+
 
   }
 
-  get inmueblesVisiblesVenta() {
+  // get inmueblesVisiblesVenta() {
 
-    return this.isSmallScreen
-      ? window.innerWidth <= 1000 ? this.resultadosVenta.slice(0, 4) : this.resultadosVenta.slice(0, 3)
-      : this.resultadosVenta.slice(0, 4);
+  //   return this.isSmallScreen
+  //     ? window.innerWidth <= 1000 ? this.resultadosVenta.slice(0, 4) : this.resultadosVenta.slice(0, 3)
+  //     : this.resultadosVenta.slice(0, 4);
+  // }
+
+  // get inmueblesVisiblesArriendo() {
+  //   return this.isSmallScreen
+  //     ? window.innerWidth <= 1000 ? this.resultadosArriendo.slice(0, 4) : this.resultadosArriendo.slice(0, 3)
+  //     : this.resultadosArriendo.slice(0, 4);
+  // }
+
+
+  actualizarInmueblesVisiblesArriendo() {
+    this.isSmallScreen = window.innerWidth <= 1024 && window.innerWidth >= 800; // lg breakpoint de Tailwind
+
+    if (this.isSmallScreen) {
+      this.inmueblesVisiblesArriendo =
+        window.innerWidth <= 1000
+          ? this.resultadosArriendo.slice(0, this.elementsPerPage -4)
+          : this.resultadosArriendo.slice(0, this.elementsPerPage-2);
+    } else {
+
+      this.inmueblesVisiblesArriendo = this.resultadosArriendo.slice(0, this.elementsPerPage);
+
+    }
+
   }
 
-  get inmueblesVisiblesArriendo() {
-    return this.isSmallScreen
-      ? window.innerWidth <= 1000 ? this.resultadosArriendo.slice(0, 4) : this.resultadosArriendo.slice(0, 3)
-      : this.resultadosArriendo.slice(0, 4);
+  async actualizarInmueblesVisiblesVenta() {
+    this.isSmallScreen = window.innerWidth <= 1024 && window.innerWidth >= 800; // lg breakpoint de Tailwind
+    if (this.isSmallScreen) {
+      this.inmueblesVisiblesVenta =
+        window.innerWidth <= 1000
+          ? this.resultadosVenta.slice(0, this.elementsPerPage-4)
+          : this.resultadosVenta.slice(0, this.elementsPerPage-2);
+    } else {
+      this.inmueblesVisiblesVenta = this.resultadosVenta.slice(0, this.elementsPerPage);
+    }
   }
 
 
@@ -94,9 +135,11 @@ export class PortafolioAsesoresComponent implements OnInit {
 
 
   obtenerPropiedadesVenta(asesorID: number, page: number, elementsPerPage: number) {
+    // this.loadingResultadosVenta = true
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('broker', asesorID);
     this.filtrosSeleccionados.set('biz', 2);
+    
 
 
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
@@ -111,6 +154,7 @@ export class PortafolioAsesoresComponent implements OnInit {
     this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
       (data: any) => {
         this.resultadosVenta = data.data;
+        this.actualizarInmueblesVisiblesVenta();
         this.totalDatosVenta = data.total;
         this.paginaActualVenta = data.current_page || 1;
         this.paginacionVenta = data;
@@ -120,9 +164,11 @@ export class PortafolioAsesoresComponent implements OnInit {
           (_, i) => i + 1
         );
 
-        
+
+
         this.generarPaginas(PortafolioEnum.VENTA);
-        console.log(this.paginacionVenta);
+        console.log(this.resultadosVenta);
+        // this.loadingResultadosVenta = false
       },
       (error: any) => {
         console.error('Error al obtener las propiedades:', error);
@@ -133,9 +179,12 @@ export class PortafolioAsesoresComponent implements OnInit {
   }
 
   obtenerPropiedadesArriendo(asesorID: number, page: number, elementsPerPage: number) {
+    // this.loadingResultadosArriendo = true
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('broker', asesorID);
     this.filtrosSeleccionados.set('biz', 1);
+    
+
 
 
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
@@ -149,7 +198,8 @@ export class PortafolioAsesoresComponent implements OnInit {
     this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
       (data: any) => {
         this.resultadosArriendo = data.data;
-        this.resultadosArriendo = data.data;
+
+        this.actualizarInmueblesVisiblesArriendo();
 
         this.totalDatosArriendo = data.total;
         this.paginaActualArriendo = data.current_page || 1;
@@ -159,9 +209,10 @@ export class PortafolioAsesoresComponent implements OnInit {
           { length: this.totalPaginasArriendo },
           (_, i) => i + 1
         );
-         this.generarPaginas(PortafolioEnum.ARRIENDO);
-         
+        this.generarPaginas(PortafolioEnum.ARRIENDO);
+
         console.log(this.resultadosArriendo);
+        // this.loadingResultadosArriendo = false
       },
       (error: any) => {
         console.error('Error al obtener las propiedades:', error);
@@ -429,12 +480,20 @@ export class PortafolioAsesoresComponent implements OnInit {
   }
 
   paginaSiguiente(tipo: string) {
+    this.loadingResultadosVenta = true
     if (tipo == PortafolioEnum.VENTA) {
       if (this.paginaActualVenta < this.totalPaginasVenta) {
+
         const nuevaPagina = this.paginaActualVenta + 1;
 
-        this.obtenerPropiedadesVenta(nuevaPagina, 1, 4);
-        
+
+        this.obtenerPropiedadesVenta(Number(this.asesorId), nuevaPagina, this.elementsPerPage);
+        this.actualizarInmueblesVisiblesVenta();
+        setTimeout(() => {
+           this.loadingResultadosVenta = false
+        }, 1000);
+
+
         const paginasPorBloque = 3;
         const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
@@ -448,20 +507,13 @@ export class PortafolioAsesoresComponent implements OnInit {
     if (tipo == PortafolioEnum.ARRIENDO) {
       if (this.paginaActualArriendo < this.totalPaginasArriendo) {
         const nuevaPagina = this.paginaActualVenta + 1;
-        // var queryParams = this.activatedRoute.snapshot.queryParams;
-        // const state = window.history.state;
-
-        // if (Object.keys(queryParams).length >= 1) {
-        //   this.paginaActual = nuevaPagina;
+       
 
 
+        this.obtenerPropiedadesArriendo(Number(this.asesorId), nuevaPagina, this.elementsPerPage);
+        this.actualizarInmueblesVisiblesVenta();
 
-
-
-        // } else {
-
-        // }
-
+        
         const paginasPorBloque = 3;
         const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
