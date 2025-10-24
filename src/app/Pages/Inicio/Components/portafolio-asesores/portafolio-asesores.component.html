@@ -1,12 +1,13 @@
 <!-- navbar  -->
 <app-navbar-2 [alwaysScrolled]="true" *ngIf=" !mostrarContenido"></app-navbar-2>
-<div style="padding-top: 50px;" class="w-full  mb-6 transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
+<div style="padding-top: 50px;"
+  class="w-full  mb-6 transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
       'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
       'md:ml-0': !isDrawerOpen
     }">
 
 
-  <div class="flex flex-col md:flex-row">
+  <div class="flex flex-col md:flex-row" *ngIf="resultadosVenta.length > 0 ">
     <div class="relative w-full">
       <!-- Overlay de carga -->
       <div *ngIf="loadingResultadosVenta"
@@ -144,11 +145,12 @@
           </div>
         </div>
       </div>
+      <div *ngIf="inmueblesVisiblesVenta.length === 0 " class="text-center py-20 mt-60 mb-60 text-gray-500">
+        No se encontraron inmuebles con los filtros seleccionados.
+      </div>
     </div>
 
-    <div *ngIf="resultadosVenta.length === 0 " class="text-center py-20 mt-60 mb-60 text-gray-500">
-      No se encontraron inmuebles con los filtros seleccionados.
-    </div>
+
 
 
   </div>
@@ -219,7 +221,8 @@
 
 <!-- navbar  -->
 
-<div style="padding-top: 50px;" class="w-full  mb-6 transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
+<div style="padding-top: 50px;" *ngIf="resultadosArriendo.length > 0 "
+  class="w-full  mb-6 transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
       'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
       'md:ml-0': !isDrawerOpen
     }">
@@ -362,18 +365,19 @@
           </div>
         </div>
       </div>
+      <div *ngIf="resultadosArriendo.length === 0 " class="text-center py-20 mt-60 mb-60 text-gray-500">
+        No se encontraron inmuebles con los filtros seleccionados.
+      </div>
     </div>
 
-    <div *ngIf="resultadosArriendo.length === 0 " class="text-center py-20 mt-60 mb-60 text-gray-500">
-      No se encontraron inmuebles con los filtros seleccionados.
-    </div>
+
 
 
   </div>
 
   <!-- Paginado -->
   <!-- Contenedor de paginado -->
-  <div class="flex items-center justify-center relative mt-6" *ngIf="inmueblesVisiblesArriendo.length > 0" >
+  <div class="flex items-center justify-center relative mt-6" *ngIf="inmueblesVisiblesArriendo.length > 0">
 
     <!-- Navegación centrada -->
     <nav aria-label="Page navigation" class="absolute left-1/2 -translate-x-1/2">

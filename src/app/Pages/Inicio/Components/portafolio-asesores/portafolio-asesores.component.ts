@@ -3,10 +3,7 @@ import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
-import { NavbarComponent } from "../../../../shared/navbar/navbar.component";
 import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
-import e from 'express';
-import { get } from 'node:http';
 import { PortafolioEnum } from '../../../../core/enums/PortafolioEnum';
 
 

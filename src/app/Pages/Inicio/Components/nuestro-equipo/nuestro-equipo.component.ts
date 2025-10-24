@@ -4,7 +4,8 @@ import { BotonesFlotantesComponent } from "../../../../shared/botones-flotantes/
 import { FooterComponent } from "../../../../shared/footer/footer.component";
 import { VolverComponent } from "../../../../shared/volver/volver.component";
 import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
-import { Router } from 'express';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-nuestro-equipo',

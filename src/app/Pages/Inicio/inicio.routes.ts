@@ -1,4 +1,4 @@
-import { RouterModule, Routes } from '@angular/router';
+import {  Routes } from '@angular/router';
 import { VistaInicialComponent } from './Components/vista-inicial/vista-inicial.component';
 
 import { FiltrosComponent } from './Components/filtros/filtros.component';
