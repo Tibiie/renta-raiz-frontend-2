@@ -265,7 +265,7 @@
                 <!-- Carrusel -->
                 <div class="relative h-full">
                   <!-- Contenedor de slides -->
-                  <div class="relative h-full overflow-hidden rounded-lg">
+                  <div class="relative h-full overflow-hidden rounded-lg" style="pointer-events: none;">
                     <div
                       *ngFor="let img of propiedad.images; let i = index"
                       [class.block]="i === selectedIndex"
@@ -284,7 +284,7 @@
                   </div>
 
                   <!-- Flechas de navegación -->
-                  <button
+                  <button  style="pointer-events: auto; touch-action: manipulation;"
                     type="button"
                     (click)="prevImageM()"
                     class="absolute top-1/2 left-4 z-40 flex items-center justify-center h-10 w-10 bg-gray-800/50 hover:bg-gray-700/70 rounded-full group focus:outline-none"
@@ -303,7 +303,7 @@
                       />
                     </svg>
                   </button>
-                  <button
+                  <button  style="pointer-events: auto; touch-action: manipulation;"
                     type="button"
                     (click)="nextImageM()"
                     class="absolute top-1/2 right-4 z-40 flex items-center justify-center h-10 w-10 bg-gray-800/50 hover:bg-gray-700/70 rounded-full group focus:outline-none"
