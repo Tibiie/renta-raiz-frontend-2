@@ -104,8 +104,8 @@ export class PortafolioAsesoresComponent implements OnInit {
     if (this.isSmallScreen) {
       this.inmueblesVisiblesArriendo =
         window.innerWidth <= 1000
-          ? this.resultadosArriendo.slice(0, this.elementsPerPage -4)
-          : this.resultadosArriendo.slice(0, this.elementsPerPage-2);
+          ? this.resultadosArriendo.slice(0, this.elementsPerPage - 4)
+          : this.resultadosArriendo.slice(0, this.elementsPerPage - 2);
     } else {
 
       this.inmueblesVisiblesArriendo = this.resultadosArriendo.slice(0, this.elementsPerPage);
@@ -119,8 +119,8 @@ export class PortafolioAsesoresComponent implements OnInit {
     if (this.isSmallScreen) {
       this.inmueblesVisiblesVenta =
         window.innerWidth <= 1000
-          ? this.resultadosVenta.slice(0, this.elementsPerPage-4)
-          : this.resultadosVenta.slice(0, this.elementsPerPage-2);
+          ? this.resultadosVenta.slice(0, this.elementsPerPage - 4)
+          : this.resultadosVenta.slice(0, this.elementsPerPage - 2);
     } else {
       this.inmueblesVisiblesVenta = this.resultadosVenta.slice(0, this.elementsPerPage);
     }
@@ -139,7 +139,7 @@ export class PortafolioAsesoresComponent implements OnInit {
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('broker', asesorID);
     this.filtrosSeleccionados.set('biz', 2);
-    
+
 
 
     const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
@@ -183,7 +183,7 @@ export class PortafolioAsesoresComponent implements OnInit {
     this.filtrosSeleccionados.clear();
     this.filtrosSeleccionados.set('broker', asesorID);
     this.filtrosSeleccionados.set('biz', 1);
-    
+
 
 
 
@@ -321,6 +321,8 @@ export class PortafolioAsesoresComponent implements OnInit {
           this.paginaActualVenta = finNuevoBloque;
         }
 
+       
+
         this.generarPaginas(PortafolioEnum.ARRIENDO);
 
       }
@@ -352,7 +354,9 @@ export class PortafolioAsesoresComponent implements OnInit {
   }
 
   cambiarPagina(pagina: number | string, tipo: string) {
+    
     if (tipo == PortafolioEnum.VENTA) {
+      
       console.log(pagina);
       console.log('primer elemento', this.paginasVenta[0]);
       console.log('pagina', this.paginaActualVenta);
@@ -362,18 +366,25 @@ export class PortafolioAsesoresComponent implements OnInit {
         this.irAlSiguienteBloque(tipo);
         return;
       }
+      this.loadingResultadosVenta = true
 
       if (typeof pagina === 'number') {
 
         const primerElemento = this.paginasVenta[0];
 
-        if (typeof primerElemento === 'number' && this.paginaActualVenta < primerElemento) {
+        if (typeof primerElemento === 'number' && pagina < primerElemento) {
           this.irAlBloqueAnterior(tipo);
           return;
         }
 
         console.log(typeof pagina);
 
+        
+         this.obtenerPropiedadesVenta(Number(this.asesorId), pagina, this.elementsPerPage);
+        this.actualizarInmueblesVisiblesVenta();
+        setTimeout(() => {
+          this.loadingResultadosVenta = false
+        }, 1000);
 
         const nuevoBloque = Math.floor((pagina - 1) / 3);
         if (nuevoBloque !== this.bloqueActualVenta) {
@@ -382,24 +393,12 @@ export class PortafolioAsesoresComponent implements OnInit {
           this.generarPaginas(tipo);
         }
 
-        // var queryParams = this.activatedRoute.snapshot.queryParams;
-        // const state = window.history.state;
-        // console.log(state)
-
-        // console.log();
-
-        // if (Object.keys(queryParams).length >= 1 && !queryParams['tipo']) {
-
-
-
-        // } else {
-        //   console.log('no hay params');
-
-        // }
+        
       }
     }
 
     if (tipo == PortafolioEnum.ARRIENDO) {
+      this.loadingResultadosArriendo = true
       console.log(pagina);
       console.log('primer elemento', this.paginasArriendo[0]);
       console.log('pagina', this.paginaActualArriendo);
@@ -414,13 +413,20 @@ export class PortafolioAsesoresComponent implements OnInit {
 
         const primerElemento = this.paginasArriendo[0];
 
-        if (typeof primerElemento === 'number' && this.paginaActualArriendo < primerElemento) {
+        if (typeof primerElemento === 'number' && pagina < primerElemento) {
           this.irAlBloqueAnterior(tipo);
           return;
         }
 
         console.log(typeof pagina);
 
+        
+        this.obtenerPropiedadesArriendo(Number(this.asesorId), pagina, this.elementsPerPage);
+        this.actualizarInmueblesVisiblesVenta();
+
+        setTimeout(() => {
+          this.loadingResultadosArriendo = false
+        }, 1000);
 
         const nuevoBloque = Math.floor((pagina - 1) / 3);
         if (nuevoBloque !== this.bloqueActualArriendo) {
@@ -430,20 +436,7 @@ export class PortafolioAsesoresComponent implements OnInit {
         }
 
 
-        // var queryParams = this.activatedRoute.snapshot.queryParams;
-        // const state = window.history.state;
-        // console.log(state)
-
-        // console.log();
-
-        // if (Object.keys(queryParams).length >= 1 && !queryParams['tipo']) {
-
-
-
-        // } else {
-        //   console.log('no hay params');
-
-        // }
+       
       }
     }
   }
@@ -452,9 +445,16 @@ export class PortafolioAsesoresComponent implements OnInit {
   paginaAnterior(tipo: string) {
     if (tipo == PortafolioEnum.VENTA) {
       if (this.paginaActualVenta > 1) {
+        this.loadingResultadosVenta = true
         const nuevaPagina = this.paginaActualVenta - 1;
         const paginasPorBloque = 3;
         const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+
+         this.obtenerPropiedadesVenta(Number(this.asesorId), nuevaPagina, this.elementsPerPage);
+        this.actualizarInmueblesVisiblesVenta();
+        setTimeout(() => {
+          this.loadingResultadosVenta = false
+        }, 1000);
 
         if (nuevoBloque !== this.bloqueActualVenta) {
           this.bloqueActualVenta = nuevoBloque;
@@ -466,9 +466,17 @@ export class PortafolioAsesoresComponent implements OnInit {
 
     if (tipo == PortafolioEnum.ARRIENDO) {
       if (this.paginaActualArriendo > 1) {
+        this.loadingResultadosArriendo = true
         const nuevaPagina = this.paginaActualArriendo - 1;
         const paginasPorBloque = 3;
         const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+
+        this.obtenerPropiedadesArriendo(Number(this.asesorId), nuevaPagina, this.elementsPerPage);
+        this.actualizarInmueblesVisiblesVenta();
+
+        setTimeout(() => {
+          this.loadingResultadosArriendo = false
+        }, 1000);
 
         if (nuevoBloque !== this.bloqueActualArriendo) {
           this.bloqueActualArriendo = nuevoBloque;
@@ -480,17 +488,18 @@ export class PortafolioAsesoresComponent implements OnInit {
   }
 
   paginaSiguiente(tipo: string) {
-    this.loadingResultadosVenta = true
+
+    
     if (tipo == PortafolioEnum.VENTA) {
       if (this.paginaActualVenta < this.totalPaginasVenta) {
-
+        this.loadingResultadosVenta = true
         const nuevaPagina = this.paginaActualVenta + 1;
 
 
         this.obtenerPropiedadesVenta(Number(this.asesorId), nuevaPagina, this.elementsPerPage);
         this.actualizarInmueblesVisiblesVenta();
         setTimeout(() => {
-           this.loadingResultadosVenta = false
+          this.loadingResultadosVenta = false
         }, 1000);
 
 
@@ -504,21 +513,25 @@ export class PortafolioAsesoresComponent implements OnInit {
 
       }
     }
+
     if (tipo == PortafolioEnum.ARRIENDO) {
       if (this.paginaActualArriendo < this.totalPaginasArriendo) {
-        const nuevaPagina = this.paginaActualVenta + 1;
-       
+        this.loadingResultadosArriendo = true
+        const nuevaPagina = this.paginaActualArriendo + 1;
+
 
 
         this.obtenerPropiedadesArriendo(Number(this.asesorId), nuevaPagina, this.elementsPerPage);
         this.actualizarInmueblesVisiblesVenta();
 
-        
+        setTimeout(() => {
+          this.loadingResultadosArriendo = false
+        }, 1000);
         const paginasPorBloque = 3;
         const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
-        if (bloqueActual !== this.bloqueActualVenta) {
-          this.bloqueActualVenta = bloqueActual;
+        if (bloqueActual !== this.bloqueActualArriendo) {
+          this.bloqueActualArriendo = bloqueActual;
           this.generarPaginas(tipo);
         }
 
