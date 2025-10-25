@@ -125,9 +125,10 @@ export class PortafolioAsesoresComponent implements OnInit {
 
 
   verPropiedad(codPro: number) {
-    this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
-      window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
-    });
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/ver-propiedad', codPro, 0])
+    );
+    window.open(url, '_blank');
   }
 
 
@@ -318,7 +319,7 @@ export class PortafolioAsesoresComponent implements OnInit {
           this.paginaActualVenta = finNuevoBloque;
         }
 
-       
+
 
         this.generarPaginas(PortafolioEnum.ARRIENDO);
 
@@ -351,9 +352,9 @@ export class PortafolioAsesoresComponent implements OnInit {
   }
 
   cambiarPagina(pagina: number | string, tipo: string) {
-    
+
     if (tipo == PortafolioEnum.VENTA) {
-      
+
       console.log(pagina);
       console.log('primer elemento', this.paginasVenta[0]);
       console.log('pagina', this.paginaActualVenta);
@@ -376,8 +377,8 @@ export class PortafolioAsesoresComponent implements OnInit {
 
         console.log(typeof pagina);
 
-        
-         this.obtenerPropiedadesVenta(Number(this.asesorId), pagina, this.elementsPerPage);
+
+        this.obtenerPropiedadesVenta(Number(this.asesorId), pagina, this.elementsPerPage);
         this.actualizarInmueblesVisiblesVenta();
         setTimeout(() => {
           this.loadingResultadosVenta = false
@@ -390,7 +391,7 @@ export class PortafolioAsesoresComponent implements OnInit {
           this.generarPaginas(tipo);
         }
 
-        
+
       }
     }
 
@@ -417,7 +418,7 @@ export class PortafolioAsesoresComponent implements OnInit {
 
         console.log(typeof pagina);
 
-        
+
         this.obtenerPropiedadesArriendo(Number(this.asesorId), pagina, this.elementsPerPage);
         this.actualizarInmueblesVisiblesVenta();
 
@@ -433,7 +434,7 @@ export class PortafolioAsesoresComponent implements OnInit {
         }
 
 
-       
+
       }
     }
   }
@@ -447,7 +448,7 @@ export class PortafolioAsesoresComponent implements OnInit {
         const paginasPorBloque = 3;
         const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
-         this.obtenerPropiedadesVenta(Number(this.asesorId), nuevaPagina, this.elementsPerPage);
+        this.obtenerPropiedadesVenta(Number(this.asesorId), nuevaPagina, this.elementsPerPage);
         this.actualizarInmueblesVisiblesVenta();
         setTimeout(() => {
           this.loadingResultadosVenta = false
@@ -486,7 +487,7 @@ export class PortafolioAsesoresComponent implements OnInit {
 
   paginaSiguiente(tipo: string) {
 
-    
+
     if (tipo == PortafolioEnum.VENTA) {
       if (this.paginaActualVenta < this.totalPaginasVenta) {
         this.loadingResultadosVenta = true

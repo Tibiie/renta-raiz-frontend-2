@@ -1,7 +1,4 @@
-<app-navbar
-  *ngIf=" mostrarContenido"
-  [alwaysScrolled]="true"
-></app-navbar>
+<app-navbar *ngIf=" mostrarContenido" [alwaysScrolled]="true"></app-navbar>
 
 
 
@@ -11,72 +8,47 @@
 
 
 <div class="flex flex-col mt-28" *ngIf="datosCargados">
-  <nav
-    class="px-4 md:px-28 py-6 text-sm text-[#CDAD60]"
-    aria-label="Breadcrumb"
-  >
+  <nav class="px-4 md:px-28 py-6 text-sm text-[#CDAD60]" aria-label="Breadcrumb">
     <ol class="flex flex-wrap items-center gap-x-1 gap-y-2 md:space-x-3">
       <li class="inline-flex items-center">
-        <button
-          class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-900"
-          (click)="enviarFiltrosMigajas('biz', propiedad.biz_code)"
-        >
+        <button class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-900"
+          (click)="enviarFiltrosMigajas('biz', propiedad.biz_code)">
           <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path
-              d="M10.707 1.293a1 1 0 00-1.414 0L1 9.586V17a2 2 0 002 2h4a1 1 0 001-1v-4h4v4a1 1 0 001 1h4a2 2 0 002-2V9.586l-8.293-8.293z"
-            />
+              d="M10.707 1.293a1 1 0 00-1.414 0L1 9.586V17a2 2 0 002 2h4a1 1 0 001-1v-4h4v4a1 1 0 001 1h4a2 2 0 002-2V9.586l-8.293-8.293z" />
           </svg>
           {{ propiedad.biz | titlecase }}
         </button>
       </li>
       <li>
         <div class="flex items-center">
-          <svg
-            class="w-4 h-4 text-gray-400 mx-2"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
+          <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
             <path
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z"
-            />
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z" />
           </svg>
-          <button
-            (click)="enviarFiltrosMigajas('type', propiedad.type_code)"
-            class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900"
-          >
+          <button (click)="enviarFiltrosMigajas('type', propiedad.type_code)"
+            class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900">
             {{ propiedad.type | titlecase }}
           </button>
         </div>
       </li>
       <li>
         <div class="flex items-center">
-          <svg
-            class="w-4 h-4 text-gray-400 mx-2"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
+          <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
             <path
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z"
-            />
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z" />
           </svg>
-          <button
-            (click)="enviarFiltrosMigajas('city', propiedad.city_code)"
-            class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900"
-          >
+          <button (click)="enviarFiltrosMigajas('city', propiedad.city_code)"
+            class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-900">
             {{ propiedad.city | titlecase }}
           </button>
         </div>
       </li>
       <li>
         <div class="flex items-center">
-          <svg
-            class="w-4 h-4 text-gray-400 mx-2"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
+          <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
             <path
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z"
-            />
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414L13.414 10l-4.707 4.707a1 1 0 01-1.414 0z" />
           </svg>
           <span class="ml-1 text-sm font-medium text-gray-700">
             {{ propiedad.neighborhood | titlecase }}
@@ -95,139 +67,81 @@
             <div *ngIf="propiedad?.images?.length > 0" class="flex flex-col">
               <div id="carousel" class="w-full relative" data-carousel="static">
                 <div class="relative h-[550px] overflow-hidden rounded-xl">
-                  <div
-                    *ngFor="let img of propiedad.images; let i = index"
-                    [ngClass]="{
+                  <div *ngFor="let img of media; let i = index" [ngClass]="{
                       hidden: selectedIndex !== i,
                       block: selectedIndex === i
-                    }"
-                    class="relative w-full h-full !translate-x-0 duration-700 ease-in-out"
-                    data-carousel-item
-                  >
-                   
-                    <img
+                    }" class="relative w-full h-full !translate-x-0 duration-700 ease-in-out" data-carousel-item>
+
+                    <!-- Si es video -->
+                    <ng-container *ngIf="img.type === 'video'; else imageTemplate">
+                      <iframe [src]="img.videourl | safeUrl" class="absolute inset-0 w-full h-full rounded-xl"
+                        frameborder="0" allowfullscreen></iframe>
+                    </ng-container>
+
+                    <!-- Si es imagen -->
+                    <ng-template #imageTemplate>
+                      <img [src]="img.imageurl" alt="Imagen ampliada"
+                        class="absolute inset-0 w-full h-full object-cover rounded-xl" (click)="openModal(i)" />
+                    </ng-template>
+                    <!-- <img
                       [src]="img.imageurl"
                       
                       alt="Imagen ampliada"
                       class="absolute inset-0 w-full h-full object-cover rounded-xl"
                       (click)="openModal(i)"
-                    />
+                    /> -->
                   </div>
                 </div>
                 <!-- Controles -->
-                <button
-                  type="button"
+                <button type="button"
                   class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  (click)="prevImage()"
-                >
+                  (click)="prevImage()">
                   <span
-                    class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50"
-                  >
-                    <svg
-                      class="w-4 h-4 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 19l-7-7 7-7"
-                      ></path>
+                    class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                   </span>
                 </button>
-                <button
-                  type="button"
+                <button type="button"
                   class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  (click)="nextImage()"
-                >
+                  (click)="nextImage()">
                   <span
-                    class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50"
-                  >
-                    <svg
-                      class="w-4 h-4 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5l7 7-7 7"
-                      ></path>
+                    class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                   </span>
                 </button>
               </div>
               <div class="w-full mt-4 relative mx-auto">
-                <div
-                  class="relative flex items-center justify-center gap-3 h-32"
-                >
-                  <button
-                    *ngIf="propiedad.images.length > thumbnailsPerPage"
-                    (click)="prevThumbs()"
-                    class="absolute left-0 z-20 flex items-center justify-center h-full px-2 cursor-pointer group focus:outline-none"
-                  >
+                <div class="relative flex items-center justify-center gap-3 h-32">
+                  <button *ngIf="propiedad.images.length > thumbnailsPerPage" (click)="prevThumbs()"
+                    class="absolute left-0 z-20 flex items-center justify-center h-full px-2 cursor-pointer group focus:outline-none">
                     <span
-                      class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/30 group-hover:bg-white/50"
-                    >
-                      <svg
-                        class="w-4 h-4 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M15 19l-7-7 7-7"
-                        />
+                      class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/30 group-hover:bg-white/50">
+                      <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                       </svg>
                     </span>
                   </button>
 
-                  <ng-container
-                    *ngFor="let img of visibleThumbnails; let i = index"
-                  >
-                    <div
-                      class="relative w-1/3 h-full rounded-md overflow-hidden cursor-pointer group"
-                      (click)="selectImage(visibleThumbnailsStart + i)"
-                    >
-                      <img
-                        [src]="img.imageurl"
-                        [alt]="'Miniatura ' + (visibleThumbnailsStart + i + 1)"
-                        class="w-full h-full object-cover transition duration-300 border-2"
-                        [class.border-blue-500]="
+                  <ng-container *ngFor="let img of visibleThumbnails; let i = index">
+                    <div class="relative w-1/3 h-full rounded-md overflow-hidden cursor-pointer group"
+                      (click)="selectImage(visibleThumbnailsStart + i)">
+                      <img [src]="img.imageurl" [alt]="'Miniatura ' + (visibleThumbnailsStart + i + 1)"
+                        class="w-full h-full object-cover transition duration-300 border-2" [class.border-blue-500]="
                           selectedIndex === visibleThumbnailsStart + i
-                        "
-                      />
+                        " />
                     </div>
                   </ng-container>
 
-                  <button
-                    *ngIf="propiedad.images.length > thumbnailsPerPage"
-                    (click)="nextThumbs()"
-                    class="absolute right-0 z-20 flex items-center justify-center h-full px-2 cursor-pointer group focus:outline-none"
-                  >
+                  <button *ngIf="propiedad.images.length > thumbnailsPerPage" (click)="nextThumbs()"
+                    class="absolute right-0 z-20 flex items-center justify-center h-full px-2 cursor-pointer group focus:outline-none">
                     <span
-                      class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/30 group-hover:bg-white/50"
-                    >
-                      <svg
-                        class="w-4 h-4 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 5l7 7-7 7"
-                        />
+                      class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/30 group-hover:bg-white/50">
+                      <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                       </svg>
                     </span>
                   </button>
@@ -235,28 +149,13 @@
               </div>
             </div>
 
-            <div
-              *ngIf="isModalOpen"
-              class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-            >
+            <div *ngIf="isModalOpen" class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
               <!-- Botón cerrar -->
-              <button
-                (click)="closeModal()"
+              <button (click)="closeModal()"
                 class="absolute top-4 right-4 z-50 text-white hover:text-red-500 transition-colors duration-200 bg-gray-800 hover:bg-gray-700 rounded-full p-2"
-                aria-label="Cerrar modal"
-              >
-                <svg
-                  class="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                aria-label="Cerrar modal">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
@@ -266,136 +165,61 @@
                 <div class="relative h-full">
                   <!-- Contenedor de slides -->
                   <div class="relative h-full overflow-hidden rounded-lg">
-                    <div
-                      *ngFor="let img of propiedad.images; let i = index"
-                      [class.block]="i === selectedIndex"
+                    <div *ngFor="let img of propiedad.images; let i = index" [class.block]="i === selectedIndex"
                       [class.hidden]="i !== selectedIndex"
-                      class="duration-700 ease-in-out flex items-center justify-center h-full"
-                    >
-                      <img
-                        [src]="img.imageurl"
-                        class="max-w-full max-h-full object-contain cursor-zoom-in"
-                        alt="Imagen de propiedad"
-                        [attr.data-zoom-src]="img.imageurl"
-                        (click)="handleImageClick($event)"
-                        zoom-template
-                      />
+                      class="duration-700 ease-in-out flex items-center justify-center h-full">
+                      <img [src]="img.imageurl" class="max-w-full max-h-full object-contain cursor-zoom-in"
+                        alt="Imagen de propiedad" [attr.data-zoom-src]="img.imageurl" (click)="handleImageClick($event)"
+                        zoom-template />
                     </div>
                   </div>
 
                   <!-- Flechas de navegación -->
-                  <button
-                    type="button"
-                    (click)="prevImageM()"
-                    class="absolute top-1/2 left-4 z-40 flex items-center justify-center h-10 w-10 bg-gray-800/50 hover:bg-gray-700/70 rounded-full group focus:outline-none"
-                  >
-                    <svg
-                      class="w-4 h-4 text-white group-hover:text-gray-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 19l-7-7 7-7"
-                      />
+                  <button type="button" (click)="prevImageM()"
+                    class="absolute top-1/2 left-4 z-40 flex items-center justify-center h-10 w-10 bg-gray-800/50 hover:bg-gray-700/70 rounded-full group focus:outline-none">
+                    <svg class="w-4 h-4 text-white group-hover:text-gray-300" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
-                  <button
-                    type="button"
-                    (click)="nextImageM()"
-                    class="absolute top-1/2 right-4 z-40 flex items-center justify-center h-10 w-10 bg-gray-800/50 hover:bg-gray-700/70 rounded-full group focus:outline-none"
-                  >
-                    <svg
-                      class="w-4 h-4 text-white group-hover:text-gray-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5l7 7-7 7"
-                      />
+                  <button type="button" (click)="nextImageM()"
+                    class="absolute top-1/2 right-4 z-40 flex items-center justify-center h-10 w-10 bg-gray-800/50 hover:bg-gray-700/70 rounded-full group focus:outline-none">
+                    <svg class="w-4 h-4 text-white group-hover:text-gray-300" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
 
                   <!-- Indicadores -->
-                  <div
-                    class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40 flex space-x-2"
-                  >
-                    <button
-                      *ngFor="let img of propiedad.images; let i = index"
-                      (click)="goToImage(i)"
-                      type="button"
-                      class="w-3 h-3 rounded-full"
-                      [class.bg-white]="i === selectedIndex"
-                      [class.bg-gray-400]="i !== selectedIndex"
-                      aria-current="i === selectedIndex"
-                      [attr.aria-label]="'Slide ' + (i + 1)"
-                    ></button>
+                  <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40 flex space-x-2">
+                    <button *ngFor="let img of propiedad.images; let i = index" (click)="goToImage(i)" type="button"
+                      class="w-3 h-3 rounded-full" [class.bg-white]="i === selectedIndex"
+                      [class.bg-gray-400]="i !== selectedIndex" aria-current="i === selectedIndex"
+                      [attr.aria-label]="'Slide ' + (i + 1)"></button>
                   </div>
                 </div>
 
                 <!-- Controles de zoom -->
                 <div
-                  class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex space-x-3 bg-gray-800/50 rounded-full p-1"
-                >
-                  <button
-                    (click)="zoomIn()"
-                    class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70"
-                  >
-                    <svg
-                      class="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
+                  class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex space-x-3 bg-gray-800/50 rounded-full p-1">
+                  <button (click)="zoomIn()"
+                    class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
                   </button>
-                  <button
-                    (click)="zoomOut()"
-                    class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70"
-                  >
-                    <svg
-                      class="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M20 12H4"
-                      />
+                  <button (click)="zoomOut()"
+                    class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
                     </svg>
                   </button>
-                  <button
-                    (click)="resetZoom()"
-                    class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70"
-                  >
-                    <svg
-                      class="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                      />
+                  <button (click)="resetZoom()"
+                    class="p-2 text-white hover:text-gray-300 rounded-full hover:bg-gray-700/70">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                     </svg>
                   </button>
                 </div>
@@ -407,8 +231,7 @@
         <div class="block md:hidden w-full mb-6 order-2">
           <!-- Copia todo el contenido de tu formulario aquí -->
           <div
-            class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300"
-          >
+            class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300">
             <div class="mb-2">
               @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
               <p class="text-gray-500 text-sm mb-1">Valor de venta en:</p>
@@ -416,7 +239,7 @@
               <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
                 <span class="text-black">{{
                   propiedad.saleprice | currency
-                }}</span>
+                  }}</span>
               </p>
               } @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
               <p class="text-gray-500 text-sm mb-1">Valor de arriendo en:</p>
@@ -437,20 +260,14 @@
                 <div class="w-full border-t border-gray-400"></div>
               </div>
               <div class="relative flex justify-center">
-                <span class="px-2 bg-white text-xs text-gray-500"
-                  >Detalles claves</span
-                >
+                <span class="px-2 bg-white text-xs text-gray-500">Detalles claves</span>
               </div>
             </div>
 
             <!-- Características -->
-            <div
-              class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 text-[#080E36] max-w-md mx-auto"
-            >
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 text-[#080E36] max-w-md mx-auto">
               <!-- Cards individuales -->
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-bath text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Baños</p>
@@ -458,9 +275,7 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-bed text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Habitaciones</p>
@@ -468,9 +283,7 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-parking text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Parqueaderos</p>
@@ -478,9 +291,7 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-ruler-combined text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Área</p>
@@ -490,9 +301,7 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-calendar-check text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Estrato</p>
@@ -500,12 +309,8 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
-                <i
-                  class="fa-regular fa-calendar-days text-lg text-gray-500"
-                ></i>
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fa-regular fa-calendar-days text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Año construcción</p>
                   <p class="text-sm font-semibold">
@@ -526,30 +331,23 @@
 
             <!-- Botones -->
             <div class="space-y-3">
-              <button
-                type="button"
-                (click)="openModalTelefono(propiedad.codpro, 'telefonos')"
-                class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-white border border-[#080E36] hover:bg-[#080E36] focus:ring-4 focus:outline-none focus:ring-[#080E36] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300"
-              >
+              <button type="button" (click)="openModalTelefono(propiedad.codpro, 'telefonos')"
+                class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-white border border-[#080E36] hover:bg-[#080E36] focus:ring-4 focus:outline-none focus:ring-[#080E36] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
                 <i class="fas fa-phone-alt fa-sm"></i> Ver teléfonos
               </button>
 
-              <button
-                type="button"
-                (click)="openModalCrearContacto(propiedad.codpro, 'whatsapp')"
-                class="w-full flex items-center justify-center gap-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300"
-              >
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'whatsapp')"
+                class="w-full flex items-center justify-center gap-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
                 <i class="fab fa-whatsapp fa-sm"></i> Contactar por WhatsApp 😊
               </button>
 
-              <button
-                type="button"
-                (click)="openModalCrearContacto(propiedad.codpro, 'soloEnviar')"
-                class="w-full text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300"
-              >
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'soloEnviar')"
+                class="w-full text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
                 Quiero que me contacten
               </button>
             </div>
+
+
           </div>
         </div>
 
@@ -560,13 +358,8 @@
             @if (propiedad.administration == 0) {
             <div class="bg-white rounded-lg shadow p-4 text-center">
               <div class="flex flex-col items-center">
-                <i
-                  class="fas fa-file-invoice-dollar text-xl mb-2"
-                  style="color: #cdad60"
-                ></i>
-                <span class="text-sm font-medium text-gray-600"
-                  >¿La administración está incluida?</span
-                >
+                <i class="fas fa-file-invoice-dollar text-xl mb-2" style="color: #cdad60"></i>
+                <span class="text-sm font-medium text-gray-600">¿La administración está incluida?</span>
                 <span class="text-lg font-bold text-gray-800 mt-1">Sí</span>
               </div>
             </div>
@@ -574,45 +367,31 @@
 
             <!-- Administracion no incluida -->
             @if (propiedad.administration > 0) {
-            <div
-              class="bg-white rounded-lg shadow p-4 text-center border border-gray-200"
-            >
+            <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
               <div class="flex flex-col items-center">
-                <i
-                  class="fas fa-file-invoice-dollar text-xl mb-2"
-                  style="color: #cdad60"
-                ></i>
-                <span class="text-sm font-medium text-gray-600"
-                  >Valor de la administración</span
-                >
+                <i class="fas fa-file-invoice-dollar text-xl mb-2" style="color: #cdad60"></i>
+                <span class="text-sm font-medium text-gray-600">Valor de la administración</span>
                 <span class="text-lg font-bold text-gray-800 mt-1">{{
                   propiedad.administration
-                    | currency : "COP" : "symbol-narrow" : "1.0-0"
-                }}</span>
+                  | currency : "COP" : "symbol-narrow" : "1.0-0"
+                  }}</span>
               </div>
             </div>
             }
 
             <!-- Disponible en arriendo -->
             @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-            <div
-              class="bg-white rounded-lg shadow p-4 text-center border border-gray-200"
-            >
+            <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
               <div class="flex flex-col items-center">
-                <i
-                  class="fas fa-check-circle text-xl mb-2"
-                  style="color: #cdad60"
-                ></i>
-                <span class="text-sm font-medium text-gray-600"
-                  >Disponible en arriendo</span
-                >
+                <i class="fas fa-check-circle text-xl mb-2" style="color: #cdad60"></i>
+                <span class="text-sm font-medium text-gray-600">Disponible en arriendo</span>
                 <span class="text-lg font-bold text-gray-800 mt-1">
                   {{
-                    propiedad.biz_code === 1 || propiedad.biz_code === 3
-                      ? propiedad.status_name === "Disponible"
-                        ? "Sí"
-                        : "No"
-                      : "-"
+                  propiedad.biz_code === 1 || propiedad.biz_code === 3
+                  ? propiedad.status_name === "Disponible"
+                  ? "Sí"
+                  : "No"
+                  : "-"
                   }}
                 </span>
               </div>
@@ -621,44 +400,30 @@
 
             <!-- Valor en arriendo -->
             @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
-            <div
-              class="bg-white rounded-lg shadow p-4 text-center border border-gray-200"
-            >
+            <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
               <div class="flex flex-col items-center">
-                <i
-                  class="fas fa-dollar-sign text-xl mb-2"
-                  style="color: #cdad60"
-                ></i>
-                <span class="text-sm font-medium text-gray-600"
-                  >Valor en arriendo</span
-                >
+                <i class="fas fa-dollar-sign text-xl mb-2" style="color: #cdad60"></i>
+                <span class="text-sm font-medium text-gray-600">Valor en arriendo</span>
                 <span class="text-lg font-bold text-gray-800 mt-1">{{
                   propiedad.rent | currency : "COP" : "symbol-narrow" : "1.0-0"
-                }}</span>
+                  }}</span>
               </div>
             </div>
             }
 
             <!-- Disponible en venta -->
             @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
-            <div
-              class="bg-white rounded-lg shadow p-4 text-center border border-gray-200"
-            >
+            <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
               <div class="flex flex-col items-center">
-                <i
-                  class="fas fa-check-circle text-xl mb-2"
-                  style="color: #cdad60"
-                ></i>
-                <span class="text-sm font-medium text-gray-600"
-                  >Disponible en venta</span
-                >
+                <i class="fas fa-check-circle text-xl mb-2" style="color: #cdad60"></i>
+                <span class="text-sm font-medium text-gray-600">Disponible en venta</span>
                 <span class="text-lg font-bold text-gray-800 mt-1">
                   {{
-                    propiedad.biz_code === 2 || propiedad.biz_code === 3
-                      ? propiedad.status_name === "Disponible"
-                        ? "Sí"
-                        : "No"
-                      : "-"
+                  propiedad.biz_code === 2 || propiedad.biz_code === 3
+                  ? propiedad.status_name === "Disponible"
+                  ? "Sí"
+                  : "No"
+                  : "-"
                   }}
                 </span>
               </div>
@@ -667,21 +432,14 @@
 
             <!-- Valor en venta -->
             @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
-            <div
-              class="bg-white rounded-lg shadow p-4 text-center border border-gray-200"
-            >
+            <div class="bg-white rounded-lg shadow p-4 text-center border border-gray-200">
               <div class="flex flex-col items-center">
-                <i
-                  class="fas fa-dollar-sign text-xl mb-2"
-                  style="color: #cdad60"
-                ></i>
-                <span class="text-sm font-medium text-gray-600"
-                  >Valor en venta</span
-                >
+                <i class="fas fa-dollar-sign text-xl mb-2" style="color: #cdad60"></i>
+                <span class="text-sm font-medium text-gray-600">Valor en venta</span>
                 <span class="text-lg font-bold text-gray-800 mt-1">{{
                   propiedad.saleprice
-                    | currency : "COP" : "symbol-narrow" : "1.0-0"
-                }}</span>
+                  | currency : "COP" : "symbol-narrow" : "1.0-0"
+                  }}</span>
               </div>
             </div>
             }
@@ -690,13 +448,11 @@
           <div class="mt-6">
             <div class="flex justify-between items-center mb-2">
               <h2 class="text-lg font-bold text-[#080E36]">Descripción</h2>
-              <span
-                class="text-[16px] text-[#CDAD60] mr-6 border-b-2 border-[#CDAD60]"
-                ><strong class="font-bold">Código propiedad: </strong>
+              <span class="text-[16px] text-[#CDAD60] mr-6 border-b-2 border-[#CDAD60]"><strong class="font-bold">Código
+                  propiedad: </strong>
                 <strong class="font-semibold">{{
                   propiedad.codpro
-                }}</strong></span
-              >
+                  }}</strong></span>
             </div>
             <p class="text-gray-700 text-sm leading-relaxed">
               {{ propiedad.description }}
@@ -707,13 +463,8 @@
             <h2 class="text-lg font-bold text-[#080E36] mb-8">
               Comodidades de la propiedad
             </h2>
-            <div
-              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm text-gray-800"
-            >
-              <div
-                *ngFor="let amenity of propiedad.amenities"
-                class="flex items-center"
-              >
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm text-gray-800">
+              <div *ngFor="let amenity of propiedad.amenities" class="flex items-center">
                 <i class="fas fa-check text-yellow-500 mr-2"></i>
                 {{ amenity.name }}
               </div>
@@ -723,13 +474,10 @@
       </div>
 
       <!-- Contenedor que se mueve con el scroll -->
-      <div
-        class="hidden md:block w-full md:w-1/3 md:sticky md:top-24 self-start order-2 md:order-2"
-      >
+      <div class="hidden md:block w-full md:w-1/3 md:sticky md:top-24 self-start order-2 md:order-2">
         <div id="modern-drawer" class="h-[calc(100vh-6rem)] overflow-y-auto">
           <div
-            class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300"
-          >
+            class="bg-white border border-gray-200 rounded-xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] transition-shadow duration-300">
             <div class="mb-2">
               @if (propiedad.biz_code === 2 || propiedad.biz_code === 3) {
               <p class="text-gray-500 text-sm mb-1">Valor de venta en:</p>
@@ -737,7 +485,7 @@
               <p class="text-3xl font-extrabold text-gray-900 mb-1 text-center">
                 <span class="text-black">{{
                   propiedad.saleprice | currency : "COP" : "symbol-narrow" : "1.0-0"
-                }}</span>
+                  }}</span>
               </p>
               } @if (propiedad.biz_code === 1 || propiedad.biz_code === 3) {
               <p class="text-gray-500 text-sm mb-1">Valor de arriendo en:</p>
@@ -758,20 +506,14 @@
                 <div class="w-full border-t border-gray-400"></div>
               </div>
               <div class="relative flex justify-center">
-                <span class="px-2 bg-white text-xs text-gray-500"
-                  >Detalles claves</span
-                >
+                <span class="px-2 bg-white text-xs text-gray-500">Detalles claves</span>
               </div>
             </div>
 
             <!-- Características -->
-            <div
-              class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 text-[#080E36] max-w-md mx-auto"
-            >
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4 text-[#080E36] max-w-md mx-auto">
               <!-- Cards individuales -->
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-bath text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Baños</p>
@@ -779,9 +521,7 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-bed text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Habitaciones</p>
@@ -789,9 +529,7 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-parking text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Parqueaderos</p>
@@ -799,9 +537,7 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-ruler-combined text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Área</p>
@@ -811,9 +547,7 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
                 <i class="fas fa-calendar-check text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Estrato</p>
@@ -823,12 +557,8 @@
                 </div>
               </div>
 
-              <div
-                class="flex flex-col items-center bg-white rounded-lg p-2 gap-1"
-              >
-                <i
-                  class="fa-regular fa-calendar-days text-lg text-gray-500"
-                ></i>
+              <div class="flex flex-col items-center bg-white rounded-lg p-2 gap-1">
+                <i class="fa-regular fa-calendar-days text-lg text-gray-500"></i>
                 <div class="text-center">
                   <p class="text-xs text-gray-500">Año construcción</p>
                   <p class="text-sm font-semibold">
@@ -849,29 +579,46 @@
 
             <!-- Botones -->
             <div class="space-y-3">
-              <button
-                type="button"
-                (click)="openModalTelefono(propiedad.codpro, 'telefonos')"
-                class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-white border border-[#080E36] hover:bg-[#080E36] focus:ring-4 focus:outline-none focus:ring-[#080E36] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300"
-              >
+              <button type="button" (click)="openModalTelefono(propiedad.codpro, 'telefonos')"
+                class="w-full flex items-center justify-center gap-2 text-gray-700 hover:text-white border border-[#080E36] hover:bg-[#080E36] focus:ring-4 focus:outline-none focus:ring-[#080E36] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
                 <i class="fas fa-phone-alt fa-sm"></i> Ver teléfonos
               </button>
 
-              <button
-                type="button"
-                (click)="openModalCrearContacto(propiedad.codpro, 'whatsapp')"
-                class="w-full flex items-center justify-center gap-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300"
-              >
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'whatsapp')"
+                class="w-full flex items-center justify-center gap-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
                 <i class="fab fa-whatsapp fa-sm"></i> Contactar por WhatsApp 😊
               </button>
 
-              <button
-                type="button"
-                (click)="openModalCrearContacto(propiedad.codpro, 'soloEnviar')"
-                class="w-full text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300"
-              >
+              <button type="button" (click)="openModalCrearContacto(propiedad.codpro, 'soloEnviar')"
+                class="w-full text-[#CDAD60] hover:text-white border border-[#CDAD60] hover:bg-[#CDAD60] focus:ring-4 focus:outline-none focus:ring-[#CDAD60] font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-300">
                 Quiero que me contacten
               </button>
+            </div>
+
+            <div (click)="abrirPortafolio(asesor.id)" style="cursor: pointer;"
+              class="bg-white rounded-xl mt-6 shadow-md p-6 flex flex-col md:flex-row items-center md:items-center justify-center transition hover:scale-105 duration-300 md:space-x-6 space-y-4 md:space-y-0 overflow-hidden">
+
+              <!-- Imagen -->
+              <img src="{{asesor.imagen}}" alt="{{asesor.nombre}}"
+                class="w-32 h-32 rounded-full object-cover flex-shrink-0" />
+
+              <!-- Datos -->
+              <div class="flex flex-col justify-center text-center md:text-left">
+                <h3 class="text-lg font-bold text-gray-900">
+                  {{asesor.nombre}}
+                </h3>
+                <p class="text-sm font-medium text-gray-900">
+                  {{asesor.cargo}}
+                </p>
+                <div class="flex justify-center md:justify-start items-center text-gray-600 mt-2">
+                  <i class="fa-solid fa-phone text-lg"></i>
+                  <span class="ml-2 text-sm">{{asesor.telefono}}</span>
+                </div>
+                <div class="flex justify-center md:justify-start items-center text-gray-600 mt-1">
+                  <i class="fa-solid fa-envelope text-lg"></i>
+                  <span class="ml-2 text-sm">{{asesor.email}}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -880,110 +627,80 @@
   </div>
 
   <!-- inmuebles similares -->
-  <div
-    class="bg-gray-200"
-    *ngIf="mostrarContenido && resultadosFiltros.length > 0"
-  >
+  <div class="bg-gray-200" *ngIf="mostrarContenido && resultadosFiltros.length > 0">
     <div class="w-full flex flex-col items-center pt-16 md:pt-24 px-4 mb-24">
-      <h1
-        class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center w-full max-w-6xl"
-      >
+      <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center w-full max-w-6xl">
         Inmuebles similares
       </h1>
-      <h2
-        class="text-2xl font-normal text-[#9a9b9c] text-center w-full max-w-6xl mt-4"
-      >
+      <h2 class="text-2xl font-normal text-[#9a9b9c] text-center w-full max-w-6xl mt-4">
         Busca inmuebles similares a tus propios
       </h2>
 
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl mt-6"
-      >
-        <div
-          *ngFor="let inmueble of resultadosFiltros"
-          class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6"
-        >
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl mt-6">
+        <div *ngFor="let inmueble of resultadosFiltros"
+          class="relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-6">
           <div class="relative group">
-            <div
-              class="bg-black w-full h-[280px] flex items-center justify-center overflow-hidden rounded-t-lg"
-            >
+            <div class="bg-black w-full h-[280px] flex items-center justify-center overflow-hidden rounded-t-lg">
               <a href="#">
-                <img
-                  class="max-w-full max-h-full object-contain"
-                  [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
-                  [alt]="inmueble.address"
-                />
+                <img class="max-w-full max-h-full object-contain" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+                  [alt]="inmueble.address" />
               </a>
             </div>
 
             <div
-              class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10"
-            >
-              <a
-                class="cursor-pointer bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
-                (click)="verPropiedad(inmueble.codpro)"
-              >
+              class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+              <a class="cursor-pointer bg-white text-[#080E36] px-6 py-2 font-semibold rounded shadow hover:bg-[#CDAD60] hover:text-white transition-colors"
+                (click)="verPropiedad(inmueble.codpro)">
                 Ver propiedad
               </a>
             </div>
 
             <div
-              class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]"
-            >
+              class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]">
               {{ inmueble.biz | titlecase }}
             </div>
 
-            <div
-              class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20"
-            >
-              <span
-                class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow"
-              >
+            <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+              <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
                 {{ inmueble.type | titlecase }}
               </span>
-              
-               <div class="flex items-center gap-2">
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice > 2000000000) 
-                                      ||  (inmueble.rent && inmueble.rent > 15000000)">
-                      <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
-                    </ng-container>
 
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 1000000001 && inmueble.saleprice <= 2000000000) 
+              <div class="flex items-center gap-2">
+                <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice > 2000000000) 
+                                      ||  (inmueble.rent && inmueble.rent > 15000000)">
+                  <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
+                </ng-container>
+
+                <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 1000000001 && inmueble.saleprice <= 2000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 8000000 &&
                       inmueble.rent <= 15000000)">
-                      <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
-                    </ng-container>
+                  <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
+                </ng-container>
 
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
+                <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 2000000 &&
                       inmueble.rent <= 8000000)">
-                      <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
-                    </ng-container>
+                  <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
+                </ng-container>
 
-                    <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                      <i class="fas fa-heart text-2xl"></i>
-                    </button>
-                </div>
+                <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                  <i class="fas fa-heart text-2xl"></i>
+                </button>
+              </div>
             </div>
           </div>
 
           <div class="p-5">
             <a href="#">
-              <h5
-                class="mb-1 text-base font-semibold tracking-tight text-[#080E36]"
-              >
+              <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36]">
                 {{
-                  inmueble.neighborhood || "Sin barrio especificado" | titlecase
+                inmueble.neighborhood || "Sin barrio especificado" | titlecase
                 }}
-                <span class="text-[#080E36] text-sm font-semibold"
-                  >(Barrio)</span
-                >
+                <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
               </h5>
-              <p
-                class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs"
-              >
+              <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
                 {{ inmueble.description }}
               </p>
             </a>
@@ -1018,10 +735,10 @@
               <span>Precio:</span>
               <span class="text-[#000000] mt-1 text-base font-semibold">
                 {{
-                  inmueble.price_format ||
-                    (inmueble.price
-                      | currency : "COP" : "symbol-narrow" : "1.0-0") ||
-                    "Consultar"
+                inmueble.price_format ||
+                (inmueble.price
+                | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                "Consultar"
                 }}
               </span>
             </div>
