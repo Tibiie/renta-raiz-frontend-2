@@ -53,9 +53,17 @@
             </div>
 
             <div class="absolute bottom-1 left-1 right-1 flex justify-between items-center px-2 z-20">
-              <span class="bg-[#CDAD60] text-white text-xs font-medium px-2 py-0.5 rounded shadow">
-                {{ inmueble.type | titlecase }}
-              </span>
+               <div class="flex flex-col gap-2">
+                  <!-- Etiqueta superior (por ejemplo 'Venta' o tipo de operación) -->
+                  <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow inline-block">
+                    {{ inmueble.type | titlecase }}
+                  </span>
+
+                  <!-- Etiqueta inferior (tipo: Casa/Apartamento) -->
+                  <span class="bg-[#CDAD60] text-white text-xs font-semibold px-3 py-1 rounded shadow inline-block">
+                    Codigo: {{ inmueble?.codpro  }}
+                  </span>
+                </div>
 
               <div class="flex items-center gap-2">
                 <ng-container *ngIf="

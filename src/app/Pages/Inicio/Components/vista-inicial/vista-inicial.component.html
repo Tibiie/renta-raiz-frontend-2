@@ -4,11 +4,9 @@
   <div class="banner-contacto w-full max-h-[60vh] overflow-hidden" data-carousel="slide" data-carousel-interval="5000">
     <div class="relative w-full h-[40vh] md:h-[60vh]">
       <div *ngFor="let imagen of sliderFotos; let i = index"
-       class="absolute top-0 left-0 w-full h-full transition-opacity duration-700"
+        class="absolute top-0 left-0 w-full h-full transition-opacity duration-700"
         [attr.data-carousel-item]="i === 0 ? 'active' : ''">
-        <img [src]="imagen"
-         class="w-full h-full object-cover"
-          alt="Slide {{ i + 1 }}" />
+        <img [src]="imagen" class="w-full h-full object-cover" alt="Slide {{ i + 1 }}" />
       </div>
 
       <div class="absolute inset-0 z-30 bg-black/50 flex items-center justify-center">
@@ -69,33 +67,41 @@
               </div>
 
               <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
-                <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
-                  {{ inmueble.type | titlecase }}
-                </span>
-               
-                 <div class="flex items-center gap-2">
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice > 2000000000) 
-                                      ||  (inmueble.rent && inmueble.rent > 15000000)">
-                      <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
-                    </ng-container>
+                <div class="flex flex-col gap-2">
+                  <!-- Etiqueta superior (por ejemplo 'Venta' o tipo de operación) -->
+                  <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow inline-block">
+                    {{ inmueble.type | titlecase }}
+                  </span>
 
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 1000000001 && inmueble.saleprice <= 2000000000) 
+                  <!-- Etiqueta inferior (tipo: Casa/Apartamento) -->
+                  <span class="bg-[#CDAD60] text-white text-xs font-semibold px-3 py-1 rounded shadow inline-block">
+                    Codigo: {{ inmueble?.codpro }}
+                  </span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice > 2000000000) 
+                                      ||  (inmueble.rent && inmueble.rent > 15000000)">
+                    <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
+                  </ng-container>
+
+                  <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 1000000001 && inmueble.saleprice <= 2000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 8000000 &&
                       inmueble.rent <= 15000000)">
-                      <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
-                    </ng-container>
+                    <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
+                  </ng-container>
 
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
+                  <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 2000000 &&
                       inmueble.rent <= 8000000)">
-                      <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
-                    </ng-container>
+                    <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
+                  </ng-container>
 
-                    <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                      <i class="fas fa-heart text-2xl"></i>
-                    </button>
+                  <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                    <i class="fas fa-heart text-2xl"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -241,37 +247,44 @@
             </div>
 
             <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
-              <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
-                {{ inmueble.type | titlecase }}
-              </span>
+              <div class="flex flex-col gap-2">
+                <!-- Etiqueta superior (por ejemplo 'Venta' o tipo de operación) -->
+                <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow inline-block">
+                  {{ inmueble.type | titlecase }}
+                </span>
 
-                <div class="flex items-center gap-2">
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice > 2000000000) 
+                <!-- Etiqueta inferior (tipo: Casa/Apartamento) -->
+                <span class="bg-[#CDAD60] text-white text-xs font-semibold px-3 py-1 rounded shadow inline-block">
+                  Codigo: {{ inmueble?.codpro }}
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice > 2000000000) 
                                       ||  (inmueble.rent && inmueble.rent > 15000000)">
-                      <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
-                    </ng-container>
+                  <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
+                </ng-container>
 
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 1000000001 && inmueble.saleprice <= 2000000000) 
+                <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 1000000001 && inmueble.saleprice <= 2000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 8000000 &&
                       inmueble.rent <= 15000000)">
-                      <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
-                    </ng-container>
+                  <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
+                </ng-container>
 
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
+                <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 2000000 &&
                       inmueble.rent <= 8000000)">
-                      <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
-                    </ng-container>
+                  <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
+                </ng-container>
 
-                    <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                      <i class="fas fa-heart text-2xl"></i>
-                    </button>
-                </div>
+                <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                  <i class="fas fa-heart text-2xl"></i>
+                </button>
+              </div>
             </div>
 
-            <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
+            <!-- <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
               <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
                 {{ inmueble?.type | titlecase }}
               </span>
@@ -279,7 +292,7 @@
               <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
                 <i class="fas fa-heart text-2xl"></i>
               </button>
-            </div>
+            </div> -->
           </div>
 
           <div class="p-5">
@@ -421,36 +434,44 @@
               </div>
 
               <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
-                <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
-                  {{ inmueble.type | titlecase }}
-                </span>
+                <div class="flex flex-col gap-2">
+                  <!-- Etiqueta superior (por ejemplo 'Venta' o tipo de operación) -->
+                  <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow inline-block">
+                    {{ inmueble.type | titlecase }}
+                  </span>
+
+                  <!-- Etiqueta inferior (tipo: Casa/Apartamento) -->
+                  <span class="bg-[#CDAD60] text-white text-xs font-semibold px-3 py-1 rounded shadow inline-block">
+                    Codigo: {{ inmueble?.codpro  }}
+                  </span>
+                </div>
 
                 <div class="flex items-center gap-2">
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice > 2000000000) 
+                  <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice > 2000000000) 
                                       ||  (inmueble.rent && inmueble.rent > 15000000)">
-                      <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
-                    </ng-container>
+                    <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
+                  </ng-container>
 
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 1000000001 && inmueble.saleprice <= 2000000000) 
+                  <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 1000000001 && inmueble.saleprice <= 2000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 8000000 &&
                       inmueble.rent <= 15000000)">
-                      <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
-                    </ng-container>
+                    <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
+                  </ng-container>
 
-                    <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
+                  <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 2000000 &&
                       inmueble.rent <= 8000000)">
-                      <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
-                    </ng-container>
+                    <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
+                  </ng-container>
 
-                    <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                      <i class="fas fa-heart text-2xl"></i>
-                    </button>
+                  <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                    <i class="fas fa-heart text-2xl"></i>
+                  </button>
                 </div>
-            </div>
-
+              </div>
+<!-- 
               <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center px-2 z-20">
                 <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow">
                   {{ inmueble.type | titlecase }}
@@ -459,7 +480,7 @@
                 <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
                   <i class="fas fa-heart text-2xl"></i>
                 </button>
-              </div>
+              </div> -->
             </div>
 
             <div class="p-5">
