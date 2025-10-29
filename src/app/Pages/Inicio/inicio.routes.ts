@@ -1,4 +1,4 @@
-import { RouterModule, Routes } from '@angular/router';
+import {  Routes } from '@angular/router';
 import { VistaInicialComponent } from './Components/vista-inicial/vista-inicial.component';
 
 import { FiltrosComponent } from './Components/filtros/filtros.component';
@@ -17,10 +17,9 @@ import { propiedadResolver } from '../../core/resolvers/propiedad.resolver';
 import { blogsResolver } from '../../core/resolvers/blogs.resolver';
 import { AppComponent } from '../../app.component';
 import { PoliticaAcosoComponent } from './Components/politica-acoso/politica-acoso.component';
+import { PortafolioAsesoresComponent } from './Components/portafolio-asesores/portafolio-asesores.component';
 
 export const routes: Routes = [
-
-
 
 
   {
@@ -79,7 +78,7 @@ export const routes: Routes = [
         path: 'politicas-de-privacidad',
         component: PoliticarPrivacidadComponent,
       },
-        {
+      {
         path: 'politicas-de-acoso-sexual',
         component: PoliticaAcosoComponent,
       },
@@ -90,8 +89,12 @@ export const routes: Routes = [
       {
         path: 'formulario-enviado-con-exito',
         component: EnvioExitosoComponent,
-      },
-
+      }
+      ,
+      {
+        path: 'portafolio/:asesor',
+        component: PortafolioAsesoresComponent,
+      }
     ]
   },
 ];

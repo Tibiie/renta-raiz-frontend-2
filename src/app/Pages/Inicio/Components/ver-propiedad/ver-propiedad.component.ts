@@ -18,6 +18,8 @@ import mediumZoom from 'medium-zoom';
 import { log } from 'console';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { VolverComponent } from '../../../../shared/volver/volver.component';
+import { SafeUrlPipePipe } from '../../../../shared/pipes/safe-url-pipe.pipe';
+import { DataasesoresService } from '../../../../core/dataAsesores/dataasesores.service';
 
 
 @Component({
@@ -34,6 +36,7 @@ import { VolverComponent } from '../../../../shared/volver/volver.component';
     BotonesFlotantesComponent,
     VolverComponent,
     NavbarComponent2,
+    SafeUrlPipePipe
   ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
@@ -50,7 +53,7 @@ export class VerPropiedadComponent implements OnInit {
   thumbnailsPerPage = 3;
   resultadosFiltros: any[] = [];
   selectedImageUrl: string | null = null;
-
+  media: any[] = [];
   isModalOpen = false;
   datosCargados = false;
   mostrarContenido = false;
@@ -65,10 +68,15 @@ export class VerPropiedadComponent implements OnInit {
   selectedImage: string = '';
   tabActivo: string = 'fotos';
 
+  asesor:any = {};
+
   router = inject(Router);
   route = inject(ActivatedRoute);
   cdRef = inject(ChangeDetectorRef);
   inmueblesService = inject(InmueblesService);
+  dataasesoresService = inject(DataasesoresService);
+
+
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
@@ -86,7 +94,24 @@ export class VerPropiedadComponent implements OnInit {
 
     this.getDatos();
     this.updateParams();
+
+    this.getAsesor();
+
   }
+
+  getAsesor() {
+    
+    this.asesor = this.dataasesoresService.getAsesorById(this.propiedad.broker[0].code);
+    console.log(this.asesor);
+    
+  }
+
+  abrirPortafolio(asesorCode: string) {
+    this.router.navigate(['/portafolio', asesorCode]).then(() => {
+      window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
+    });
+  }
+
 
   getDatos() {
     // this.getDatosPropiedad();
@@ -245,7 +270,7 @@ export class VerPropiedadComponent implements OnInit {
 
     var valueDescription = `${this.propiedad.type} ${this.propiedad.biz} ${this.propiedad.city} ${this.propiedad.neighborhood}`.toLowerCase();
 
-    pamrams["description"] = this.removeSpecialChars(valueDescription).replaceAll("-","").split(" ").join("-");
+    pamrams["description"] = this.removeSpecialChars(valueDescription).replaceAll("-", "").split(" ").join("-");
 
     if (this.propiedad.biz === "ARRIENDO") {
       if ((this.propiedad.rent && this.propiedad.rent > 15000000)) {
@@ -290,10 +315,42 @@ export class VerPropiedadComponent implements OnInit {
 
   }
 
+  convertToEmbedUrl(url: string): string {
+    try {
+      const videoIdMatch = url.match(
+        /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/
+      );
+      if (videoIdMatch && videoIdMatch[1]) {
+        return `https://www.youtube.com/embed/${videoIdMatch[1]}`;
+      }
+      return url; // Si no se puede transformar, devuelve el original
+    } catch {
+      return url;
+    }
+  }
+
   getDatosPropiedad() {
     this.datosCargados = false;
 
     this.propiedad = this.route.snapshot.data['propiedad'].data;
+    if (this.propiedad.video) {
+      var video = {
+        "type": "video",
+        "videourl": this.convertToEmbedUrl(this.propiedad.video)
+      };
+      this.media.push(video);
+    }
+
+    for (let data of this.propiedad.images) {
+      var image = {
+        "type": "image",
+        "imageurl": data.imageurl,
+        "thumburl": data.thumbnurl
+      };
+      this.media.push(image);
+    }
+
+    console.log(this.media);
 
     this.datosCargados = true;
 

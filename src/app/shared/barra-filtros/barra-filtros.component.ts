@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 import { log } from 'console';
+import { TipoPropiedadEnum } from '../../core/enums/TipoPropiedadEnum';
 
 @Component({
   selector: 'app-barra-filtros',
@@ -598,14 +599,27 @@ export class BarraFiltrosComponent {
     this.cargando = true;
 
     console.log(this.filtrosSeleccionados);
-    
-     if (this.precioMaximoCtrl.value !== "" && this.precioMinimoCtrl.value !== "") {
 
-      this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
-      this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
+    if (this.precioMaximoCtrl.value !== "" && this.precioMinimoCtrl.value !== "") {
+      if (this.selectedProperty?.code === TipoPropiedadEnum.VENTA ) {
+        this.filtrosSeleccionados.set('pvmin', this.getNumericValue(this.precioMinimoCtrl));
+        this.filtrosSeleccionados.set('pvmax', this.getNumericValue(this.precioMaximoCtrl));
+      }
+
+      if (this.selectedProperty?.code == TipoPropiedadEnum.ARRIENDO ) {
+        this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
+        this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
+      }
+
+      if (this.selectedProperty?.code == TipoPropiedadEnum.VENTA_ARRIENDO ) {
+        this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
+        this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
+       
+      }
+
     }
 
-  
+
     this.prepararFiltros();
     this.getEnviarFiltros();
   }
@@ -637,20 +651,20 @@ export class BarraFiltrosComponent {
   }
 
 
-  onMinSelected(event: any,trigger: MatAutocompleteTrigger) {
+  onMinSelected(event: any, trigger: MatAutocompleteTrigger) {
     const value = event.option.value;
     this.precioMinimoCtrl.setValue(value, { emitEvent: true });
     this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
-     // 👇 Cierra el panel
-  trigger.closePanel();
+    // 👇 Cierra el panel
+    trigger.closePanel();
   }
 
-  onMaxSelected(event: any,trigger: MatAutocompleteTrigger) {
+  onMaxSelected(event: any, trigger: MatAutocompleteTrigger) {
     const value = event.option.value;
     this.precioMaximoCtrl.setValue(value, { emitEvent: true });
     this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
-     // 👇 Cierra el panel
-  trigger.closePanel();
+    // 👇 Cierra el panel
+    trigger.closePanel();
   }
 
 

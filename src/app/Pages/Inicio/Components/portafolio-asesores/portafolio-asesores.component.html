@@ -1,0 +1,455 @@
+<!-- navbar  -->
+<!-- <app-navbar-2 [alwaysScrolled]="true" *ngIf=" !mostrarContenido"></app-navbar-2> -->
+<div class="w-full  mb-6 transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
+      'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
+      'md:ml-0': !isDrawerOpen
+    }">
+
+
+  <div class="flex flex-col md:flex-row" *ngIf="resultadosVenta.length > 0 ">
+    <div class="relative w-full">
+      <!-- Overlay de carga -->
+      <div *ngIf="loadingResultadosVenta"
+        class="absolute inset-0 bg-white bg-opacity-70 z-40 flex items-center justify-center">
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 border-4 border-[#CDAD60] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </div>
+
+
+
+      <div class="w-full flex flex-col items-center  px-4">
+        <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-4">
+          Nuestros inmuebles en venta
+        </h1>
+        <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
+          No sueñes, ¡hagamos que suceda!
+        </h2>
+      </div>
+
+      <!-- Contenido de resultados -->
+      <div *ngIf="resultadosVenta.length > 0 "
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10 relative z-0 items-center">
+
+        <div *ngFor="let inmueble of inmueblesVisiblesVenta"
+          class="z-10 relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-4 text-sm w-full mx-auto">
+          <div class="relative group">
+            <a href="#">
+              <img class="rounded-t-lg w-full h-44 object-cover" [src]="inmueble.image1 || 'assets/images/renta-1.jpg'"
+                [alt]="inmueble.address" />
+            </a>
+
+            <div
+              class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+              <a (click)="verPropiedad(inmueble.codpro)"
+                class="cursor-pointer bg-white text-[#080E36] px-4 py-1 font-medium rounded shadow hover:bg-[#CDAD60] hover:text-white text-xs">
+                Ver propiedad
+              </a>
+            </div>
+
+            <div
+              class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]">
+              {{ inmueble.biz | titlecase }}
+            </div>
+
+            <div class="absolute bottom-1 left-1 right-1 flex justify-between items-center px-2 z-20">
+               <div class="flex flex-col gap-2">
+                  <!-- Etiqueta superior (por ejemplo 'Venta' o tipo de operación) -->
+                  <span class="bg-[#CDAD60] text-white text-sm font-semibold px-3 py-1 rounded shadow inline-block">
+                    {{ inmueble.type | titlecase }}
+                  </span>
+
+                  <!-- Etiqueta inferior (tipo: Casa/Apartamento) -->
+                  <span class="bg-[#CDAD60] text-white text-xs font-semibold px-3 py-1 rounded shadow inline-block">
+                    Codigo: {{ inmueble?.codpro  }}
+                  </span>
+                </div>
+
+              <div class="flex items-center gap-2">
+                <ng-container *ngIf="
+                    (inmueble.saleprice && inmueble.saleprice > 2000000000) ||
+                    (inmueble.rent && inmueble.rent > 15000000)
+                  ">
+                  <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
+                </ng-container>
+
+                <ng-container *ngIf="
+                    (inmueble.saleprice &&
+                      inmueble.saleprice >= 1000000001 &&
+                      inmueble.saleprice <= 2000000000) ||
+                    (inmueble.rent &&
+                      inmueble.rent >= 8000000 &&
+                      inmueble.rent <= 15000000)
+                  ">
+                  <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
+                </ng-container>
+
+                <ng-container *ngIf="
+                    (inmueble.saleprice &&
+                      inmueble.saleprice >= 100000000 &&
+                      inmueble.saleprice <= 1000000000) ||
+                    (inmueble.rent &&
+                      inmueble.rent >= 2000000 &&
+                      inmueble.rent <= 8000000)
+                  ">
+                  <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
+                </ng-container>
+
+                <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                  <i class="fas fa-heart text-2xl"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3">
+            <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
+              <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug">
+                {{
+                inmueble.neighborhood || "Sin barrio especificado" | titlecase
+                }}
+                <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
+              </h5>
+              <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
+                {{ inmueble.description }}
+              </p>
+            </a>
+
+            <div class="flex justify-between text-[#080E36] mt-2">
+              <div class="flex flex-col items-center">
+                <span class="text-xs font-medium">Habit</span>
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-bed text-sm"></i>
+                  <span class="ml-1">{{ inmueble.bedrooms || "N/A" }}</span>
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <span class="text-xs font-medium">Baños</span>
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-bath text-sm"></i>
+                  <span class="ml-1">{{ inmueble.bathrooms || "N/A" }}</span>
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <span class="text-xs font-medium">Área</span>
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-ruler-combined text-sm"></i>
+                  <span class="ml-1">
+                    {{ inmueble.area_cons || inmueble.area_lot || "N/A" }} m²
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col mt-3 text-[#080E36] text-sm font-medium">
+              <span>Precio:</span>
+              <span class="text-[#000000] mt-1 text-base font-semibold">
+                {{
+                inmueble.price_format ||
+                (inmueble.price
+                | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                "Consultar"
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="inmueblesVisiblesVenta.length === 0 " class="text-center py-20 mt-60 mb-60 text-gray-500">
+        No se encontraron inmuebles con los filtros seleccionados.
+      </div>
+    </div>
+
+
+
+
+  </div>
+
+  <!-- Paginado -->
+  <!-- Contenedor de paginado -->
+  <div class="flex items-center justify-center relative mt-12" *ngIf="inmueblesVisiblesVenta.length > 0">
+
+    <!-- Navegación centrada -->
+    <nav aria-label="Page navigation" class="absolute left-1/2 -translate-x-1/2">
+      <ul class="inline-flex items-center -space-x-px text-sm">
+        <li>
+          <button (click)="paginaAnterior('VENTA')" [disabled]="paginaActualVenta === 1"
+            class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+            Anterior
+          </button>
+        </li>
+
+        <li *ngIf="bloqueActualVenta > 0">
+          <button (click)="irAlBloqueAnterior('VENTA')" [disabled]="bloqueActualVenta === 0"
+            class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+            ...
+          </button>
+        </li>
+
+        <li *ngFor="let pagina of paginasVenta" class="mx-0.5">
+          <ng-container *ngIf="pagina === '...'; else paginaBtn">
+            <button (click)="cambiarPagina(pagina, 'VENTA')"
+              class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded">
+              ...
+            </button>
+          </ng-container>
+          <ng-template #paginaBtn>
+            <button (click)="cambiarPagina(pagina, 'VENTA')" [ngClass]="
+                pagina === paginaActualVenta
+                  ? 'text-white bg-[#CDAD60]'
+                  : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
+              " class="px-3 py-2 leading-tight border border-gray-300 rounded">
+              {{ pagina }}
+            </button>
+          </ng-template>
+        </li>
+
+        <li>
+          <button (click)="paginaSiguiente('VENTA')" [disabled]="paginaActualVenta === totalPaginasVenta"
+            class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+            Siguiente
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+
+
+  </div>
+  <!-- <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+    <button (click)="scrollToTop()"
+      class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:bg-[#CDAD60] transition-all duration-300 bg-[#080E36] flex items-center justify-center"
+      aria-label="Volver arriba">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+      </svg>
+    </button>
+  </div> -->
+</div>
+
+
+
+<div class="bg-gray-200">
+
+  <div style="padding-top: 50px;" *ngIf="resultadosArriendo.length > 0 "
+    class="w-full   transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
+      'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
+      'md:ml-0': !isDrawerOpen
+    }">
+
+
+    <div class="flex flex-col md:flex-row">
+      <div class="relative w-full">
+        <!-- Overlay de carga -->
+        <div *ngIf="loadingResultadosArriendo"
+          class="absolute inset-0 bg-white bg-opacity-70 z-40 flex items-center justify-center">
+          <div class="flex flex-col items-center">
+            <div class="w-10 h-10 border-4 border-[#CDAD60] border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </div>
+
+
+        <div class="w-full flex flex-col items-center  px-4">
+          <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-4">
+            Nuestros inmuebles en arriendo
+          </h1>
+          <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
+            Somos la llave al hogar que buscas
+          </h2>
+        </div>
+
+        <!-- Contenido de resultados -->
+        <div *ngIf="resultadosArriendo.length > 0 "
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10 relative z-0 items-center">
+
+          <div *ngFor="let inmueble of inmueblesVisiblesArriendo"
+            class="z-10 relative bg-white border border-[#CDAD60] rounded-lg shadow-md border-b-4 pb-4 text-sm w-full mx-auto">
+            <div class="relative group">
+              <a href="#">
+                <img class="rounded-t-lg w-full h-44 object-cover"
+                  [src]="inmueble.image1 || 'assets/images/renta-1.jpg'" [alt]="inmueble.address" />
+              </a>
+
+              <div
+                class="absolute inset-0 bg-[#080E36] bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-t-lg z-10">
+                <a (click)="verPropiedad(inmueble.codpro)"
+                  class="cursor-pointer bg-white text-[#080E36] px-4 py-1 font-medium rounded shadow hover:bg-[#CDAD60] hover:text-white text-xs">
+                  Ver propiedad
+                </a>
+              </div>
+
+              <div
+                class="absolute -top-2 -left-0.5 bg-[#080E36] text-white text-sm font-semibold px-3 py-1 flex items-center z-20 before:content-[''] before:absolute before:top-0 before:right-[-10px] before:border-y-[14px] before:border-y-transparent before:border-l-[10px] before:border-l-[#080E36]">
+                {{ inmueble.biz | titlecase }}
+              </div>
+
+              <div class="absolute bottom-1 left-1 right-1 flex justify-between items-center px-2 z-20">
+                <span class="bg-[#CDAD60] text-white text-xs font-medium px-2 py-0.5 rounded shadow">
+                  {{ inmueble.type | titlecase }}
+                </span>
+
+                <div class="flex items-center gap-2">
+                  <ng-container *ngIf="
+                    (inmueble.saleprice && inmueble.saleprice > 2000000000) ||
+                    (inmueble.rent && inmueble.rent > 15000000)
+                  ">
+                    <i class="fas fa-gem text-blue-500 text-xl" title="Propiedad diamante"></i>
+                  </ng-container>
+
+                  <ng-container *ngIf="
+                    (inmueble.saleprice &&
+                      inmueble.saleprice >= 1000000001 &&
+                      inmueble.saleprice <= 2000000000) ||
+                    (inmueble.rent &&
+                      inmueble.rent >= 8000000 &&
+                      inmueble.rent <= 15000000)
+                  ">
+                    <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
+                  </ng-container>
+
+                  <ng-container *ngIf="
+                    (inmueble.saleprice &&
+                      inmueble.saleprice >= 100000000 &&
+                      inmueble.saleprice <= 1000000000) ||
+                    (inmueble.rent &&
+                      inmueble.rent >= 2000000 &&
+                      inmueble.rent <= 8000000)
+                  ">
+                    <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
+                  </ng-container>
+
+                  <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                    <i class="fas fa-heart text-2xl"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-3">
+              <a (click)="verPropiedad(inmueble.codpro)" class="cursor-pointer">
+                <h5 class="mb-1 text-base font-semibold tracking-tight text-[#080E36] leading-snug">
+                  {{
+                  inmueble.neighborhood || "Sin barrio especificado" | titlecase
+                  }}
+                  <span class="text-[#080E36] text-sm font-semibold">(Barrio)</span>
+                </h5>
+                <p class="text-[#707172] mb-2 line-clamp-2 overflow-hidden text-xs">
+                  {{ inmueble.description }}
+                </p>
+              </a>
+
+              <div class="flex justify-between text-[#080E36] mt-2">
+                <div class="flex flex-col items-center">
+                  <span class="text-xs font-medium">Habit</span>
+                  <div class="flex items-center text-xs">
+                    <i class="fas fa-bed text-sm"></i>
+                    <span class="ml-1">{{ inmueble.bedrooms || "N/A" }}</span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-center">
+                  <span class="text-xs font-medium">Baños</span>
+                  <div class="flex items-center text-xs">
+                    <i class="fas fa-bath text-sm"></i>
+                    <span class="ml-1">{{ inmueble.bathrooms || "N/A" }}</span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-center">
+                  <span class="text-xs font-medium">Área</span>
+                  <div class="flex items-center text-xs">
+                    <i class="fas fa-ruler-combined text-sm"></i>
+                    <span class="ml-1">
+                      {{ inmueble.area_cons || inmueble.area_lot || "N/A" }} m²
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col mt-3 text-[#080E36] text-sm font-medium">
+                <span>Precio:</span>
+                <span class="text-[#000000] mt-1 text-base font-semibold">
+                  {{
+                  inmueble.price_format ||
+                  (inmueble.price
+                  | currency : "COP" : "symbol-narrow" : "1.0-0") ||
+                  "Consultar"
+                  }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="resultadosArriendo.length === 0 " class="text-center py-20 mt-60 mb-60 text-gray-500">
+          No se encontraron inmuebles con los filtros seleccionados.
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+    <!-- Paginado -->
+    <!-- Contenedor de paginado -->
+    <div class="flex items-center justify-center relative mt-12" *ngIf="inmueblesVisiblesArriendo.length > 0"
+      style="padding-bottom: 50px;" >
+
+      <!-- Navegación centrada -->
+      <nav aria-label="Page navigation" class="absolute left-1/2 -translate-x-1/2">
+        <ul class="inline-flex items-center -space-x-px text-sm">
+          <li>
+            <button (click)="paginaAnterior('ARRIENDO')" [disabled]="paginaActualArriendo === 1"
+              class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+              Anterior
+            </button>
+          </li>
+
+          <li *ngIf="bloqueActualArriendo > 0">
+            <button (click)="irAlBloqueAnterior('ARRIENDO')" [disabled]="bloqueActualArriendo === 0"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+              ...
+            </button>
+          </li>
+
+          <li *ngFor="let pagina of paginasArriendo" class="mx-0.5">
+            <ng-container *ngIf="pagina === '...'; else paginaBtn">
+              <button
+                class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded">
+                ...
+              </button>
+            </ng-container>
+            <ng-template #paginaBtn>
+              <button (click)="cambiarPagina(pagina, 'ARRIENDO')" [ngClass]="
+                pagina === paginaActualArriendo
+                  ? 'text-white bg-[#CDAD60]'
+                  : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
+              " class="px-3 py-2 leading-tight border border-gray-300 rounded">
+                {{ pagina }}
+              </button>
+            </ng-template>
+          </li>
+
+          <li>
+            <button (click)="paginaSiguiente('ARRIENDO')" [disabled]="paginaActualArriendo === totalPaginasArriendo"
+              class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
+              Siguiente
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+
+
+    </div>
+    <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+      <button (click)="scrollToTop()"
+        class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:bg-[#CDAD60] transition-all duration-300 bg-[#080E36] flex items-center justify-center"
+        aria-label="Volver arriba">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
