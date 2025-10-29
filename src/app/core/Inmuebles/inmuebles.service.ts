@@ -74,7 +74,7 @@ export class InmueblesService {
 
   getPropiedadesByAsesor(asesorID: number, page: number) {
     return this.http.get(
-      `${environment.baserUrlTest}/properties/asesor/${asesorID}?page=${page}`
+      `${environment.baseUrl}/properties/asesor/${asesorID}?page=${page}`
     );
   }
 }
