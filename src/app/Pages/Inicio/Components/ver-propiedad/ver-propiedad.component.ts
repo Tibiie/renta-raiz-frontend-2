@@ -20,6 +20,7 @@ import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/
 import { VolverComponent } from '../../../../shared/volver/volver.component';
 import { SafeUrlPipePipe } from '../../../../shared/pipes/safe-url-pipe.pipe';
 import { DataasesoresService } from '../../../../core/dataAsesores/dataasesores.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -68,13 +69,15 @@ export class VerPropiedadComponent implements OnInit {
   selectedImage: string = '';
   tabActivo: string = 'fotos';
 
-  asesor:any = {};
+  asesor: any = {};
 
   router = inject(Router);
   route = inject(ActivatedRoute);
   cdRef = inject(ChangeDetectorRef);
   inmueblesService = inject(InmueblesService);
   dataasesoresService = inject(DataasesoresService);
+  meta = inject(Meta);
+  title = inject(Title);
 
 
 
@@ -97,13 +100,20 @@ export class VerPropiedadComponent implements OnInit {
 
     this.getAsesor();
 
+
+    
+    
+    this.meta.updateTag({ property: 'og:description', content: this.propiedad.descripcion });
+    this.meta.updateTag({ property: 'og:image', content: this.propiedad.images[0].imageurl });
+    
+
   }
 
   getAsesor() {
-    
+
     this.asesor = this.dataasesoresService.getAsesorById(this.propiedad.broker[0].code);
     console.log(this.asesor);
-    
+
   }
 
   abrirPortafolio(asesorCode: string) {
