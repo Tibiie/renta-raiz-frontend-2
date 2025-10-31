@@ -19,7 +19,7 @@ export class NuestroEquipoComponent implements OnInit {
   asesoresCode  = {
     "Juan Pablo Hoyos": "11370",
     "Sebastián Ospina": "41112",
-    "Lenys Cuberos": "41132",
+    "Lenys Cuberos": "59504",
     "Andres Mejia": "67953",
     "David Peláez": "69627",
     "Juan Pablo Ospina": "45849"

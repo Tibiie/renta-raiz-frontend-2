@@ -23,7 +23,7 @@ export class DataasesoresService {
       "imagen": "assets/images/SebastianOspina-rr24-210x210.jpg"
     },
     {
-      "id": 41132,
+      "id": 59504,
       "nombre": "Lenys Cuberos",
       "cargo": "Coordinadora Comercial",
       "telefono": "314 543 8665",
