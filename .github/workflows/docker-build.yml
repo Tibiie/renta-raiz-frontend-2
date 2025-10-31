@@ -3,7 +3,7 @@ name: Angular CI/CD
 on:
   push:
     branches:
-      - main # Cambia 'main' por el nombre de tu rama principal
+      - master # Cambia 'main' por el nombre de tu rama principal
 
 jobs:
   build:
