@@ -3,16 +3,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { CommonModule } from '@angular/common';
+import { CategoryEnum } from '../../../../core/enums/CategoryEnum';
+import { TipoPropiedadEnum } from '../../../../core/enums/TipoPropiedadEnum';
+import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
 
 @Component({
   selector: 'app-prioritarios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,NavbarComponent2],
   templateUrl: './prioritarios.component.html',
   styleUrl: './prioritarios.component.scss'
 })
 export class PrioritariosComponent implements OnInit {
-  
+
+
+  reference = {
+    code: "4026"
+  }
 
 
 
@@ -27,7 +34,7 @@ export class PrioritariosComponent implements OnInit {
 
   paginaActualVenta: number = 1;
 
-  elementsPerPage = 8;
+  elementsPerPage = 12;
   bloqueActualVenta: number = 0;
 
 
@@ -50,44 +57,158 @@ export class PrioritariosComponent implements OnInit {
 
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
+    const queryParams = this.activatedRoute.snapshot.queryParams;
+    if (queryParams['category'] ) {
+     
+
+      this.getCategory(queryParams['category'], queryParams['biz']);
+      console.log(this.filtrosSeleccionados);
+      
+
+      
+    }
+
+    if (queryParams['biz']) {
+       this.getBiz(queryParams['biz']);
+    }
+
+
+    this.obtenerInmuebles(this.elementsPerPage, 1);
   }
 
   verPropiedad(codPro: number) {
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/ver-propiedad', codPro, 0])
+      this.router.createUrlTree(['/ver-propiedad', codPro, 1])
     );
     window.open(url, '_blank');
   }
 
+  getBiz(type: string) {
+    if (type === TipoPropiedadEnum.VENTA) {
+      this.filtrosSeleccionados.set('biz', TipoPropiedadEnum.VENTA);
+    }
+    if (type === TipoPropiedadEnum.ARRIENDO) {
+      this.filtrosSeleccionados.set('biz', TipoPropiedadEnum.ARRIENDO);
+    }
+  }
 
-  
-    generarPaginas(tipo: string) {
-     
-    }
-  
-    irAlSiguienteBloque(tipo: string) {
-     
-  
-    }
-  
-    irAlBloqueAnterior(tipo: string) {
-    
-    }
-  
-    cambiarPagina(pagina: number | string, tipo: string) {
-  
-     
-    }
-  
-  
-    paginaAnterior(tipo: string) {
+
+  getCategory(categoria: string, type: string) {
+
+    if (type === TipoPropiedadEnum.VENTA) {
       
+      if (categoria === CategoryEnum.ORO) {
+        this.filtrosSeleccionados.set('pvmin', 1000000001);
+        this.filtrosSeleccionados.set('pvmax', 2000000000);
+      }
+
+      if (categoria === CategoryEnum.PLATA) {
+
+        this.filtrosSeleccionados.set('pvmin', 100000000);
+        this.filtrosSeleccionados.set('pvmax', 1000000000);
+
+      }
+
+      if (categoria === CategoryEnum.DIAMANTE) {
+        this.filtrosSeleccionados.set('pvmin', 2000000000);
+        this.filtrosSeleccionados.set('pvmax', 100000000000);
+      }
     }
-  
-    paginaSiguiente(tipo: string) {
-  
-  
+
+
+
+    if (type === TipoPropiedadEnum.ARRIENDO) {
+      
+      if (categoria === CategoryEnum.ORO) {
+        this.filtrosSeleccionados.set('pcmin', 8000000);
+        this.filtrosSeleccionados.set('pcmax', 15000000);
+      }
+      if (categoria === CategoryEnum.PLATA) {
+        this.filtrosSeleccionados.set('pcmin', 2000000);
+        this.filtrosSeleccionados.set('pcmax', 8000000);
+      }
+      if (categoria === CategoryEnum.DIAMANTE) {
+        this.filtrosSeleccionados.set('pcmin', 15000000);
+        this.filtrosSeleccionados.set('pcmax', 100000000000);
+      }
     }
+
+
+
+
+
+  }
+
+  obtenerInmuebles(elementsPerPage: number, page: number) {
+    this.filtrosSeleccionados.set('reference', this.reference.code);
+
+
+
+
+    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
+
+
+    const obj = {
+      ...filtrosObj,
+      page: page,
+    };
+    console.log(obj);
+
+    this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
+      (data: any) => {
+        this.resultadosVenta = data.data;
+
+        this.totalDatosVenta = data.total;
+        this.paginaActualVenta = data.current_page || 1;
+        this.paginacionVenta = data;
+        this.totalPaginasVenta = data.last_page || 1;
+        this.paginasVenta = Array.from(
+          { length: this.totalPaginasVenta },
+          (_, i) => i + 1
+        );
+
+
+
+        this.generarPaginas();
+        console.log(this.resultadosVenta);
+        // this.loadingResultadosVenta = false
+      },
+      (error: any) => {
+        console.error('Error al obtener las propiedades:', error);
+      }
+    );
+
+
+  }
+
+
+  generarPaginas() {
+
+  }
+
+  irAlSiguienteBloque(tipo: string) {
+
+
+  }
+
+  irAlBloqueAnterior(tipo: string) {
+
+  }
+
+  cambiarPagina(pagina: number | string, tipo: string) {
+
+
+  }
+
+
+  paginaAnterior(tipo: string) {
+
+  }
+
+  paginaSiguiente(tipo: string) {
+
+
+  }
 
 }
