@@ -92,14 +92,14 @@
                     <i class="fas fa-crown text-yellow-500 text-xl" title="Propiedad oro"></i>
                   </ng-container>
 
-                  <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.saleprice <= 1000000000) 
+                  <ng-container *ngIf="(inmueble.saleprice && inmueble.saleprice >= 100000000 && inmueble.sanleprice <= 1000000000) 
                                       ||  (inmueble.rent &&
                       inmueble.rent >= 2000000 &&
                       inmueble.rent <= 8000000)">
                     <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
                   </ng-container>
 
-                  <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                  <button (click)="agregarFavorito(inmueble)" class="text-white text-lg hover:text-[#ea6666] transition-colors">
                     <i class="fas fa-heart text-2xl"></i>
                   </button>
                 </div>
@@ -886,3 +886,4 @@
 
 <app-footer></app-footer>
 <app-botones-flotantes></app-botones-flotantes>
+<app-offcanvas-wishlist></app-offcanvas-wishlist>

@@ -19,8 +19,12 @@ import { Router } from '@angular/router';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
+import { BehaviorSubject } from 'rxjs';
+import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
+import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
 var document: any;
 declare const Carousel: any;
+
 @Component({
   selector: 'app-vista-inicial',
   standalone: true,
@@ -32,6 +36,7 @@ declare const Carousel: any;
     FooterComponent,
     BotonesFlotantesComponent,
     BarraFiltrosComponent,
+    OffcanvasWishlistComponent,
   ],
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss'],
@@ -83,6 +88,7 @@ export class VistaInicialComponent implements OnInit {
   elementRef = inject(ElementRef);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
+  favService = inject(WishlistServiceService);
 
   // PAGINACION
   totalPaginasArriendo = 0;
@@ -100,6 +106,8 @@ export class VistaInicialComponent implements OnInit {
   bloqueActualDestacados: number = 0;
   paginasDestacados: (number | string)[] = [];
 
+
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
@@ -112,6 +120,10 @@ export class VistaInicialComponent implements OnInit {
     this.getInmueblesVentas(1);
     this.getInmueblesArriendos(1);
     this.getInmueblesDestacados(1);
+  }
+
+  agregarFavorito(propiedad: any) {
+    this.favService.agregar(propiedad);
   }
 
   getInmueblesVentas(page: number) {

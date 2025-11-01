@@ -1,0 +1,24 @@
+<div
+  class="fixed bottom-0 right-0 w-full sm:w-96 bg-white shadow-2xl rounded-t-2xl border border-gray-200 z-50 transform transition-transform duration-300"
+  [class.translate-y-full]="!visible"
+>
+  <div class="flex justify-between items-center p-4 border-b">
+    <h2 class="text-lg font-semibold text-gray-800">Tu visita guiada 🏡</h2>
+    <button (click)="cerrar()" class="text-gray-500 hover:text-gray-800">&times;</button>
+  </div>
+
+  <div class="p-4 max-h-96 overflow-y-auto" *ngIf="favoritos.length > 0;">
+    <div *ngFor="let fav of favoritos" class="flex items-center mb-3 border rounded-lg p-2 shadow-sm">
+      <img [src]="fav.imagen" [alt]="fav.nombre" class="w-16 h-16 object-cover rounded-lg mr-3" />
+      <div class="flex-1">
+        <p class="font-medium text-gray-800">{{ fav.city }}</p>
+        <p class="text-xs text-gray-500">Código: {{ fav.codpro }}</p>
+      </div>
+      <button (click)="eliminar(fav.codigo)" class="text-red-500 hover:text-red-700 font-bold">&times;</button>
+    </div>
+  </div>
+
+  <ng-template #vacio>
+    <p class="text-gray-500 text-sm text-center">Aún no has seleccionado propiedades.</p>
+  </ng-template>
+</div>
