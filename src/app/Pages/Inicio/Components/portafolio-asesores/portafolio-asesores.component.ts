@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,9 @@ import { PortafolioEnum } from '../../../../core/enums/PortafolioEnum';
   styleUrl: './portafolio-asesores.component.scss'
 })
 export class PortafolioAsesoresComponent implements OnInit {
+
+  @ViewChild('carruselVenta') carruselVenta!: ElementRef;
+  @ViewChild('carruselArriendo') carruselArriendo!: ElementRef;
 
   paginacionVenta: any = {};
   paginacionArriendo: any = {};
@@ -73,6 +76,17 @@ export class PortafolioAsesoresComponent implements OnInit {
     this.actualizarInmueblesVisiblesVenta();
   }
 
+
+  scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
+    const carrusel = tipo === 'venta' ? this.carruselVenta : this.carruselArriendo;
+    const scrollAmount = 350; // cantidad de píxeles que se moverá
+
+    if (direccion === 'left') {
+      carrusel.nativeElement.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      carrusel.nativeElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }
 
 
   private checkScreenSize() {
