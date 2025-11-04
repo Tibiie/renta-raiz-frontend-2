@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { CategoryEnum } from '../../../../core/enums/CategoryEnum';
 import { TipoPropiedadEnum } from '../../../../core/enums/TipoPropiedadEnum';
 import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
+import { catchError, forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-prioritarios',
   standalone: true,
-  imports: [CommonModule,NavbarComponent2],
+  imports: [CommonModule, NavbarComponent2],
   templateUrl: './prioritarios.component.html',
   styleUrl: './prioritarios.component.scss'
 })
@@ -21,13 +22,23 @@ export class PrioritariosComponent implements OnInit {
     code: "4026"
   }
 
+  type: string = "";
+
+  paramsFilter: any = {
+    oro: "",
+    plata: "",
+    diamante: ""
+  };
+
 
 
   paginacionVenta: any = {};
 
   mostrarContenido = false;
   asesorId!: string;
-  filtrosSeleccionados: Map<string, any> = new Map();
+  filtrosSeleccionadosOro: Map<string, any> = new Map();
+  filtrosSeleccionadosPlata: Map<string, any> = new Map();
+  filtrosSeleccionadosDiamante: Map<string, any> = new Map();
   totalDatosVenta = 0;
 
   totalPaginasVenta = 0;
@@ -42,7 +53,7 @@ export class PrioritariosComponent implements OnInit {
   loadingResultadosVenta: boolean = false;
 
   isDrawerOpen: boolean = false;
-  resultadosVenta: any[] = [];
+  resultados: any[] = [];
 
   paginasVenta: (number | string)[] = [];
 
@@ -59,18 +70,18 @@ export class PrioritariosComponent implements OnInit {
   ngOnInit(): void {
 
     const queryParams = this.activatedRoute.snapshot.queryParams;
-    if (queryParams['category'] ) {
-     
+    // if (queryParams['category'] ) {
 
-      this.getCategory(queryParams['category'], queryParams['biz']);
-      console.log(this.filtrosSeleccionados);
-      
 
-      
-    }
+    //   this.getCategory(queryParams['category'], queryParams['biz']);
+    //   console.log(this.filtrosSeleccionados);
+
+
+
+    // }
 
     if (queryParams['biz']) {
-       this.getBiz(queryParams['biz']);
+      this.getBiz(queryParams['biz']);
     }
 
 
@@ -85,99 +96,159 @@ export class PrioritariosComponent implements OnInit {
   }
 
   getBiz(type: string) {
-    if (type === TipoPropiedadEnum.VENTA) {
-      this.filtrosSeleccionados.set('biz', TipoPropiedadEnum.VENTA);
-    }
-    if (type === TipoPropiedadEnum.ARRIENDO) {
-      this.filtrosSeleccionados.set('biz', TipoPropiedadEnum.ARRIENDO);
-    }
-  }
+    this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.VENTA);
+    this.filtrosSeleccionadosOro.set('reference', this.reference.code);
+    this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.VENTA);
+    this.filtrosSeleccionadosOro.set('reference', this.reference.code);
+    this.filtrosSeleccionadosPlata.set('biz', TipoPropiedadEnum.VENTA);
+    this.filtrosSeleccionadosOro.set('reference', this.reference.code);
 
 
-  getCategory(categoria: string, type: string) {
 
     if (type === TipoPropiedadEnum.VENTA) {
-      
-      if (categoria === CategoryEnum.ORO) {
-        this.filtrosSeleccionados.set('pvmin', 1000000001);
-        this.filtrosSeleccionados.set('pvmax', 2000000000);
-      }
+      this.type = "Venta";
 
-      if (categoria === CategoryEnum.PLATA) {
+      //oro
+      this.filtrosSeleccionadosOro.set('pvmin', 1000000001);
+      this.filtrosSeleccionadosOro.set('pvmax', 2000000000);
 
-        this.filtrosSeleccionados.set('pvmin', 100000000);
-        this.filtrosSeleccionados.set('pvmax', 1000000000);
+      //plata
+      this.filtrosSeleccionadosPlata.set('pvmin', 100000000);
+      this.filtrosSeleccionadosPlata.set('pvmax', 1000000000);
 
-      }
-
-      if (categoria === CategoryEnum.DIAMANTE) {
-        this.filtrosSeleccionados.set('pvmin', 2000000000);
-        this.filtrosSeleccionados.set('pvmax', 100000000000);
-      }
+      //diamante
+      this.filtrosSeleccionadosDiamante.set('pvmin', 2000000000);
+      this.filtrosSeleccionadosDiamante.set('pvmax', 100000000000);
     }
-
 
 
     if (type === TipoPropiedadEnum.ARRIENDO) {
-      
-      if (categoria === CategoryEnum.ORO) {
-        this.filtrosSeleccionados.set('pcmin', 8000000);
-        this.filtrosSeleccionados.set('pcmax', 15000000);
-      }
-      if (categoria === CategoryEnum.PLATA) {
-        this.filtrosSeleccionados.set('pcmin', 2000000);
-        this.filtrosSeleccionados.set('pcmax', 8000000);
-      }
-      if (categoria === CategoryEnum.DIAMANTE) {
-        this.filtrosSeleccionados.set('pcmin', 15000000);
-        this.filtrosSeleccionados.set('pcmax', 100000000000);
-      }
+      this.type = "Arriendo";
+      //oro
+      this.filtrosSeleccionadosOro.set('pcmin', 8000000);
+      this.filtrosSeleccionadosOro.set('pcmax', 15000000);
+
+      //plata
+      this.filtrosSeleccionadosPlata.set('pcmin', 2000000);
+      this.filtrosSeleccionadosPlata.set('pcmax', 8000000);
+
+      //diamante
+      this.filtrosSeleccionadosDiamante.set('pcmin', 15000000);
+      this.filtrosSeleccionadosDiamante.set('pcmax', 100000000000);
     }
 
-
-
+    this.paramsFilter.oro = this.filtrosSeleccionadosOro;
+    this.paramsFilter.plata = this.filtrosSeleccionadosPlata;
+    this.paramsFilter.diamante = this.filtrosSeleccionadosDiamante;
 
 
   }
+
+
+
 
   obtenerInmuebles(elementsPerPage: number, page: number) {
-    this.filtrosSeleccionados.set('reference', this.reference.code);
 
 
-
-
-    const filtrosObj = Object.fromEntries(this.filtrosSeleccionados);
-
-
-    const obj = {
-      ...filtrosObj,
+    //oro
+    const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
+    const objOro = {
+      ...filtrosObjOro,
       page: page,
     };
-    console.log(obj);
 
-    this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
-      (data: any) => {
-        this.resultadosVenta = data.data;
+    //plata
+    const filtrosObjPlata = Object.fromEntries(this.filtrosSeleccionadosPlata);
+    const objPlata = {
+      ...filtrosObjPlata,
+      page: page,
+    };
 
-        this.totalDatosVenta = data.total;
-        this.paginaActualVenta = data.current_page || 1;
-        this.paginacionVenta = data;
-        this.totalPaginasVenta = data.last_page || 1;
-        this.paginasVenta = Array.from(
-          { length: this.totalPaginasVenta },
-          (_, i) => i + 1
-        );
+    //diamante
+    const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
+    const objDiamante = {
+      ...filtrosObjDiamante,
+      page: page,
+    };
 
 
 
-        this.generarPaginas();
-        console.log(this.resultadosVenta);
-        // this.loadingResultadosVenta = false
+
+
+
+    forkJoin({
+      oro: this.inmubeService.getFiltrosEnviar(objOro, elementsPerPage).pipe(
+        catchError(err => {
+          console.error('Error al cargar usuarios:', err);
+          return of([] as any[]);
+        })
+      ),
+      plata: this.inmubeService.getFiltrosEnviar(objPlata, elementsPerPage).pipe(
+        catchError(err => {
+          console.error('Error al cargar productos:', err);
+          return of([] as any[]);
+        })
+      ),
+      diamante: this.inmubeService.getFiltrosEnviar(objDiamante, elementsPerPage).pipe(
+        catchError(err => {
+          console.error('Error al cargar pedidos:', err);
+          return of([] as any[]);
+        })
+      )
+    }).subscribe({
+      next: ({ oro, plata, diamante }) => {
+
+        var resultOro ={
+          type: "Oro",
+          data: oro
+        }
+        this.resultados.push(resultOro);
+
+        var resultPlata ={
+          type: "Plata",
+          data: plata
+        }
+        this.resultados.push(resultPlata);
+
+        var resultDiamante ={
+          type: "Diamante",
+          data: diamante
+        }
+        this.resultados.push(resultDiamante);
+
+       
+        console.log('✅ Datos cargados correctamente:', { oro, plata, diamante });
+        console.log(this.resultados);
+        
       },
-      (error: any) => {
-        console.error('Error al obtener las propiedades:', error);
+      error: (err) => {
+        console.error('❌ Error general:', err);
       }
-    );
+    });
+
+    // this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
+    //   (data: any) => {
+    //     this.resultadosVenta = data.data;
+
+    //     this.totalDatosVenta = data.total;
+    //     this.paginaActualVenta = data.current_page || 1;
+    //     this.paginacionVenta = data;
+    //     this.totalPaginasVenta = data.last_page || 1;
+    //     this.paginasVenta = Array.from(
+    //       { length: this.totalPaginasVenta },
+    //       (_, i) => i + 1
+    //     );
+
+
+
+    //     this.generarPaginas();
+    //     console.log(this.resultadosVenta);
+    //     // this.loadingResultadosVenta = false
+    //   },
+    //   (error: any) => {
+    //     console.error('Error al obtener las propiedades:', error);
+    //   }
+    // );
 
 
   }
