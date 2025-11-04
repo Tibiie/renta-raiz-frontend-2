@@ -1,20 +1,27 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
 import { PortafolioEnum } from '../../../../core/enums/PortafolioEnum';
+import { FooterComponent } from '../../../../shared/footer/footer.component';
+import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
+import { FooterPortafolioComponent } from '../../../../shared/footer-portafolio/footer-portafolio.component';
 
 
 @Component({
   selector: 'app-portafolio-asesores',
   standalone: true,
-  imports: [CommonModule, NavbarComponent2],
+  imports: [CommonModule, NavbarComponent2,FooterPortafolioComponent,
+      BotonesFlotantesComponent],
   templateUrl: './portafolio-asesores.component.html',
   styleUrl: './portafolio-asesores.component.scss'
 })
 export class PortafolioAsesoresComponent implements OnInit {
+
+  @ViewChild('carruselVenta') carruselVenta!: ElementRef;
+  @ViewChild('carruselArriendo') carruselArriendo!: ElementRef;
 
   paginacionVenta: any = {};
   paginacionArriendo: any = {};
@@ -73,6 +80,17 @@ export class PortafolioAsesoresComponent implements OnInit {
     this.actualizarInmueblesVisiblesVenta();
   }
 
+
+  scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
+    const carrusel = tipo === 'venta' ? this.carruselVenta : this.carruselArriendo;
+    const scrollAmount = 350; // cantidad de píxeles que se moverá
+
+    if (direccion === 'left') {
+      carrusel.nativeElement.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      carrusel.nativeElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }
 
 
   private checkScreenSize() {
