@@ -1,7 +1,7 @@
 <!-- navbar  -->
 <!-- <app-navbar-2 [alwaysScrolled]="true" *ngIf=" !mostrarContenido"></app-navbar-2> -->
 
-<div class="w-full  mb-6 transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
+<div class="w-full  mb-12 transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
       'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
       'md:ml-0': !isDrawerOpen
     }">
@@ -19,11 +19,11 @@
 
 
 
-      <div class="w-full flex flex-col items-center  px-4">
-        <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-4">
+      <div class="w-full flex flex-col items-center  ">
+        <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-1">
           Nuestros inmuebles en venta
         </h1>
-        <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
+        <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center ">
           No sueñes, ¡hagamos que suceda!
         </h2>
       </div>
@@ -167,7 +167,7 @@
 
       <!-- mobile -->
       <!-- CARRUSEL DE INMUEBLES EN VENTA -->
-      <div class="relative block md:hidden  pt-2 mt-4 z-10  ">
+      <div class="relative block md:hidden   z-10  ">
         <!-- Botones de navegación -->
         <button (click)="scrollCarrusel('venta', 'left')"
           class="hidden md:flex absolute left-0 top-1/2 transform -translate-y-1/2 bg-[#080E36] text-white p-2 rounded-full shadow hover:bg-[#CDAD60] z-20">
@@ -316,7 +316,7 @@
 
   <!-- Paginado -->
   <!-- Contenedor de paginado -->
-  <div class="flex items-center justify-center relative mt-12" *ngIf="inmueblesVisiblesVenta.length > 0">
+  <div class="flex items-center justify-center relative mt-6 " *ngIf="inmueblesVisiblesVenta.length > 0">
 
     <!-- Navegación centrada -->
     <nav aria-label="Page navigation" class="absolute left-1/2 -translate-x-1/2">
@@ -379,7 +379,7 @@
 
 <div class="bg-gray-200">
 
-  <div style="padding-top: 50px;" *ngIf="resultadosArriendo.length > 0 "
+  <div style="padding-top: 20px;" *ngIf="resultadosArriendo.length > 0 "
     class="w-full   transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
       'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
       'md:ml-0': !isDrawerOpen
@@ -398,10 +398,10 @@
 
 
         <div class="w-full flex flex-col items-center  px-4">
-          <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-4">
+          <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-1">
             Nuestros inmuebles en arriendo
           </h1>
-          <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-6">
+          <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center ">
             Somos la llave al hogar que buscas
           </h2>
         </div>
@@ -675,8 +675,8 @@
 
     <!-- Paginado -->
     <!-- Contenedor de paginado -->
-    <div class="flex items-center justify-center relative mt-12" *ngIf="inmueblesVisiblesArriendo.length > 0"
-      style="padding-bottom: 100px;">
+    <div class="flex items-center justify-center relative mt-6" *ngIf="inmueblesVisiblesArriendo.length > 0"
+      style="padding-bottom: 50px;">
 
       <!-- Navegación centrada -->
       <nav aria-label="Page navigation" class="absolute left-1/2 -translate-x-1/2">
@@ -725,7 +725,7 @@
 
 
     </div>
-    <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+    <div class="fixed bottom-6 right-2 flex flex-col gap-3 z-50">
       <button (click)="scrollToTop()"
         class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:bg-[#CDAD60] transition-all duration-300 bg-[#080E36] flex items-center justify-center"
         aria-label="Volver arriba">
@@ -737,3 +737,4 @@
     </div>
   </div>
 </div>
+<app-footer-portafolio *ngIf="resultadosVenta.length > 0"></app-footer-portafolio>
