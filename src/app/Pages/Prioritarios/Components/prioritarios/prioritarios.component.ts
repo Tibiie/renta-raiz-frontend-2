@@ -7,11 +7,12 @@ import { CategoryEnum } from '../../../../core/enums/CategoryEnum';
 import { TipoPropiedadEnum } from '../../../../core/enums/TipoPropiedadEnum';
 import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
 import { catchError, forkJoin, of } from 'rxjs';
+import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
 
 @Component({
   selector: 'app-prioritarios',
   standalone: true,
-  imports: [CommonModule, NavbarComponent2],
+  imports: [CommonModule, NavbarComponent2,  BarraFiltrosComponent],
   templateUrl: './prioritarios.component.html',
   styleUrl: './prioritarios.component.scss'
 })
