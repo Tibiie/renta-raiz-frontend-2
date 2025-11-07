@@ -21,10 +21,7 @@ export const routes: Routes = [
         path: 'ver-propiedad/:codpro/:ocultarContenido',
         component: VerPropiedadComponent,
         resolve: { propiedad: propiedadResolver }
-      },{
-              path: 'filtros',
-              component: FiltrosComponent,
-            },
+      }
     ]
 
   },

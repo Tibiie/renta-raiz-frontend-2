@@ -8,11 +8,15 @@ import { TipoPropiedadEnum } from '../../../../core/enums/TipoPropiedadEnum';
 import { NavbarComponent2 } from '../../../../shared/navbar-2/navbar-2.component';
 import { catchError, forkJoin, of } from 'rxjs';
 import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { BarraFiltrosPrioritariosComponent } from "../barra-filtros-prioritarios/barra-filtros-prioritarios.component";
 
 @Component({
   selector: 'app-prioritarios',
   standalone: true,
-  imports: [CommonModule, NavbarComponent2,  BarraFiltrosComponent],
+  imports: [CommonModule, NavbarComponent2, BarraFiltrosPrioritariosComponent],
   templateUrl: './prioritarios.component.html',
   styleUrl: './prioritarios.component.scss'
 })
@@ -146,6 +150,26 @@ export class PrioritariosComponent implements OnInit {
   }
 
 
+  getFiltrosSeleccionados(filtros: [string, any][]) {
+    const filter = new Map<string, any>(filtros);
+
+    for (const [key, value] of filter) {
+      this.filtrosSeleccionadosOro.set(key, value);
+      this.filtrosSeleccionadosPlata.set(key, value);
+      this.filtrosSeleccionadosDiamante.set(key, value);
+    }
+    const queryParams = this.activatedRoute.snapshot.queryParams;
+
+    if (queryParams['biz']) {
+      this.getBiz(queryParams['biz']);
+    }
+
+    console.log(this.filtrosSeleccionadosOro);
+    console.log(this.filtrosSeleccionadosPlata);
+    console.log(this.filtrosSeleccionadosDiamante);
+    
+  }
+
 
 
   obtenerInmuebles(elementsPerPage: number, page: number) {
@@ -199,28 +223,28 @@ export class PrioritariosComponent implements OnInit {
     }).subscribe({
       next: ({ oro, plata, diamante }) => {
 
-        var resultOro ={
+        var resultOro = {
           type: "Oro",
           data: oro
         }
         this.resultados.push(resultOro);
 
-        var resultPlata ={
+        var resultPlata = {
           type: "Plata",
           data: plata
         }
         this.resultados.push(resultPlata);
 
-        var resultDiamante ={
+        var resultDiamante = {
           type: "Diamante",
           data: diamante
         }
         this.resultados.push(resultDiamante);
 
-       
+
         console.log('✅ Datos cargados correctamente:', { oro, plata, diamante });
         console.log(this.resultados);
-        
+
       },
       error: (err) => {
         console.error('❌ Error general:', err);
