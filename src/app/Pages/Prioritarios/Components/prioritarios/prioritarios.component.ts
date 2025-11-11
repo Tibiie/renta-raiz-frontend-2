@@ -35,6 +35,8 @@ export class PrioritariosComponent implements OnInit {
     diamante: ""
   };
 
+  isCargando!: boolean;
+
 
 
   paginacionVenta: any = {};
@@ -69,10 +71,13 @@ export class PrioritariosComponent implements OnInit {
   // router = inject(Router);
   inmubeService = inject(InmueblesService);
 
-
+  biz!: string;
+  category!: string;
 
 
   ngOnInit(): void {
+
+
 
     const queryParams = this.activatedRoute.snapshot.queryParams;
     // if (queryParams['category'] ) {
@@ -86,11 +91,27 @@ export class PrioritariosComponent implements OnInit {
     // }
 
     if (queryParams['biz']) {
-      this.getBiz(queryParams['biz']);
+      this.biz = queryParams['biz'];
+
+      this.getBiz(queryParams['biz'], null);
+
+      if (queryParams['category']) {
+        this.category = queryParams['category'];
+        this.getBiz(queryParams['biz'], queryParams['category']);
+      }
+
+
+
+
+
+
+
+
+
     }
 
-
     this.obtenerInmuebles(this.elementsPerPage, 1);
+
   }
 
   verPropiedad(codPro: number) {
@@ -100,35 +121,26 @@ export class PrioritariosComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  getBiz(type: string) {
-    this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.VENTA);
+  getBiz(type: string, category: string | null) {
+    this.filtrosSeleccionadosDiamante.clear();
+    this.filtrosSeleccionadosOro.clear();
+    this.filtrosSeleccionadosPlata.clear();
+
     this.filtrosSeleccionadosOro.set('reference', this.reference.code);
-    this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.VENTA);
-    this.filtrosSeleccionadosOro.set('reference', this.reference.code);
-    this.filtrosSeleccionadosPlata.set('biz', TipoPropiedadEnum.VENTA);
-    this.filtrosSeleccionadosOro.set('reference', this.reference.code);
 
+    this.filtrosSeleccionadosPlata.set('reference', this.reference.code);
 
+    this.filtrosSeleccionadosDiamante.set('reference', this.reference.code);
 
-    if (type === TipoPropiedadEnum.VENTA) {
-      this.type = "Venta";
-
-      //oro
-      this.filtrosSeleccionadosOro.set('pvmin', 1000000001);
-      this.filtrosSeleccionadosOro.set('pvmax', 2000000000);
-
-      //plata
-      this.filtrosSeleccionadosPlata.set('pvmin', 100000000);
-      this.filtrosSeleccionadosPlata.set('pvmax', 1000000000);
-
-      //diamante
-      this.filtrosSeleccionadosDiamante.set('pvmin', 2000000000);
-      this.filtrosSeleccionadosDiamante.set('pvmax', 100000000000);
-    }
 
 
     if (type === TipoPropiedadEnum.ARRIENDO) {
       this.type = "Arriendo";
+
+      this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.ARRIENDO);
+      this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.ARRIENDO);
+      this.filtrosSeleccionadosPlata.set('biz', TipoPropiedadEnum.ARRIENDO);
+
       //oro
       this.filtrosSeleccionadosOro.set('pcmin', 8000000);
       this.filtrosSeleccionadosOro.set('pcmax', 15000000);
@@ -138,8 +150,20 @@ export class PrioritariosComponent implements OnInit {
       this.filtrosSeleccionadosPlata.set('pcmax', 8000000);
 
       //diamante
+
       this.filtrosSeleccionadosDiamante.set('pcmin', 15000000);
       this.filtrosSeleccionadosDiamante.set('pcmax', 100000000000);
+    }
+
+
+    if (type === TipoPropiedadEnum.VENTA) {
+
+
+      this.type = "Venta";
+
+      this.getCategory(category!);
+
+
     }
 
     this.paramsFilter.oro = this.filtrosSeleccionadosOro;
@@ -147,10 +171,40 @@ export class PrioritariosComponent implements OnInit {
     this.paramsFilter.diamante = this.filtrosSeleccionadosDiamante;
 
 
+    console.log(this.filtrosSeleccionadosDiamante)
+    console.log(this.filtrosSeleccionadosOro)
+    console.log(this.filtrosSeleccionadosPlata)
+  }
+
+  getCategory(category: string) {
+    if (category === CategoryEnum.ORO) {
+      this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.VENTA);
+      //oro
+      this.filtrosSeleccionadosOro.set('pvmin', 1000000001);
+      this.filtrosSeleccionadosOro.set('pvmax', 2000000000);
+    }
+
+    if (category === CategoryEnum.PLATA) {
+      this.filtrosSeleccionadosPlata.set('biz', TipoPropiedadEnum.VENTA);
+      //plata
+      this.filtrosSeleccionadosPlata.set('pvmin', 100000000);
+      this.filtrosSeleccionadosPlata.set('pvmax', 1000000000);
+    }
+
+    if (category === CategoryEnum.DIAMANTE) {
+      this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.VENTA);
+      //diamante
+      this.filtrosSeleccionadosDiamante.set('pvmin', 2000000000);
+      this.filtrosSeleccionadosDiamante.set('pvmax', 100000000000);
+    }
   }
 
 
   getFiltrosSeleccionados(filtros: [string, any][]) {
+    this.isCargando = true;
+    this.filtrosSeleccionadosDiamante.clear();
+    this.filtrosSeleccionadosOro.clear();
+    this.filtrosSeleccionadosPlata.clear();
     const filter = new Map<string, any>(filtros);
 
     for (const [key, value] of filter) {
@@ -161,95 +215,167 @@ export class PrioritariosComponent implements OnInit {
     const queryParams = this.activatedRoute.snapshot.queryParams;
 
     if (queryParams['biz']) {
-      this.getBiz(queryParams['biz']);
+      this.getBiz(queryParams['biz'], null);
     }
 
-    console.log(this.filtrosSeleccionadosOro);
-    console.log(this.filtrosSeleccionadosPlata);
-    console.log(this.filtrosSeleccionadosDiamante);
-    
+    this.obtenerInmuebles(this.elementsPerPage, 1);
+
+    console.log(this.isCargando);
+
   }
 
 
 
   obtenerInmuebles(elementsPerPage: number, page: number) {
 
-
-    //oro
-    const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
-    const objOro = {
-      ...filtrosObjOro,
-      page: page,
-    };
-
-    //plata
-    const filtrosObjPlata = Object.fromEntries(this.filtrosSeleccionadosPlata);
-    const objPlata = {
-      ...filtrosObjPlata,
-      page: page,
-    };
-
-    //diamante
-    const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
-    const objDiamante = {
-      ...filtrosObjDiamante,
-      page: page,
-    };
+    this.resultados = [];
 
 
 
+    if (this.biz === TipoPropiedadEnum.ARRIENDO) {
+      //oro
+      const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
+      const objOro = {
+        ...filtrosObjOro,
+        page: page,
+      };
+
+      //plata
+      const filtrosObjPlata = Object.fromEntries(this.filtrosSeleccionadosPlata);
+      const objPlata = {
+        ...filtrosObjPlata,
+        page: page,
+      };
+
+      //diamante
+      const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
+      const objDiamante = {
+        ...filtrosObjDiamante,
+        page: page,
+      };
+      forkJoin({
+        oro: this.inmubeService.getFiltrosEnviar(objOro, elementsPerPage).pipe(
+          catchError(err => {
+            console.error('Error al cargar usuarios:', err);
+            return of([] as any[]);
+          })
+        ),
+        plata: this.inmubeService.getFiltrosEnviar(objPlata, elementsPerPage).pipe(
+          catchError(err => {
+            console.error('Error al cargar productos:', err);
+            return of([] as any[]);
+          })
+        ),
+        diamante: this.inmubeService.getFiltrosEnviar(objDiamante, elementsPerPage).pipe(
+          catchError(err => {
+            console.error('Error al cargar pedidos:', err);
+            return of([] as any[]);
+          })
+        )
+      }).subscribe({
+        next: ({ oro, plata, diamante }) => {
+
+          var resultOro = {
+            type: "Oro",
+            data: oro
+          }
+          this.resultados.push(resultOro);
+
+          var resultPlata = {
+            type: "Plata",
+            data: plata
+          }
+          this.resultados.push(resultPlata);
+
+          var resultDiamante = {
+            type: "Diamante",
+            data: diamante
+          }
+          this.resultados.push(resultDiamante);
 
 
+          console.log('✅ Datos cargados correctamente:', { oro, plata, diamante });
+          console.log(this.resultados);
+          this.isCargando = false;
 
-    forkJoin({
-      oro: this.inmubeService.getFiltrosEnviar(objOro, elementsPerPage).pipe(
-        catchError(err => {
-          console.error('Error al cargar usuarios:', err);
-          return of([] as any[]);
-        })
-      ),
-      plata: this.inmubeService.getFiltrosEnviar(objPlata, elementsPerPage).pipe(
-        catchError(err => {
-          console.error('Error al cargar productos:', err);
-          return of([] as any[]);
-        })
-      ),
-      diamante: this.inmubeService.getFiltrosEnviar(objDiamante, elementsPerPage).pipe(
-        catchError(err => {
-          console.error('Error al cargar pedidos:', err);
-          return of([] as any[]);
-        })
-      )
-    }).subscribe({
-      next: ({ oro, plata, diamante }) => {
-
-        var resultOro = {
-          type: "Oro",
-          data: oro
+        },
+        error: (err) => {
+          console.error('❌ Error general:', err);
         }
-        this.resultados.push(resultOro);
+      });
+    }
 
-        var resultPlata = {
-          type: "Plata",
-          data: plata
-        }
-        this.resultados.push(resultPlata);
+    if (this.biz === TipoPropiedadEnum.VENTA) {
+      var obj = {};
+      if (this.category === CategoryEnum.ORO) {
 
-        var resultDiamante = {
-          type: "Diamante",
-          data: diamante
-        }
-        this.resultados.push(resultDiamante);
-
-
-        console.log('✅ Datos cargados correctamente:', { oro, plata, diamante });
-        console.log(this.resultados);
-
-      },
-      error: (err) => {
-        console.error('❌ Error general:', err);
+        //oro
+        const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
+        const objOro = {
+          ...filtrosObjOro,
+          page: page,
+        };
+        obj = objOro;
       }
-    });
+
+      if (this.category === CategoryEnum.PLATA) {
+
+        //plata
+        const filtrosObjPlata = Object.fromEntries(this.filtrosSeleccionadosPlata);
+        const objPlata = {
+          ...filtrosObjPlata,
+          page: page,
+        };
+        obj = objPlata;
+      }
+
+      if (this.category === CategoryEnum.DIAMANTE) {
+
+        //diamante
+        const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
+        const objDiamante = {
+          ...filtrosObjDiamante,
+          page: page,
+        };
+        obj = objDiamante;
+      }
+
+
+
+      this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
+        (data: any) => {
+
+          var result = {
+            type: this.transform(this.category),
+            data: data
+          }
+          this.resultados.push(result)
+
+          console.log(this.resultados);
+
+          // this.totalDatosVenta = data.total;
+          // this.paginaActualVenta = data.current_page || 1;
+          // this.paginacionVenta = data;
+          // this.totalPaginasVenta = data.last_page || 1;
+          // this.paginasVenta = Array.from(
+          //   { length: this.totalPaginasVenta },
+          //   (_, i) => i + 1
+          // );
+
+
+
+          // this.generarPaginas();
+
+          // this.loadingResultadosVenta = false
+        },
+        (error: any) => {
+          console.error('Error al obtener las propiedades:', error);
+        }
+      );
+
+    }
+
+
 
     // this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
     //   (data: any) => {
@@ -278,6 +404,11 @@ export class PrioritariosComponent implements OnInit {
 
   }
 
+
+  transform(value: string): string {
+    if (!value) return '';
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+  }
 
   generarPaginas() {
 

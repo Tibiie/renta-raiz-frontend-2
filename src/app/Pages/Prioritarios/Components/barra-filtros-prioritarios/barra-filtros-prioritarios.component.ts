@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, inject, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, inject, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +19,7 @@ import { map, Observable, startWith } from 'rxjs';
   templateUrl: './barra-filtros-prioritarios.component.html',
   styleUrl: './barra-filtros-prioritarios.component.scss'
 })
-export class BarraFiltrosPrioritariosComponent {
+export class BarraFiltrosPrioritariosComponent implements OnChanges {
   @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
   
     precioMinimoCtrl = new FormControl('');
@@ -55,7 +55,9 @@ export class BarraFiltrosPrioritariosComponent {
       habitaciones: [] as (number | string)[],
     };
   
-    cargando = false;
+    @Input()cargando = false;
+
+    cargandoLocal: boolean = false;
     isPreciosOpen = false;
     isMasFiltrosOpen = false;
     tipoFiltro: string = 'ubicacion';
@@ -127,6 +129,15 @@ export class BarraFiltrosPrioritariosComponent {
   
   
     }
+
+    ngOnChanges(changes: SimpleChanges): void {
+    // 🔹 Cuando el padre cambia cargandoPadre -> actualizamos el loader local
+    if (changes['cargando']) {
+      console.log(changes['cargando']);
+      
+      this.cargandoLocal = this.cargando;
+    }
+  }
   
     scrollToTop(): void {
       window.scrollTo({
@@ -485,7 +496,9 @@ export class BarraFiltrosPrioritariosComponent {
   
     redirigirFiltros() {
       this.isPreciosOpen = false;
-      this.cargando = true;
+      this.cargandoLocal = true;
+      console.log(this.cargandoLocal);
+      
   
       console.log(this.filtrosSeleccionados);
   

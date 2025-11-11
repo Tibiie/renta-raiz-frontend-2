@@ -3,7 +3,7 @@
 
 
 
-<div class="flex flex-col items-center px-4 md:px-0 mt-20"> 
+<div class="flex flex-col items-center px-4 md:px-0 mt-20 pb-3"> 
   <div class="banner-contacto w-full max-h-[100vh] overflow-hidden" data-carousel="slide" data-carousel-interval="5000">
     <div class="relative w-full md:w-3/4 lg:max-w-[1000px] aspect-video mx-auto rounded-xl overflow-hidden shadow-lg">
       <iframe 
@@ -17,11 +17,11 @@
     </div>
   </div>
 
-  <div class=" pt-24" #dropdownContainer>
-    <app-barra-filtros-prioritarios (filtosSelected)="getFiltrosSeleccionados($event)" ></app-barra-filtros-prioritarios>
-  </div>  
+  
 </div>
-
+<div class=" pt-24 pb-6" #dropdownContainer >
+    <app-barra-filtros-prioritarios [cargando]="isCargando" (filtosSelected)="getFiltrosSeleccionados($event)" ></app-barra-filtros-prioritarios>
+  </div>  
 
 
 <div class="w-full pt-12 flex flex-col items-center  px-4">
@@ -32,17 +32,21 @@
     No sueñes, ¡hagamos que suceda!
   </h2>
 </div>
+
+
 <div *ngFor="let resul of resultados">
-  <div class="w-full  transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
+  <div class="w-full  transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-12 md:mt-16" [ngClass]="{
       'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
       'md:ml-0': !isDrawerOpen,
-      'bg-gray-200': resul.type === 'Plata',
-    }" style="padding-top: 50px;">
+      'bg-gray-200': resul.type === 'Oro' || resul.type === 'Diamante',
+      
+
+    }" style="padding-top: 10px;">
 
 
 
-    <div style="padding-top: 50px;" *ngIf="resultados.length > 0 "
-      class="w-full   transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-16" [ngClass]="{
+    <div style="padding-top: 10px;" *ngIf="resultados.length > 0 "
+      class="w-full   transition-all duration-300 ease-in-out px-4 md:px-6 lg:px-10 xl:px-16 md:mt-6" [ngClass]="{
       'md:ml-[24rem] lg:ml-[26rem] xl:ml-[28rem]': isDrawerOpen,
       'md:ml-0': !isDrawerOpen
     }">
