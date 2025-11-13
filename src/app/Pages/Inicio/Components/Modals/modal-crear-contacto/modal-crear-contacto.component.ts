@@ -19,24 +19,26 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './modal-crear-contacto.component.scss',
 })
 export class ModalCrearContactoComponent implements OnInit {
-  iframeConfig: { [codPro: number]: {
-    url: string;
-    formId: string;
-    formName: string;
-    height?: number;
-  } } = {
-    5975: { url: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ', formId: 'DBQBxa2NZQgSAYMiukLJ', formName: 'Propiedad código 5975', height: 401 },
-    2531: { url: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu', formId: 'M1injuZo8jl0AFnLbjzu', formName: 'Propiedad código 2531', height: 401 },
-    5970: { url: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S', formId: 'XeOz8uDX43OxILBxg74S', formName: 'Propiedad código 5970', height: 401 },
-    2411: { url: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC', formId: '5CmVcLxMiLpUTEImetKC', formName: 'Propiedad código 2411', height: 401 },
-    5689: { url: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz', formId: 'tanbgyswwkJ82IjFdrwz', formName: 'Lote en las Palmas (Yeferson Cossio)', height: 402 },
-    5024: { url: 'https://api.leadconnectorhq.com/widget/form/1H6XwJGDZfAL1YuEcp0d', formId: '1H6XwJGDZfAL1YuEcp0d', formName: 'Propiedad código 5024', height: 401 }
-  };
+  iframeConfig: {
+    [codPro: number]: {
+      url: string;
+      formId: string;
+      formName: string;
+      height?: number;
+    }
+  } = {
+      5975: { url: 'https://api.leadconnectorhq.com/widget/form/DBQBxa2NZQgSAYMiukLJ', formId: 'DBQBxa2NZQgSAYMiukLJ', formName: 'Propiedad código 5975', height: 401 },
+      2531: { url: 'https://api.leadconnectorhq.com/widget/form/M1injuZo8jl0AFnLbjzu', formId: 'M1injuZo8jl0AFnLbjzu', formName: 'Propiedad código 2531', height: 401 },
+      5970: { url: 'https://api.leadconnectorhq.com/widget/form/XeOz8uDX43OxILBxg74S', formId: 'XeOz8uDX43OxILBxg74S', formName: 'Propiedad código 5970', height: 401 },
+      2411: { url: 'https://api.leadconnectorhq.com/widget/form/5CmVcLxMiLpUTEImetKC', formId: '5CmVcLxMiLpUTEImetKC', formName: 'Propiedad código 2411', height: 401 },
+      5689: { url: 'https://api.leadconnectorhq.com/widget/form/tanbgyswwkJ82IjFdrwz', formId: 'tanbgyswwkJ82IjFdrwz', formName: 'Lote en las Palmas (Yeferson Cossio)', height: 402 },
+      5024: { url: 'https://api.leadconnectorhq.com/widget/form/1H6XwJGDZfAL1YuEcp0d', formId: '1H6XwJGDZfAL1YuEcp0d', formName: 'Propiedad código 5024', height: 401 }
+    };
 
   iframeId = '';
   iframeTitle = '';
   iframeSrc: any = '';
-  
+
   iframeHeight = 600;
 
   visible = false;
@@ -67,7 +69,10 @@ export class ModalCrearContactoComponent implements OnInit {
     mensaje: ['', Validators.required],
   });
 
+
+
   ngOnInit(): void {
+
     var queryParams = this.activatedRoute.snapshot.queryParams;
     console.log(queryParams);
 
@@ -95,13 +100,30 @@ export class ModalCrearContactoComponent implements OnInit {
         'https://api.leadconnectorhq.com/widget/form/9SRYMPh2FynzdxY045gg';
     }
 
-    const url = `${urlIframe}?urlInmueble=${window.location.href}`;
+    // const url = `${urlIframe}`;
     //this.urlBase = this.urlBase + "?urlInmueble="+
 
-    this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    console.log(this.urlBase);
+    // this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    // console.log(this.urlBase);
 
-    
+    // "Magia" de Javascript para construir la Query String
+    const params = new URLSearchParams();
+
+    // Agregamos cada dato al objeto params
+    // append(NOMBRE_EN_GHL, VALOR)
+    params.append('urlInmueble', window.location.href);
+    params.append('historial_web', "test");
+
+    // Si tuvieras los datos del usuario logueado, los agregas también:
+    // params.append('email', datosAEnviar.email);
+    // params.append('full_name', datosAEnviar.full_name);
+
+    // Construimos la URL final. toString() agrega automáticamente los & y ?
+    const urlFinal = `${urlIframe}?${params.toString()}`;
+
+    console.log('URL Generada:', urlFinal);
+
+    this.urlBase = this.sanitizer.bypassSecurityTrustResourceUrl(urlFinal);
 
   }
 
@@ -145,11 +167,11 @@ export class ModalCrearContactoComponent implements OnInit {
     this.iframeId = `inline-${formId}`;
     this.iframeTitle = formName;
     this.iframeHeight = iframeHeight;
-  
+
     const urlCurrent = window.location.href
-   const encodedUrl =  btoa(urlCurrent)
-    const url = `${urlIframe}?urlInmueble=${encodedUrl}`;
-    
+    const encodedUrl = btoa(urlCurrent)
+    const url = `${urlIframe}?urlInmueble=${encodedUrl}&historial_web=test`;
+
     this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
@@ -169,8 +191,8 @@ export class ModalCrearContactoComponent implements OnInit {
     this.mostrarModalTelefonos = true;
   }
 
-  abrirToCall(number:string){
-    window.location.href= `tel:${number}`
+  abrirToCall(number: string) {
+    window.location.href = `tel:${number}`
   }
 
   cerrarModalTelefonos() {
