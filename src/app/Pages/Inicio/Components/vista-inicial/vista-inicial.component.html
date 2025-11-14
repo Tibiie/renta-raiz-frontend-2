@@ -99,7 +99,7 @@
                     <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
                   </ng-container>
 
-                  <button (click)="agregarFavorito(inmueble)" class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                  <button (click)="agregarFavorito(inmueble );$event.stopPropagation()" class="text-white text-lg hover:text-[#ea6666] transition-colors">
                     <i class="fas fa-heart text-2xl"></i>
                   </button>
                 </div>

@@ -108,7 +108,7 @@ export class VistaInicialComponent implements OnInit {
 
 
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
     this.getDatos();
@@ -123,6 +123,8 @@ export class VistaInicialComponent implements OnInit {
   }
 
   agregarFavorito(propiedad: any) {
+    
+    
     this.favService.agregar(propiedad);
   }
 
@@ -299,8 +301,8 @@ export class VistaInicialComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
-    window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
-  });
+      window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
+    });
   }
 
   abrirBrochure() {
@@ -336,7 +338,7 @@ export class VistaInicialComponent implements OnInit {
         this.paginasArriendo.push(this.totalPaginasArriendo);
       }
       console.log(this.paginasArriendo);
-      
+
     } else if (inmueble === 'VENTAS') {
       this.paginasVentas = [];
       const paginasPorBloque = 3;
@@ -460,7 +462,7 @@ export class VistaInicialComponent implements OnInit {
         }
 
         this.generarPaginas(inmueble);
-        
+
         this.getInmueblesDestacados(this.paginaActualDestacados);
       }
     }
@@ -605,12 +607,12 @@ export class VistaInicialComponent implements OnInit {
     }
   }
 
-  getFiltros(){
+  getFiltros() {
     this.inmueblesService.getFiltros().subscribe({
       next: (response: any) => {
         this.filtros = response;
         console.log('Filtros obtenidos:', this.filtros);
-      } ,
+      },
       error: (error: any) => {
         console.error('Error al obtener los filtros:', error);
       }

@@ -1,21 +1,89 @@
 <div
-  class="fixed bottom-0 right-0 w-full sm:w-96 bg-white shadow-2xl rounded-t-2xl border border-gray-200 z-50 transform transition-transform duration-300"
-  [class.translate-y-full]="!visible"
->
-  <div class="flex justify-between items-center p-4 border-b">
-    <h2 class="text-lg font-semibold text-gray-800">Tu visita guiada 🏡</h2>
-    <button (click)="cerrar()" class="text-gray-500 hover:text-gray-800">&times;</button>
+  class="fixed bottom-0 right-24 w-full sm:w-96 bg-white shadow-2xl rounded-t-2xl border border-gray-200 z-50 transform transition-transform duration-300"
+  [class.translate-y-full]="!visible">
+  <!-- Barra superior -->
+  <div class="flex justify-between items-center p-4 border-b cursor-pointer" (click)="toggleMinimizado()">
+    <h2 class="text-lg  items-center font-semibold text-gray-800">Exploración de Propiedades en Curso 🔍</h2>
+
+
   </div>
 
-  <div class="p-4 max-h-96 overflow-y-auto" *ngIf="favoritos.length > 0;">
-    <div *ngFor="let fav of favoritos" class="flex items-center mb-3 border rounded-lg p-2 shadow-sm">
-      <img [src]="fav.imagen" [alt]="fav.nombre" class="w-16 h-16 object-cover rounded-lg mr-3" />
-      <div class="flex-1">
-        <p class="font-medium text-gray-800">{{ fav.city }}</p>
-        <p class="text-xs text-gray-500">Código: {{ fav.codpro }}</p>
-      </div>
-      <button (click)="eliminar(fav.codigo)" class="text-red-500 hover:text-red-700 font-bold">&times;</button>
+  <!-- CONTENIDO que se minimiza -->
+  <div class="transition-all duration-300 overflow-hidden" [style.maxHeight]="minimizado ? '0px' : '600px'">
+    <div class="flex items-center justify-between gap-3 px-4 mb-1 mt-6" >
+      <h5 class="text-sm font-semibold text-gray-700 mb-3 flex items-center justify-center text-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#CDAD60]" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 110 20 10 10 0 010-20z" />
+        </svg>
+        Recuerda que la disponibilidad de las propiedades seleccionadas pueden variar.
+      </h5>
     </div>
+
+    <!-- Lista de favoritos -->
+    <div class="p-4 max-h-96 overflow-y-auto" *ngIf="favoritos.length > 0;">
+      <div *ngFor="let fav of favoritos" class="flex items-center mb-3 border rounded-lg p-2 shadow-sm"
+        style="cursor: pointer;">
+        <img [src]="fav.image1" [alt]="fav.nombre" class="w-16 h-16 object-cover rounded-lg mr-3" />
+        <div class="flex-1">
+          <p class="font-medium text-gray-800"><strong>Direccion:</strong> {{ fav.address }}</p>
+          <p class="font-medium text-gray-800"><strong>Ciudad:</strong> {{ fav.city }}</p>
+          <p class="text-xs text-gray-500"><strong>Código:</strong> {{ fav.codpro }}</p>
+
+        </div>
+        <button (click)="eliminar(fav.codpro)" class="text-red-500 hover:text-red-700 font-bold">&times;</button>
+      </div>
+    </div>
+
+    <!-- Contenedor de los dos botones -->
+    <div class="flex items-center justify-between gap-3 px-4 mb-4">
+
+      <!-- Botón Agendar -->
+      <button type="button"
+        class="flex items-center justify-center flex-1 text-white font-bold rounded-full text-sm px-3 py-2 transition-all duration-300 transform shadow"
+        [ngClass]="{
+      'bg-[#080E36] hover:bg-[#CDAD60] hover:scale-105 hover:shadow-md': !false,
+      'bg-gray-400 cursor-not-allowed': false
+    }">
+        <ng-container *ngIf="!false; else loading">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 7V3m8 4V3m-9 8h10m-11 8h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Agendar Recorrido
+        </ng-container>
+      </button>
+
+      <!-- Botón Limpiar -->
+      <button type="button" (click)="limpiar()"
+        class="flex items-center justify-center flex-1 text-white font-bold rounded-full text-sm px-3 py-2 transition-all duration-300 transform shadow"
+        [ngClass]="{
+      'bg-[#CDAD60] hover:bg-[#080E36] hover:scale-105 hover:shadow-md': !false,
+      'bg-gray-400 cursor-not-allowed': false
+    }">
+        <ng-container *ngIf="!false; else loading">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 7V3m8 4V3m-9 8h10m-11 8h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Limpiar Recorrido
+        </ng-container>
+      </button>
+
+    </div>
+
+    <!-- Template loading -->
+    <ng-template #loading>
+      <svg class="animate-spin h-4 w-4 text-white mr-1" xmlns="http://www.w3.org/2000/svg" fill="none"
+        viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      Cargando...
+    </ng-template>
   </div>
 
   <ng-template #vacio>

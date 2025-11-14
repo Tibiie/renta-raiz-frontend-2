@@ -24,8 +24,10 @@ private favoritosSubject = new BehaviorSubject<any[]>(this.cargarFavoritos());
   }
 
   agregar(fav: any): void {
+    console.log("inmueble que llega",fav);
+    
     const favoritos = this.favoritosSubject.value;
-    if (!favoritos.some(f => f.codigo === fav.codigo)) {
+    if (!favoritos.some(f => f.codpro === fav.codpro)) {
       const nuevos = [...favoritos, fav];
       this.favoritosSubject.next(nuevos);
       this.guardarFavoritos(nuevos);
@@ -33,8 +35,13 @@ private favoritosSubject = new BehaviorSubject<any[]>(this.cargarFavoritos());
   }
 
   eliminar(codigo: string): void {
-    const nuevos = this.favoritosSubject.value.filter(f => f.codigo !== codigo);
+    const nuevos = this.favoritosSubject.value.filter(f => f.codpro !== codigo);
     this.favoritosSubject.next(nuevos);
     this.guardarFavoritos(nuevos);
+  }
+
+  eliminarAll(): void {
+    localStorage.removeItem('favoritos');
+    this.favoritosSubject.next([]);
   }
 }
