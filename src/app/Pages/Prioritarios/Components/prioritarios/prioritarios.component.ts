@@ -24,7 +24,7 @@ export class PrioritariosComponent implements OnInit {
 
 
   reference = {
-    code: "4026"
+    code: "4025"
   }
 
   type: string = "";
@@ -38,6 +38,29 @@ export class PrioritariosComponent implements OnInit {
   isCargando!: boolean;
 
 
+  paginacionCategory: any = {
+    oro: {
+      totalDatosVenta: "",
+      paginaActualVenta: "",
+      paginacionVenta: "",
+      totalPaginasVenta: "",
+      paginasVenta: ""
+    },
+    plata: {
+      totalDatosVenta: "",
+      paginaActualVenta: "",
+      paginacionVenta: "",
+      totalPaginasVenta: "",
+      paginasVenta: ""
+    },
+    diamante: {
+      totalDatosVenta: "",
+      paginaActualVenta: "",
+      paginacionVenta: "",
+      totalPaginasVenta: "",
+      paginasVenta: ""
+    }
+  };
 
   paginacionVenta: any = {};
 
@@ -77,35 +100,29 @@ export class PrioritariosComponent implements OnInit {
 
   ngOnInit(): void {
 
-
-
     const queryParams = this.activatedRoute.snapshot.queryParams;
-    // if (queryParams['category'] ) {
-
-
-    //   this.getCategory(queryParams['category'], queryParams['biz']);
-    //   console.log(this.filtrosSeleccionados);
-
-
-
-    // }
 
     if (queryParams['biz']) {
       this.biz = queryParams['biz'];
 
       this.getBiz(queryParams['biz'], null);
 
-      if (queryParams['category']) {
-        this.category = queryParams['category'];
-        this.getBiz(queryParams['biz'], queryParams['category']);
+
+      if (this.biz === TipoPropiedadEnum.ARRIENDO) {
+        if (queryParams['category']) {
+          this.category = queryParams['category'];
+          this.getBiz(queryParams['biz'], queryParams['category']);
+        } else {
+
+          this.category = 'DIAMANTE';
+          this.router.navigate([], {
+            queryParams: { category: this.category },
+            queryParamsHandling: 'merge'
+          });
+
+          this.getBiz(queryParams['biz'], this.category);
+        }
       }
-
-
-
-
-
-
-
 
 
     }
@@ -134,8 +151,8 @@ export class PrioritariosComponent implements OnInit {
 
 
 
-    if (type === TipoPropiedadEnum.ARRIENDO) {
-      this.type = "Arriendo";
+    if (type === TipoPropiedadEnum.VENTA) {
+      this.type = "Venta";
 
       this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.ARRIENDO);
       this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.ARRIENDO);
@@ -156,10 +173,10 @@ export class PrioritariosComponent implements OnInit {
     }
 
 
-    if (type === TipoPropiedadEnum.VENTA) {
+    if (type === TipoPropiedadEnum.ARRIENDO) {
 
 
-      this.type = "Venta";
+      this.type = "Arriendo";
 
       this.getCategory(category!);
 
@@ -232,7 +249,7 @@ export class PrioritariosComponent implements OnInit {
 
 
 
-    if (this.biz === TipoPropiedadEnum.ARRIENDO) {
+    if (this.biz === TipoPropiedadEnum.VENTA) {
       //oro
       const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
       const objOro = {
@@ -275,28 +292,77 @@ export class PrioritariosComponent implements OnInit {
       }).subscribe({
         next: ({ oro, plata, diamante }) => {
 
-          var resultOro = {
-            type: "Oro",
-            data: oro
-          }
-          this.resultados.push(resultOro);
 
-          var resultPlata = {
-            type: "Plata",
-            data: plata
-          }
-          this.resultados.push(resultPlata);
 
-          var resultDiamante = {
-            type: "Diamante",
-            data: diamante
-          }
-          this.resultados.push(resultDiamante);
+
 
 
           console.log('✅ Datos cargados correctamente:', { oro, plata, diamante });
-          console.log(this.resultados);
+
           this.isCargando = false;
+          const o: any = oro;
+          const p: any = plata;
+          const d: any = diamante;
+
+
+
+
+
+          //ORO
+
+          this.paginacionCategory.oro.totalDatosVenta = o.total;
+          this.paginacionCategory.oro.paginaActualVenta = o.current_page || 1;
+          this.paginacionCategory.oro.paginacionVenta = o;
+          this.paginacionCategory.oro.totalPaginasVenta = o.last_page || 1;
+          this.paginacionCategory.oro.paginasVenta = Array.from(
+            { length: this.paginacionCategory.oro.totalPaginasVenta },
+            (_, i) => i + 1
+          );
+          var resultOro = {
+            type: "Oro",
+            data: oro,
+            paginacion: this.paginacionCategory.oro
+          }
+          this.resultados.push(resultOro);
+
+
+          //PLATA
+
+          this.paginacionCategory.plata.totalDatosVenta = p.total;
+          this.paginacionCategory.plata.paginaActualVenta = p.current_page || 1;
+          this.paginacionCategory.plata.paginacionVenta = p;
+          this.paginacionCategory.plata.totalPaginasVenta = p.last_page || 1;
+          this.paginacionCategory.plata.paginasVenta = Array.from(
+            { length: this.paginacionCategory.plata.totalPaginasVenta },
+            (_, i) => i + 1
+          );
+
+          var resultPlata = {
+            type: "Plata",
+            data: plata,
+            paginacion: this.paginacionCategory.plata
+          }
+          this.resultados.push(resultPlata);
+
+
+          //DIAMANTE
+          this.paginacionCategory.diamante.totalDatosVenta = d.total;
+          this.paginacionCategory.diamante.paginaActualVenta = d.current_page || 1;
+          this.paginacionCategory.diamante.paginacionVenta = d;
+          this.paginacionCategory.diamante.totalPaginasVenta = d.last_page || 1;
+          this.paginacionCategory.diamante.paginasVenta = Array.from(
+            { length: this.paginacionCategory.diamante.totalPaginasVenta },
+            (_, i) => i + 1
+          );
+
+
+          var resultDiamante = {
+            type: "Diamante",
+            data: diamante,
+            paginacion: this.paginacionCategory.diamante
+          }
+          this.resultados.push(resultDiamante);
+          console.log(this.resultados);
 
         },
         error: (err) => {
@@ -305,7 +371,7 @@ export class PrioritariosComponent implements OnInit {
       });
     }
 
-    if (this.biz === TipoPropiedadEnum.VENTA) {
+    if (this.biz === TipoPropiedadEnum.ARRIENDO) {
       var obj = {};
       if (this.category === CategoryEnum.ORO) {
 
@@ -345,9 +411,24 @@ export class PrioritariosComponent implements OnInit {
       this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
         (data: any) => {
 
+          console.log(data);
+
+
+          var paginacion = {
+            totalDatosVenta: data.total,
+            paginaActualVenta: data.current_page || 1,
+            paginacionVenta: data,
+            totalPaginasVenta: data.last_page || 1,
+            paginasVenta: Array.from(
+              { length: data.last_page },
+              (_, i) => i + 1
+            )
+          }
+
           var result = {
             type: this.transform(this.category),
-            data: data
+            data: data,
+            paginacion: paginacion
           }
           this.resultados.push(result)
 
@@ -364,9 +445,9 @@ export class PrioritariosComponent implements OnInit {
 
 
 
-          // this.generarPaginas();
+          this.generarPaginas();
 
-          // this.loadingResultadosVenta = false
+          this.loadingResultadosVenta = false
         },
         (error: any) => {
           console.error('Error al obtener las propiedades:', error);
@@ -379,22 +460,7 @@ export class PrioritariosComponent implements OnInit {
 
     // this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
     //   (data: any) => {
-    //     this.resultadosVenta = data.data;
 
-    //     this.totalDatosVenta = data.total;
-    //     this.paginaActualVenta = data.current_page || 1;
-    //     this.paginacionVenta = data;
-    //     this.totalPaginasVenta = data.last_page || 1;
-    //     this.paginasVenta = Array.from(
-    //       { length: this.totalPaginasVenta },
-    //       (_, i) => i + 1
-    //     );
-
-
-
-    //     this.generarPaginas();
-    //     console.log(this.resultadosVenta);
-    //     // this.loadingResultadosVenta = false
     //   },
     //   (error: any) => {
     //     console.error('Error al obtener las propiedades:', error);
@@ -411,7 +477,24 @@ export class PrioritariosComponent implements OnInit {
   }
 
   generarPaginas() {
+    this.paginasVenta = [];
+    const paginasPorBloque = 3;
+    const inicio = this.bloqueActualVenta * paginasPorBloque + 1;
+    const fin = Math.min(inicio + paginasPorBloque - 1, this.totalPaginasVenta);
 
+    for (let i = inicio; i <= fin; i++) {
+      this.paginasVenta.push(i);
+    }
+
+    if (fin < this.totalPaginasVenta - 1) {
+      this.paginasVenta.push('...');
+    }
+
+    if (this.totalPaginasVenta > 1 && !this.paginasVenta.includes(this.totalPaginasVenta)) {
+      this.paginasVenta.push(this.totalPaginasVenta);
+    }
+
+    console.log(this.paginasVenta);
   }
 
   irAlSiguienteBloque(tipo: string) {

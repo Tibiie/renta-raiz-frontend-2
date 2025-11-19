@@ -5,7 +5,7 @@
 
 <div class="flex flex-col items-center px-4 md:px-0 mt-20 pb-3"> 
   <div class="banner-contacto w-full max-h-[100vh] overflow-hidden" data-carousel="slide" data-carousel-interval="5000">
-    <div class="relative w-full md:w-3/4 lg:max-w-[1000px] aspect-video mx-auto rounded-xl overflow-hidden shadow-lg">
+    <div class="relative w-full md:w-3/4 lg:max-w-[3000px] lg:max-h-[1000px] aspect-video mx-auto rounded-xl overflow-hidden shadow-lg">
       <iframe 
         class="w-full h-full"
         src="https://www.youtube.com/embed/Ae5JuC54Ba8?autoplay=1&mute=1&loop=1&playlist=Ae5JuC54Ba8&controls=1&modestbranding=1"
@@ -67,9 +67,7 @@
             <h1 class="text-4xl sm:text-5xl font-bold text-[#080E36] text-center mb-4">
               Nuestros inmuebles {{resul.type}}
             </h1>
-            <h2 class="text-xl md:text-2xl font-normal text-[#9a9b9c] text-center mb-12">
-              Somos la llave al hogar que buscas
-            </h2>
+          
           </div>
 
           <!-- Contenido de resultados -->
@@ -209,20 +207,20 @@
         <nav aria-label="Page navigation" class="absolute left-1/2 -translate-x-1/2">
           <ul class="inline-flex items-center -space-x-px text-sm">
             <li>
-              <button (click)="paginaAnterior('ARRIENDO')" [disabled]="paginaActualVenta === 1"
+              <button (click)="paginaAnterior('ARRIENDO')" [disabled]="resul.paginacion.paginaActualVenta === 1"
                 class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
                 Anterior
               </button>
             </li>
 
             <li *ngIf="bloqueActualVenta > 0">
-              <button (click)="irAlBloqueAnterior('ARRIENDO')" [disabled]="bloqueActualVenta === 0"
+              <button (click)="irAlBloqueAnterior('ARRIENDO')" [disabled]="resul.paginacion.bloqueActualVenta === 0"
                 class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
                 ...
               </button>
             </li>
 
-            <li *ngFor="let pagina of paginasVenta" class="mx-0.5">
+            <li *ngFor="let pagina of resul.paginacion.paginasVenta" class="mx-0.5">
               <ng-container *ngIf="pagina === '...'; else paginaBtn">
                 <button
                   class="px-3 py-2 leading-tight border border-gray-300 text-gray-400 bg-white hover:bg-gray-100 rounded">
@@ -231,7 +229,7 @@
               </ng-container>
               <ng-template #paginaBtn>
                 <button (click)="cambiarPagina(pagina, 'ARRIENDO')" [ngClass]="
-                pagina === paginaActualVenta
+                pagina === resul.paginacion.paginaActualVenta
                   ? 'text-white bg-[#CDAD60]'
                   : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'
               " class="px-3 py-2 leading-tight border border-gray-300 rounded">
@@ -241,7 +239,7 @@
             </li>
 
             <li>
-              <button (click)="paginaSiguiente('ARRIENDO')" [disabled]="paginaActualVenta === totalPaginasVenta"
+              <button (click)="paginaSiguiente('ARRIENDO')" [disabled]="resul.paginacion.paginaActualVenta === resul.paginacion.totalPaginasVenta"
                 class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
                 Siguiente
               </button>
