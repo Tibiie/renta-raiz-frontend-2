@@ -148,7 +148,7 @@ export class ModalCrearContactoComponent implements OnInit {
   
     const urlCurrent = window.location.href
    const encodedUrl =  btoa(urlCurrent)
-    const url = `${urlIframe}?urlInmueble=${encodedUrl}`;
+    const url = `${urlIframe}?urlInmueble=${encodedUrl}&historial_web=${urlCurrent}`;
     
     this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
