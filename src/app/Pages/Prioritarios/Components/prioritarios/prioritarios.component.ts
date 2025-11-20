@@ -218,11 +218,15 @@ export class PrioritariosComponent implements OnInit {
 
 
   getFiltrosSeleccionados(filtros: [string, any][]) {
+
+    
+    
     this.isCargando = true;
     this.filtrosSeleccionadosDiamante.clear();
     this.filtrosSeleccionadosOro.clear();
     this.filtrosSeleccionadosPlata.clear();
     const filter = new Map<string, any>(filtros);
+    console.log(filter);
 
     for (const [key, value] of filter) {
       this.filtrosSeleccionadosOro.set(key, value);
@@ -407,6 +411,15 @@ export class PrioritariosComponent implements OnInit {
       }
 
 
+      if (JSON.stringify(obj) === "{}") {
+        obj = {
+          reference: this.reference.code,
+          page: page,
+        }
+      }
+
+      console.log(obj);
+
 
       this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
         (data: any) => {
@@ -516,9 +529,151 @@ export class PrioritariosComponent implements OnInit {
 
   }
 
-  paginaSiguiente(tipo: string) {
+  paginaSiguiente(tipo: string, resul: any) {
+
+    if (this.biz === TipoPropiedadEnum.ARRIENDO) {
+      this.loadingResultadosVenta = true
+      const nuevaPagina = resul.paginacion.paginaActualVenta + 1;
+
+
+      this.getInmuebles(nuevaPagina, this.elementsPerPage);
+
+      setTimeout(() => {
+        this.loadingResultadosVenta = false
+      }, 1000);
+
+
+      const paginasPorBloque = 3;
+      const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+
+      if (bloqueActual !== this.bloqueActualVenta) {
+        this.bloqueActualVenta = bloqueActual;
+        this.generarPaginas();
+      }
+
+    }
+
+    if (this.biz === TipoPropiedadEnum.VENTA) {
+
+      this.loadingResultadosVenta = true
+      const nuevaPagina = this.paginaActualVenta + 1;
+
+
+      this.getInmuebles(nuevaPagina, this.elementsPerPage);
+
+      setTimeout(() => {
+        this.loadingResultadosVenta = false
+      }, 1000);
+
+
+      const paginasPorBloque = 3;
+      const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+
+      if (bloqueActual !== this.bloqueActualVenta) {
+        this.bloqueActualVenta = bloqueActual;
+        this.generarPaginas();
+      }
+
+
+    }
+
+  }
+
+
+  getInmuebles(page: any, elementsPerPage: number) {
+    this.resultados = [];
+    var obj = {};
+    if (this.category === CategoryEnum.ORO) {
+
+      //oro
+      const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
+      const objOro = {
+        ...filtrosObjOro,
+        page: page,
+      };
+      obj = objOro;
+    }
+
+    if (this.category === CategoryEnum.PLATA) {
+
+      //plata
+      const filtrosObjPlata = Object.fromEntries(this.filtrosSeleccionadosPlata);
+      const objPlata = {
+        ...filtrosObjPlata,
+        page: page,
+      };
+      obj = objPlata;
+    }
+
+    if (this.category === CategoryEnum.DIAMANTE) {
+      //diamante
+      const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
+      const objDiamante = {
+        ...filtrosObjDiamante,
+        page: page,
+      };
+      obj = objDiamante;
+
+    }
+
+    if (JSON.stringify(obj) === "{}") {
+      obj = {
+        reference: this.reference.code,
+        page: page,
+      }
+    }
+
+    console.log(obj);
+
+
+    this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
+      (data: any) => {
+
+        console.log(data);
+
+
+        var paginacion = {
+          totalDatosVenta: data.total,
+          paginaActualVenta: data.current_page || 1,
+          paginacionVenta: data,
+          totalPaginasVenta: data.last_page || 1,
+          paginasVenta: Array.from(
+            { length: data.last_page },
+            (_, i) => i + 1
+          )
+        }
+
+        var result = {
+          type: this.transform(this.category),
+          data: data,
+          paginacion: paginacion
+        }
+        this.resultados.push(result)
+
+        console.log(this.resultados);
+
+        // this.totalDatosVenta = data.total;
+        // this.paginaActualVenta = data.current_page || 1;
+        // this.paginacionVenta = data;
+        // this.totalPaginasVenta = data.last_page || 1;
+        // this.paginasVenta = Array.from(
+        //   { length: this.totalPaginasVenta },
+        //   (_, i) => i + 1
+        // );
+
+
+
+        this.generarPaginas();
+
+        this.loadingResultadosVenta = false
+      },
+      (error: any) => {
+        console.error('Error al obtener las propiedades:', error);
+      }
+    );
 
 
   }
+
 
 }

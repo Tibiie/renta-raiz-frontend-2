@@ -391,6 +391,7 @@ export class BarraFiltrosPrioritariosComponent implements OnChanges {
   
     getEnviarFiltros() {
      this.filtosSelected.emit(this.filtrosSeleccionados);
+     console.log(this.filtrosSeleccionados);
      
     }
   
