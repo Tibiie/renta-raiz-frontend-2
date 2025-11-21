@@ -114,13 +114,13 @@ export class PrioritariosComponent implements OnInit {
           this.getBiz(queryParams['biz'], queryParams['category']);
         } else {
 
-          this.category = 'DIAMANTE';
-          this.router.navigate([], {
-            queryParams: { category: this.category },
-            queryParamsHandling: 'merge'
-          });
+          // this.category = 'DIAMANTE';
+          // this.router.navigate([], {
+          //   queryParams: { category: this.category },
+          //   queryParamsHandling: 'merge'
+          // });
 
-          this.getBiz(queryParams['biz'], this.category);
+          // this.getBiz(queryParams['biz'], this.category);
         }
       }
 
@@ -139,9 +139,9 @@ export class PrioritariosComponent implements OnInit {
   }
 
   getBiz(type: string, category: string | null) {
-    this.filtrosSeleccionadosDiamante.clear();
-    this.filtrosSeleccionadosOro.clear();
-    this.filtrosSeleccionadosPlata.clear();
+    // this.filtrosSeleccionadosDiamante.clear();
+    // this.filtrosSeleccionadosOro.clear();
+    // this.filtrosSeleccionadosPlata.clear();
 
     this.filtrosSeleccionadosOro.set('reference', this.reference.code);
 
@@ -219,8 +219,8 @@ export class PrioritariosComponent implements OnInit {
 
   getFiltrosSeleccionados(filtros: [string, any][]) {
 
-    
-    
+
+
     this.isCargando = true;
     this.filtrosSeleccionadosDiamante.clear();
     this.filtrosSeleccionadosOro.clear();
@@ -233,15 +233,21 @@ export class PrioritariosComponent implements OnInit {
       this.filtrosSeleccionadosPlata.set(key, value);
       this.filtrosSeleccionadosDiamante.set(key, value);
     }
+
+    console.log(this.filtrosSeleccionadosDiamante);
+    console.log(this.filtrosSeleccionadosOro);
+    console.log(this.filtrosSeleccionadosPlata);
     const queryParams = this.activatedRoute.snapshot.queryParams;
 
     if (queryParams['biz']) {
-      this.getBiz(queryParams['biz'], null);
+      this.getBiz(queryParams['biz'], this.category);
     }
 
     this.obtenerInmuebles(this.elementsPerPage, 1);
 
+    this.isCargando = false
     console.log(this.isCargando);
+
 
   }
 
@@ -525,56 +531,43 @@ export class PrioritariosComponent implements OnInit {
   }
 
 
-  paginaAnterior(tipo: string) {
+  paginaAnterior(tipo: string, resul: any) {
+    this.loadingResultadosVenta = true
+    const nuevaPagina =  resul.paginacion.paginaActualVenta - 1;
+    const paginasPorBloque = 3;
+    const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
+
+    this.getInmuebles(nuevaPagina, this.elementsPerPage);
+    setTimeout(() => {
+      this.loadingResultadosVenta = false
+    }, 1000);
+
+    if (nuevoBloque !== this.bloqueActualVenta) {
+      this.bloqueActualVenta = nuevoBloque;
+      this.generarPaginas();
+    }
 
   }
 
   paginaSiguiente(tipo: string, resul: any) {
 
-    if (this.biz === TipoPropiedadEnum.ARRIENDO) {
-      this.loadingResultadosVenta = true
-      const nuevaPagina = resul.paginacion.paginaActualVenta + 1;
+    this.loadingResultadosVenta = true
+    const nuevaPagina = resul.paginacion.paginaActualVenta + 1;
 
 
-      this.getInmuebles(nuevaPagina, this.elementsPerPage);
+    this.getInmuebles(nuevaPagina, this.elementsPerPage);
 
-      setTimeout(() => {
-        this.loadingResultadosVenta = false
-      }, 1000);
-
-
-      const paginasPorBloque = 3;
-      const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
-
-      if (bloqueActual !== this.bloqueActualVenta) {
-        this.bloqueActualVenta = bloqueActual;
-        this.generarPaginas();
-      }
-
-    }
-
-    if (this.biz === TipoPropiedadEnum.VENTA) {
-
-      this.loadingResultadosVenta = true
-      const nuevaPagina = this.paginaActualVenta + 1;
+    setTimeout(() => {
+      this.loadingResultadosVenta = false
+    }, 1000);
 
 
-      this.getInmuebles(nuevaPagina, this.elementsPerPage);
+    const paginasPorBloque = 3;
+    const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
-      setTimeout(() => {
-        this.loadingResultadosVenta = false
-      }, 1000);
-
-
-      const paginasPorBloque = 3;
-      const bloqueActual = Math.floor((nuevaPagina - 1) / paginasPorBloque);
-
-      if (bloqueActual !== this.bloqueActualVenta) {
-        this.bloqueActualVenta = bloqueActual;
-        this.generarPaginas();
-      }
-
-
+    if (bloqueActual !== this.bloqueActualVenta) {
+      this.bloqueActualVenta = bloqueActual;
+      this.generarPaginas();
     }
 
   }

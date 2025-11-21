@@ -207,7 +207,7 @@
         <nav aria-label="Page navigation" class="absolute left-1/2 -translate-x-1/2">
           <ul class="inline-flex items-center -space-x-px text-sm">
             <li>
-              <button (click)="paginaAnterior('ARRIENDO')" [disabled]="resul.paginacion.paginaActualVenta === 1"
+              <button (click)="paginaAnterior('ARRIENDO', resul)" [disabled]="resul.paginacion.paginaActualVenta === 1"
                 class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">
                 Anterior
               </button>
