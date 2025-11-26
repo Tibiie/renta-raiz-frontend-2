@@ -114,13 +114,14 @@ export class PrioritariosComponent implements OnInit {
           this.getBiz(queryParams['biz'], queryParams['category']);
         } else {
 
-          // this.category = 'DIAMANTE';
-          // this.router.navigate([], {
-          //   queryParams: { category: this.category },
-          //   queryParamsHandling: 'merge'
-          // });
+          this.category = 'DIAMANTE';
+          this.router.navigate([], {
+            queryParams: { category: this.category },
+            queryParamsHandling: 'merge'
+          });
 
-          // this.getBiz(queryParams['biz'], this.category);
+          this.getBiz(queryParams['biz'], this.category);
+          // this.getBiz(queryParams['biz'], null);
         }
       }
 
@@ -154,22 +155,27 @@ export class PrioritariosComponent implements OnInit {
     if (type === TipoPropiedadEnum.VENTA) {
       this.type = "Venta";
 
-      this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.ARRIENDO);
-      this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.ARRIENDO);
-      this.filtrosSeleccionadosPlata.set('biz', TipoPropiedadEnum.ARRIENDO);
+      this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.VENTA);
+      this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.VENTA);
+      this.filtrosSeleccionadosPlata.set('biz', TipoPropiedadEnum.VENTA);
 
       //oro
-      this.filtrosSeleccionadosOro.set('pcmin', 8000000);
-      this.filtrosSeleccionadosOro.set('pcmax', 15000000);
+      this.filtrosSeleccionadosOro.set('pvmin', 1000000001);
+      this.filtrosSeleccionadosOro.set('pvmax', 2000000000);
 
       //plata
-      this.filtrosSeleccionadosPlata.set('pcmin', 2000000);
-      this.filtrosSeleccionadosPlata.set('pcmax', 8000000);
+      this.filtrosSeleccionadosPlata.set('pvmin', 100000000);
+      this.filtrosSeleccionadosPlata.set('pvmax', 1000000000);
 
       //diamante
+      this.filtrosSeleccionadosDiamante.set('pvmin', 2000000000);
+      this.filtrosSeleccionadosDiamante.set('pvmax', 100000000000);
 
-      this.filtrosSeleccionadosDiamante.set('pcmin', 15000000);
-      this.filtrosSeleccionadosDiamante.set('pcmax', 100000000000);
+
+
+
+
+
     }
 
 
@@ -195,31 +201,31 @@ export class PrioritariosComponent implements OnInit {
 
   getCategory(category: string) {
     if (category === CategoryEnum.ORO) {
-      this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.VENTA);
+      this.filtrosSeleccionadosOro.set('biz', TipoPropiedadEnum.ARRIENDO);
       //oro
-      this.filtrosSeleccionadosOro.set('pvmin', 1000000001);
-      this.filtrosSeleccionadosOro.set('pvmax', 2000000000);
+      this.filtrosSeleccionadosOro.set('pcmin', 8000000);
+      this.filtrosSeleccionadosOro.set('pcmax', 15000000);
     }
 
     if (category === CategoryEnum.PLATA) {
-      this.filtrosSeleccionadosPlata.set('biz', TipoPropiedadEnum.VENTA);
+      this.filtrosSeleccionadosPlata.set('biz', TipoPropiedadEnum.ARRIENDO);
       //plata
-      this.filtrosSeleccionadosPlata.set('pvmin', 100000000);
-      this.filtrosSeleccionadosPlata.set('pvmax', 1000000000);
+      this.filtrosSeleccionadosPlata.set('pcmin', 2000000);
+      this.filtrosSeleccionadosPlata.set('pcmax', 8000000);
     }
 
     if (category === CategoryEnum.DIAMANTE) {
-      this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.VENTA);
+      this.filtrosSeleccionadosDiamante.set('biz', TipoPropiedadEnum.ARRIENDO);
       //diamante
-      this.filtrosSeleccionadosDiamante.set('pvmin', 2000000000);
-      this.filtrosSeleccionadosDiamante.set('pvmax', 100000000000);
+      this.filtrosSeleccionadosDiamante.set('pcmin', 15000000);
+      this.filtrosSeleccionadosDiamante.set('pcmax', 100000000000);
     }
   }
 
 
   getFiltrosSeleccionados(filtros: [string, any][]) {
 
-
+    this.loadingResultadosVenta = true
 
     this.isCargando = true;
     this.filtrosSeleccionadosDiamante.clear();
@@ -234,9 +240,7 @@ export class PrioritariosComponent implements OnInit {
       this.filtrosSeleccionadosDiamante.set(key, value);
     }
 
-    console.log(this.filtrosSeleccionadosDiamante);
-    console.log(this.filtrosSeleccionadosOro);
-    console.log(this.filtrosSeleccionadosPlata);
+
     const queryParams = this.activatedRoute.snapshot.queryParams;
 
     if (queryParams['biz']) {
@@ -245,8 +249,7 @@ export class PrioritariosComponent implements OnInit {
 
     this.obtenerInmuebles(this.elementsPerPage, 1);
 
-    this.isCargando = false
-    console.log(this.isCargando);
+
 
 
   }
@@ -374,6 +377,9 @@ export class PrioritariosComponent implements OnInit {
           this.resultados.push(resultDiamante);
           console.log(this.resultados);
 
+          this.isCargando = false
+          console.log(this.isCargando);
+          this.loadingResultadosVenta = false
         },
         error: (err) => {
           console.error('❌ Error general:', err);
@@ -467,6 +473,8 @@ export class PrioritariosComponent implements OnInit {
           this.generarPaginas();
 
           this.loadingResultadosVenta = false
+          this.isCargando = false
+          console.log(this.isCargando);
         },
         (error: any) => {
           console.error('Error al obtener las propiedades:', error);
@@ -518,14 +526,86 @@ export class PrioritariosComponent implements OnInit {
 
   irAlSiguienteBloque(tipo: string) {
 
+    const maxBloques = Math.floor((this.totalPaginasVenta - 1) / 3);
+    console.log(this.bloqueActualVenta < maxBloques);
+    console.log(this.bloqueActualVenta);
+
+
+    if (this.bloqueActualVenta < maxBloques) {
+      console.log('bloque sig');
+
+      this.bloqueActualVenta++;
+      this.generarPaginas();
+    }
 
   }
 
   irAlBloqueAnterior(tipo: string) {
+    const paginasPorBloque = 3;
+    console.log('bloque ant');
+
+    if (this.bloqueActualVenta > 0) {
+      const nuevoBloque = this.bloqueActualVenta - 1;
+      const inicioNuevoBloque = nuevoBloque * paginasPorBloque + 1;
+      const finNuevoBloque = Math.min(
+        inicioNuevoBloque + paginasPorBloque - 1,
+        this.totalPaginasVenta
+      );
+
+      if (this.paginaActualVenta >= inicioNuevoBloque) {
+        this.bloqueActualVenta = nuevoBloque;
+      } else {
+        this.bloqueActualVenta = nuevoBloque;
+        this.paginaActualVenta = finNuevoBloque;
+      }
+
+
+
+      this.generarPaginas();
+
+    }
 
   }
 
   cambiarPagina(pagina: number | string, tipo: string) {
+    console.log(pagina);
+    console.log('primer elemento', this.paginasVenta[0]);
+    console.log('pagina', this.paginaActualVenta);
+
+
+    if (pagina === '...') {
+      this.irAlSiguienteBloque(tipo);
+      return;
+    }
+    this.loadingResultadosVenta = true
+
+    if (typeof pagina === 'number') {
+
+      const primerElemento = this.paginasVenta[0];
+
+      if (typeof primerElemento === 'number' && pagina < primerElemento) {
+        this.irAlBloqueAnterior(tipo);
+        return;
+      }
+
+      console.log(typeof pagina);
+
+
+      this.getInmuebles(pagina, this.elementsPerPage);
+
+      setTimeout(() => {
+        this.loadingResultadosVenta = false
+      }, 1000);
+
+      const nuevoBloque = Math.floor((pagina - 1) / 3);
+      if (nuevoBloque !== this.bloqueActualVenta) {
+
+        this.bloqueActualVenta = nuevoBloque;
+        this.generarPaginas();
+      }
+
+
+    }
 
 
   }
@@ -533,7 +613,7 @@ export class PrioritariosComponent implements OnInit {
 
   paginaAnterior(tipo: string, resul: any) {
     this.loadingResultadosVenta = true
-    const nuevaPagina =  resul.paginacion.paginaActualVenta - 1;
+    const nuevaPagina = resul.paginacion.paginaActualVenta - 1;
     const paginasPorBloque = 3;
     const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
