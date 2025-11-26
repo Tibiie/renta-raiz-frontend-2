@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
@@ -22,6 +22,7 @@ import { BarraFiltrosPrioritariosComponent } from "../barra-filtros-prioritarios
 })
 export class PrioritariosComponent implements OnInit {
 
+@ViewChild('carruselVenta') carruselVenta!: ElementRef;
 
   reference = {
     code: "4025"
@@ -222,6 +223,18 @@ export class PrioritariosComponent implements OnInit {
     }
   }
 
+
+  
+scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
+    const carrusel =  this.carruselVenta ;
+    const scrollAmount = 350; // cantidad de píxeles que se moverá
+
+    if (direccion === 'left') {
+      carrusel.nativeElement.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      carrusel.nativeElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }
 
   getFiltrosSeleccionados(filtros: [string, any][]) {
 
