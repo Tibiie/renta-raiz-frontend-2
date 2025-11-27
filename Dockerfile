@@ -1,7 +1,7 @@
 # ============================
 # Etapa 1: Dependencias con cache
 # ============================
-FROM node:20 AS deps
+FROM node:20.15.1-alpine AS deps
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN npm install --legacy-peer-deps
 # ============================
 # Etapa 2: Build
 # ============================
-FROM node:20 AS build
+FROM node:20.15.1-alpine AS build
 
 WORKDIR /app
 
@@ -28,7 +28,7 @@ RUN npm run build -- --configuration production --base-href=/prioritarios/ --dep
 # ============================
 # Etapa 3: Runtime
 # ============================
-FROM node:20-alpine AS runtime
+FROM node:20.15.1-alpine AS runtime
 
 WORKDIR /app
 
