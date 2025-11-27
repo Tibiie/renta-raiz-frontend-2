@@ -13,22 +13,9 @@ export function app(): express.Express {
   // Habilitar compresión gzip
   server.use(compression());
 
-  // Rutas correctas basadas en la estructura real del build
-  const distRoot = resolve(process.cwd(), 'dist/renta-raiz-frontend-2');
-
-  // Carpeta donde están los JS/CSS/Assets del navegador
-  const browserDistFolder = join(distRoot, 'browser');
-
-  // Carpeta donde está el código SSR
-  const serverDistFolder = join(distRoot, 'server');
-
-  // Archivo principal SSR
+  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+  const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(serverDistFolder, 'index.server.html');
-
-  // Logs para verificar dentro del contenedor
-  console.log("📁 Server Dist:", serverDistFolder);
-  console.log("📁 Browser Dist:", browserDistFolder);
-  console.log("📄 indexHtml:", indexHtml);
 
   const commonEngine = new CommonEngine();
 
@@ -37,40 +24,6 @@ export function app(): express.Express {
 
   // Cache de HTML renderizado en memoria
   const pageCache = new Map<string, string>();
-
-
-
-  // Rutas que empiezan con /prioritarios deben servir el index SSR igual
-  server.get('/prioritarios*', async (req, res, next) => {
-    try {
-      const url = req.originalUrl;
-
-      // cache
-      if (pageCache.has(url)) {
-        res.send(pageCache.get(url));
-        return;
-      }
-
-      const html = await commonEngine.render({
-        bootstrap,
-        documentFilePath: indexHtml,
-        url: `${req.protocol}://${req.headers.host}${req.originalUrl}`,
-        publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: '/prioritarios' }],
-      });
-
-      pageCache.set(url, html);
-
-      res.send(html);
-      return;
-
-    } catch (err) {
-      next(err);
-      return;
-    }
-  });
-
-
 
   // Servir archivos estáticos con cache largo
   server.get('*.*', express.static(browserDistFolder, {
