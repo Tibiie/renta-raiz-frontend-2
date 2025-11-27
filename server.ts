@@ -13,9 +13,22 @@ export function app(): express.Express {
   // Habilitar compresión gzip
   server.use(compression());
 
-  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
+  // Rutas correctas basadas en la estructura real del build
+  const distRoot = resolve(process.cwd(), 'dist/renta-raiz-frontend-2');
+
+  // Carpeta donde están los JS/CSS/Assets del navegador
+  const browserDistFolder = join(distRoot, 'browser');
+
+  // Carpeta donde está el código SSR
+  const serverDistFolder = join(distRoot, 'server');
+
+  // Archivo principal SSR
   const indexHtml = join(serverDistFolder, 'index.server.html');
+
+  // Logs para verificar dentro del contenedor
+  console.log("📁 Server Dist:", serverDistFolder);
+  console.log("📁 Browser Dist:", browserDistFolder);
+  console.log("📄 indexHtml:", indexHtml);
 
   const commonEngine = new CommonEngine();
 
