@@ -1,11 +1,13 @@
+# =========================
 # Etapa 1: Build
+# =========================
 FROM node:20.15.1-alpine AS build
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-# Configurar zona horaria
+# Zona horaria
 RUN apk --no-cache add tzdata && \
     cp /usr/share/zoneinfo/America/Bogota /etc/localtime && \
     echo "America/Bogota" > /etc/timezone && \
@@ -15,20 +17,24 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+# 🔥 Build para sub-ruta /prioritarios
+RUN npm run build -- --base-href=/prioritarios/ --deploy-url=/prioritarios/
 
-# Etapa 2: Runtime
+# =========================
+# Etapa 2: Runtime (SSR)
+# =========================
 FROM node:20.15.1-alpine AS runtime
 
 WORKDIR /usr/src/app
 
+# Copiar output del build Angular Universal
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/package*.json ./
-COPY --from=build /usr/src/app/robots.txt ./   
+COPY --from=build /usr/src/app/robots.txt ./
 
-# Copiar sitemap y robots.txt a la carpeta pública
-RUN cp /usr/src/app/dist/renta-raiz-frontend-2/sitemap.xml /usr/src/app/dist/renta-raiz-frontend-2/browser/ && \
-    cp /usr/src/app/robots.txt /usr/src/app/dist/renta-raiz-frontend-2/browser/
+# Copiar sitemap y robots a la carpeta browser si aplica
+RUN cp /usr/src/app/dist/renta-raiz-frontend-2/sitemap.xml /usr/src/app/dist/renta-raiz-frontend-2/browser/ 2>/dev/null || true && \
+    cp /usr/src/app/robots.txt /usr/src/app/dist/renta-raiz-frontend-2/browser/ 2>/dev/null || true
 
 RUN npm install --omit=dev
 

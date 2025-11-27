@@ -25,6 +25,33 @@ export function app(): express.Express {
   // Cache de HTML renderizado en memoria
   const pageCache = new Map<string, string>();
 
+
+
+  // Rutas que empiezan con /prioritarios deben servir el index SSR igual
+  server.get('/prioritarios*', async (req, res, next) => {
+    try {
+      const url = req.originalUrl;
+
+      if (pageCache.has(url)) {
+        return res.send(pageCache.get(url));
+      }
+
+      const html = await commonEngine.render({
+        bootstrap,
+        documentFilePath: indexHtml,
+        url: `${req.protocol}://${req.headers.host}${req.originalUrl}`,
+        publicPath: browserDistFolder,
+        providers: [{ provide: APP_BASE_HREF, useValue: '/prioritarios' }],
+      });
+
+      pageCache.set(url, html);
+      res.send(html);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+
   // Servir archivos estáticos con cache largo
   server.get('*.*', express.static(browserDistFolder, {
     maxAge: '1y',
