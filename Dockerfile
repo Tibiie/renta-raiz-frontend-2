@@ -15,7 +15,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build -- --configuration production --base-href=/prioritarios/ --deploy-url=/prioritarios/ --prerender=false
+RUN npm run build
 
 # Etapa 2: Runtime
 FROM node:20.15.1-alpine AS runtime
