@@ -1,43 +1,52 @@
-# =========================
-# Etapa 1: Build
-# =========================
-FROM node:20.15.1-alpine AS build
+# ============================
+# Etapa 1: Dependencias con cache
+# ============================
+FROM node:20 AS deps
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 
-# Zona horaria
-RUN apk --no-cache add tzdata && \
-    cp /usr/share/zoneinfo/America/Bogota /etc/localtime && \
-    echo "America/Bogota" > /etc/timezone && \
-    apk del tzdata
+RUN npm install --legacy-peer-deps
 
-RUN npm install
 
+# ============================
+# Etapa 2: Build
+# ============================
+FROM node:20 AS build
+
+WORKDIR /app
+
+# Copiar node_modules previamente instalados (cache)
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# 🔥 Build para sub-ruta /prioritarios
+# Build Angular SSR para subruta /prioritarios
 RUN npm run build -- --configuration production --base-href=/prioritarios/ --deploy-url=/prioritarios/ --prerender=false
 
 
-# =========================
-# Etapa 2: Runtime (SSR)
-# =========================
-FROM node:20.15.1-alpine AS runtime
+# ============================
+# Etapa 3: Runtime
+# ============================
+FROM node:20-alpine AS runtime
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copiar output del build Angular Universal
-COPY --from=build /usr/src/app/dist ./dist
-COPY --from=build /usr/src/app/package*.json ./
-COPY --from=build /usr/src/app/robots.txt ./
+# Copiar dist compilado
+COPY --from=build /app/dist ./dist
 
-# Copiar sitemap y robots a la carpeta browser si aplica
-RUN cp /usr/src/app/dist/renta-raiz-frontend-2/sitemap.xml /usr/src/app/dist/renta-raiz-frontend-2/browser/ 2>/dev/null || true && \
-    cp /usr/src/app/robots.txt /usr/src/app/dist/renta-raiz-frontend-2/browser/ 2>/dev/null || true
+# Copiar package.json para runtime
+COPY package*.json ./
 
-RUN npm install --omit=dev
+# Instalar dependencias solo para producir (omit dev)
+RUN npm install --omit=dev --legacy-peer-deps
+
+# Copiar archivos estáticos extras
+COPY robots.txt ./
+
+# Copiar sitemap/robots al browser build (si existe)
+RUN cp dist/renta-raiz-frontend-2/sitemap.xml dist/renta-raiz-frontend-2/browser/ 2>/dev/null || true && \
+    cp robots.txt dist/renta-raiz-frontend-2/browser/ 2>/dev/null || true
 
 EXPOSE 4000
 
