@@ -8,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './footer-portafolio.component.scss'
 })
 export class FooterPortafolioComponent {
+   abrirPestana(url: string) {
+    window.open(url, '_blank');
+  }
 
 }
