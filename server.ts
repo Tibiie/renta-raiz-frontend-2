@@ -6,12 +6,28 @@ import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 import compression from 'compression';
 
-// The Express app is exported so that it can be used by serverless Functions.
+// Configuración básica de caché
+const CACHE_SIZE_LIMIT = 100; // Solo guardar las últimas 100 páginas
+const CACHE_TTL_MS = 1000 * 60 * 60; // 1 Hora de vida
+
+interface CacheEntry {
+  html: string;
+  timestamp: number;
+}
+
 export function app(): express.Express {
   const server = express();
 
-  // Habilitar compresión gzip
-  server.use(compression());
+  // OPTIMIZACIÓN: No comprimir respuestas que ya son pequeñas o binarias
+  server.use(compression({
+    filter: (req, res) => {
+      if (req.headers['x-no-compression']) {
+        return false; // Permitir bypass
+      }
+      // El filtro por defecto de compression maneja bien text/html, json, etc.
+      return compression.filter(req, res);
+    }
+  }));
 
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -22,26 +38,39 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Cache de HTML renderizado en memoria
-  const pageCache = new Map<string, string>();
+  // CACHE EN MEMORIA (Seguro)
+  const pageCache = new Map<string, CacheEntry>();
 
-  // Servir archivos estáticos con cache largo
+  // Servir archivos estáticos
   server.get('*.*', express.static(browserDistFolder, {
     maxAge: '1y',
-    etag: false
+    etag: false // Deshabilita etag para ahorrar procesamiento en estáticos cacheados
   }));
 
-  // Todas las demás rutas usan Angular SSR
+  // Rutas Angular
   server.get('*', async (req, res, next) => {
     try {
       const { protocol, originalUrl, baseUrl, headers } = req;
-      const url = originalUrl;
+      
+      // SEGURIDAD: Nunca cachear si hay cookies de sesión o auth headers
+      // Ajusta 'Authorization' o el nombre de tu cookie de sesión
+      const hasAuth = headers['authorization'] || headers['cookie']?.includes('token');
 
-      // Devolver HTML de cache si existe
-      if (pageCache.has(url)) {
-        return res.send(pageCache.get(url));
+      // Normalizar URL (opcional: quitar trailing slashes o query params irrelevantes)
+      const urlKey = originalUrl; 
+
+      // 1. Intentar servir desde caché
+      if (!hasAuth && pageCache.has(urlKey)) {
+        const entry = pageCache.get(urlKey)!;
+        // Verificar expiración (TTL)
+        if (Date.now() - entry.timestamp < CACHE_TTL_MS) {
+          return res.send(entry.html);
+        } else {
+          pageCache.delete(urlKey); // Borrar si expiró
+        }
       }
 
+      // 2. Renderizar (SSR)
       const html = await commonEngine.render({
         bootstrap,
         documentFilePath: indexHtml,
@@ -50,8 +79,18 @@ export function app(): express.Express {
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       });
 
-      // Guardar en cache
-      pageCache.set(url, html);
+      // 3. Guardar en caché solo si no es usuario autenticado
+      if (!hasAuth) {
+        // Limpieza preventiva de memoria
+        if (pageCache.size > CACHE_SIZE_LIMIT) {
+            pageCache.clear(); // O estrategia más compleja, pero clear() evita el crash
+        }
+        
+        pageCache.set(urlKey, {
+          html,
+          timestamp: Date.now()
+        });
+      }
 
       res.send(html);
       return;
@@ -65,9 +104,9 @@ export function app(): express.Express {
 }
 
 function run(): void {
-  const port = 4000;
+  // IMPORTANTE: Usar variable de entorno para el puerto (necesario en nubes como Azure/Heroku/Google Cloud)
+  const port = process.env['PORT'] || 4000;
 
-  // Start up the Node server
   const server = app();
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
