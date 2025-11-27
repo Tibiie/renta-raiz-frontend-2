@@ -18,7 +18,8 @@ RUN npm install
 COPY . .
 
 # 🔥 Build para sub-ruta /prioritarios
-RUN npm run build -- --base-href=/prioritarios/ --deploy-url=/prioritarios/
+RUN npm run build -- --configuration production --base-href=/prioritarios/ --deploy-url=/prioritarios/ --prerender=false
+
 
 # =========================
 # Etapa 2: Runtime (SSR)

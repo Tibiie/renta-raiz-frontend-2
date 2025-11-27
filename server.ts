@@ -32,8 +32,10 @@ export function app(): express.Express {
     try {
       const url = req.originalUrl;
 
+      // cache
       if (pageCache.has(url)) {
-        return res.send(pageCache.get(url));
+        res.send(pageCache.get(url));
+        return;
       }
 
       const html = await commonEngine.render({
@@ -45,11 +47,16 @@ export function app(): express.Express {
       });
 
       pageCache.set(url, html);
+
       res.send(html);
+      return;
+
     } catch (err) {
       next(err);
+      return;
     }
   });
+
 
 
   // Servir archivos estáticos con cache largo
