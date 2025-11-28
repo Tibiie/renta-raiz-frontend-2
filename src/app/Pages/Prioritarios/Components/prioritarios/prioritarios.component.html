@@ -388,7 +388,7 @@
                   </button>
                 </ng-container>
                 <ng-template #paginaBtn>
-                  <button (click)="cambiarPagina(pagina, 'ARRIENDO')" [ngClass]="
+                  <button (click)="cambiarPagina(pagina, 'ARRIENDO', resul)" [ngClass]="
                 pagina === resul.paginacion.paginaActualVenta
                   ? 'text-white bg-[#CDAD60]'
                   : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700'

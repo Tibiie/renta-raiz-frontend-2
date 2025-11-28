@@ -22,7 +22,7 @@ import { BarraFiltrosPrioritariosComponent } from "../barra-filtros-prioritarios
 })
 export class PrioritariosComponent implements OnInit {
 
-@ViewChild('carruselVenta') carruselVenta!: ElementRef;
+  @ViewChild('carruselVenta') carruselVenta!: ElementRef;
 
   reference = {
     code: "4025"
@@ -224,9 +224,9 @@ export class PrioritariosComponent implements OnInit {
   }
 
 
-  
-scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
-    const carrusel =  this.carruselVenta ;
+
+  scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
+    const carrusel = this.carruselVenta;
     const scrollAmount = 350; // cantidad de píxeles que se moverá
 
     if (direccion === 'left') {
@@ -580,7 +580,7 @@ scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
 
   }
 
-  cambiarPagina(pagina: number | string, tipo: string) {
+  cambiarPagina(pagina: number | string, tipo: string, resul: any) {
     console.log(pagina);
     console.log('primer elemento', this.paginasVenta[0]);
     console.log('pagina', this.paginaActualVenta);
@@ -604,7 +604,7 @@ scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
       console.log(typeof pagina);
 
 
-      this.getInmuebles(pagina, this.elementsPerPage);
+      this.getInmuebles(pagina, this.elementsPerPage, resul);
 
       setTimeout(() => {
         this.loadingResultadosVenta = false
@@ -630,7 +630,7 @@ scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
     const paginasPorBloque = 3;
     const nuevoBloque = Math.floor((nuevaPagina - 1) / paginasPorBloque);
 
-    this.getInmuebles(nuevaPagina, this.elementsPerPage);
+    this.getInmuebles(nuevaPagina, this.elementsPerPage, resul);
     setTimeout(() => {
       this.loadingResultadosVenta = false
     }, 1000);
@@ -648,7 +648,7 @@ scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
     const nuevaPagina = resul.paginacion.paginaActualVenta + 1;
 
 
-    this.getInmuebles(nuevaPagina, this.elementsPerPage);
+    this.getInmuebles(nuevaPagina, this.elementsPerPage, resul);
 
     setTimeout(() => {
       this.loadingResultadosVenta = false
@@ -666,98 +666,201 @@ scrollCarrusel(tipo: 'venta' | 'arriendo', direccion: 'left' | 'right') {
   }
 
 
-  getInmuebles(page: any, elementsPerPage: number) {
-    this.resultados = [];
+  getInmuebles(page: any, elementsPerPage: number, result: any) {
     var obj = {};
-    if (this.category === CategoryEnum.ORO) {
 
-      //oro
-      const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
-      const objOro = {
-        ...filtrosObjOro,
-        page: page,
-      };
-      obj = objOro;
-    }
+    if (this.biz === TipoPropiedadEnum.ARRIENDO) {
+      this.resultados = [];
 
-    if (this.category === CategoryEnum.PLATA) {
+      if (this.category === CategoryEnum.ORO) {
 
-      //plata
-      const filtrosObjPlata = Object.fromEntries(this.filtrosSeleccionadosPlata);
-      const objPlata = {
-        ...filtrosObjPlata,
-        page: page,
-      };
-      obj = objPlata;
-    }
-
-    if (this.category === CategoryEnum.DIAMANTE) {
-      //diamante
-      const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
-      const objDiamante = {
-        ...filtrosObjDiamante,
-        page: page,
-      };
-      obj = objDiamante;
-
-    }
-
-    if (JSON.stringify(obj) === "{}") {
-      obj = {
-        reference: this.reference.code,
-        page: page,
+        //oro
+        const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
+        const objOro = {
+          ...filtrosObjOro,
+          page: page,
+        };
+        obj = objOro;
       }
+
+      if (this.category === CategoryEnum.PLATA) {
+
+        //plata
+        const filtrosObjPlata = Object.fromEntries(this.filtrosSeleccionadosPlata);
+        const objPlata = {
+          ...filtrosObjPlata,
+          page: page,
+        };
+        obj = objPlata;
+      }
+
+      if (this.category === CategoryEnum.DIAMANTE) {
+        //diamante
+        const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
+        const objDiamante = {
+          ...filtrosObjDiamante,
+          page: page,
+        };
+        obj = objDiamante;
+
+      }
+
+      if (JSON.stringify(obj) === "{}") {
+        obj = {
+          reference: this.reference.code,
+          page: page,
+        }
+      }
+
+      console.log(obj);
+
+
+      this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
+        (data: any) => {
+
+          console.log(data);
+
+
+          var paginacion = {
+            totalDatosVenta: data.total,
+            paginaActualVenta: data.current_page || 1,
+            paginacionVenta: data,
+            totalPaginasVenta: data.last_page || 1,
+            paginasVenta: Array.from(
+              { length: data.last_page },
+              (_, i) => i + 1
+            )
+          }
+
+          var result = {
+            type: this.transform(this.category),
+            data: data,
+            paginacion: paginacion
+          }
+          this.resultados.push(result)
+
+          console.log(this.resultados);
+
+          // this.totalDatosVenta = data.total;
+          // this.paginaActualVenta = data.current_page || 1;
+          // this.paginacionVenta = data;
+          // this.totalPaginasVenta = data.last_page || 1;
+          // this.paginasVenta = Array.from(
+          //   { length: this.totalPaginasVenta },
+          //   (_, i) => i + 1
+          // );
+
+
+
+          this.generarPaginas();
+
+          this.loadingResultadosVenta = false
+        },
+        (error: any) => {
+          console.error('Error al obtener las propiedades:', error);
+        }
+      );
     }
 
-    console.log(obj);
+    if (this.biz === TipoPropiedadEnum.VENTA) {
 
+      if (result.type.toUpperCase() === CategoryEnum.ORO) {
 
-    this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
-      (data: any) => {
-
-        console.log(data);
-
-
-        var paginacion = {
-          totalDatosVenta: data.total,
-          paginaActualVenta: data.current_page || 1,
-          paginacionVenta: data,
-          totalPaginasVenta: data.last_page || 1,
-          paginasVenta: Array.from(
-            { length: data.last_page },
-            (_, i) => i + 1
-          )
-        }
-
-        var result = {
-          type: this.transform(this.category),
-          data: data,
-          paginacion: paginacion
-        }
-        this.resultados.push(result)
-
-        console.log(this.resultados);
-
-        // this.totalDatosVenta = data.total;
-        // this.paginaActualVenta = data.current_page || 1;
-        // this.paginacionVenta = data;
-        // this.totalPaginasVenta = data.last_page || 1;
-        // this.paginasVenta = Array.from(
-        //   { length: this.totalPaginasVenta },
-        //   (_, i) => i + 1
-        // );
-
-
-
-        this.generarPaginas();
-
-        this.loadingResultadosVenta = false
-      },
-      (error: any) => {
-        console.error('Error al obtener las propiedades:', error);
+        //oro
+        const filtrosObjOro = Object.fromEntries(this.filtrosSeleccionadosOro);
+        const objOro = {
+          ...filtrosObjOro,
+          page: page,
+        };
+        obj = objOro;
       }
-    );
 
+      if (result.type.toUpperCase() === CategoryEnum.PLATA) {
+
+        //plata
+        const filtrosObjPlata = Object.fromEntries(this.filtrosSeleccionadosPlata);
+        const objPlata = {
+          ...filtrosObjPlata,
+          page: page,
+        };
+        obj = objPlata;
+      }
+
+      if (result.type.toUpperCase() === CategoryEnum.DIAMANTE) {
+        
+        //diamante
+        const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
+        const objDiamante = {
+          ...filtrosObjDiamante,
+          page: page,
+        };
+        obj = objDiamante;
+
+      }
+
+      if (JSON.stringify(obj) === "{}") {
+        obj = {
+          reference: this.reference.code,
+          page: page,
+        }
+      }
+      console.log(result);
+      console.log(obj);
+      
+
+      this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
+        (data: any) => {
+
+          console.log(data);
+
+
+          var paginacion = {
+            totalDatosVenta: data.total,
+            paginaActualVenta: data.current_page || 1,
+            paginacionVenta: data,
+            totalPaginasVenta: data.last_page || 1,
+            paginasVenta: Array.from(
+              { length: data.last_page },
+              (_, i) => i + 1
+            )
+          }
+
+          var resultFind = this.resultados.find(x => x.type === this.transform(result.type));
+          
+          
+          resultFind.data.data = data.data;
+          resultFind.paginacion = paginacion;
+
+          // var result = {
+          //   type: this.transform(this.category),
+          //   data: data,
+          //   paginacion: paginacion
+          // }
+          // this.resultados.push(result)
+
+          console.log(this.resultados);
+
+          // this.totalDatosVenta = data.total;
+          // this.paginaActualVenta = data.current_page || 1;
+          // this.paginacionVenta = data;
+          // this.totalPaginasVenta = data.last_page || 1;
+          // this.paginasVenta = Array.from(
+          //   { length: this.totalPaginasVenta },
+          //   (_, i) => i + 1
+          // );
+
+
+
+          this.generarPaginas();
+
+          this.loadingResultadosVenta = false
+        },
+        (error: any) => {
+          console.error('Error al obtener las propiedades:', error);
+        }
+      );
+
+    }
 
   }
 
