@@ -3,7 +3,7 @@ name: Angular CI/CD
 on:
   push:
     branches:
-      - master # Cambia 'main' por el nombre de tu rama principal
+      - proyect-inmuebles-prioritarios # Cambia 'main' por el nombre de tu rama principal
 
 jobs:
   build:
@@ -35,8 +35,8 @@ jobs:
     - name: Build and push Docker image
       run: |
         
-        docker build -t duhudico/renta_raiz_frontend_2 .
-        docker push duhudico/renta_raiz_frontend_2
+        docker build -t duhudico/renta_raiz_prioritarios .
+        docker push duhudico/renta_raiz_prioritarios
       env:
         DOCKER_BUILDKIT: 1
 

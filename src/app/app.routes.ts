@@ -5,7 +5,7 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./Pages/Inicio/inicio.routes').then((m) => m.routes),
+      import('./Pages/Prioritarios/inicio.routes').then((m) => m.routes),
   },
 
   {
