@@ -1,4 +1,4 @@
-import {  Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { VistaInicialComponent } from './Components/vista-inicial/vista-inicial.component';
 
 import { FiltrosComponent } from './Components/filtros/filtros.component';
@@ -18,6 +18,7 @@ import { blogsResolver } from '../../core/resolvers/blogs.resolver';
 import { AppComponent } from '../../app.component';
 import { PoliticaAcosoComponent } from './Components/politica-acoso/politica-acoso.component';
 import { PortafolioAsesoresComponent } from './Components/portafolio-asesores/portafolio-asesores.component';
+import { PrioritariosComponent } from '../Prioritarios/Components/prioritarios/prioritarios.component';
 
 export const routes: Routes = [
 
@@ -94,6 +95,11 @@ export const routes: Routes = [
       {
         path: 'portafolio/:asesor',
         component: PortafolioAsesoresComponent,
+      }
+      ,
+      {
+        path: 'prioritarios',
+        component: PrioritariosComponent,
       }
     ]
   },
