@@ -825,11 +825,18 @@ export class PrioritariosComponent implements OnInit {
             )
           }
 
-          var resultFind = this.resultados.find(x => x.type === this.transform(result.type));
+
+          result.data = data
+          result.paginacion = paginacion;
+
+          // var resultFind = this.resultados.find(x => x.type === this.transform(result.type));
           
           
-          resultFind.data.data = data.data;
-          resultFind.paginacion = paginacion;
+          // resultFind.data.data = data.data;
+          // resultFind.paginacion = paginacion;
+
+          console.log(data.data);
+          
 
           // var result = {
           //   type: this.transform(this.category),
