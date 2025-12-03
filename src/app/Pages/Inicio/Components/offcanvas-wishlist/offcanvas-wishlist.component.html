@@ -2,7 +2,7 @@
   class="fixed bottom-0 right-24 w-full sm:w-96 bg-white shadow-2xl rounded-t-2xl border border-gray-200 z-50 transform transition-transform duration-300"
   [class.translate-y-full]="!visible">
   <!-- Barra superior -->
-  <div class="flex justify-between items-center p-4 border-b cursor-pointer" (click)="toggleMinimizado()">
+  <div class="flex justify-between items-center p-4 border-b cursor-pointer" (click)="toggleMinimizado(); $event.stopPropagation()">
     <h2 class="text-lg  items-center font-semibold text-gray-800">Exploración de Propiedades en Curso 🔍</h2>
 
 

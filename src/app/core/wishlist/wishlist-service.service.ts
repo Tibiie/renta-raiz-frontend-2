@@ -31,7 +31,10 @@ private favoritosSubject = new BehaviorSubject<any[]>(this.cargarFavoritos());
       const nuevos = [...favoritos, fav];
       this.favoritosSubject.next(nuevos);
       this.guardarFavoritos(nuevos);
+    }else{
+      this.favoritosSubject.next(this.cargarFavoritos());
     }
+
   }
 
   eliminar(codigo: string): void {

@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
 import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
 var document: any;
@@ -106,6 +106,9 @@ export class VistaInicialComponent implements OnInit {
   bloqueActualDestacados: number = 0;
   paginasDestacados: (number | string)[] = [];
 
+  offcanvasVisible: boolean = false;
+  offcanvasMinimizado: boolean = true;
+
 
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
@@ -123,9 +126,16 @@ export class VistaInicialComponent implements OnInit {
   }
 
   agregarFavorito(propiedad: any) {
-    
-    
+
+
     this.favService.agregar(propiedad);
+    
+  }
+
+
+  recibirDato(valor: boolean) {
+    this.offcanvasVisible = valor;
+    console.log('Valor que llegó desde el hijo:', valor);
   }
 
   getInmueblesVentas(page: number) {
