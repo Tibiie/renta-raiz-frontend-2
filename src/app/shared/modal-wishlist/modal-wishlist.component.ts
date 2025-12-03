@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -22,18 +22,16 @@ export class ModalWishlistComponent implements OnInit {
 
   @Input() mostrarModalRecorrido = false
 
+  @Output() cerrar = new EventEmitter<void>();
+
   ngOnInit(): void {
      this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.urlIframe)
   }
 
 
-  abrirModalAgendarRecorrido() {
-    this.mostrarModalRecorrido = true;
-   
-  }
 
   cerrarModal() {
-    this.mostrarModalRecorrido = false
+   this.cerrar.emit();
   }
 
 }

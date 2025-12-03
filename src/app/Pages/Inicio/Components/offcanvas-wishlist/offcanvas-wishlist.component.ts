@@ -18,7 +18,7 @@ export class OffcanvasWishlistComponent {
   @Input() minimizado: boolean = false;
 
   
-  @Output() visibleModalRecorrido = new EventEmitter<boolean>();
+  @Output() visibleModalRecorrido = new EventEmitter<void>();
 
 
   @Output() visiblePadre = new EventEmitter<boolean>();
@@ -41,7 +41,8 @@ export class OffcanvasWishlistComponent {
 
 
   abrirModalRecorrido(){
-    this.visibleModalRecorrido.emit(true)
+    this.visibleModalRecorrido.emit()
+   
   }
 
 

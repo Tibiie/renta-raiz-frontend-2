@@ -886,7 +886,7 @@
 
 <app-footer></app-footer>
 <app-botones-flotantes></app-botones-flotantes>
-<app-offcanvas-wishlist  (visibleModalRecorrido)="recibirValorModalRecorrido($event)"></app-offcanvas-wishlist>
+<app-offcanvas-wishlist  (visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
 
 
-<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido"></app-modal-wishlist>
+<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

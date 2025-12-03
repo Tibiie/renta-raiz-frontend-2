@@ -132,9 +132,7 @@ export class VistaInicialComponent implements OnInit {
     this.getInmueblesDestacados(1);
   }
 
-  agendarRecorrido() {
-    this.modalCrearContacto.abrirModalAgendarRecorrido()
-  }
+
 
 
   agregarFavorito(propiedad: any) {
@@ -146,8 +144,8 @@ export class VistaInicialComponent implements OnInit {
   }
 
 
-  recibirValorModalRecorrido(valor:boolean){
-    this.mostrarModalRecorrido = valor;
+  recibirValorModalRecorrido(){
+    this.mostrarModalRecorrido = true;
   }
 
 
