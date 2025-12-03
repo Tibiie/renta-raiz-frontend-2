@@ -1,6 +1,7 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { Favorito, WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
 import { CommonModule } from '@angular/common';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
 
 
 @Component({
@@ -15,6 +16,9 @@ export class OffcanvasWishlistComponent {
   favoritos: any[] = [];
   @Input() visible = false;
   @Input() minimizado: boolean = false;
+
+  
+  @Output() visibleModalRecorrido = new EventEmitter<boolean>();
 
 
   @Output() visiblePadre = new EventEmitter<boolean>();
@@ -35,6 +39,10 @@ export class OffcanvasWishlistComponent {
   }
 
 
+
+  abrirModalRecorrido(){
+    this.visibleModalRecorrido.emit(true)
+  }
 
 
   @HostListener('document:click', ['$event'])

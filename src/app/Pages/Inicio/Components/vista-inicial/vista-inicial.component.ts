@@ -22,6 +22,7 @@ import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-fi
 import { BehaviorSubject, of } from 'rxjs';
 import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
 import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
 var document: any;
 declare const Carousel: any;
 
@@ -37,12 +38,16 @@ declare const Carousel: any;
     BotonesFlotantesComponent,
     BarraFiltrosComponent,
     OffcanvasWishlistComponent,
+    ModalWishlistComponent
   ],
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss'],
 })
 export class VistaInicialComponent implements OnInit {
   @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
+
+  @ViewChild(ModalWishlistComponent)
+  modalCrearContacto!: ModalWishlistComponent;
 
   intervalId: any;
   currentSlide = 0;
@@ -109,6 +114,8 @@ export class VistaInicialComponent implements OnInit {
   offcanvasVisible: boolean = false;
   offcanvasMinimizado: boolean = true;
 
+  mostrarModalRecorrido= false
+
 
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
@@ -125,12 +132,24 @@ export class VistaInicialComponent implements OnInit {
     this.getInmueblesDestacados(1);
   }
 
+  agendarRecorrido() {
+    this.modalCrearContacto.abrirModalAgendarRecorrido()
+  }
+
+
   agregarFavorito(propiedad: any) {
 
 
     this.favService.agregar(propiedad);
-    
+
+
   }
+
+
+  recibirValorModalRecorrido(valor:boolean){
+    this.mostrarModalRecorrido = valor;
+  }
+
 
 
   recibirDato(valor: boolean) {
