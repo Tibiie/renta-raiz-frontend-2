@@ -15,7 +15,7 @@ export class WishlistServiceService {
 private favoritosSubject = new BehaviorSubject<any[]>(this.cargarFavoritos());
   favoritos$ = this.favoritosSubject.asObservable();
 
-  private cargarFavoritos(): Favorito[] {
+  public cargarFavoritos(): Favorito[] {
     return JSON.parse(localStorage.getItem('favoritos') || '[]');
   }
 

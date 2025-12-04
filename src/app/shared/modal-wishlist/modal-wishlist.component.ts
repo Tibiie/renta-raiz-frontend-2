@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { WishlistServiceService } from '../../core/wishlist/wishlist-service.service';
 
 @Component({
   selector: 'app-modal-wishlist',
@@ -24,14 +25,35 @@ export class ModalWishlistComponent implements OnInit {
 
   @Output() cerrar = new EventEmitter<void>();
 
+
+  favService = inject(WishlistServiceService);
+
   ngOnInit(): void {
-     this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.urlIframe)
+
+    var recorrido = this.favService.cargarFavoritos();
+
+    const resultado = recorrido.map((item:any) => ({
+      codpro: item.codpro,
+      address: item.address,
+      city: item.city
+    }));
+
+    const cadena = JSON.stringify(resultado);
+
+    const cadenaCodificada = encodeURIComponent(cadena);
+
+    console.log(cadena);
+
+
+    var url = `${this.urlIframe}?historial_web=${cadenaCodificada}`
+
+    this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
 
 
   cerrarModal() {
-   this.cerrar.emit();
+    this.cerrar.emit();
   }
 
 }
