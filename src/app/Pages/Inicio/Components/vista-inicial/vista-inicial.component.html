@@ -1,4 +1,4 @@
-<app-navbar (abrir)="offcanvasMinimizado = true"></app-navbar>
+<app-navbar (abrir)="toggleOffcanvas()"></app-navbar>
 
 <div class="flex flex-col">
   <div class="banner-contacto w-full max-h-[60vh] overflow-hidden" data-carousel="slide" data-carousel-interval="5000">
@@ -885,8 +885,8 @@
 </div>
 
 <app-footer></app-footer>
-<app-botones-flotantes></app-botones-flotantes>
-<app-offcanvas-wishlist [minimizado]="offcanvasMinimizado"  (visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+<app-botones-flotantes  (abrir)="toggleOffcanvas()"></app-botones-flotantes>
+<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas"(visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
 
 
 <app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

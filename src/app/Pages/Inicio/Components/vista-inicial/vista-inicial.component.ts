@@ -114,14 +114,25 @@ export class VistaInicialComponent implements OnInit {
   offcanvasVisible: boolean = false;
   offcanvasMinimizado: boolean = true;
 
-  mostrarModalRecorrido= false
+  mostrarModalRecorrido = false
 
-
+  mostrarOffcanvas: boolean = false;
+  minimizarOffcanvas: boolean = true;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
     this.getDatos();
+  }
+
+  toggleOffcanvas() {
+    this.mostrarOffcanvas = !this.mostrarOffcanvas;
+    setTimeout(() => {
+      this.minimizarOffcanvas = !this.minimizarOffcanvas;
+    }, 100);
+
+    console.log("minimizado"+this.minimizarOffcanvas);
+    
   }
 
   getDatos() {
@@ -144,7 +155,7 @@ export class VistaInicialComponent implements OnInit {
   }
 
 
-  recibirValorModalRecorrido(){
+  recibirValorModalRecorrido() {
     this.mostrarModalRecorrido = true;
   }
 
