@@ -1,4 +1,4 @@
-<app-navbar *ngIf=" mostrarContenido" [alwaysScrolled]="true"></app-navbar>
+<app-navbar (abrir)="toggleOffcanvas()" *ngIf=" mostrarContenido" [alwaysScrolled]="true"></app-navbar>
 
 
 
@@ -758,6 +758,9 @@
 </div>
 
 <app-modal-crear-contacto *ngIf="datosCargados"></app-modal-crear-contacto>
-<app-botones-flotantes *ngIf="datosCargados"></app-botones-flotantes>
+<app-botones-flotantes (abrir)="toggleOffcanvas()" *ngIf="datosCargados"></app-botones-flotantes>
+
 <app-volver *ngIf="datosCargados"></app-volver>
 <app-footer *ngIf="datosCargados"></app-footer>
+<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas"(visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

@@ -1,4 +1,4 @@
-<app-navbar [alwaysScrolled]="true"></app-navbar>
+<app-navbar (abrir)="toggleOffcanvas()" [alwaysScrolled]="true"></app-navbar>
 
 <div class="flex flex-col md:flex-row">
   <div class="flex-1">
@@ -575,9 +575,9 @@
                   <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
                 </ng-container>
 
-                <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                  <i class="fas fa-heart text-2xl"></i>
-                </button>
+                  <button (click)="agregarFavorito(inmueble); $event.stopPropagation()" class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                    <i class="fas fa-cart-shopping text-2xl"></i>
+                  </button>
               </div>
             </div>
           </div>
@@ -702,3 +702,9 @@
 
 <app-volver></app-volver>
 <app-footer></app-footer>
+
+
+<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas"(visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+
+
+<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

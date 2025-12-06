@@ -8,6 +8,7 @@ import { PortafolioEnum } from '../../../../core/enums/PortafolioEnum';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { FooterPortafolioComponent } from '../../../../shared/footer-portafolio/footer-portafolio.component';
+import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
 
 
 @Component({
@@ -52,6 +53,7 @@ export class PortafolioAsesoresComponent implements OnInit {
   router = inject(Router);
   // router = inject(Router);
   inmubeService = inject(InmueblesService);
+  favService = inject(WishlistServiceService);
 
 
 
@@ -67,6 +69,14 @@ export class PortafolioAsesoresComponent implements OnInit {
     this.obtenerPropiedadesVenta(Number(this.asesorId), 1, this.elementsPerPage);
     this.obtenerPropiedadesArriendo(Number(this.asesorId), 1, this.elementsPerPage);
 
+
+
+  }
+
+  agregarFavorito(propiedad: any) {
+
+
+    this.favService.agregar(propiedad);
 
 
   }
