@@ -738,3 +738,8 @@
   </div>
 </div>
 <app-footer-portafolio *ngIf="resultadosVenta.length > 0"></app-footer-portafolio>
+
+<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas"(visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+
+
+<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

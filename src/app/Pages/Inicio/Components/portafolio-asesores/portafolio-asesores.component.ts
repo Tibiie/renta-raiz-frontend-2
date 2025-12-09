@@ -9,13 +9,15 @@ import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { FooterPortafolioComponent } from '../../../../shared/footer-portafolio/footer-portafolio.component';
 import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
+import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
 
 
 @Component({
   selector: 'app-portafolio-asesores',
   standalone: true,
-  imports: [CommonModule, NavbarComponent2,FooterPortafolioComponent,
-      BotonesFlotantesComponent],
+  imports: [CommonModule, NavbarComponent2, FooterPortafolioComponent,
+    BotonesFlotantesComponent, OffcanvasWishlistComponent, ModalWishlistComponent],
   templateUrl: './portafolio-asesores.component.html',
   styleUrl: './portafolio-asesores.component.scss'
 })
@@ -23,6 +25,11 @@ export class PortafolioAsesoresComponent implements OnInit {
 
   @ViewChild('carruselVenta') carruselVenta!: ElementRef;
   @ViewChild('carruselArriendo') carruselArriendo!: ElementRef;
+
+  mostrarModalRecorrido = false
+
+  mostrarOffcanvas: boolean = false;
+  minimizarOffcanvas: boolean = true;
 
   paginacionVenta: any = {};
   paginacionArriendo: any = {};
@@ -81,6 +88,10 @@ export class PortafolioAsesoresComponent implements OnInit {
 
   }
 
+
+  recibirValorModalRecorrido() {
+    this.mostrarModalRecorrido = true;
+  }
 
   @HostListener('window:resize', [])
   onResize() {
