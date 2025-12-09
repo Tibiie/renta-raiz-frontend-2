@@ -25,6 +25,9 @@ import { UrlParamService } from '../../../../core/configs/url-param.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
+import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
 
 @Component({
   selector: 'app-filtros',
@@ -38,6 +41,8 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
     FooterComponent,
     MatAutocompleteModule,
     MatInputModule,
+    ModalWishlistComponent,
+    OffcanvasWishlistComponent,
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
@@ -161,6 +166,12 @@ export class FiltrosComponent implements OnInit {
     } as Record<string, string>,
   };
 
+
+  mostrarModalRecorrido = false
+
+  mostrarOffcanvas: boolean = false;
+  minimizarOffcanvas: boolean = true;
+
   // Injectaciones
   router = inject(Router);
   cdRef = inject(ChangeDetectorRef);
@@ -169,6 +180,7 @@ export class FiltrosComponent implements OnInit {
   geolocalizacionService = inject(GeolocalizacionService);
   activatedRoute = inject(ActivatedRoute);
   urlParamService = inject(UrlParamService);
+  favService = inject(WishlistServiceService);
 
   mostrarMapa = false;
   address: string | null = null;
@@ -271,6 +283,30 @@ export class FiltrosComponent implements OnInit {
       this.isSticky = window.scrollY > 45;
       this.cdRef.detectChanges();
     }, 16);
+  }
+
+
+
+  agregarFavorito(propiedad: any) {
+
+
+    this.favService.agregar(propiedad);
+
+
+  }
+
+  recibirValorModalRecorrido() {
+    this.mostrarModalRecorrido = true;
+  }
+
+  toggleOffcanvas() {
+    this.mostrarOffcanvas = !this.mostrarOffcanvas;
+    setTimeout(() => {
+      this.minimizarOffcanvas = !this.minimizarOffcanvas;
+    }, 100);
+
+    console.log("minimizado"+this.minimizarOffcanvas);
+    
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {

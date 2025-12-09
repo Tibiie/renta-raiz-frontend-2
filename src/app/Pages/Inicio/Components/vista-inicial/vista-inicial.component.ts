@@ -19,8 +19,13 @@ import { Router } from '@angular/router';
 import { FooterComponent } from '../../../../shared/footer/footer.component';
 import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 import { BarraFiltrosComponent } from '../../../../shared/barra-filtros/barra-filtros.component';
+import { BehaviorSubject, of } from 'rxjs';
+import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
+import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
 var document: any;
 declare const Carousel: any;
+
 @Component({
   selector: 'app-vista-inicial',
   standalone: true,
@@ -32,12 +37,17 @@ declare const Carousel: any;
     FooterComponent,
     BotonesFlotantesComponent,
     BarraFiltrosComponent,
+    OffcanvasWishlistComponent,
+    ModalWishlistComponent
   ],
   templateUrl: './vista-inicial.component.html',
   styleUrls: ['./vista-inicial.component.scss'],
 })
 export class VistaInicialComponent implements OnInit {
   @ViewChild('dropdownContainer') dropdownContainer!: ElementRef | undefined;
+
+  @ViewChild(ModalWishlistComponent)
+  modalCrearContacto!: ModalWishlistComponent;
 
   intervalId: any;
   currentSlide = 0;
@@ -83,6 +93,7 @@ export class VistaInicialComponent implements OnInit {
   elementRef = inject(ElementRef);
   formBuilder = inject(FormBuilder);
   inmueblesService = inject(InmueblesService);
+  favService = inject(WishlistServiceService);
 
   // PAGINACION
   totalPaginasArriendo = 0;
@@ -100,10 +111,28 @@ export class VistaInicialComponent implements OnInit {
   bloqueActualDestacados: number = 0;
   paginasDestacados: (number | string)[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  offcanvasVisible: boolean = false;
+  offcanvasMinimizado: boolean = true;
+
+  mostrarModalRecorrido = false
+
+  mostrarOffcanvas: boolean = false;
+  minimizarOffcanvas: boolean = true;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
     this.getDatos();
+  }
+
+  toggleOffcanvas() {
+    this.mostrarOffcanvas = !this.mostrarOffcanvas;
+    setTimeout(() => {
+      this.minimizarOffcanvas = !this.minimizarOffcanvas;
+    }, 100);
+
+    console.log("minimizado"+this.minimizarOffcanvas);
+    
   }
 
   getDatos() {
@@ -112,6 +141,29 @@ export class VistaInicialComponent implements OnInit {
     this.getInmueblesVentas(1);
     this.getInmueblesArriendos(1);
     this.getInmueblesDestacados(1);
+  }
+
+
+
+
+  agregarFavorito(propiedad: any) {
+
+
+    this.favService.agregar(propiedad);
+
+
+  }
+
+
+  recibirValorModalRecorrido() {
+    this.mostrarModalRecorrido = true;
+  }
+
+
+
+  recibirDato(valor: boolean) {
+    this.offcanvasVisible = valor;
+    console.log('Valor que llegó desde el hijo:', valor);
   }
 
   getInmueblesVentas(page: number) {
@@ -287,8 +339,8 @@ export class VistaInicialComponent implements OnInit {
 
   verPropiedad(codPro: number) {
     this.router.navigate(['/ver-propiedad', codPro, 0]).then(() => {
-    window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
-  });
+      window.scrollTo(0, 0); // opcional: para que siempre inicie arriba
+    });
   }
 
   abrirBrochure() {
@@ -324,7 +376,7 @@ export class VistaInicialComponent implements OnInit {
         this.paginasArriendo.push(this.totalPaginasArriendo);
       }
       console.log(this.paginasArriendo);
-      
+
     } else if (inmueble === 'VENTAS') {
       this.paginasVentas = [];
       const paginasPorBloque = 3;
@@ -448,7 +500,7 @@ export class VistaInicialComponent implements OnInit {
         }
 
         this.generarPaginas(inmueble);
-        
+
         this.getInmueblesDestacados(this.paginaActualDestacados);
       }
     }
@@ -593,12 +645,12 @@ export class VistaInicialComponent implements OnInit {
     }
   }
 
-  getFiltros(){
+  getFiltros() {
     this.inmueblesService.getFiltros().subscribe({
       next: (response: any) => {
         this.filtros = response;
         console.log('Filtros obtenidos:', this.filtros);
-      } ,
+      },
       error: (error: any) => {
         console.error('Error al obtener los filtros:', error);
       }

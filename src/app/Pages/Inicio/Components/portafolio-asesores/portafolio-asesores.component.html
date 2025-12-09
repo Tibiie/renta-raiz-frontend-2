@@ -98,8 +98,8 @@
                     <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
                   </ng-container>
 
-                  <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                    <i class="fas fa-heart text-2xl"></i>
+                <button (click)="agregarFavorito(inmueble); $event.stopPropagation()" class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                    <i class="fas fa-cart-shopping text-2xl"></i>
                   </button>
                 </div>
               </div>
@@ -240,8 +240,8 @@
                     <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
                   </ng-container>
 
-                  <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                    <i class="fas fa-heart text-2xl"></i>
+                 <button (click)="agregarFavorito(inmueble); $event.stopPropagation()" class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                    <i class="fas fa-cart-shopping text-2xl"></i>
                   </button>
                 </div>
               </div>
@@ -469,9 +469,9 @@
                       <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
                     </ng-container>
 
-                    <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                      <i class="fas fa-heart text-2xl"></i>
-                    </button>
+                   <button (click)="agregarFavorito(inmueble); $event.stopPropagation()" class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                    <i class="fas fa-cart-shopping text-2xl"></i>
+                  </button>
                   </div>
                 </div>
               </div>
@@ -603,8 +603,8 @@
                     <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
                   </ng-container>
 
-                  <button class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                    <i class="fas fa-heart text-2xl"></i>
+                    <button (click)="agregarFavorito(inmueble); $event.stopPropagation()" class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                    <i class="fas fa-cart-shopping text-2xl"></i>
                   </button>
                 </div>
               </div>
@@ -737,4 +737,9 @@
     </div>
   </div>
 </div>
-<app-footer-portafolio></app-footer-portafolio>
+<app-footer-portafolio *ngIf="resultadosVenta.length > 0"></app-footer-portafolio>
+
+<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas"(visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+
+
+<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

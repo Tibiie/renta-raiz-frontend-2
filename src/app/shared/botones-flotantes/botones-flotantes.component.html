@@ -1,4 +1,16 @@
 <div class="fixed bottom-6 left-6 flex flex-col gap-3 z-50">
+    <button (click)="abrirOffcanvas(); " class="text-white bg-[#003366] text-lg w-14 h-14 rounded-full hover:text-[#cdad60] transition-colors md:hidden">
+        <i class="fas fa-cart-shopping text-2xl"></i>
+    </button>
+
+    <!-- Tooltip -->
+    <span class="absolute left-1/2 -translate-x-1/2 -bottom-9 
+           bg-gray-800 text-white text-xs px-2 py-1 rounded 
+           opacity-0 group-hover:opacity-100 transition-opacity duration-300
+           whitespace-nowrap pointer-events-none md:hidden">
+        Ver Recorrido
+    </span>
+
     <!-- Botón de PSE -->
     <a target="_blank"
         onclick="window.open('https://gateway2.tucompra.com.co/sites/RentaRaiz/facturacion.xhtml?idTerminal=2018')"
@@ -7,6 +19,7 @@
             class="absolute inset-0 w-full h-full object-contain scale-125" />
     </a>
 </div>
+
 
 <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
     <button (click)="scrollToTop()"

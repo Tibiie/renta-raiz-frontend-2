@@ -2,15 +2,18 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   inject,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 import { UrlParamService } from '../../core/configs/url-param.service';
+import { OffcanvasWishlistComponent } from '../../Pages/Inicio/Components/offcanvas-wishlist/offcanvas-wishlist.component';
 
 @Component({
   selector: 'app-navbar',
@@ -23,6 +26,10 @@ export class NavbarComponent implements OnInit {
   @ViewChild('nosotrosDropdown') nosotrosDropdownRef: ElementRef | undefined;
   @ViewChild('arriendosDropdown') arriendosDropdownRef: ElementRef | undefined;
   @ViewChild('clientesDropdown') clientesDropdownRef: ElementRef | undefined;
+
+
+
+  @Output() abrir = new EventEmitter<void>();
 
   isScrolled = false;
   elementsPerPage = 12;
@@ -53,6 +60,10 @@ export class NavbarComponent implements OnInit {
     if (!this.alwaysScrolled) {
       this.isScrolled = window.scrollY > 50;
     }
+  }
+
+  abrirOffcanvas (){
+    this.abrir.emit()
   }
 
   toggleMobileMenu(): void {
