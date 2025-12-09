@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar  (abrir)="toggleOffcanvas()"></app-navbar>
 
 <div class="flex flex-col">
   <div class="banner-contacto w-full h-[40vh] md:h-[60vh] overflow-hidden">
@@ -170,3 +170,6 @@
 <app-volver></app-volver>
 <app-footer></app-footer>
 <app-botones-flotantes></app-botones-flotantes>
+
+<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas"(visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

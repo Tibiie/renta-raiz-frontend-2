@@ -8,12 +8,15 @@ import { FooterComponent } from "../../../../shared/footer/footer.component";
 import { BarraFiltrosComponent } from "../../../../shared/barra-filtros/barra-filtros.component";
 import { ToastrService } from 'ngx-toastr';
 import { VolverComponent } from "../../../../shared/volver/volver.component";
+import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
+import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
 
 
 @Component({
   selector: 'app-contactanos',
   standalone: true,
-  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, BotonesFlotantesComponent, FooterComponent, BarraFiltrosComponent, VolverComponent],
+  imports: [NavbarComponent, FormsModule, CommonModule, ReactiveFormsModule, BotonesFlotantesComponent, FooterComponent, BarraFiltrosComponent, VolverComponent, OffcanvasWishlistComponent, ModalWishlistComponent],
   templateUrl: './contactanos.component.html',
   styleUrl: './contactanos.component.scss'
 })
@@ -35,8 +38,39 @@ export class ContactanosComponent implements OnInit {
     mensaje: ['', [Validators.required, Validators.minLength(10)]],
   });
 
+
+  mostrarModalRecorrido = false
+
+  mostrarOffcanvas: boolean = false;
+  minimizarOffcanvas: boolean = true;
+
+  favService = inject(WishlistServiceService);
+
+
   ngOnInit(): void {
     window.scrollTo(0, 0);
+  }
+
+  agregarFavorito(propiedad: any) {
+
+
+    this.favService.agregar(propiedad);
+
+
+  }
+
+  recibirValorModalRecorrido() {
+    this.mostrarModalRecorrido = true;
+  }
+
+  toggleOffcanvas() {
+    this.mostrarOffcanvas = !this.mostrarOffcanvas;
+    setTimeout(() => {
+      this.minimizarOffcanvas = !this.minimizarOffcanvas;
+    }, 100);
+
+    console.log("minimizado" + this.minimizarOffcanvas);
+
   }
 
   createContacto() {
