@@ -12,11 +12,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { BarraFiltrosPrioritariosComponent } from "../barra-filtros-prioritarios/barra-filtros-prioritarios.component";
+import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
+import { OffcanvasWishlistComponent } from '../../../Inicio/Components/offcanvas-wishlist/offcanvas-wishlist.component';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
+import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 
 @Component({
   selector: 'app-prioritarios',
   standalone: true,
-  imports: [CommonModule, NavbarComponent2, BarraFiltrosPrioritariosComponent],
+  imports: [CommonModule, NavbarComponent2, BarraFiltrosPrioritariosComponent, OffcanvasWishlistComponent, ModalWishlistComponent, BotonesFlotantesComponent],
   templateUrl: './prioritarios.component.html',
   styleUrl: './prioritarios.component.scss'
 })
@@ -88,6 +92,15 @@ export class PrioritariosComponent implements OnInit {
 
   paginasVenta: (number | string)[] = [];
 
+
+  mostrarModalRecorrido = false
+
+  mostrarOffcanvas: boolean = false;
+  minimizarOffcanvas: boolean = true;
+  favService = inject(WishlistServiceService);
+
+
+
   isSmallScreen = false;
 
   activatedRoute = inject(ActivatedRoute);
@@ -138,6 +151,30 @@ export class PrioritariosComponent implements OnInit {
       this.router.createUrlTree(['/ver-propiedad', codPro, 1])
     );
     window.open(url, '_blank');
+  }
+
+
+  agregarFavorito(propiedad: any) {
+
+
+    this.favService.agregar(propiedad);
+
+
+  }
+
+
+  toggleOffcanvas() {
+    this.mostrarOffcanvas = !this.mostrarOffcanvas;
+    setTimeout(() => {
+      this.minimizarOffcanvas = !this.minimizarOffcanvas;
+    }, 100);
+
+    console.log("minimizado"+this.minimizarOffcanvas);
+    
+  }
+
+  recibirValorModalRecorrido() {
+    this.mostrarModalRecorrido = true;
   }
 
   getBiz(type: string, category: string | null) {
@@ -787,7 +824,7 @@ export class PrioritariosComponent implements OnInit {
       }
 
       if (result.type.toUpperCase() === CategoryEnum.DIAMANTE) {
-        
+
         //diamante
         const filtrosObjDiamante = Object.fromEntries(this.filtrosSeleccionadosDiamante);
         const objDiamante = {
@@ -806,7 +843,7 @@ export class PrioritariosComponent implements OnInit {
       }
       console.log(result);
       console.log(obj);
-      
+
 
       this.inmubeService.getFiltrosEnviar(obj, elementsPerPage).subscribe(
         (data: any) => {
@@ -830,13 +867,13 @@ export class PrioritariosComponent implements OnInit {
           result.paginacion = paginacion;
 
           // var resultFind = this.resultados.find(x => x.type === this.transform(result.type));
-          
-          
+
+
           // resultFind.data.data = data.data;
           // resultFind.paginacion = paginacion;
 
           console.log(data.data);
-          
+
 
           // var result = {
           //   type: this.transform(this.category),

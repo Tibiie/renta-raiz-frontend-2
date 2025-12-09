@@ -89,6 +89,17 @@ export class PortafolioAsesoresComponent implements OnInit {
   }
 
 
+  toggleOffcanvas() {
+    this.mostrarOffcanvas = !this.mostrarOffcanvas;
+    setTimeout(() => {
+      this.minimizarOffcanvas = !this.minimizarOffcanvas;
+    }, 100);
+
+    console.log("minimizado"+this.minimizarOffcanvas);
+    
+  }
+
+
   recibirValorModalRecorrido() {
     this.mostrarModalRecorrido = true;
   }
