@@ -21,6 +21,8 @@ import { VolverComponent } from '../../../../shared/volver/volver.component';
 import { SafeUrlPipePipe } from '../../../../shared/pipes/safe-url-pipe.pipe';
 import { DataasesoresService } from '../../../../core/dataAsesores/dataasesores.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
+import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
 
 
 @Component({
@@ -37,7 +39,9 @@ import { Meta, Title } from '@angular/platform-browser';
     BotonesFlotantesComponent,
     VolverComponent,
     NavbarComponent2,
-    SafeUrlPipePipe
+    SafeUrlPipePipe,
+    ModalWishlistComponent,
+    OffcanvasWishlistComponent,
   ],
   templateUrl: './ver-propiedad.component.html',
   styleUrl: './ver-propiedad.component.scss',
@@ -78,7 +82,10 @@ export class VerPropiedadComponent implements OnInit {
   dataasesoresService = inject(DataasesoresService);
   meta = inject(Meta);
   title = inject(Title);
+  mostrarOffcanvas: boolean = false;
+  minimizarOffcanvas: boolean = true;
 
+  mostrarModalRecorrido = false
 
 
   ngOnInit(): void {
@@ -101,12 +108,27 @@ export class VerPropiedadComponent implements OnInit {
     this.getAsesor();
 
 
-    
-    
+
+
     this.meta.updateTag({ property: 'og:description', content: this.propiedad.descripcion });
     this.meta.updateTag({ property: 'og:image', content: this.propiedad.images[0].imageurl });
-    
 
+
+  }
+
+
+   toggleOffcanvas() {
+    this.mostrarOffcanvas = !this.mostrarOffcanvas;
+    setTimeout(() => {
+      this.minimizarOffcanvas = !this.minimizarOffcanvas;
+    }, 100);
+
+    console.log("minimizado"+this.minimizarOffcanvas);
+    
+  }
+  
+  recibirValorModalRecorrido() {
+    this.mostrarModalRecorrido = true;
   }
 
   getAsesor() {

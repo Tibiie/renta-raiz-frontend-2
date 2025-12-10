@@ -8,6 +8,9 @@ import { InmueblesService } from '../../../../core/Inmuebles/inmuebles.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { VolverComponent } from "../../../../shared/volver/volver.component";
+import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
+import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
+import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
 
 @Component({
   selector: 'app-publicar-inmueble',
@@ -19,7 +22,9 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
     FooterComponent,
     ReactiveFormsModule,
     CommonModule,
-    VolverComponent
+    VolverComponent,
+    OffcanvasWishlistComponent,
+    ModalWishlistComponent
   ],
   templateUrl: './publicar-inmueble.component.html',
   styleUrl: './publicar-inmueble.component.scss',
@@ -27,20 +32,49 @@ import { VolverComponent } from "../../../../shared/volver/volver.component";
 export class PublicarInmuebleComponent implements OnInit {
   cargando = false;
   fotosBase64: string[] = [];
-  
+
   toastr = inject(ToastrService);
   formBuilder = inject(FormBuilder);
   inmuebleService = inject(InmueblesService);
-  
+
   formPublicarInmueble = this.formBuilder.group({
     nombre: ['', Validators.required],
     telefono: ['', Validators.required],
     email: ['', Validators.required],
     barrio: ['', Validators.required],
   });
-  
+
+  mostrarModalRecorrido = false
+
+  mostrarOffcanvas: boolean = false;
+  minimizarOffcanvas: boolean = true;
+
+  favService = inject(WishlistServiceService);
+
   ngOnInit(): void {
     window.scrollTo(0, 0);
+  }
+
+  agregarFavorito(propiedad: any) {
+
+
+    this.favService.agregar(propiedad);
+
+
+  }
+
+  recibirValorModalRecorrido() {
+    this.mostrarModalRecorrido = true;
+  }
+
+  toggleOffcanvas() {
+    this.mostrarOffcanvas = !this.mostrarOffcanvas;
+    setTimeout(() => {
+      this.minimizarOffcanvas = !this.minimizarOffcanvas;
+    }, 100);
+
+    console.log("minimizado" + this.minimizarOffcanvas);
+
   }
 
   crearPublicacionPropiedad() {

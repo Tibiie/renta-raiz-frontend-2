@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-botones-flotantes',
@@ -11,6 +11,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class BotonesFlotantesComponent {
   @Input() hideWhatsApp: boolean = false;
 
+  @Output() abrir = new EventEmitter<void>();
+
   scrollToTop(): void {
     window.scrollTo({
       top: 0,
@@ -20,5 +22,10 @@ export class BotonesFlotantesComponent {
 
   vistaAnterior(): void {
     window.history.back();
+  }
+
+
+    abrirOffcanvas (){
+    this.abrir.emit()
   }
 }
