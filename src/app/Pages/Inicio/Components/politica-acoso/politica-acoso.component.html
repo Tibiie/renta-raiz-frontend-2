@@ -13,3 +13,8 @@
     Si no se abrió, haz clic aquí para ver el PDF
   </a>
 </div>
+
+
+<app-offcanvas-wishlist (cerrarNotificacion)="sincronizarCierre()" [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas" (visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+<app-botones-flotantes    (abrir)="toggleOffcanvas()"></app-botones-flotantes>
+<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

@@ -23,6 +23,8 @@ export class OffcanvasWishlistComponent {
 
   @Output() visiblePadre = new EventEmitter<boolean>();
 
+  @Output() cerrarNotificacion = new EventEmitter<void>();
+
   constructor(private favService: WishlistServiceService, private elementRef: ElementRef) { }
 
   ngOnInit(): void {
@@ -48,6 +50,7 @@ export class OffcanvasWishlistComponent {
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
+    
     const clickDentro = this.elementRef.nativeElement.contains(event.target);
 
     if (!clickDentro) {
@@ -63,11 +66,13 @@ export class OffcanvasWishlistComponent {
 
   cerrar(): void {
     this.visible = false;
+    this.cerrarNotificacion.emit();
   }
   toggleMinimizado() {
 
 
     this.minimizado = !this.minimizado;
+    
   }
 
   eliminar(codigo: string): void {

@@ -40,6 +40,16 @@ export class QuienesSomosComponent implements OnInit {
 
   }
 
+  sincronizarCierre() {
+    console.log("El hijo me avisó que se cerró. Sincronizando variables...");
+
+    // Forzamos las variables a FALSE (no usamos toggle/signo de exclamación aquí)
+    this.mostrarOffcanvas = false;
+    this.minimizarOffcanvas = false;
+    console.log(this.minimizarOffcanvas);
+
+  }
+
   recibirValorModalRecorrido() {
     this.mostrarModalRecorrido = true;
   }

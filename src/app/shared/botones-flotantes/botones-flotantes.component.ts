@@ -13,6 +13,8 @@ export class BotonesFlotantesComponent {
 
   @Output() abrir = new EventEmitter<void>();
 
+  
+
   scrollToTop(): void {
     window.scrollTo({
       top: 0,
@@ -25,7 +27,7 @@ export class BotonesFlotantesComponent {
   }
 
 
-    abrirOffcanvas (){
+  abrirOffcanvas() {
     this.abrir.emit()
   }
 }
