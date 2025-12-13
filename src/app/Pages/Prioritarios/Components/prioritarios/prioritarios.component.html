@@ -135,7 +135,7 @@
                         </ng-container>
 
                         <button (click)="agregarFavorito(inmueble); $event.stopPropagation()"
-                          class="text-white text-lg hover:text-[#ea6666] transition-colors">
+                          class="text-white text-lg md:hover:text-[#ea6666] transition-colors">
                           <i class="fas fa-cart-shopping text-2xl"></i>
                         </button>
                       </div>
@@ -276,9 +276,10 @@
                           <i class="fas fa-medal text-gray-400 text-xl" title="Propiedad plata"></i>
                         </ng-container>
 
-                         <button (click)="agregarFavorito(inmueble); $event.stopPropagation()" class="text-white text-lg hover:text-[#ea6666] transition-colors">
-                    <i class="fas fa-cart-shopping text-2xl"></i>
-                  </button>
+                        <button (click)="agregarFavorito(inmueble); $event.stopPropagation()"
+                          class="text-white text-lg md:hover:text-[#ea6666] transition-colors">
+                          <i class="fas fa-cart-shopping text-2xl"></i>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -416,12 +417,10 @@
   </div>
 </div>
 
-
-<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas"
+<app-botones-flotantes (abrir)="toggleOffcanvas()"></app-botones-flotantes>
+<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas" (cerrarNotificacion)="sincronizarCierre()"
   (visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
 
 
 <app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido"
   (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>
-
-  <app-botones-flotantes  (abrir)="toggleOffcanvas()"></app-botones-flotantes>

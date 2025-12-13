@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -119,20 +120,28 @@ export class VistaInicialComponent implements OnInit {
   mostrarOffcanvas: boolean = false;
   minimizarOffcanvas: boolean = true;
 
+  cd = inject(ChangeDetectorRef);
+
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
     this.getDatos();
+    this.mostrarOffcanvas = false;
+    this.minimizarOffcanvas = true;
   }
 
   toggleOffcanvas() {
     this.mostrarOffcanvas = !this.mostrarOffcanvas;
+
     setTimeout(() => {
       this.minimizarOffcanvas = !this.minimizarOffcanvas;
+      console.log("minimizado: " + this.minimizarOffcanvas);
+
+      // 3. ¡LA MAGIA! Forzamos a Angular a pintar el cambio en la pantalla
+      this.cd.detectChanges();
     }, 100);
 
-    console.log("minimizado"+this.minimizarOffcanvas);
-    
   }
 
   getDatos() {
@@ -144,19 +153,28 @@ export class VistaInicialComponent implements OnInit {
   }
 
 
+  sincronizarCierre() {
+    console.log("El hijo me avisó que se cerró. Sincronizando variables...");
 
+    // Forzamos las variables a FALSE (no usamos toggle/signo de exclamación aquí)
+    this.mostrarOffcanvas = false;
+    this.minimizarOffcanvas = false;
+    console.log(this.minimizarOffcanvas);
+
+  }
 
   agregarFavorito(propiedad: any) {
 
 
     this.favService.agregar(propiedad);
 
+    // this.toggleOffcanvas()
 
   }
 
 
   recibirValorModalRecorrido() {
-    this.mostrarModalRecorrido = true;
+    this.mostrarModalRecorrido = !this.mostrarModalRecorrido;
   }
 
 

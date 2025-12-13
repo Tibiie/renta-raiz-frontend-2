@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { WishlistServiceService } from '../../core/wishlist/wishlist-service.service';
 
 @Component({
   selector: 'app-botones-flotantes',
@@ -8,10 +10,20 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   templateUrl: './botones-flotantes.component.html',
   styleUrl: './botones-flotantes.component.scss'
 })
-export class BotonesFlotantesComponent {
+export class BotonesFlotantesComponent implements OnInit {
+
   @Input() hideWhatsApp: boolean = false;
 
   @Output() abrir = new EventEmitter<void>();
+
+  favService = inject(WishlistServiceService);
+
+  router = inject(ActivatedRoute)
+
+  mostrarBotonWhatsapp: boolean = false;
+
+  routeValidatedbotomWhatsapp: string[] = ["prioritarios"]
+  cantidadInmuebles:number = 0
 
   scrollToTop(): void {
     window.scrollTo({
@@ -20,12 +32,19 @@ export class BotonesFlotantesComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.mostrarBotonWhatsapp = this.routeValidatedbotomWhatsapp.includes(
+      this.router.snapshot.url.toString()
+    );
+   
+  }
+
   vistaAnterior(): void {
     window.history.back();
   }
 
 
-    abrirOffcanvas (){
+  abrirOffcanvas() {
     this.abrir.emit()
   }
 }

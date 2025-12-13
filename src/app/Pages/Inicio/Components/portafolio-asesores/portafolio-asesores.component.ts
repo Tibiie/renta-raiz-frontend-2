@@ -76,7 +76,7 @@ export class PortafolioAsesoresComponent implements OnInit {
     this.obtenerPropiedadesVenta(Number(this.asesorId), 1, this.elementsPerPage);
     this.obtenerPropiedadesArriendo(Number(this.asesorId), 1, this.elementsPerPage);
 
-
+    this.toggleOffcanvas()
 
   }
 
@@ -84,10 +84,20 @@ export class PortafolioAsesoresComponent implements OnInit {
 
 
     this.favService.agregar(propiedad);
-
+    // this.toggleOffcanvas()
 
   }
 
+
+  sincronizarCierre() {
+    console.log("El hijo me avisó que se cerró. Sincronizando variables...");
+
+    // Forzamos las variables a FALSE (no usamos toggle/signo de exclamación aquí)
+    this.mostrarOffcanvas = false;
+    this.minimizarOffcanvas = false;
+    console.log(this.minimizarOffcanvas);
+
+  }
 
   toggleOffcanvas() {
     this.mostrarOffcanvas = !this.mostrarOffcanvas;
@@ -95,8 +105,8 @@ export class PortafolioAsesoresComponent implements OnInit {
       this.minimizarOffcanvas = !this.minimizarOffcanvas;
     }, 100);
 
-    console.log("minimizado"+this.minimizarOffcanvas);
-    
+    console.log("minimizado" + this.minimizarOffcanvas);
+
   }
 
 

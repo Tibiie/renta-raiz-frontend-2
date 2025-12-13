@@ -252,8 +252,9 @@
 </div>
 
 <app-volver></app-volver>
-<app-botones-flotantes></app-botones-flotantes>
-<app-footer></app-footer>
 
-<app-offcanvas-wishlist [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas"(visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+<app-footer></app-footer>
+<app-botones-flotantes    (abrir)="toggleOffcanvas()"></app-botones-flotantes>
+<app-offcanvas-wishlist (cerrarNotificacion)="sincronizarCierre()" [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas" (visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
+
 <app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

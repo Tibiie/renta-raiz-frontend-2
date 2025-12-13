@@ -28,6 +28,7 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { WishlistServiceService } from '../../../../core/wishlist/wishlist-service.service';
 import { ModalWishlistComponent } from '../../../../shared/modal-wishlist/modal-wishlist.component';
 import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wishlist.component';
+import { BotonesFlotantesComponent } from '../../../../shared/botones-flotantes/botones-flotantes.component';
 
 @Component({
   selector: 'app-filtros',
@@ -43,6 +44,7 @@ import { OffcanvasWishlistComponent } from '../offcanvas-wishlist/offcanvas-wish
     MatInputModule,
     ModalWishlistComponent,
     OffcanvasWishlistComponent,
+    BotonesFlotantesComponent
   ],
   templateUrl: './filtros.component.html',
   styleUrl: './filtros.component.scss',
@@ -181,6 +183,7 @@ export class FiltrosComponent implements OnInit {
   activatedRoute = inject(ActivatedRoute);
   urlParamService = inject(UrlParamService);
   favService = inject(WishlistServiceService);
+  
 
   mostrarMapa = false;
   address: string | null = null;
@@ -201,7 +204,7 @@ export class FiltrosComponent implements OnInit {
   @ViewChild('closeButton') closeButton!: ElementRef<HTMLButtonElement>;
 
   async ngOnInit(): Promise<void> {
-
+    
     var data = this.urlParamService.obtenerParamLocalStorage('data');
     if (data) {
       var obj = JSON.parse(data);
@@ -291,7 +294,17 @@ export class FiltrosComponent implements OnInit {
 
 
     this.favService.agregar(propiedad);
+    // this.toggleOffcanvas()
 
+  }
+
+  sincronizarCierre() {
+    console.log("El hijo me avisó que se cerró. Sincronizando variables...");
+
+    // Forzamos las variables a FALSE (no usamos toggle/signo de exclamación aquí)
+    this.mostrarOffcanvas = false;
+    this.minimizarOffcanvas = false;
+    console.log(this.minimizarOffcanvas);
 
   }
 
@@ -303,10 +316,11 @@ export class FiltrosComponent implements OnInit {
     this.mostrarOffcanvas = !this.mostrarOffcanvas;
     setTimeout(() => {
       this.minimizarOffcanvas = !this.minimizarOffcanvas;
+       this.cdRef.detectChanges();
     }, 100);
 
-    console.log("minimizado"+this.minimizarOffcanvas);
-    
+    console.log("minimizado" + this.minimizarOffcanvas);
+
   }
 
   obtenerParametrosFiltros(pagina: number, queryParams: any, state: any) {
@@ -1590,7 +1604,7 @@ export class FiltrosComponent implements OnInit {
   }
 
 
-  onMinSelected(event: any,trigger: MatAutocompleteTrigger) {
+  onMinSelected(event: any, trigger: MatAutocompleteTrigger) {
     const value = event.option.value;
     this.precioMinimoCtrl.setValue(value, { emitEvent: true });
     this.filtrosSeleccionados.set('pcmin', this.precioMinimoCtrl.value);
@@ -1599,12 +1613,12 @@ export class FiltrosComponent implements OnInit {
       precioVentaMinimo: this.precioVentaMinimoCtrl.value,
     });
 
-     // 👇 Cierra el panel
-  trigger.closePanel();
+    // 👇 Cierra el panel
+    trigger.closePanel();
 
   }
 
-  onMaxSelected(event: any,trigger: MatAutocompleteTrigger) {
+  onMaxSelected(event: any, trigger: MatAutocompleteTrigger) {
     const value = event.option.value;
     this.precioMaximoCtrl.setValue(value, { emitEvent: true });
     this.filtrosSeleccionados.set('pcmax', this.precioMaximoCtrl.value);
@@ -1612,8 +1626,8 @@ export class FiltrosComponent implements OnInit {
       precioMaximo: this.precioMaximoCtrl.value,
       precioVentaMaximo: this.precioVentaMaximoCtrl.value,
     });
- // 👇 Cierra el panel
-  trigger.closePanel();
+    // 👇 Cierra el panel
+    trigger.closePanel();
   }
 
 
@@ -1631,13 +1645,13 @@ export class FiltrosComponent implements OnInit {
     ctrl.setValue(formattedValue, { emitEvent: false });
   }
 
- getNumericValue(ctrl: FormControl): number {
-  return parseInt(ctrl.value.toString().replace(/\D/g, ''), 10) || 0;
-}
+  getNumericValue(ctrl: FormControl): number {
+    return parseInt(ctrl.value.toString().replace(/\D/g, ''), 10) || 0;
+  }
 
-onInputBlur(trigger: MatAutocompleteTrigger): void {
-  trigger.closePanel();
-}
+  onInputBlur(trigger: MatAutocompleteTrigger): void {
+    trigger.closePanel();
+  }
 
 
 }
