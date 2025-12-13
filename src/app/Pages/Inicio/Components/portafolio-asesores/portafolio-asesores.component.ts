@@ -84,7 +84,7 @@ export class PortafolioAsesoresComponent implements OnInit {
 
 
     this.favService.agregar(propiedad);
-    this.toggleOffcanvas()
+    // this.toggleOffcanvas()
 
   }
 

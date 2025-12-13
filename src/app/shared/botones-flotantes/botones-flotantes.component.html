@@ -1,12 +1,23 @@
 <div class="fixed bottom-6 left-6 flex flex-col gap-3 z-50">
-    
-    <button (click)="abrirOffcanvas(); $event.stopPropagation()"
-        class="text-white bg-[#003366] text-lg w-14 h-14 rounded-full 
+
+    <button (click)="abrirOffcanvas(); $event.stopPropagation()" class="relative text-white bg-[#003366] text-lg w-14 h-14 rounded-full 
                md:hover:text-[#cdad60] transition-colors md:hidden 
                flex items-center justify-center shadow-lg 
                touch-manipulation focus:outline-none active:bg-[#002244]">
-        
+
         <i class="fas fa-cart-shopping text-2xl pointer-events-none"></i>
+
+        <ng-container *ngIf="(favService.favoritos$ | async) as favoritos">
+
+            <span *ngIf="favoritos.length > 0" class="absolute top-2 right-2 flex h-5 w-5 items-center justify-center 
+                       rounded-full bg-red-600 text-[10px] font-bold text-white 
+                       shadow-sm ring-2 ring-[#003366] animate-pulse">
+
+                {{ favoritos.length }}
+
+            </span>
+
+        </ng-container>
     </button>
 
     <a target="_blank"
@@ -14,16 +25,15 @@
         class="cursor-pointer w-14 h-14 rounded-full shadow-lg 
                md:hover:brightness-110 transition duration-200 
                relative overflow-hidden bg-[#003366] md:hidden">
-        
+
         <img src="assets/images/pse-findo.png" alt="PSE"
             class="absolute inset-0 w-full h-full object-contain scale-125 pointer-events-none" />
     </a>
 
 </div>
-
 <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-50 items-center">
 
-    <a href="https://wa.me/573145438665?text=Hola%20buen%20dia%20busco%20propiedad%20"
+    <a *ngIf="mostrarBotonWhatsapp" href="https://wa.me/573145438665?text=Hola%20buen%20dia%20busco%20propiedad%20"
         class="cursor-pointer w-14 h-14 rounded-full shadow-lg hover:bg-[#128C7E] transition-all duration-300 bg-[#25D366] flex items-center justify-center text-white"
         aria-label="Contactar por WhatsApp">
         <i class="fab fa-whatsapp text-3xl"></i>

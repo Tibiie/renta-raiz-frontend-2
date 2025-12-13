@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { InmueblesService } from '../../core/Inmuebles/inmuebles.service';
 import { UrlParamService } from '../../core/configs/url-param.service';
 import { OffcanvasWishlistComponent } from '../../Pages/Inicio/Components/offcanvas-wishlist/offcanvas-wishlist.component';
+import { WishlistServiceService } from '../../core/wishlist/wishlist-service.service';
 
 @Component({
   selector: 'app-navbar',
@@ -48,6 +49,8 @@ export class NavbarComponent implements OnInit {
   _router = inject(Router);
   inmueblesService = inject(InmueblesService);
   urlParamService = inject(UrlParamService);
+
+  favService = inject(WishlistServiceService);
 
   ngOnInit(): void {
     if (this.alwaysScrolled) {

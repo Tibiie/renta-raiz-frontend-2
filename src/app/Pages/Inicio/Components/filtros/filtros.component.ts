@@ -294,7 +294,7 @@ export class FiltrosComponent implements OnInit {
 
 
     this.favService.agregar(propiedad);
-    this.toggleOffcanvas()
+    // this.toggleOffcanvas()
 
   }
 

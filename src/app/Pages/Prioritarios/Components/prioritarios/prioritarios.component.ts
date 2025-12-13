@@ -154,11 +154,21 @@ export class PrioritariosComponent implements OnInit {
   }
 
 
-  agregarFavorito(propiedad: any) {
+   agregarFavorito(propiedad: any) {
 
 
     this.favService.agregar(propiedad);
+    this.toggleOffcanvas()
 
+  }
+
+   sincronizarCierre() {
+    console.log("El hijo me avisó que se cerró. Sincronizando variables...");
+
+    // Forzamos las variables a FALSE (no usamos toggle/signo de exclamación aquí)
+    this.mostrarOffcanvas = false;
+    this.minimizarOffcanvas = false;
+    console.log(this.minimizarOffcanvas);
 
   }
 
@@ -169,8 +179,8 @@ export class PrioritariosComponent implements OnInit {
       this.minimizarOffcanvas = !this.minimizarOffcanvas;
     }, 100);
 
-    console.log("minimizado"+this.minimizarOffcanvas);
-    
+    console.log("minimizado" + this.minimizarOffcanvas);
+
   }
 
   recibirValorModalRecorrido() {
