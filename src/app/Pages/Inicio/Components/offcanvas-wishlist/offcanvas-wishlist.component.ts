@@ -44,7 +44,7 @@ export class OffcanvasWishlistComponent {
 
   abrirModalRecorrido(){
     this.visibleModalRecorrido.emit()
-   
+    
   }
 
 

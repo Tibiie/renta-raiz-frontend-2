@@ -889,4 +889,4 @@
 <app-offcanvas-wishlist (cerrarNotificacion)="sincronizarCierre()" [visible]="mostrarOffcanvas" [minimizado]="minimizarOffcanvas" (visibleModalRecorrido)="recibirValorModalRecorrido()"></app-offcanvas-wishlist>
 
 
-<app-modal-wishlist [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>
+<app-modal-wishlist *ngIf="mostrarModalRecorrido" [mostrarModalRecorrido]="mostrarModalRecorrido" (cerrar)="mostrarModalRecorrido = false"></app-modal-wishlist>

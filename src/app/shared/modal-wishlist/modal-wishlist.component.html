@@ -8,13 +8,11 @@
     </div>
 
     <div class="relative w-full h-[70vh] md:h-[700px] bg-gray-50">
-      <iframe 
-        id="1WJfiMGJcT4VpcFo1G8h_1763138081735"
-        [src]="iframeSrc"
-        class="absolute top-0 left-0 w-full h-full border-0"
-        scrolling="yes">
+      <iframe *ngIf="iframeSrc" [src]="iframeSrc" class="absolute top-0 left-0 w-full h-full border-0" scrolling="yes"
+        frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation"
+        allow="calendar">
       </iframe>
-      </div>
-
     </div>
+
+  </div>
 </div>

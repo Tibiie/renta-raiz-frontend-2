@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WishlistServiceService } from '../../core/wishlist/wishlist-service.service';
 
@@ -10,14 +10,16 @@ import { WishlistServiceService } from '../../core/wishlist/wishlist-service.ser
   templateUrl: './modal-wishlist.component.html',
   styleUrl: './modal-wishlist.component.scss'
 })
-export class ModalWishlistComponent implements OnInit {
+export class ModalWishlistComponent implements OnInit, OnChanges {
+  // ... tus variables
+
 
 
   visible: boolean = false;
   sanitizer = inject(DomSanitizer);
   iframeId = '1WJfiMGJcT4VpcFo1G8h_1763138081735';
   iframeTitle = '';
-  urlIframe = "https://api.leadconnectorhq.com/widget/booking/1WJfiMGJcT4VpcFo1G8h"
+  urlIframe = "https://api.leadconnectorhq.com/widget/bookings/agenda-recorridos"
   iframeSrc: any = "";
   iframeHeight = 600;
 
@@ -28,32 +30,39 @@ export class ModalWishlistComponent implements OnInit {
 
   favService = inject(WishlistServiceService);
 
-  ngOnInit(): void {
-
-    var recorrido = this.favService.cargarFavoritos();
-
-    const resultado = recorrido.map((item:any) => ({
-      codpro: item.codpro,
-      address: item.address,
-      city: item.city
-    }));
-
-    const cadena = JSON.stringify(resultado);
-
-    const cadenaCodificada = encodeURIComponent(cadena);
-
-    console.log(cadena);
 
 
-    var url = `${this.urlIframe}?historial_web=${cadenaCodificada}`
-
-    this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url)
+  ngOnChanges(changes: SimpleChanges): void {
+    // Si mostrarModalRecorrido cambia de false a true, regeneramos la URL
+    if (changes['mostrarModalRecorrido']?.currentValue === true) {
+      this.generarUrlIframe();
+    }
   }
 
+  generarUrlIframe(): void {
+    const recorrido = this.favService.cargarFavoritos();
+    const listaStrings = recorrido.map((item: any) => `${item.codpro}`);
+    const cadenaPlana = listaStrings.join(',');
+
+    // 1. Construir la URL completa como un string normal
+    const urlCompleta = `${this.urlIframe}?historial_web_recorrido=${encodeURIComponent(cadenaPlana)}`;
+
+    // 2. LOG para verificar (debe verse igual a la que pegas en el navegador)
+    console.log("URL a cargar:", urlCompleta);
+
+    // 3. Validar con el sanitizer la URL COMPLETA
+    // Esto elimina el error NG0904
+    this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(urlCompleta);
+  }
+  ngOnInit(): void {
+    this.generarUrlIframe();
+  }
 
 
   cerrarModal() {
     this.cerrar.emit();
+    
+
   }
 
 }
