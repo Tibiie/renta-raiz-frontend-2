@@ -25,6 +25,7 @@ export class OffcanvasWishlistComponent {
 
   @Output() cerrarNotificacion = new EventEmitter<void>();
 
+
   constructor(private favService: WishlistServiceService, private elementRef: ElementRef) { }
 
   ngOnInit(): void {
@@ -33,6 +34,7 @@ export class OffcanvasWishlistComponent {
       if (favs.length > 0) {
         this.visible = true
         this.minimizado = false;
+        
 
       }
     });

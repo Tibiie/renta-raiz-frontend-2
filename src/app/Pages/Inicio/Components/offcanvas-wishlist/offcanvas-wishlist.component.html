@@ -57,12 +57,12 @@
 
       <div class="flex-none p-4 bg-gray-50 border-t mt-auto">
         <div class="flex items-center gap-3">
-          <button type="button" (click)="abrirModalRecorrido()"
+          <button type="button" (click)="abrirModalRecorrido()" *ngIf="favoritos.length > 0"
             class="flex-1 flex items-center justify-center text-white font-bold rounded-lg text-sm py-3 transition-colors bg-[#080E36] hover:bg-[#cdad60]">
              Agendar Visita
           </button>
 
-          <button type="button" (click)="limpiar()"
+          <button type="button" (click)="limpiar()" *ngIf="favoritos.length > 0"
             class="flex-1 flex items-center justify-center text-gray-700 font-bold rounded-lg text-sm py-3 border border-gray-300 hover:bg-gray-100 bg-white">
              Limpiar
           </button>
