@@ -89,10 +89,12 @@ export class VerPropiedadComponent implements OnInit {
 
 
   ngOnInit(): void {
+
     window.scrollTo(0, 0);
     this.initZoom();
 
     this.route.paramMap.subscribe((params) => {
+      this.propiedad = {}
       this.codPro = Number(params.get('codpro'));
       const ocultar = Number(params.get('ocultarContenido')) === 1;
       this.getDatosPropiedad();
@@ -117,16 +119,16 @@ export class VerPropiedadComponent implements OnInit {
   }
 
 
-   toggleOffcanvas() {
+  toggleOffcanvas() {
     this.mostrarOffcanvas = !this.mostrarOffcanvas;
     setTimeout(() => {
       this.minimizarOffcanvas = !this.minimizarOffcanvas;
     }, 100);
 
-    console.log("minimizado"+this.minimizarOffcanvas);
-    
+    console.log("minimizado" + this.minimizarOffcanvas);
+
   }
-  
+
   recibirValorModalRecorrido() {
     this.mostrarModalRecorrido = true;
   }
@@ -362,6 +364,7 @@ export class VerPropiedadComponent implements OnInit {
   }
 
   getDatosPropiedad() {
+    this.media = [];
     this.datosCargados = false;
 
     this.propiedad = this.route.snapshot.data['propiedad'].data;
