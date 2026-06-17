@@ -38,6 +38,9 @@ export class VerBlogComponent implements OnInit {
 
   blog3: string =
     'por-que-medellin-se-ha-convertido-en-el-lugar-ideal-para-vivir-e-invertir-en-tiempos-de-cambio';
+
+  blog4: string =
+    'quien-toma-realmente-las-decisiones-sobre-un-inmueble-rentado-el-propietario-o-la-inmobiliaria';
   inmueblesDestacadosArray: any = {};
 
   router = inject(Router);
