@@ -651,20 +651,22 @@ export class BarraFiltrosComponent {
   }
 
 
-  onMinSelected(event: any, trigger: MatAutocompleteTrigger) {
+  onMinSelected(event: any, trigger?: MatAutocompleteTrigger) {
     const value = event.option.value;
-    this.precioMinimoCtrl.setValue(value, { emitEvent: true });
-    this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
-    // 👇 Cierra el panel
-    trigger.closePanel();
+    const num = typeof value === 'number' ? value : parseInt((value || '').toString().replace(/\D/g, ''), 10);
+    if (!isNaN(num) && num > 0) {
+      this.precioMinimoCtrl.setValue(num.toLocaleString('es-CO'), { emitEvent: true });
+      this.filtrosSeleccionados.set('pcmin', num);
+    }
   }
 
-  onMaxSelected(event: any, trigger: MatAutocompleteTrigger) {
+  onMaxSelected(event: any, trigger?: MatAutocompleteTrigger) {
     const value = event.option.value;
-    this.precioMaximoCtrl.setValue(value, { emitEvent: true });
-    this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
-    // 👇 Cierra el panel
-    trigger.closePanel();
+    const num = typeof value === 'number' ? value : parseInt((value || '').toString().replace(/\D/g, ''), 10);
+    if (!isNaN(num) && num > 0) {
+      this.precioMaximoCtrl.setValue(num.toLocaleString('es-CO'), { emitEvent: true });
+      this.filtrosSeleccionados.set('pcmax', num);
+    }
   }
 
 

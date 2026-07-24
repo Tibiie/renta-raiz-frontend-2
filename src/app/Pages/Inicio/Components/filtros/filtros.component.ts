@@ -782,85 +782,69 @@ export class FiltrosComponent implements OnInit {
     if (f?.neighborhood_code) {
       this.filtrosSeleccionados.set('neighborhood_code', f.neighborhood_code);
     }
-    if (f?.pcmin !== undefined && f.pcmin !== null) {
-      this.formRangos.patchValue({
-        precioMinimo: f.pcmin.toString(),
-        precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null,
-      });
 
+    if (f?.pcmin !== undefined && f?.pcmin !== null && f?.pcmin !== '') {
       const pcmin = Number(f.pcmin);
-      const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
+      const pcmax = (f.pcmax !== undefined && f.pcmax !== null && f.pcmax !== '') ? Number(f.pcmax) : null;
 
-      if (f?.pcmin !== undefined && f.pcmin !== null) {
-        const pcmin = Number(f.pcmin);
-        const pcmax = f.pcmax !== undefined ? Number(f.pcmax) : null;
+      this.selectedPriceRange = this.priceRangesArriendos.find((range) => {
+        return (
+          range.min === pcmin &&
+          (range.max === pcmax || (range.max === 0 && (pcmax === null || pcmax === 0)))
+        );
+      }) || null;
 
-        // Buscar en arriendos
-        this.selectedPriceRange =
-          this.priceRangesArriendos.find((range) => {
-            return (
-              range.min === pcmin &&
-              (range.max === pcmax || (range.max === null && pcmax === null))
-            );
-          }) || null;
-
-        if (!this.selectedPriceRange) {
-          this.selectedPriceRange =
-            this.priceRangesArriendos.find((range) => {
-              return (
-                pcmin >= range.min &&
-                (range.max === null || (pcmax !== null && pcmax <= range.max))
-              );
-            }) || null;
-        }
-
-        if (this.selectedPriceRange) {
-          this.formRangos.patchValue({
-            precioMinimo: f.pcmin.toString(),
-            precioMaximo: f.pcmax !== undefined ? f.pcmax.toString() : null,
-          });
-          this.filtrosSeleccionados.set('pcmin', f.pcmin.toString());
-          if (f.pcmax !== undefined) {
-            this.filtrosSeleccionados.set('pcmax', f.pcmax.toString());
-          }
-        }
+      if (this.selectedPriceRange) {
+        this.precioMinimoCtrl.setValue('');
+        this.precioMaximoCtrl.setValue('');
+        this.precioMinimoCtrl.disable();
+        this.precioMaximoCtrl.disable();
+      } else {
+        this.precioMinimoCtrl.enable();
+        this.precioMaximoCtrl.enable();
+        this.precioMinimoCtrl.setValue(pcmin ? pcmin.toLocaleString('es-CO') : '');
+        this.precioMaximoCtrl.setValue(pcmax ? pcmax.toLocaleString('es-CO') : '');
       }
+      this.filtrosSeleccionados.set('pcmin', pcmin);
+      if (pcmax) this.filtrosSeleccionados.set('pcmax', pcmax);
+    } else {
+      this.selectedPriceRange = null;
+      this.precioMinimoCtrl.enable();
+      this.precioMaximoCtrl.enable();
+      this.precioMinimoCtrl.setValue('');
+      this.precioMaximoCtrl.setValue('');
+    }
 
-      if (f?.pvmin !== undefined && f.pvmin !== null) {
-        const pvmin = Number(f.pvmin);
-        const pvmax = f.pvmax !== undefined ? Number(f.pvmax) : null;
+    if (f?.pvmin !== undefined && f?.pvmin !== null && f?.pvmin !== '') {
+      const pvmin = Number(f.pvmin);
+      const pvmax = (f.pvmax !== undefined && f.pvmax !== null && f.pvmax !== '') ? Number(f.pvmax) : null;
 
-        // Buscar en ventas
-        this.selectedPriceRangeVentas =
-          this.priceRangesVentas.find((range) => {
-            return (
-              range.min === pvmin &&
-              (range.max === pvmax || (range.max === null && pvmax === null))
-            );
-          }) || null;
+      this.selectedPriceRangeVentas = this.priceRangesVentas.find((range) => {
+        return (
+          range.min === pvmin &&
+          (range.max === pvmax || (range.max === 0 && (pvmax === null || pvmax === 0)))
+        );
+      }) || null;
 
-        if (!this.selectedPriceRangeVentas) {
-          this.selectedPriceRangeVentas =
-            this.priceRangesVentas.find((range) => {
-              return (
-                pvmin >= range.min &&
-                (range.max === null || (pvmax !== null && pvmax <= range.max))
-              );
-            }) || null;
-        }
-
-        if (this.selectedPriceRangeVentas) {
-          this.formRangos.patchValue({
-            precioVentaMinimo: f.pvmin.toString(),
-            precioVentaMaximo:
-              f.pvmax !== undefined ? f.pvmax.toString() : null,
-          });
-          this.filtrosSeleccionados.set('pvmin', f.pvmin.toString());
-          if (f.pvmax !== undefined) {
-            this.filtrosSeleccionados.set('pvmax', f.pvmax.toString());
-          }
-        }
+      if (this.selectedPriceRangeVentas) {
+        this.precioVentaMinimoCtrl.setValue('');
+        this.precioVentaMaximoCtrl.setValue('');
+        this.precioVentaMinimoCtrl.disable();
+        this.precioVentaMaximoCtrl.disable();
+      } else {
+        this.precioVentaMinimoCtrl.enable();
+        this.precioVentaMaximoCtrl.enable();
+        this.precioVentaMinimoCtrl.setValue(pvmin ? pvmin.toLocaleString('es-CO') : '');
+        this.precioVentaMaximoCtrl.setValue(pvmax ? pvmax.toLocaleString('es-CO') : '');
       }
+      this.filtrosSeleccionados.set('pvmin', pvmin);
+      if (pvmax) this.filtrosSeleccionados.set('pvmax', pvmax);
+    } else {
+      this.selectedPriceRangeVentas = null;
+      this.precioVentaMinimoCtrl.enable();
+      this.precioVentaMaximoCtrl.enable();
+      this.precioVentaMinimoCtrl.setValue('');
+      this.precioVentaMaximoCtrl.setValue('');
     }
 
     this.selectedProperty =
@@ -973,6 +957,20 @@ export class FiltrosComponent implements OnInit {
     }
   }
 
+  hasManualArriendoPrice(): boolean {
+    return (
+      this.getNumericValue(this.precioMinimoCtrl) > 0 ||
+      this.getNumericValue(this.precioMaximoCtrl) > 0
+    );
+  }
+
+  hasManualVentaPrice(): boolean {
+    return (
+      this.getNumericValue(this.precioVentaMinimoCtrl) > 0 ||
+      this.getNumericValue(this.precioVentaMaximoCtrl) > 0
+    );
+  }
+
   enviarFiltros(pagina: number, prepararFiltros: boolean = true) {
     this.filtrosSeleccionados = new Map();
     this.cargando = true;
@@ -980,24 +978,6 @@ export class FiltrosComponent implements OnInit {
     const savedCity = this.filtrosSeleccionados.get('city');
     const savedNeighborhood =
       this.filtrosSeleccionados.get('neighborhood_code');
-
-    console.log(this.precioMaximoCtrl.value);
-
-    if (this.precioMaximoCtrl.value !== "" && this.precioMinimoCtrl.value !== "") {
-
-      this.filtrosSeleccionados.set('pcmin', this.getNumericValue(this.precioMinimoCtrl));
-      this.filtrosSeleccionados.set('pcmax', this.getNumericValue(this.precioMaximoCtrl));
-    }
-
-    if (this.precioVentaMinimoCtrl.value !== "" && this.precioVentaMaximoCtrl.value !== "") {
-      this.filtrosSeleccionados.set('pvmin', this.getNumericValue(this.precioVentaMinimoCtrl));
-      this.filtrosSeleccionados.set('pvmax', this.getNumericValue(this.precioVentaMaximoCtrl));
-    }
-
-
-
-
-    console.log(this.filtrosSeleccionados);
 
     if (prepararFiltros) {
       this.prepararFiltros();
@@ -1181,51 +1161,54 @@ export class FiltrosComponent implements OnInit {
       );
     }
 
-    if (this.filtrosSeleccionados.get('pcmin') === "" || this.filtrosSeleccionados.get('pcmin') === undefined) {
-      this.filtrosSeleccionados.delete('pcmin');
-    }
-
-    if (this.filtrosSeleccionados.get('pcmax') === "" || this.filtrosSeleccionados.get('pcmax') === undefined) {
-      this.filtrosSeleccionados.delete('pcmax');
-    }
-    if (this.filtrosSeleccionados.get('pvmin') === "" || this.filtrosSeleccionados.get('pvmin') === undefined) {
-      this.filtrosSeleccionados.delete('pvmin');
-    }
-
-    if (this.filtrosSeleccionados.get('pvmax') === "" || this.filtrosSeleccionados.get('pvmax') === undefined) {
-      this.filtrosSeleccionados.delete('pvmax');
-    }
     if (this.selectedProperty) {
       const propertyType = this.selectedProperty.code;
 
-      if (
-        (propertyType === '1' || propertyType === '3') &&
-        (this.selectedPriceRange || this.formRangos.value.precioMinimo)
-      ) {
-        const precioMinimo = this.formRangos.value.precioMinimo;
-        const precioMaximo = this.formRangos.value.precioMaximo;
-
-        if (precioMinimo && precioMinimo !== '') {
-          this.filtrosSeleccionados.set('pcmin', precioMinimo);
-        }
-        if (precioMaximo && precioMaximo !== '') {
-          this.filtrosSeleccionados.set('pcmax', precioMaximo);
+      if (propertyType === '1' || propertyType === '3') {
+        if (this.selectedPriceRange) {
+          this.filtrosSeleccionados.set('pcmin', this.selectedPriceRange.min);
+          if (this.selectedPriceRange.max && this.selectedPriceRange.max > 0) {
+            this.filtrosSeleccionados.set('pcmax', this.selectedPriceRange.max);
+          } else {
+            this.filtrosSeleccionados.delete('pcmax');
+          }
+        } else {
+          const pcmin = this.getNumericValue(this.precioMinimoCtrl);
+          const pcmax = this.getNumericValue(this.precioMaximoCtrl);
+          if (pcmin > 0) {
+            this.filtrosSeleccionados.set('pcmin', pcmin);
+          } else {
+            this.filtrosSeleccionados.delete('pcmin');
+          }
+          if (pcmax > 0) {
+            this.filtrosSeleccionados.set('pcmax', pcmax);
+          } else {
+            this.filtrosSeleccionados.delete('pcmax');
+          }
         }
       }
 
-      if (
-        (propertyType === '2' || propertyType === '3') &&
-        (this.selectedPriceRangeVentas ||
-          this.formRangos.value.precioVentaMinimo)
-      ) {
-        const precioVentaMinimo = this.formRangos.value.precioVentaMinimo;
-        const precioVentaMaximo = this.formRangos.value.precioVentaMaximo;
-
-        if (precioVentaMinimo && precioVentaMinimo !== '') {
-          this.filtrosSeleccionados.set('pvmin', precioVentaMinimo);
-        }
-        if (precioVentaMaximo && precioVentaMaximo !== '') {
-          this.filtrosSeleccionados.set('pvmax', precioVentaMaximo);
+      if (propertyType === '2' || propertyType === '3') {
+        if (this.selectedPriceRangeVentas) {
+          this.filtrosSeleccionados.set('pvmin', this.selectedPriceRangeVentas.min);
+          if (this.selectedPriceRangeVentas.max && this.selectedPriceRangeVentas.max > 0) {
+            this.filtrosSeleccionados.set('pvmax', this.selectedPriceRangeVentas.max);
+          } else {
+            this.filtrosSeleccionados.delete('pvmax');
+          }
+        } else {
+          const pvmin = this.getNumericValue(this.precioVentaMinimoCtrl);
+          const pvmax = this.getNumericValue(this.precioVentaMaximoCtrl);
+          if (pvmin > 0) {
+            this.filtrosSeleccionados.set('pvmin', pvmin);
+          } else {
+            this.filtrosSeleccionados.delete('pvmin');
+          }
+          if (pvmax > 0) {
+            this.filtrosSeleccionados.set('pvmax', pvmax);
+          } else {
+            this.filtrosSeleccionados.delete('pvmax');
+          }
         }
       }
     }
@@ -1257,7 +1240,6 @@ export class FiltrosComponent implements OnInit {
       this.filtrosSeleccionados.get('neighborhood_code');
 
     console.log(this.filtrosSeleccionados);
-
 
     if (savedCity) {
       this.filtrosSeleccionados.set('city', savedCity);
@@ -1326,44 +1308,52 @@ export class FiltrosComponent implements OnInit {
     type: 'arriendo' | 'venta'
   ): void {
     if (type === 'arriendo') {
+      if (this.hasManualArriendoPrice()) {
+        return;
+      }
+
       if (this.selectedPriceRange?.min === range.min) {
         this.selectedPriceRange = null;
-        this.formRangos.patchValue({
-          precioMinimo: null,
-          precioMaximo: null,
-        });
+        this.precioMinimoCtrl.enable();
+        this.precioMaximoCtrl.enable();
+        this.precioMinimoCtrl.setValue('');
+        this.precioMaximoCtrl.setValue('');
         this.filtrosSeleccionados.delete('pcmin');
         this.filtrosSeleccionados.delete('pcmax');
       } else {
         this.selectedPriceRange = range;
-        this.formRangos.patchValue({
-          precioMinimo: range.min.toString(),
-          precioMaximo: range.max ? range.max.toString() : null,
-        });
+        this.precioMinimoCtrl.setValue('');
+        this.precioMaximoCtrl.setValue('');
+        this.precioMinimoCtrl.disable();
+        this.precioMaximoCtrl.disable();
         this.filtrosSeleccionados.set('pcmin', range.min.toString());
-        if (range.max !== null) {
+        if (range.max !== null && range.max > 0) {
           this.filtrosSeleccionados.set('pcmax', range.max.toString());
         } else {
           this.filtrosSeleccionados.delete('pcmax');
         }
       }
     } else if (type === 'venta') {
+      if (this.hasManualVentaPrice()) {
+        return;
+      }
+
       if (this.selectedPriceRangeVentas?.min === range.min) {
         this.selectedPriceRangeVentas = null;
-        this.formRangos.patchValue({
-          precioVentaMinimo: null,
-          precioVentaMaximo: null,
-        });
+        this.precioVentaMinimoCtrl.enable();
+        this.precioVentaMaximoCtrl.enable();
+        this.precioVentaMinimoCtrl.setValue('');
+        this.precioVentaMaximoCtrl.setValue('');
         this.filtrosSeleccionados.delete('pvmin');
         this.filtrosSeleccionados.delete('pvmax');
       } else {
         this.selectedPriceRangeVentas = range;
-        this.formRangos.patchValue({
-          precioVentaMinimo: range.min.toString(),
-          precioVentaMaximo: range.max ? range.max.toString() : null,
-        });
+        this.precioVentaMinimoCtrl.setValue('');
+        this.precioVentaMaximoCtrl.setValue('');
+        this.precioVentaMinimoCtrl.disable();
+        this.precioVentaMaximoCtrl.disable();
         this.filtrosSeleccionados.set('pvmin', range.min.toString());
-        if (range.max !== null) {
+        if (range.max !== null && range.max > 0) {
           this.filtrosSeleccionados.set('pvmax', range.max.toString());
         } else {
           this.filtrosSeleccionados.delete('pvmax');
@@ -1455,6 +1445,17 @@ export class FiltrosComponent implements OnInit {
   borrarFiltros() {
     this.filtrosSeleccionados.clear();
     this.selectedPriceRange = null;
+    this.selectedPriceRangeVentas = null;
+
+    this.precioMinimoCtrl.enable();
+    this.precioMinimoCtrl.setValue('');
+    this.precioMaximoCtrl.enable();
+    this.precioMaximoCtrl.setValue('');
+
+    this.precioVentaMinimoCtrl.enable();
+    this.precioVentaMinimoCtrl.setValue('');
+    this.precioVentaMaximoCtrl.enable();
+    this.precioVentaMaximoCtrl.setValue('');
 
     this.seleccion = {
       habitaciones: [],
@@ -1598,40 +1599,46 @@ export class FiltrosComponent implements OnInit {
     if (!num || isNaN(num)) return [];
 
     const multipliers = [1, 10, 100, 1000, 10000];
-    const suggestions = multipliers.map(m => num * m).filter(v => v <= 50000000000); // por ejemplo, máximo 500 millones
+    const suggestions = multipliers.map(m => num * m).filter(v => v <= 50000000000);
 
     return suggestions;
   }
 
-
-  onMinSelected(event: any, trigger: MatAutocompleteTrigger) {
+  onMinSelected(event: any, trigger?: MatAutocompleteTrigger, type: 'arriendo' | 'venta' = 'arriendo') {
     const value = event.option.value;
-    this.precioMinimoCtrl.setValue(value, { emitEvent: true });
-    this.filtrosSeleccionados.set('pcmin', this.precioMinimoCtrl.value);
-    this.formRangos.patchValue({
-      precioMinimo: this.precioMinimoCtrl.value,
-      precioVentaMinimo: this.precioVentaMinimoCtrl.value,
-    });
+    const ctrl = type === 'arriendo' ? this.precioMinimoCtrl : this.precioVentaMinimoCtrl;
+    const num = typeof value === 'number' ? value : parseInt((value || '').toString().replace(/\D/g, ''), 10);
 
-    // 👇 Cierra el panel
-    trigger.closePanel();
+    if (!isNaN(num) && num > 0) {
+      ctrl.setValue(num.toLocaleString('es-CO'), { emitEvent: true });
+    }
 
+    if (type === 'arriendo') {
+      this.selectedPriceRange = null;
+    } else {
+      this.selectedPriceRangeVentas = null;
+    }
+    this.cdRef.detectChanges();
   }
 
-  onMaxSelected(event: any, trigger: MatAutocompleteTrigger) {
+  onMaxSelected(event: any, trigger?: MatAutocompleteTrigger, type: 'arriendo' | 'venta' = 'arriendo') {
     const value = event.option.value;
-    this.precioMaximoCtrl.setValue(value, { emitEvent: true });
-    this.filtrosSeleccionados.set('pcmax', this.precioMaximoCtrl.value);
-    this.formRangos.patchValue({
-      precioMaximo: this.precioMaximoCtrl.value,
-      precioVentaMaximo: this.precioVentaMaximoCtrl.value,
-    });
-    // 👇 Cierra el panel
-    trigger.closePanel();
+    const ctrl = type === 'arriendo' ? this.precioMaximoCtrl : this.precioVentaMaximoCtrl;
+    const num = typeof value === 'number' ? value : parseInt((value || '').toString().replace(/\D/g, ''), 10);
+
+    if (!isNaN(num) && num > 0) {
+      ctrl.setValue(num.toLocaleString('es-CO'), { emitEvent: true });
+    }
+
+    if (type === 'arriendo') {
+      this.selectedPriceRange = null;
+    } else {
+      this.selectedPriceRangeVentas = null;
+    }
+    this.cdRef.detectChanges();
   }
 
-
-  formatCurrencyInput(ctrl: FormControl): void {
+  formatCurrencyInput(ctrl: FormControl, type?: 'arriendo' | 'venta'): void {
     const rawValue = ctrl.value?.toString().replace(/\D/g, '') || '';
     if (!rawValue) {
       ctrl.setValue('', { emitEvent: false });
@@ -1639,14 +1646,19 @@ export class FiltrosComponent implements OnInit {
     }
 
     const numericValue = parseInt(rawValue, 10);
-    const formattedValue = numericValue.toLocaleString('es-CO'); // Ej: 1.000.000
+    const formattedValue = numericValue.toLocaleString('es-CO');
 
-    // Actualizamos el input solo visualmente
     ctrl.setValue(formattedValue, { emitEvent: false });
+
+    if (type === 'arriendo' && this.selectedPriceRange) {
+      this.selectedPriceRange = null;
+    } else if (type === 'venta' && this.selectedPriceRangeVentas) {
+      this.selectedPriceRangeVentas = null;
+    }
   }
 
   getNumericValue(ctrl: FormControl): number {
-    return parseInt(ctrl.value.toString().replace(/\D/g, ''), 10) || 0;
+    return parseInt(ctrl.value?.toString().replace(/\D/g, '') || '0', 10) || 0;
   }
 
   onInputBlur(trigger: MatAutocompleteTrigger): void {

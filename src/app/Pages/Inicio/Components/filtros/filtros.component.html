@@ -35,10 +35,11 @@
                   <div class="flex flex-col w-44 relative">
                     <label for="min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
                     <input id="min-price" type="text" matInput placeholder="Desde $" [formControl]="precioMinimoCtrl"
-                      [matAutocomplete]="autoMin" (input)="formatCurrencyInput(precioMinimoCtrl)"
-                      (blur)="onInputBlur(autoMinTrigger)" #autoMinTrigger="matAutocompleteTrigger"
-                      class="w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
-                    <mat-autocomplete #autoMin="matAutocomplete" (optionSelected)="onMinSelected($event,autoMinTrigger)">
+                      [disabled]="selectedPriceRange !== null"
+                      [matAutocomplete]="autoMin" (input)="formatCurrencyInput(precioMinimoCtrl, 'arriendo')"
+                      #autoMinTrigger="matAutocompleteTrigger"
+                      class="w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60] disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60" />
+                    <mat-autocomplete #autoMin="matAutocomplete" (optionSelected)="onMinSelected($event, autoMinTrigger, 'arriendo')">
                       <mat-option *ngFor="let option of filteredMin | async" [value]="option">
                         ${{ option | number : "1.0-0" }}
                       </mat-option>
@@ -49,10 +50,11 @@
                   <div class="flex flex-col w-44 relative">
                     <label for="max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
                     <input id="max-price" type="text" matInput placeholder="Hasta $" [formControl]="precioMaximoCtrl"
-                      [matAutocomplete]="autoMax" (input)="formatCurrencyInput(precioMaximoCtrl)"
-                      (blur)="onInputBlur(autoMaxTrigger)" #autoMaxTrigger="matAutocompleteTrigger"
-                      class="w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60]" />
-                    <mat-autocomplete #autoMax="matAutocomplete" (optionSelected)="onMaxSelected($event,autoMaxTrigger)">
+                      [disabled]="selectedPriceRange !== null"
+                      [matAutocomplete]="autoMax" (input)="formatCurrencyInput(precioMaximoCtrl, 'arriendo')"
+                      #autoMaxTrigger="matAutocompleteTrigger"
+                      class="w-full py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CDAD60] disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60" />
+                    <mat-autocomplete #autoMax="matAutocomplete" (optionSelected)="onMaxSelected($event, autoMaxTrigger, 'arriendo')">
                       <mat-option *ngFor="let option of filteredMax | async" [value]="option">
                         ${{ option | number : "1.0-0" }}
                       </mat-option>
@@ -72,32 +74,32 @@
 
               <div class="mt-2 px-3">
                 <div class="flex gap-4">
-                  <!-- Precio mínimo -->
                   <!-- Precio mínimo venta -->
                   <div class="flex flex-col w-44 relative">
                     <label for="venta-min-price" class="text-sm font-medium text-gray-700 mb-1">Precio mínimo</label>
                     <input id="venta-min-price" type="text" matInput placeholder="Desde $"
                       [formControl]="precioVentaMinimoCtrl" [matAutocomplete]="autoVentaMin"
-                      (input)="formatCurrencyInput(precioVentaMinimoCtrl)"
-                      (blur)="onInputBlur(autoMinTrigger)" #autoMinTrigger="matAutocompleteTrigger"
-                      class="px-4 py-2 border border-gray-300 rounded-md" />
-                    <mat-autocomplete #autoVentaMin="matAutocomplete" (optionSelected)="onMinSelected($event,autoMinTrigger)">
+                      [disabled]="selectedPriceRangeVentas !== null"
+                      (input)="formatCurrencyInput(precioVentaMinimoCtrl, 'venta')"
+                      #autoVentaMinTrigger="matAutocompleteTrigger"
+                      class="px-4 py-2 border border-gray-300 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60" />
+                    <mat-autocomplete #autoVentaMin="matAutocomplete" (optionSelected)="onMinSelected($event, autoVentaMinTrigger, 'venta')">
                       <mat-option *ngFor="let option of filteredVentaMin | async" [value]="option">
                         ${{ option | number : "1.0-0" }}
                       </mat-option>
                     </mat-autocomplete>
                   </div>
 
-                  <!-- Precio máximo -->
+                  <!-- Precio máximo venta -->
                   <div class="flex flex-col w-44 relative">
-                    <label for="venta-min-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
-                    <input id="venta-min-price" type="text" matInput placeholder="Desde $"
+                    <label for="venta-max-price" class="text-sm font-medium text-gray-700 mb-1">Precio máximo</label>
+                    <input id="venta-max-price" type="text" matInput placeholder="Hasta $"
                       [formControl]="precioVentaMaximoCtrl" [matAutocomplete]="autoVentaMax"
-                      (blur)="onInputBlur(autoMaxTrigger)" #autoMinTrigger="matAutocompleteTrigger"
-                      (input)="formatCurrencyInput(precioVentaMaximoCtrl)"
-                      #autoMaxTrigger="matAutocompleteTrigger"
-                      class="px-4 py-2 border border-gray-300 rounded-md" />
-                    <mat-autocomplete #autoVentaMax="matAutocomplete" (optionSelected)="onMaxSelected($event,autoMaxTrigger)">
+                      [disabled]="selectedPriceRangeVentas !== null"
+                      #autoVentaMaxTrigger="matAutocompleteTrigger"
+                      (input)="formatCurrencyInput(precioVentaMaximoCtrl, 'venta')"
+                      class="px-4 py-2 border border-gray-300 rounded-md disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60" />
+                    <mat-autocomplete #autoVentaMax="matAutocomplete" (optionSelected)="onMaxSelected($event, autoVentaMaxTrigger, 'venta')">
                       <mat-option *ngFor="let option of filteredVentaMax | async" [value]="option">
                         ${{ option | number : "1.0-0" }}
                       </mat-option>
@@ -118,13 +120,13 @@
               <div class="mt-2">
                 <div class="flex flex-wrap gap-2">
                   <button title=" {{ range.displayName }}" *ngFor="let range of priceRangesArriendos"
+                    [disabled]="hasManualArriendoPrice()"
                     (click)="selectPriceRange(range, 'arriendo')" [class]="
                       getButtonClass(
                         selectedPriceRange?.min === range.min
                       )
-                    ">
-
-
+                    "
+                    [ngClass]="{ 'opacity-40 cursor-not-allowed pointer-events-none': hasManualArriendoPrice() }">
 
                     <ng-container *ngIf="
                     (range.min > 15000000)  && (range.max === 0)
@@ -146,17 +148,13 @@
                       <i class="fas fa-medal text-gray-400 text-xl"> </i>&nbsp;Plata
                     </ng-container>
 
-
-
-
-
-                    <span *ngIf="selectedPriceRangeVentas?.min === range.min" class="ml-1">✔</span>
+                    <span *ngIf="selectedPriceRange?.min === range.min" class="ml-1">✔</span>
                   </button>
                 </div>
               </div>
             </li>
 
-            <li class="border-b border-[#d1d5db] pb-4 mb-4" *ngIf="selectedProperty?.code === '2'">
+            <li class="border-b border-[#d1d5db] pb-4 mb-4" *ngIf="selectedProperty?.code === '2' || selectedProperty?.code === '3'">
               <a class="flex items-center p-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-dollar-sign text-xl text-[#000000] mr-3"></i>
                 <span class="font-semibold">Rangos de precios predefinidos de venta</span>
@@ -165,13 +163,13 @@
               <div class="mt-2">
                 <div class="flex flex-wrap gap-2">
                   <button title=" {{ range.displayName }}" *ngFor="let range of priceRangesVentas"
+                    [disabled]="hasManualVentaPrice()"
                     (click)="selectPriceRange(range, 'venta')" [class]="
                       getButtonClass(
                         selectedPriceRangeVentas?.min === range.min
                       )
-                    ">
-
-
+                    "
+                    [ngClass]="{ 'opacity-40 cursor-not-allowed pointer-events-none': hasManualVentaPrice() }">
 
                     <ng-container *ngIf="
                     (range.min > 2000000000)  && (range.max === 0)
@@ -192,10 +190,6 @@
                   ">
                       <i class="fas fa-medal text-gray-400 text-xl"> </i>&nbsp;Plata
                     </ng-container>
-
-
-
-
 
                     <span *ngIf="selectedPriceRangeVentas?.min === range.min" class="ml-1">✔</span>
                   </button>
